@@ -1,0 +1,59 @@
+# Copyright 2018 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+plank:
+  job_url_prefix: https://gubernator.k8s.io/build/
+  pod_pending_timeout: 60m
+  default_decoration_config:
+    timeout: 7200000000000 # 2h
+    grace_period: 15000000000 # 15s
+    utility_images:
+      clonerefs: "gcr.io/k8s-prow/clonerefs:v20181017-d31417a"
+      initupload: "gcr.io/k8s-prow/initupload:v20181017-d31417a"
+      entrypoint: "gcr.io/k8s-prow/entrypoint:v20181017-d31417a"
+      sidecar: "gcr.io/k8s-prow/sidecar:v20181017-d31417a"
+    gcs_configuration:
+      bucket: "oss-prow"
+      path_strategy: "explicit"
+    gcs_credentials_secret: "service-account"
+
+sinker:
+  resync_period: 1m
+  max_prowjob_age: 48h
+  max_pod_age: 24h
+
+prowjob_namespace: default
+pod_namespace: test-pods
+log_level: info
+
+presubmits:
+  https://kunit-review.googlesource.com/linux:
+  - name: kunit-test-presubmit
+    branches:
+    - kunit/alpha/master
+    decorate: true
+    always_run: true
+    spec:
+      volumes:
+      - name: shared-mem
+        emptyDir: {}
+      containers:
+      - image: gcr.io/kunit-presubmit/kunit
+        securityContext:
+          privileged: true
+        command:
+        - /kunit.sh
+        volumeMounts:
+        - name: shared-mem
+          mountPath: /dev/shm
