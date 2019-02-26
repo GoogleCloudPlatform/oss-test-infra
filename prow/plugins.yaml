@@ -184,3 +184,12 @@ plugins:
   - owners-label
   - size
   - trigger 
+  GoogleCloudPlatform/gke-vault-demo:
+  - approve
+  - assign
+  - cat
+  - dog
+  - lgtm
+  - owners-label
+  - size
+  - trigger
