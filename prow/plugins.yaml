@@ -193,3 +193,12 @@ plugins:
   - owners-label
   - size
   - trigger
+  GoogleCloudPlatform/oss-test-infra:
+  - approve
+  - assign
+  - cat
+  - dog
+  - lgtm
+  - owners-label
+  - size
+  - trigger
