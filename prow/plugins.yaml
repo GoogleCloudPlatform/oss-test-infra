@@ -12,8 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+config_updater:
+  maps:
+    prow/config.yaml:
+      name: config
+    prow/plugins.yaml:
+      name: plugins
+
 plugins:
-  GoogleCloudPlatform/gke-application-security-demo:
+  GoogleCloudPlatform:
   - approve
   - assign
   - cat
@@ -22,183 +29,13 @@ plugins:
   - owners-label
   - size
   - trigger 
-  GoogleCloudPlatform/gke-cloud-sql-postgres-demo:
-  - approve
-  - assign
-  - cat
-  - dog
-  - lgtm
-  - owners-label
-  - size
-  - trigger 
-  GoogleCloudPlatform/gke-monitoring-tutorial:
-  - approve
-  - assign
-  - cat
-  - dog
-  - lgtm
-  - owners-label
-  - size
-  - trigger 
-  GoogleCloudPlatform/gke-datadog-demo:
-  - approve
-  - assign
-  - cat
-  - dog
-  - lgtm
-  - owners-label
-  - size
-  - trigger 
-  GoogleCloudPlatform/gke-network-policy-demo:
-  - approve
-  - assign
-  - cat
-  - dog
-  - lgtm
-  - owners-label
-  - size
-  - trigger 
-  GoogleCloudPlatform/gke-enterprise-demo:
-  - approve
-  - assign
-  - cat
-  - dog
-  - lgtm
-  - owners-label
-  - size
-  - trigger 
-  GoogleCloudPlatform/gke-networking-demos:
-  - approve
-  - assign
-  - cat
-  - dog
-  - lgtm
-  - owners-label
-  - size
-  - trigger 
-  GoogleCloudPlatform/gke-istio-gce-demo:            
-  - approve
-  - assign
-  - cat
-  - dog
-  - lgtm
-  - owners-label
-  - size
-  - trigger 
-  GoogleCloudPlatform/gke-rbac-demo:
-  - approve
-  - assign
-  - cat
-  - dog
-  - lgtm
-  - owners-label
-  - size
-  - trigger 
-  GoogleCloudPlatform/gke-istio-shared:               
-  - approve
-  - assign
-  - cat
-  - dog
-  - lgtm
-  - owners-label
-  - size
-  - trigger 
-  GoogleCloudPlatform/gke-rolling-updates-demo:
-  - approve
-  - assign
-  - cat
-  - dog
-  - lgtm
-  - owners-label
-  - size
-  - trigger 
-  GoogleCloudPlatform/gke-istio-telemetry-demo:
-  - approve
-  - assign
-  - cat
-  - dog
-  - lgtm
-  - owners-label
-  - size
-  - trigger 
-  GoogleCloudPlatform/gke-security-scenarios-demo:
-  - approve
-  - assign
-  - cat
-  - dog
-  - lgtm
-  - owners-label
-  - size
-  - trigger 
-  GoogleCloudPlatform/gke-istio-vpn-demo:
-  - approve
-  - assign
-  - cat
-  - dog
-  - lgtm
-  - owners-label
-  - size
-  - trigger 
-  GoogleCloudPlatform/gke-stateful-applications-demo:
-  - approve
-  - assign
-  - cat
-  - dog
-  - lgtm
-  - owners-label
-  - size
-  - trigger 
-  GoogleCloudPlatform/gke-logging-sinks-demo:
-  - approve
-  - assign
-  - cat
-  - dog
-  - lgtm
-  - owners-label
-  - size
-  - trigger 
-  GoogleCloudPlatform/gke-tracing-demo:
-  - approve
-  - assign
-  - cat
-  - dog
-  - lgtm
-  - owners-label
-  - size
-  - trigger 
-  GoogleCloudPlatform/gke-migration-to-containers:
-  - approve
-  - assign
-  - cat
-  - dog
-  - lgtm
-  - owners-label
-  - size
-  - trigger 
-  GoogleCloudPlatform/gke-tracing-demo:
-  - approve
-  - assign
-  - cat
-  - dog
-  - lgtm
-  - owners-label
-  - size
-  - trigger 
-  GoogleCloudPlatform/gke-vault-demo:
-  - approve
-  - assign
-  - cat
-  - dog
-  - lgtm
-  - owners-label
-  - size
-  - trigger
+
   GoogleCloudPlatform/oss-test-infra:
-  - approve
-  - assign
-  - cat
-  - dog
-  - lgtm
-  - owners-label
-  - size
-  - trigger
+  - blunderbuss
+  - config-updater
+  - golint
+  - heart
+  - pony
+  - shrug
+  - wip
+  - yuks

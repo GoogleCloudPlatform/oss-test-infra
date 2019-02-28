@@ -19,10 +19,10 @@ plank:
     timeout: 7200000000000 # 2h
     grace_period: 15000000000 # 15s
     utility_images:
-      clonerefs: "gcr.io/k8s-prow/clonerefs:v20181017-d31417a"
-      initupload: "gcr.io/k8s-prow/initupload:v20181017-d31417a"
-      entrypoint: "gcr.io/k8s-prow/entrypoint:v20181017-d31417a"
-      sidecar: "gcr.io/k8s-prow/sidecar:v20181017-d31417a"
+      clonerefs: "gcr.io/k8s-prow/clonerefs:v20190228-49ac9d2"
+      initupload: "gcr.io/k8s-prow/initupload:v20190228-49ac9d2"
+      entrypoint: "gcr.io/k8s-prow/entrypoint:v20190228-49ac9d2"
+      sidecar: "gcr.io/k8s-prow/sidecar:v20190228-49ac9d2"
     gcs_configuration:
       bucket: "oss-prow"
       path_strategy: "explicit"
@@ -57,3 +57,31 @@ presubmits:
         volumeMounts:
         - name: shared-mem
           mountPath: /dev/shm
+
+  GoogleCloudPlatform/oss-test-infra:
+  - name: pull-prow-config-validate
+    branches:
+    - master
+    decorate: true
+    always_run: true
+    extra_refs:
+    - org: kubernetes
+      repo: test-infra
+      base_ref: master
+      path_alias: k8s.io/test-infra
+    spec:
+      containers:
+      - image: gcr.io/k8s-testimages/kubekins-e2e:v20190220-615bdbe2e-master
+        command:
+        - runner.sh 
+        args:
+        - bash
+        - -C
+        - cd
+        - /home/prow/go/src/k8s.io/test-infra
+        - "&&"
+        - bazel
+        - run
+        - prow/cmd/checkconfig
+        - --
+        - --config-path=/home/prow/go/src/github.com/GoogleCloudPlatform/oss-test-infra/prow/config.yaml
