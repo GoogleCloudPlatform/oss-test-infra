@@ -83,7 +83,7 @@ spec:
       serviceAccountName: plank
       containers:
       - name: plank
-        image: gcr.io/k8s-prow/plank:v20181205-f0447df
+        image: gcr.io/k8s-prow/plank:v20190228-49ac9d2
         args:
         - --dry-run=false
         - --github-token-path=
@@ -113,7 +113,7 @@ spec:
       serviceAccountName: sinker
       containers:
       - name: sinker
-        image: gcr.io/k8s-prow/sinker:v20181205-f0447df
+        image: gcr.io/k8s-prow/sinker:v20190228-49ac9d2
         volumeMounts:
         - name: config
           mountPath: /etc/config
@@ -145,10 +145,12 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
       - name: deck
-        image: gcr.io/k8s-prow/deck:v20181205-f0447df
+        image: gcr.io/k8s-prow/deck:v20190228-49ac9d2
+        args:
+        - --spyglass=true
         ports:
-          - name: http
-            containerPort: 8080
+        - name: http
+          containerPort: 8080
         volumeMounts:
         - name: config
           mountPath: /etc/config
@@ -187,7 +189,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
       - name: horologium
-        image: gcr.io/k8s-prow/horologium:v20181205-f0447df
+        image: gcr.io/k8s-prow/horologium:v20190228-49ac9d2
         volumeMounts:
         - name: config
           mountPath: /etc/config
@@ -261,7 +263,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
       - name: gerrit
-        image: gcr.io/k8s-prow/gerrit:v20181205-f0447df
+        image: gcr.io/k8s-prow/gerrit:v20190228-49ac9d2
         args:
         - --config-path=/etc/config/config.yaml
         - --cookiefile=/etc/cookies/cookies
@@ -305,20 +307,27 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
       - name: crier
-        image: gcr.io/k8s-prow/crier:v20181205-f0447df
+        image: gcr.io/k8s-prow/crier:v20190228-49ac9d2
         args:
         - --gerrit-workers=1
         - --cookiefile=/etc/cookies/cookies
         - --gerrit-projects=https://kunit-review.googlesource.com=linux
+        - --config-path=/etc/config/config.yaml
         volumeMounts:
         - name: cookies
           mountPath: /etc/cookies
+          readOnly: true
+        - name: config
+          mountPath: /etc/config
           readOnly: true
       volumes:
       - name: cookies
         secret:
           defaultMode: 420
           secretName: http-cookiefile
+      - name: config
+        configMap:
+          name: config
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -342,7 +351,7 @@ spec:
       terminationGracePeriodSeconds: 180
       containers:
       - name: hook
-        image: gcr.io/k8s-prow/hook:v20181205-f0447df
+        image: gcr.io/k8s-prow/hook:v20190228-49ac9d2
         imagePullPolicy: Always
         args:
         - --dry-run=false
