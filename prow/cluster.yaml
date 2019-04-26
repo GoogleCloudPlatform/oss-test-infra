@@ -89,9 +89,14 @@ spec:
         - --dry-run=false
         - --github-token-path=
         - --skip-report=true
+        - --config-path=/etc/config/config.yaml
+        - --job-config-path=/etc/job-config
         volumeMounts:
         - name: config
           mountPath: /etc/config
+          readOnly: true
+        - name: job-config
+          mountPath: /etc/job-config
           readOnly: true
         - mountPath: /etc/cluster
           name: cluster
@@ -100,6 +105,9 @@ spec:
       - name: config
         configMap:
           name: config
+      - name: job-config
+        configMap:
+          name: job-config
       - name: cluster
         secret:
           defaultMode: 420
@@ -122,14 +130,32 @@ spec:
       containers:
       - name: sinker
         image: gcr.io/k8s-prow/sinker:v20190424-fc2ee9967
+        args:
+        - --build-cluster=/etc/cluster/build-cluster.yaml
+        - --config-path=/etc/config/config.yaml
+        - --job-config-path=/etc/job-config
+        - --dry-run=false
         volumeMounts:
         - name: config
           mountPath: /etc/config
+          readOnly: true
+        - name: job-config
+          mountPath: /etc/job-config
+          readOnly: true
+        - mountPath: /etc/cluster
+          name: cluster
           readOnly: true
       volumes:
       - name: config
         configMap:
           name: config
+      - name: job-config
+        configMap:
+          name: job-config
+      - name: cluster
+        secret:
+          defaultMode: 420
+          secretName: build-cluster
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -156,6 +182,8 @@ spec:
         image: gcr.io/k8s-prow/deck:v20190424-fc2ee9967
         args:
         - --build-cluster=/etc/cluster/build-cluster.yaml
+        - --config-path=/etc/config/config.yaml
+        - --job-config-path=/etc/job-config
         - --spyglass=true
         ports:
         - name: http
@@ -164,6 +192,9 @@ spec:
         - name: config
           mountPath: /etc/config
           readOnly: true
+        - name: job-config
+          mountPath: /etc/job-config
+          readOnly: true
         - mountPath: /etc/cluster
           name: cluster
           readOnly: true
@@ -171,6 +202,9 @@ spec:
       - name: config
         configMap:
           name: config
+      - name: job-config
+        configMap:
+          name: job-config
       - name: cluster
         secret:
           defaultMode: 420
@@ -206,14 +240,24 @@ spec:
       containers:
       - name: horologium
         image: gcr.io/k8s-prow/horologium:v20190424-fc2ee9967
+        args:
+        - --config-path=/etc/config/config.yaml
+        - --job-config-path=/etc/job-config
+        - --dry-run=false
         volumeMounts:
         - name: config
           mountPath: /etc/config
+          readOnly: true
+        - name: job-config
+          mountPath: /etc/job-config
           readOnly: true
       volumes:
       - name: config
         configMap:
           name: config
+      - name: job-config
+        configMap:
+          name: job-config
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress
@@ -282,12 +326,16 @@ spec:
         image: gcr.io/k8s-prow/gerrit:v20190424-fc2ee9967
         args:
         - --config-path=/etc/config/config.yaml
+        - --job-config-path=/etc/job-config
         - --cookiefile=/etc/cookies/cookies
         - --gerrit-projects=https://kunit-review.googlesource.com=linux
         - --last-sync-fallback=/store/gerrit
         volumeMounts:
         - name: config
           mountPath: /etc/config
+          readOnly: true
+        - name: job-config
+          mountPath: /etc/job-config
           readOnly: true
         - name: gerrit-volume
           mountPath: /store
@@ -298,6 +346,9 @@ spec:
       - name: config
         configMap:
           name: config
+      - name: job-config
+        configMap:
+          name: job-config
       - name: cookies
         secret:
           defaultMode: 420
@@ -330,12 +381,16 @@ spec:
         - --cookiefile=/etc/cookies/cookies
         - --gerrit-projects=https://kunit-review.googlesource.com=linux
         - --config-path=/etc/config/config.yaml
+        - --job-config-path=/etc/job-config
         volumeMounts:
         - name: cookies
           mountPath: /etc/cookies
           readOnly: true
         - name: config
           mountPath: /etc/config
+          readOnly: true
+        - name: job-config
+          mountPath: /etc/job-config
           readOnly: true
         - name: oauth
           mountPath: /etc/github
@@ -348,6 +403,9 @@ spec:
       - name: config
         configMap:
           name: config
+      - name: job-config
+        configMap:
+          name: job-config
       - name: oauth
         secret:
           secretName: oauth-token

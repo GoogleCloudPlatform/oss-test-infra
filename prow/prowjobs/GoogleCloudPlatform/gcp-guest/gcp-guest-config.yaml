@@ -1,0 +1,9 @@
+periodics:
+- name: cluster-gcp-guest
+  cluster: gcp-guest
+  interval: 30m
+  decorate: true
+  spec:
+    containers:
+    - image: alpine
+      command: ["/bin/date"]
