@@ -12,6 +12,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+tide:
+  merge_method:
+    GoogleCloudPlatform/osconfig: squash
+
+  target_url: https://prow.gflocks.com/tide
+
+  queries:
+    - repos:
+        - GoogleCloudPlatform/osconfig
+      labels:
+        - lgtm
+        - approved
+      missingLabels:
+        - do-not-merge
+        - do-not-merge/hold
+        - do-not-merge/work-in-progress
+
 plank:
   job_url_prefix: https://gubernator.k8s.io/build/
   pod_pending_timeout: 60m

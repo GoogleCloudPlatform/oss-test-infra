@@ -41,6 +41,7 @@ plugins:
   - shrug
   - wip
   - yuks
+  - hold
 
   GoogleCloudPlatform/osconfig:
   - golint
