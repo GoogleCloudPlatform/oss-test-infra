@@ -28,7 +28,7 @@ plugins:
   - lgtm
   - owners-label
   - size
-  - trigger 
+  - trigger
 
   GoogleCloudPlatform/oss-test-infra:
   - blunderbuss
@@ -39,3 +39,6 @@ plugins:
   - shrug
   - wip
   - yuks
+
+  GoogleCloudPlatform/osconfig:
+  - golint
