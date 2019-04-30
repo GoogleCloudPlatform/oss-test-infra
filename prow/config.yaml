@@ -15,12 +15,11 @@
 tide:
   merge_method:
     GoogleCloudPlatform/osconfig: squash
-
   target_url: https://prow.gflocks.com/tide
-
   queries:
     - repos:
         - GoogleCloudPlatform/osconfig
+        - GoogleCloudPlatform/oss-test-infra
       labels:
         - lgtm
         - approved
