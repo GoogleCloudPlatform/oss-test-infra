@@ -1,41 +1,39 @@
 presubmits:
   GoogleCloudPlatform/osconfig:
-    - name: osconfig-presubmit-gocheck
-      cluster: gcp-guest
-      agent: kubernetes
-      run_if_changed: ".*\\.go$"
-      trigger: "(?m)^/gocheck$"
-      rerun_command: "/gocheck"
-      context: prow/presubmit/gocheck
-      spec:
-        containers:
-          - image: gcr.io/compute-image-tools-test/gocheck:latest
-            volumeMounts:
-              - name: compute-image-tools-test-service-account
-                mountPath: /etc/compute-image-tools-test-service-account
-                readOnly: true
-            volumes:
-              - name: compute-image-tools-test-service-account
-                secret:
-                  secretName: compute-image-tools-test-service-account
-    - name: osconfig-presubmit-gobuild
-      cluster: gcp-guest
-      agent: kubernetes
-      run_if_changed: ".*\\.go$"
-      trigger: "(?m)^/gobuild$"
-      rerun_command: "/gobuild"
-      context: prow/presubmit/gobuild
-      spec:
-        containers:
-          - image: gcr.io/compute-image-tools-test/gobuild:latest
-            volumeMounts:
-              - name: compute-image-tools-test-service-account
-                mountPath: /etc/compute-image-tools-test-service-account
-                readOnly: true
-            volumes:
-              - name: compute-image-tools-test-service-account
-                secret:
-                  secretName: compute-image-tools-test-service-account
+  - name: osconfig-presubmit-gocheck
+    cluster: gcp-guest
+    run_if_changed: ".*\\.go$"
+    trigger: "(?m)^/gocheck$"
+    rerun_command: "/gocheck"
+    context: prow/presubmit/gocheck
+    spec:
+      containers:
+      - image: gcr.io/compute-image-tools-test/gocheck:latest
+        volumeMounts:
+          - name: compute-image-tools-test-service-account
+            mountPath: /etc/compute-image-tools-test-service-account
+            readOnly: true
+      volumes:
+        - name: compute-image-tools-test-service-account
+          secret:
+            secretName: compute-image-tools-test-service-account
+  - name: osconfig-presubmit-gobuild
+    cluster: gcp-guest
+    run_if_changed: ".*\\.go$"
+    trigger: "(?m)^/gobuild$"
+    rerun_command: "/gobuild"
+    context: prow/presubmit/gobuild
+    spec:
+      containers:
+      - image: gcr.io/compute-image-tools-test/gobuild:latest
+        volumeMounts:
+        - name: compute-image-tools-test-service-account
+          mountPath: /etc/compute-image-tools-test-service-account
+          readOnly: true
+      volumes:
+      - name: compute-image-tools-test-service-account
+        secret:
+          secretName: compute-image-tools-test-service-account
 
 periodics:
 - name: cluster-gcp-guest
