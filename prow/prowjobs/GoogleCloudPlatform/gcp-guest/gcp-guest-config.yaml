@@ -25,7 +25,9 @@ presubmits:
     context: prow/presubmit/gobuild
     spec:
       containers:
-      - image: gcr.io/compute-image-tools-test/gobuild:latest
+      - image: gcr.io/compute-image-tools-test/gobuild-liam:latest
+        args:
+        - "github.com/GoogleCloudPlatform/osconfig"  # TODO: substitution
         volumeMounts:
         - name: compute-image-tools-test-service-account
           mountPath: /etc/compute-image-tools-test-service-account
