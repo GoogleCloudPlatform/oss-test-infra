@@ -6,6 +6,7 @@ presubmits:
     trigger: "(?m)^/gocheck$"
     rerun_command: "/gocheck"
     context: prow/presubmit/gocheck
+    decorate: true
     spec:
       containers:
       - image: gcr.io/compute-image-tools-test/gocheck:latest
@@ -23,6 +24,7 @@ presubmits:
     trigger: "(?m)^/gobuild$"
     rerun_command: "/gobuild"
     context: prow/presubmit/gobuild
+    decorate: true
     spec:
       containers:
       - image: gcr.io/compute-image-tools-test/gobuild-liam:latest
