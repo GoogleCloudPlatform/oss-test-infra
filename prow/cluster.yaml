@@ -185,6 +185,10 @@ spec:
         - --config-path=/etc/config/config.yaml
         - --job-config-path=/etc/job-config
         - --spyglass=true
+        - --tide-url=http://tide/
+        - --hook-url=http://hook:8888/plugin-help
+        - --redirect-http-to=prow.gflocks.com
+        - --oauth-url=/github-login
         ports:
         - name: http
           containerPort: 8080
@@ -198,6 +202,9 @@ spec:
         - mountPath: /etc/cluster
           name: cluster
           readOnly: true
+        - name: oauth
+          mountPath: /etc/github
+          readOnly: true
       volumes:
       - name: config
         configMap:
@@ -209,6 +216,9 @@ spec:
         secret:
           defaultMode: 420
           secretName: build-cluster
+      - name: oauth
+        secret:
+          secretName: oauth-token
 ---
 apiVersion: v1
 kind: Service
