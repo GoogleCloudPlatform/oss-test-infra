@@ -188,7 +188,7 @@ spec:
         - --tide-url=http://tide/
         - --hook-url=http://hook:8888/plugin-help
         - --redirect-http-to=prow.gflocks.com
-        - --oauth-url=/github-login
+        - --github-oauth-config-file=/etc/github/oauth
         ports:
         - name: http
           containerPort: 8080
