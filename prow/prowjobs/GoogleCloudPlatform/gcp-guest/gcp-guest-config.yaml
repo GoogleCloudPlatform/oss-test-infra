@@ -11,8 +11,8 @@ presubmits:
       containers:
       - image: gcr.io/compute-image-tools-test/gocheck:latest
         command:
-        - "./wrapper"
-        - "./main.sh"
+        - "/go/wrapper"
+        - "/go/main.sh"
         volumeMounts:
         - name: compute-image-tools-test-service-account
           mountPath: /etc/compute-image-tools-test-service-account
@@ -32,8 +32,8 @@ presubmits:
       containers:
       - image: gcr.io/compute-image-tools-test/gobuild-liam:latest
         command:
-        - "./wrapper"
-        - "./main.sh"
+        - "/go/wrapper"
+        - "/go/main.sh"
         args:
         - "github.com/GoogleCloudPlatform/osconfig"  # TODO: substitution
         volumeMounts:
