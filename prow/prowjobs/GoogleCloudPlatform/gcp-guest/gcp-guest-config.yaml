@@ -10,14 +10,17 @@ presubmits:
     spec:
       containers:
       - image: gcr.io/compute-image-tools-test/gocheck:latest
+        command:
+        - "./wrapper"
+        - "./main.sh"
         volumeMounts:
-          - name: compute-image-tools-test-service-account
-            mountPath: /etc/compute-image-tools-test-service-account
-            readOnly: true
-      volumes:
         - name: compute-image-tools-test-service-account
-          secret:
-            secretName: compute-image-tools-test-service-account
+          mountPath: /etc/compute-image-tools-test-service-account
+          readOnly: true
+      volumes:
+      - name: compute-image-tools-test-service-account
+        secret:
+          secretName: compute-image-tools-test-service-account
   - name: osconfig-presubmit-gobuild
     cluster: gcp-guest
     run_if_changed: ".*\\.go$"
@@ -28,6 +31,9 @@ presubmits:
     spec:
       containers:
       - image: gcr.io/compute-image-tools-test/gobuild-liam:latest
+        command:
+        - "./wrapper"
+        - "./main.sh"
         args:
         - "github.com/GoogleCloudPlatform/osconfig"  # TODO: substitution
         volumeMounts:
