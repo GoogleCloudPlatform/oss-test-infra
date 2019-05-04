@@ -32,8 +32,6 @@ presubmits:
       - image: gcr.io/compute-image-tools-test/gobuild-liam:latest
         command:
         - "/go/main.sh"
-        args:
-        - "github.com/GoogleCloudPlatform/osconfig"  # TODO: substitution
         volumeMounts:
         - name: compute-image-tools-test-service-account
           mountPath: /etc/compute-image-tools-test-service-account
@@ -42,6 +40,32 @@ presubmits:
       - name: compute-image-tools-test-service-account
         secret:
           secretName: compute-image-tools-test-service-account
+  - name: osconfig-presubmit-unittests
+    cluster: gcp-guest
+    run_if_changed: ".*\\.go$"
+    trigger: "(?m)^/unittests$"
+    rerun_command: "/unittests"
+    context: prow/presubmit/unittests
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/compute-image-tools-test/unittests-liam:latest
+        command:
+        - "/go/main.sh"
+        volumeMounts:
+        - name: compute-image-tools-test-service-account
+          mountPath: /etc/compute-image-tools-test-service-account
+          readOnly: true
+        - name: codecov
+          mountPath: /etc/codecov
+          readOnly: true
+      volumes:
+      - name: compute-image-tools-test-service-account
+        secret:
+          secretName: compute-image-tools-test-service-account
+      - name: codecov
+        secret:
+          secretName: codecov
 
 periodics:
 - name: cluster-gcp-guest
