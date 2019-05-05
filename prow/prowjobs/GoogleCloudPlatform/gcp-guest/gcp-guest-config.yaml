@@ -1,6 +1,7 @@
 postsubmits:
   GoogleCloudPlatform/osconfig:
   - name: osconfig-agent-build
+    cluster: gcp-guest
     decorate: true
     spec:
       containers:
