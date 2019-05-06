@@ -5,10 +5,10 @@ postsubmits:
     decorate: true
     spec:
       containers:
-      - image: gcr.io/compute-image-tools-test/osconfig-agent-build:latest
+      - image: gcr.io/gcp-guest/osconfig-agent-build:latest
         imagePullPolicy: Always
         command:
-        - "./main.sh"
+        - "/go/main.sh"
         volumeMounts:
         - name: compute-image-tools-test-service-account
           mountPath: /etc/compute-image-tools-test-service-account
@@ -32,18 +32,10 @@ presubmits:
     decorate: true
     spec:
       containers:
-      - image: gcr.io/compute-image-tools-test/gocheck-liam:latest
+      - image: gcr.io/gcp-guest/gocheck:latest
         imagePullPolicy: Always
         command:
         - "/go/main.sh"
-        volumeMounts:
-        - name: compute-image-tools-test-service-account
-          mountPath: /etc/compute-image-tools-test-service-account
-          readOnly: true
-      volumes:
-      - name: compute-image-tools-test-service-account
-        secret:
-          secretName: compute-image-tools-test-service-account
   - name: osconfig-presubmit-gobuild
     cluster: gcp-guest
     run_if_changed: ".*\\.go$"
@@ -53,42 +45,28 @@ presubmits:
     decorate: true
     spec:
       containers:
-      - image: gcr.io/compute-image-tools-test/gobuild-liam:latest
+      - image: gcr.io/gcp-guest/gobuild:latest
         imagePullPolicy: Always
         command:
         - "/go/main.sh"
-        volumeMounts:
-        - name: compute-image-tools-test-service-account
-          mountPath: /etc/compute-image-tools-test-service-account
-          readOnly: true
-      volumes:
-      - name: compute-image-tools-test-service-account
-        secret:
-          secretName: compute-image-tools-test-service-account
-  - name: osconfig-presubmit-unittests
+  - name: osconfig-presubmit-gotest
     cluster: gcp-guest
     run_if_changed: ".*\\.go$"
-    trigger: "(?m)^/unittests$"
-    rerun_command: "/unittests"
-    context: prow/presubmit/unittests
+    trigger: "(?m)^/gotest$"
+    rerun_command: "/gotest"
+    context: prow/presubmit/gotest
     decorate: true
     spec:
       containers:
-      - image: gcr.io/compute-image-tools-test/unittests-liam:latest
+      - image: gcr.io/gcp-guest/gotest:latest
         imagePullPolicy: Always
         command:
         - "/go/main.sh"
         volumeMounts:
-        - name: compute-image-tools-test-service-account
-          mountPath: /etc/compute-image-tools-test-service-account
-          readOnly: true
         - name: codecov
           mountPath: /etc/codecov
           readOnly: true
       volumes:
-      - name: compute-image-tools-test-service-account
-        secret:
-          secretName: compute-image-tools-test-service-account
       - name: codecov
         secret:
           secretName: codecov
