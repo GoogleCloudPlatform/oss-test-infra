@@ -52,3 +52,19 @@ sinker:
 prowjob_namespace: default
 pod_namespace: test-pods
 log_level: info
+
+deck:
+  spyglass:
+    size_limit: 500000000 # 500MB
+    gcs_browser_prefix: https://pantheon.corp.google.com/storage/browser/
+    # TODO(krzyzacy): no testgrid support yet, consider use k8s.testgrid, or deploy a new testgrid instance
+    # testgrid_config: gs://testgrid/config
+    # testgrid_root: https://testgrid.corp.google.com/
+    viewers:
+      "started.json|finished.json":
+      - "metadata-viewer"
+      "build-log.txt":
+      - "build-log-viewer"
+      "artifacts/junit.*\\.xml":
+      - "junit-viewer"
+    announcement: "The old job viewer, Gubernator, has been deprecated in favour of this page, Spyglass.{{if .ArtifactPath}} For now, the old page is <a href='https://gubernator-internal.googleplex.com/build/{{.ArtifactPath}}'>still available</a>.{{end}} Please send feedback to osp-engprod@google.com."
