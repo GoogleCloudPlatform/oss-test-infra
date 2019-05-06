@@ -8,7 +8,7 @@ postsubmits:
       - image: gcr.io/gcp-guest/osconfig-agent-build:latest
         imagePullPolicy: Always
         command:
-        - "/go/main.sh"
+        - "/main.sh"
         volumeMounts:
         - name: compute-image-tools-test-service-account
           mountPath: /etc/compute-image-tools-test-service-account
