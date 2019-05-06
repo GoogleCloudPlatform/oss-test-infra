@@ -5,17 +5,18 @@ postsubmits:
     decorate: true
     spec:
       containers:
-        - image: gcr.io/compute-image-tools-test/osconfig-agent-build:latest
-          command:
-            - "./main.sh"
-          volumeMounts:
-            - name: compute-image-tools-test-service-account
-              mountPath: /etc/compute-image-tools-test-service-account
-              readOnly: true
-        volumes:
-          - name: compute-image-tools-test-service-account
-            secret:
-              secretName: compute-image-tools-test-service-account
+      - image: gcr.io/compute-image-tools-test/osconfig-agent-build:latest
+        imagePullPolicy: Always
+        command:
+        - "./main.sh"
+        volumeMounts:
+        - name: compute-image-tools-test-service-account
+          mountPath: /etc/compute-image-tools-test-service-account
+          readOnly: true
+      volumes:
+      - name: compute-image-tools-test-service-account
+        secret:
+          secretName: compute-image-tools-test-service-account
     max_concurrency: 10
     branches:
       - ^master$
@@ -32,6 +33,7 @@ presubmits:
     spec:
       containers:
       - image: gcr.io/compute-image-tools-test/gocheck-liam:latest
+        imagePullPolicy: Always
         command:
         - "/go/main.sh"
         volumeMounts:
@@ -52,6 +54,7 @@ presubmits:
     spec:
       containers:
       - image: gcr.io/compute-image-tools-test/gobuild-liam:latest
+        imagePullPolicy: Always
         command:
         - "/go/main.sh"
         volumeMounts:
@@ -72,6 +75,7 @@ presubmits:
     spec:
       containers:
       - image: gcr.io/compute-image-tools-test/unittests-liam:latest
+        imagePullPolicy: Always
         command:
         - "/go/main.sh"
         volumeMounts:
