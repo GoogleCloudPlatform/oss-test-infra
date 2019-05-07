@@ -5,13 +5,13 @@ postsubmits:
     decorate: true
     spec:
       containers:
-      - image: gcr.io/compute-image-tools-test/osconfig-agent-build:latest
+      - image: gcr.io/gcp-guest/osconfig-agent-build:latest
         command:
         - "/run_daisy_workflow.sh"
         volumeMounts:
         - name: compute-image-tools-test-service-account
           mountPath: /etc/compute-image-tools-test-service-account
-          readonly: true
+          readOnly: true
       volumes:
       - name: compute-image-tools-test-service-account
         secret:
