@@ -20,7 +20,10 @@ presubmits:
         - -c
         - >-
           cd /home/prow/go/src/k8s.io/test-infra &&
-          bazel run prow/cmd/checkconfig -- --config-path=/home/prow/go/src/github.com/GoogleCloudPlatform/oss-test-infra/prow/config.yaml
+          bazel run prow/cmd/checkconfig
+          --
+          --config-path=/home/prow/go/src/github.com/GoogleCloudPlatform/oss-test-infra/prow/config.yaml
+          --job-config-path=/home/prow/go/src/github.com/GoogleCloudPlatform/oss-test-infra/prow/prowjobs
 
 periodics:
 # test jobs, remove later
