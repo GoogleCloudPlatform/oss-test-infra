@@ -5,25 +5,15 @@ presubmits:
     - master
     decorate: true
     always_run: true
-    extra_refs:
-    - org: kubernetes
-      repo: test-infra
-      base_ref: master
-      path_alias: k8s.io/test-infra
     spec:
       containers:
-      - image: gcr.io/k8s-testimages/kubekins-e2e:v20190329-811f7954b-master
+      - image: gcr.io/k8s-prow/checkconfig:latest
+        imagePullPolicy: Always
         command:
-        - runner.sh 
+        - /checkconfig
         args:
-        - bash
-        - -c
-        - >-
-          cd /home/prow/go/src/k8s.io/test-infra &&
-          bazel run prow/cmd/checkconfig
-          --
-          --config-path=/home/prow/go/src/github.com/GoogleCloudPlatform/oss-test-infra/prow/config.yaml
-          --job-config-path=/home/prow/go/src/github.com/GoogleCloudPlatform/oss-test-infra/prow/prowjobs
+        - --config-path=./prow/config.yaml
+        - --job-config-path=./prow/prowjobs
 
 periodics:
 # test jobs, remove later
