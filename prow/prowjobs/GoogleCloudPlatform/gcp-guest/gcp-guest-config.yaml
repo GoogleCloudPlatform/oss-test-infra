@@ -1,6 +1,6 @@
 postsubmits:
   GoogleCloudPlatform/osconfig:
-  - name: osconfig-agent-build
+  - name: osconfig-build
     cluster: gcp-guest
     decorate: true
     spec:
@@ -50,6 +50,55 @@ presubmits:
         command:
         - "/go/main.sh"
   - name: osconfig-presubmit-gotest
+    cluster: gcp-guest
+    run_if_changed: ".*\\.go$"
+    trigger: "(?m)^/gotest$"
+    rerun_command: "/gotest"
+    context: prow/presubmit/gotest
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gotest:latest
+        imagePullPolicy: Always
+        command:
+        - "/go/main.sh"
+        volumeMounts:
+        - name: codecov
+          mountPath: /etc/codecov
+          readOnly: true
+      volumes:
+      - name: codecov
+        secret:
+          secretName: codecov
+
+  GoogleCloudPlatform/guest-agent:
+  - name: guest-agent-presubmit-gocheck
+    cluster: gcp-guest
+    run_if_changed: ".*\\.go$"
+    trigger: "(?m)^/gocheck$"
+    rerun_command: "/gocheck"
+    context: prow/presubmit/gocheck
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gocheck:latest
+        imagePullPolicy: Always
+        command:
+        - "/go/main.sh"
+  - name: guest-agent-presubmit-gobuild
+    cluster: gcp-guest
+    run_if_changed: ".*\\.go$"
+    trigger: "(?m)^/gobuild$"
+    rerun_command: "/gobuild"
+    context: prow/presubmit/gobuild
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gobuild:latest
+        imagePullPolicy: Always
+        command:
+        - "/go/main.sh"
+  - name: guest-agent-presubmit-gotest
     cluster: gcp-guest
     run_if_changed: ".*\\.go$"
     trigger: "(?m)^/gotest$"
