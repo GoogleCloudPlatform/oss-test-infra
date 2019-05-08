@@ -83,7 +83,7 @@ spec:
       serviceAccountName: plank
       containers:
       - name: plank
-        image: gcr.io/k8s-prow/plank:v20190430-6a7dd776a
+        image: gcr.io/k8s-prow/plank:v20190506-d97b87848
         args:
         - --build-cluster=/etc/cluster/build-cluster.yaml
         - --dry-run=false
@@ -129,7 +129,7 @@ spec:
       serviceAccountName: sinker
       containers:
       - name: sinker
-        image: gcr.io/k8s-prow/sinker:v20190430-6a7dd776a
+        image: gcr.io/k8s-prow/sinker:v20190506-d97b87848
         args:
         - --build-cluster=/etc/cluster/build-cluster.yaml
         - --config-path=/etc/config/config.yaml
@@ -179,7 +179,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
       - name: deck
-        image: gcr.io/k8s-prow/deck:v20190430-6a7dd776a
+        image: gcr.io/k8s-prow/deck:v20190506-d97b87848
         args:
         - --build-cluster=/etc/cluster/build-cluster.yaml
         - --config-path=/etc/config/config.yaml
@@ -249,7 +249,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
       - name: horologium
-        image: gcr.io/k8s-prow/horologium:v20190430-6a7dd776a
+        image: gcr.io/k8s-prow/horologium:v20190506-d97b87848
         args:
         - --config-path=/etc/config/config.yaml
         - --job-config-path=/etc/job-config
@@ -333,7 +333,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
       - name: gerrit
-        image: gcr.io/k8s-prow/gerrit:v20190430-6a7dd776a
+        image: gcr.io/k8s-prow/gerrit:v20190506-d97b87848
         args:
         - --config-path=/etc/config/config.yaml
         - --job-config-path=/etc/job-config
@@ -384,7 +384,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
       - name: crier
-        image: gcr.io/k8s-prow/crier:v20190430-6a7dd776a
+        image: gcr.io/k8s-prow/crier:v20190506-d97b87848
         args:
         - --gerrit-workers=1
         - --github-workers=1
@@ -442,7 +442,7 @@ spec:
       terminationGracePeriodSeconds: 180
       containers:
       - name: hook
-        image: gcr.io/k8s-prow/hook:v20190430-6a7dd776a
+        image: gcr.io/k8s-prow/hook:v20190506-d97b87848
         imagePullPolicy: Always
         args:
         - --config-path=/etc/config/config.yaml
@@ -533,6 +533,9 @@ subjects:
 - kind: ServiceAccount
   name: "deck"
   namespace: "default"
+- kind: ServiceAccount
+  name: "deck"
+  namespace: "test-pods"
 ---
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1beta1
@@ -794,7 +797,7 @@ spec:
       serviceAccountName: tide
       containers:
       - name: tide
-        image: gcr.io/k8s-prow/tide:v20190430-6a7dd776a
+        image: gcr.io/k8s-prow/tide:v20190506-d97b87848
         args:
         - --build-cluster=/etc/cluster/build-cluster.yaml
         - --config-path=/etc/config/config.yaml
