@@ -7,7 +7,20 @@ postsubmits:
       containers:
       - image: gcr.io/gcp-guest/osconfig-agent-build:latest
         command:
-        - "/run_daisy_workflow.sh"
+        - "/daisy_build_upload.sh"
+        env:
+        - name: PROJECT
+          value: "gcp-guest"
+        - name: ZONE
+          value: "us-central1-c"
+        - name: BASE_REPO
+          value: "GoogleCloudPlatform"
+        - name: REPOSITORY
+          value: "osconfig"
+        - name: POST_SUBMIT_JOB
+          value: "True"
+        - name: FINAL_OUTS_PATH
+          value: "gs://osconfig-agent-package/"
         volumeMounts:
         - name: compute-image-tools-test-service-account
           mountPath: /etc/compute-image-tools-test-service-account
@@ -19,9 +32,36 @@ postsubmits:
     max_concurrency: 10
     branches:
     - ^master$
-
 presubmits:
   GoogleCloudPlatform/osconfig:
+  - name: osconfig-presubmit-build
+      cluster: gcp-guest
+      trigger: "(?m)^/osconfigbuild$"
+      rerun_command: "/osconfigbuild"
+      context: prow/presubmit/gotest
+      decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/osconfig-agent-build:latest
+        command:
+        - "/daisy_build_upload.sh"
+        env:
+        - name: PROJECT
+          value: "gcp-guest"
+        - name: ZONE
+          value: "us-central1-c"
+        - name: BASE_REPO
+          value: "GoogleCloudPlatform"
+        - name: REPOSITORY
+          value: "osconfig"
+        volumeMounts:
+        - name: compute-image-tools-test-service-account
+          mountPath: /etc/compute-image-tools-test-service-account
+          readOnly: true
+        volumes:
+        - name: compute-image-tools-test-service-account
+          secret:
+            secretName: compute-image-tools-test-service-account
   - name: osconfig-presubmit-gocheck
     cluster: gcp-guest
     run_if_changed: ".*\\.go$"
