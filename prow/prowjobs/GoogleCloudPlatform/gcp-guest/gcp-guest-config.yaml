@@ -5,22 +5,10 @@ postsubmits:
     decorate: true
     spec:
       containers:
-      - image: gcr.io/gcp-guest/osconfig-agent-build:latest
+      - image: gcr.io/gcp-guest/daisy_build_upload:latest
         command:
         - "/daisy_build_upload.sh"
-        env:
-        - name: PROJECT
-          value: "gcp-guest"
-        - name: ZONE
-          value: "us-central1-c"
-        - name: BASE_REPO
-          value: "GoogleCloudPlatform"
-        - name: REPOSITORY
-          value: "osconfig"
-        - name: POST_SUBMIT_JOB
-          value: "True"
-        - name: FINAL_OUTS_PATH
-          value: "gs://osconfig-agent-package/"
+        args: ["gcp-guest", "us-west1-a", "./packaging/build_packages_wf.json", "gs://osconfig-agent-package/"]
         volumeMounts:
         - name: compute-image-tools-test-service-account
           mountPath: /etc/compute-image-tools-test-service-account
@@ -42,18 +30,10 @@ presubmits:
       decorate: true
     spec:
       containers:
-      - image: gcr.io/gcp-guest/osconfig-agent-build:latest
+      - image: gcr.io/gcp-guest/daisy_build_upload:latest
         command:
         - "/daisy_build_upload.sh"
-        env:
-        - name: PROJECT
-          value: "gcp-guest"
-        - name: ZONE
-          value: "us-central1-c"
-        - name: BASE_REPO
-          value: "GoogleCloudPlatform"
-        - name: REPOSITORY
-          value: "osconfig"
+        args: ["gcp-guest", "us-west1-a", "./packaging/build_packages_wf.json", "gs://osconfig-agent-package/"]
         volumeMounts:
         - name: compute-image-tools-test-service-account
           mountPath: /etc/compute-image-tools-test-service-account
