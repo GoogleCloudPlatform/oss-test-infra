@@ -15,11 +15,15 @@
 tide:
   merge_method:
     GoogleCloudPlatform/osconfig: squash
+    GoogleCloudPlatform/guest-logging-go: squash
+    GoogleCloudPlatform/guest-agent: squash
   target_url: https://prow.gflocks.com/tide
   queries:
     - repos:
         - GoogleCloudPlatform/osconfig
         - GoogleCloudPlatform/oss-test-infra
+        - GoogleCloudPlatform/guest-logging-go
+        - GoogleCloudPlatform/guest-agent
       labels:
         - lgtm
         - approved
