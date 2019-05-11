@@ -23,11 +23,11 @@ postsubmits:
 presubmits:
   GoogleCloudPlatform/osconfig:
   - name: osconfig-presubmit-build
-      cluster: gcp-guest
-      trigger: "(?m)^/osconfigbuild$"
-      rerun_command: "/osconfigbuild"
-      context: prow/presubmit/gotest
-      decorate: true
+    cluster: gcp-guest
+    trigger: "(?m)^/osconfigbuild$"
+    rerun_command: "/osconfigbuild"
+    context: prow/presubmit/gotest
+    decorate: true
     spec:
       containers:
       - image: gcr.io/gcp-guest/daisy_build_upload:latest
