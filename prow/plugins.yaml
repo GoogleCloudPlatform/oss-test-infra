@@ -21,6 +21,11 @@ config_updater:
     prow/prowjobs/**/*.yaml:
       name: job-config
 
+lgtm:
+- repos:
+  - GoogleCloudPlatform/oss-test-infra
+  review_acts_as_lgtm: true
+
 plugins:
   GoogleCloudPlatform:
   - approve
