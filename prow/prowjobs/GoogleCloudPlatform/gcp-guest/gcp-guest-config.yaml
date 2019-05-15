@@ -7,16 +7,16 @@ postsubmits:
       containers:
       - image: gcr.io/gcp-guest/daisy_build_upload:latest
         command:
-        - "/daisy_build_upload.sh"
+        - "/main.sh"
         args: ["gcp-guest", "us-west1-a", "./packaging/build_packages_wf.json", "gs://osconfig-agent-package/"]
         volumeMounts:
-        - name: compute-image-tools-test-service-account
-          mountPath: /etc/compute-image-tools-test-service-account
-          readOnly: true
+          - name: daisy-service-account
+            mountPath: /etc/daisy-service-account
+            readOnly: true
       volumes:
-      - name: compute-image-tools-test-service-account
+      - name: daisy-service-account
         secret:
-          secretName: compute-image-tools-test-service-account
+          secretName: daisy-service-account
     max_concurrency: 10
     branches:
     - ^master$
@@ -24,24 +24,24 @@ presubmits:
   GoogleCloudPlatform/osconfig:
   - name: osconfig-presubmit-build
     cluster: gcp-guest
-    trigger: "(?m)^/osconfigbuild$"
-    rerun_command: "/osconfigbuild"
-    context: prow/presubmit/gotest
+    trigger: "(?m)^/packagebuild$"
+    rerun_command: "/packagebuild"
+    context: prow/presubmit/packagebuild
     decorate: true
     spec:
       containers:
       - image: gcr.io/gcp-guest/daisy_build_upload:latest
         command:
-        - "/daisy_build_upload.sh"
+        - "/main.sh"
         args: ["gcp-guest", "us-west1-a", "./packaging/build_packages_wf.json", "gs://osconfig-agent-package/"]
         volumeMounts:
-        - name: compute-image-tools-test-service-account
-          mountPath: /etc/compute-image-tools-test-service-account
+        - name: daisy-service-account
+          mountPath: /etc/daisy-service-account
           readOnly: true
-        volumes:
-        - name: compute-image-tools-test-service-account
-          secret:
-            secretName: compute-image-tools-test-service-account
+      volumes:
+      - name: daisy-service-account
+        secret:
+          secretName: daisy-service-account
   - name: osconfig-presubmit-gocheck
     cluster: gcp-guest
     run_if_changed: ".*\\.go$"
