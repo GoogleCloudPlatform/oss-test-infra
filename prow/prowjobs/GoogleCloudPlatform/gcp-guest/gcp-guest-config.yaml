@@ -10,9 +10,9 @@ postsubmits:
         - "/main.sh"
         args: ["gcp-guest", "us-west1-a", "./packaging/build_packages_wf.json", "gs://osconfig-agent-package/"]
         volumeMounts:
-          - name: daisy-service-account
-            mountPath: /etc/daisy-service-account
-            readOnly: true
+        - name: daisy-service-account
+          mountPath: /etc/daisy-service-account
+          readOnly: true
       volumes:
       - name: daisy-service-account
         secret:
