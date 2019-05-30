@@ -5,7 +5,7 @@ postsubmits:
     decorate: true
     spec:
       containers:
-      - image: gcr.io/gcp-guest/daisy_build_upload:latest
+      - image: gcr.io/gcp-guest/daisy-builder:latest
         command:
         - "/main.sh"
         args: ["gcp-guest", "us-west1-a", "./packaging/build_packages_wf.json", "gs://osconfig-agent-package/"]
@@ -13,6 +13,9 @@ postsubmits:
         - name: daisy-service-account
           mountPath: /etc/daisy-service-account
           readOnly: true
+        env:
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /etc/daisy-service-account/creds.json
       volumes:
       - name: daisy-service-account
         secret:
@@ -20,6 +23,7 @@ postsubmits:
     max_concurrency: 10
     branches:
     - ^master$
+
 presubmits:
   GoogleCloudPlatform/osconfig:
   - name: osconfig-presubmit-build
@@ -30,14 +34,17 @@ presubmits:
     decorate: true
     spec:
       containers:
-      - image: gcr.io/gcp-guest/daisy_build_upload:latest
+      - image: gcr.io/gcp-guest/daisy-builder:latest
         command:
         - "/main.sh"
-        args: ["gcp-guest", "us-west1-a", "./packaging/build_packages_wf.json", "gs://osconfig-agent-package/"]
+        args: ["gcp-guest", "us-west1-a", "./packaging/build_packages_wf.json"]
         volumeMounts:
         - name: daisy-service-account
           mountPath: /etc/daisy-service-account
           readOnly: true
+        env:
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /etc/daisy-service-account/creds.json
       volumes:
       - name: daisy-service-account
         secret:
