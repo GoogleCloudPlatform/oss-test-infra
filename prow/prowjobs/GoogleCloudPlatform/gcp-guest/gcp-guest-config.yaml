@@ -209,4 +209,4 @@ presubmits:
       - image: gcr.io/gcp-guest/selinux-tools:latest
         imagePullPolicy: Always
         command:
-        - "./packages/google-compute-engine-oslogin/validate.sh"
+        - "./packages/google-compute-engine-oslogin/policy/validate.sh"
