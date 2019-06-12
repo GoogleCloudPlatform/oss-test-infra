@@ -234,7 +234,7 @@ presubmits:
     decorate: true
     spec:
       containers:
-      - image: debian
+      - image: gcr.io/gcp-guest/build-essential:latest
         imagePullPolicy: Always
         command:
         - make
@@ -249,7 +249,7 @@ presubmits:
     decorate: true
     spec:
       containers:
-      - image: debian
+      - image: gcr.io/gcp-guest/build-essential:latest
         imagePullPolicy: Always
         command:
         - make
