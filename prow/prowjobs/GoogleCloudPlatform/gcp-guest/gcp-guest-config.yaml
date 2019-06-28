@@ -255,3 +255,29 @@ presubmits:
         - make
         args:
         - prowtest
+
+  GoogleCloudPlatform/guest-configs:
+  - name: guest-configs-presubmit-build
+    cluster: gcp-guest
+    run_if_changed: ".*/packaging/.*"
+    trigger: "(?m)^/packagebuild$"
+    rerun_command: "/packagebuild"
+    context: prow/presubmit/packagebuild
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/daisy-builder:latest
+        command:
+        - "/main.sh"
+        args: ["gcp-guest", "us-west1-a", "./packaging/build_packages_wf.json"]
+        volumeMounts:
+        - name: daisy-service-account
+          mountPath: /etc/daisy-service-account
+          readOnly: true
+        env:
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /etc/daisy-service-account/creds.json
+      volumes:
+      - name: daisy-service-account
+        secret:
+          secretName: daisy-service-account
