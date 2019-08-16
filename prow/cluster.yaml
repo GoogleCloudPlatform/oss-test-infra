@@ -83,7 +83,7 @@ spec:
       serviceAccountName: plank
       containers:
       - name: plank
-        image: gcr.io/k8s-prow/plank:v20190506-d97b87848
+        image: gcr.io/oss-prow/plank:v20190816-e9e4eb93b
         args:
         - --build-cluster=/etc/cluster/build-cluster.yaml
         - --dry-run=false
