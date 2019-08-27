@@ -25,6 +25,9 @@ lgtm:
 - repos:
   - GoogleCloudPlatform/oss-test-infra
   review_acts_as_lgtm: true
+- repos:
+  - GoogleForGames
+  review_acts_as_lgtm: true
 
 plugins:
   GoogleCloudPlatform:
@@ -50,3 +53,19 @@ plugins:
 
   GoogleCloudPlatform/osconfig:
   - golint
+
+  GoogleForGames/agones:
+  - approve # /approve
+  - assign # /assign and /cc
+  - blunderbuss # auto-/cc
+  - cat # /meow
+  - dog # /woof
+  - golint # /lint
+  - heart # encourage OWNERS changes
+  - hold # /hold PR from merge
+  - lgtm # /lgtm
+  - pony # /pony
+  - shrug # /shrug
+  - size # auto-add size label
+  - wip # draft-PR awareness
+  - yuks # /joke
