@@ -39,10 +39,10 @@ plank:
     timeout: 7200000000000 # 2h
     grace_period: 15000000000 # 15s
     utility_images:
-      clonerefs: "gcr.io/k8s-prow/clonerefs:v20190506-d97b87848"
-      initupload: "gcr.io/k8s-prow/initupload:v20190506-d97b87848"
-      entrypoint: "gcr.io/k8s-prow/entrypoint:v20190506-d97b87848"
-      sidecar: "gcr.io/k8s-prow/sidecar:v20190506-d97b87848"
+      clonerefs: "gcr.io/k8s-prow/clonerefs:v20190827-484b36c51"
+      initupload: "gcr.io/k8s-prow/initupload:v20190827-484b36c51"
+      entrypoint: "gcr.io/k8s-prow/entrypoint:v20190827-484b36c51"
+      sidecar: "gcr.io/k8s-prow/sidecar:v20190827-484b36c51"
     gcs_configuration:
       bucket: "oss-prow"
       path_strategy: "explicit"
@@ -55,7 +55,7 @@ sinker:
 
 prowjob_namespace: default
 pod_namespace: test-pods
-log_level: info
+log_level: debug
 
 deck:
   spyglass:
