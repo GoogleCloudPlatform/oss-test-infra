@@ -25,7 +25,7 @@ approve:
 - repos:
   - GoogleCloudPlatform
   - googleforgames
-  requre_self_approval: false
+  require_self_approval: false
 
 lgtm:
 - repos:
