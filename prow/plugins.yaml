@@ -54,7 +54,7 @@ plugins:
   GoogleCloudPlatform/osconfig:
   - golint
 
-  GoogleForGames/agones:
+  googleforgames/agones:
   - approve # /approve
   - assign # /assign and /cc
   - blunderbuss # auto-/cc
