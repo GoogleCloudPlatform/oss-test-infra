@@ -21,12 +21,16 @@ config_updater:
     prow/prowjobs/**/*.yaml:
       name: job-config
 
+approve:
+- repos:
+  - GoogleCloudPlatform
+  - googleforgames
+  requre_self_approval: false
+
 lgtm:
 - repos:
-  - GoogleCloudPlatform/oss-test-infra
-  review_acts_as_lgtm: true
-- repos:
-  - GoogleForGames
+  - GoogleCloudPlatform
+  - googleforgames
   review_acts_as_lgtm: true
 
 plugins:
