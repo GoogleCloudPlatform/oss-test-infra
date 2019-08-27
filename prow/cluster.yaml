@@ -85,7 +85,7 @@ spec:
       - name: plank
         image: gcr.io/k8s-prow/plank:v20190827-484b36c51
         args:
-        - --build-cluster=/etc/cluster/build-cluster.yaml
+        - --kubeconfig=/etc/kubeconfig/oss-config
         - --dry-run=false
         - --github-token-path=
         - --skip-report=true
@@ -98,8 +98,8 @@ spec:
         - name: job-config
           mountPath: /etc/job-config
           readOnly: true
-        - mountPath: /etc/cluster
-          name: cluster
+        - mountPath: /etc/kubeconfig
+          name: kubeconfig
           readOnly: true
       volumes:
       - name: config
@@ -108,10 +108,10 @@ spec:
       - name: job-config
         configMap:
           name: job-config
-      - name: cluster
+      - name: kubeconfig
         secret:
           defaultMode: 420
-          secretName: build-cluster
+          secretName: kubeconfig
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -131,7 +131,7 @@ spec:
       - name: sinker
         image: gcr.io/k8s-prow/sinker:v20190827-484b36c51
         args:
-        - --build-cluster=/etc/cluster/build-cluster.yaml
+        - --kubeconfig=/etc/kubeconfig/oss-config
         - --config-path=/etc/config/config.yaml
         - --job-config-path=/etc/job-config
         - --dry-run=false
@@ -142,8 +142,8 @@ spec:
         - name: job-config
           mountPath: /etc/job-config
           readOnly: true
-        - mountPath: /etc/cluster
-          name: cluster
+        - mountPath: /etc/kubeconfig
+          name: kubeconfig
           readOnly: true
       volumes:
       - name: config
@@ -152,10 +152,10 @@ spec:
       - name: job-config
         configMap:
           name: job-config
-      - name: cluster
+      - name: kubeconfig
         secret:
           defaultMode: 420
-          secretName: build-cluster
+          secretName: kubeconfig
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -181,7 +181,7 @@ spec:
       - name: deck
         image: gcr.io/k8s-prow/deck:v20190827-484b36c51
         args:
-        - --build-cluster=/etc/cluster/build-cluster.yaml
+        - --kubeconfig=/etc/kubeconfig/oss-config
         - --config-path=/etc/config/config.yaml
         - --job-config-path=/etc/job-config
         - --spyglass=true
@@ -199,8 +199,8 @@ spec:
         - name: job-config
           mountPath: /etc/job-config
           readOnly: true
-        - mountPath: /etc/cluster
-          name: cluster
+        - mountPath: /etc/kubeconfig
+          name: kubeconfig
           readOnly: true
         - name: oauth
           mountPath: /etc/github
@@ -212,10 +212,10 @@ spec:
       - name: job-config
         configMap:
           name: job-config
-      - name: cluster
+      - name: kubeconfig
         secret:
           defaultMode: 420
-          secretName: build-cluster
+          secretName: kubeconfig
       - name: oauth
         secret:
           secretName: oauth-token
@@ -799,7 +799,6 @@ spec:
       - name: tide
         image: gcr.io/k8s-prow/tide:v20190827-484b36c51
         args:
-        - --build-cluster=/etc/cluster/build-cluster.yaml
         - --config-path=/etc/config/config.yaml
         - --job-config-path=/etc/job-config
         - --dry-run=false
@@ -816,9 +815,6 @@ spec:
         - name: job-config
           mountPath: /etc/job-config
           readOnly: true
-        - mountPath: /etc/cluster
-          name: cluster
-          readOnly: true
       volumes:
       - name: oauth
         secret:
@@ -829,10 +825,6 @@ spec:
       - name: job-config
         configMap:
           name: job-config
-      - name: cluster
-        secret:
-          defaultMode: 420
-          secretName: build-cluster
 ---
 apiVersion: v1
 kind: Service
