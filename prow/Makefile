@@ -27,8 +27,8 @@ update-config: get-cluster-credentials
 update-plugins: get-cluster-credentials
 	kubectl create configmap plugins --from-file=plugins.yaml=plugins.yaml --dry-run -o yaml | kubectl replace configmap plugins -f -
 
-.PHONY: update-cluster
-update-cluster: get-cluster-credentials
+.PHONY: deploy
+deploy: get-cluster-credentials
 	kubectl apply -f cluster.yaml
 	kubectl apply -f grandmatriarch.yaml
 	kubectl apply -f cert-manager.yaml
