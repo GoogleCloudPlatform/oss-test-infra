@@ -1,16 +1,30 @@
 presubmits:
   GoogleCloudPlatform/oss-test-infra:
-  - name: pull-prow-config-validate
-    branches:
-    - master
-    decorate: true
-    always_run: true
-    spec:
-      containers:
-      - image: gcr.io/k8s-prow/checkconfig:v20190905-4782ba3a2
-        imagePullPolicy: Always
-        command:
-        - /checkconfig
-        args:
-        - --config-path=./prow/config.yaml
-        - --job-config-path=./prow/prowjobs
+
+    - name: pull-prow-config-validate
+      branches:
+        - master
+      decorate: true
+      always_run: true
+      spec:
+        containers:
+          - image: gcr.io/k8s-prow/checkconfig:v20190905-4782ba3a2
+            imagePullPolicy: Always
+            command:
+              - /checkconfig
+            args:
+              - --config-path=./prow/config.yaml
+              - --job-config-path=./prow/prowjobs
+
+    - name: pull-test-infra-go-test
+      branches:
+        - master
+      decorate: true
+      always_run: true
+      spec:
+        containers:
+          - image: golang:1.13
+            command:
+              - go
+              - test
+              - ./...

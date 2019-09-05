@@ -1,4 +1,4 @@
-module GoogleCloudPlatform/oss-test-infra
+module github.com/GoogleCloudPlatform/oss-test-infra
 
 go 1.13
 
