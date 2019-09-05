@@ -297,22 +297,6 @@ spec:
           serviceName: hook
           servicePort: 8888
 ---
-# start gerrit
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  labels:
-    app: gerrit
-  name: gerrit-storage
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
-  # volumeName: added automatically after volume creation
-  # See https://cloud.google.com/kubernetes-engine/docs/concepts/persistent-volumes
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -338,8 +322,9 @@ spec:
         - --config-path=/etc/config/config.yaml
         - --job-config-path=/etc/job-config
         - --cookiefile=/etc/cookies/cookies
+        - --gcs-credentials-file=/etc/robot/service-account.json
         - --gerrit-projects=https://kunit-review.googlesource.com=linux
-        - --last-sync-fallback=/store/gerrit
+        - --last-sync-fallback=gs://oss-prow/last-gerrit-sync
         volumeMounts:
         - name: config
           mountPath: /etc/config
@@ -347,10 +332,11 @@ spec:
         - name: job-config
           mountPath: /etc/job-config
           readOnly: true
-        - name: gerrit-volume
-          mountPath: /store
         - name: cookies
           mountPath: /etc/cookies
+          readOnly: true
+        - name: service-account
+          mountPath: /etc/robot
           readOnly: true
       volumes:
       - name: config
@@ -363,9 +349,9 @@ spec:
         secret:
           defaultMode: 420
           secretName: http-cookiefile
-      - name: gerrit-volume
-        persistentVolumeClaim:
-          claimName: gerrit-storage
+      - name: service-account
+        secret:
+          secretName: service-account
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
