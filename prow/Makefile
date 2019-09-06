@@ -19,6 +19,18 @@ ZONE          ?= us-west1-a
 CLUSTER       ?= prow
 JOB_NAMESPACE ?= test-pods
 
+export KUBECONFIG
+
+# This prevents the Kube current-context in the execution environment from being
+# overwritten unless the intention is made explicit w/ the `save` parameter.
+# e.g.
+#		make get-cluster-credentials save=true
+.PHONY: save-kubeconfig
+save-kubeconfig:
+ifndef save
+	$(eval KUBECONFIG=$(shell mktemp))
+endif
+
 .PHONY: update-config
 update-config: get-cluster-credentials
 	kubectl create configmap config --from-file=config.yaml=config.yaml --dry-run -o yaml | kubectl replace configmap config -f -
@@ -34,5 +46,5 @@ deploy: get-cluster-credentials
 	kubectl apply -f cert-manager.yaml
 
 .PHONY: get-cluster-credentials
-get-cluster-credentials:
+get-cluster-credentials: save-kubeconfig
 	gcloud container clusters get-credentials "$(CLUSTER)" --project="$(PROJECT)" --zone="$(ZONE)"
