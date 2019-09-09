@@ -196,21 +196,6 @@ presubmits:
         secret:
           secretName: codecov
 
-  GoogleCloudPlatform/compute-image-packages:
-  - name: packages-presubmit-selinux-module
-    cluster: gcp-guest
-    run_if_changed: ".*/policy/.*"
-    trigger: "(?m)^/modcheck$"
-    rerun_command: "/modcheck"
-    context: prow/presubmit/selinux_module_check
-    decorate: true
-    spec:
-      containers:
-      - image: gcr.io/gcp-guest/selinux-tools:latest
-        imagePullPolicy: Always
-        command:
-        - "./packages/google-compute-engine-oslogin/policy/validate.sh"
-
   GoogleCloudPlatform/guest-oslogin:
   - name: oslogin-presubmit-selinux-module
     cluster: gcp-guest
@@ -227,7 +212,7 @@ presubmits:
         - "./selinux/validate.sh"
   - name: oslogin-presubmit-build
     cluster: gcp-guest
-    run_if_changed: ".*\\.(cc?|h)$"
+    always_run: true
     trigger: "(?m)^/build$"
     rerun_command: "/build"
     context: prow/presubmit/build
@@ -242,7 +227,7 @@ presubmits:
         - prowbuild
   - name: oslogin-presubmit-test
     cluster: gcp-guest
-    run_if_changed: ".*\\.(cc?|h)$"
+    always_run: true
     trigger: "(?m)^/test$"
     rerun_command: "/test"
     context: prow/presubmit/test
