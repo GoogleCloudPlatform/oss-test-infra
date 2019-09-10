@@ -18,4 +18,4 @@ Here lives the OSS [prow](https://github.com/kubernetes/test-infra/tree/master/p
 
 Prow deck: https://prow.gflocks.com/
 
-Please follow https://github.com/kubernetes/test-infra/blob/master/prow/jobs.md#how-to-configure-new-jobs for how to configure prowjobs in [config.yaml](./config.yaml).
+Please follow https://github.com/kubernetes/test-infra/blob/master/prow/jobs.md#how-to-configure-new-jobs for how to configure prowjobs in [config.yaml](./prow/config.yaml).
