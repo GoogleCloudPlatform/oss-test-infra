@@ -58,6 +58,17 @@ plugins:
   GoogleCloudPlatform/osconfig:
   - golint
 
+  GoogleCloudPlatform/testgrid:
+  - blunderbuss
+  - config-updater
+  - golint
+  - heart
+  - pony
+  - shrug
+  - wip
+  - yuks
+  - hold
+
   googleforgames/agones:
   - approve # /approve
   - assign # /assign and /cc
