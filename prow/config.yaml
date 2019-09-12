@@ -34,7 +34,8 @@ tide:
         - do-not-merge/work-in-progress
 
 plank:
-  job_url_prefix: https://prow.gflocks.com/view/gcs/
+  job_url_prefix_config:
+    '*': https://prow.gflocks.com/view/gcs/
   pod_pending_timeout: 60m
   default_decoration_config:
     timeout: 7200000000000 # 2h
