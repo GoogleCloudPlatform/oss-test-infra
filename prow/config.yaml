@@ -25,6 +25,7 @@ tide:
         - GoogleCloudPlatform/guest-logging-go
         - GoogleCloudPlatform/guest-agent
         - GoogleCloudPlatform/guest-oslogin
+        - GoogleCloudPlatform/testgrid
       labels:
         - lgtm
         - approved
