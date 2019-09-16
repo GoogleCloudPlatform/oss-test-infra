@@ -1,0 +1,16 @@
+presubmits:
+  GoogleCloudPlatform/testgrid:
+  - name: test-testgrid-all
+    cluster: testgrid
+    branches:
+    - master
+    decorate: true
+    always_run: true
+    spec:
+      containers:
+      - image: launcher.gcr.io/google/bazel:0.29.1
+        command:
+        - bazel
+        args:
+        - test
+        - //...
