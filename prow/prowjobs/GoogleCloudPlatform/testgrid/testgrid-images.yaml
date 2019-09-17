@@ -1,7 +1,6 @@
 presubmits:
   GoogleCloudPlatform/testgrid:
   - name: test-testgrid-all
-    cluster: testgrid
     branches:
     - master
     decorate: true
