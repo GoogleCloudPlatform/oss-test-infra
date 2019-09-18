@@ -8,7 +8,7 @@ presubmits:
       always_run: true
       spec:
         containers:
-          - image: gcr.io/k8s-prow/checkconfig:v20190913-fb0db8137
+          - image: gcr.io/k8s-prow/checkconfig:v20190918-7672de02b
             imagePullPolicy: Always
             command:
               - /checkconfig
