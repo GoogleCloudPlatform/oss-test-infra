@@ -14,6 +14,7 @@
 
 tide:
   merge_method:
+    kubeflow: squash
     GoogleCloudPlatform/osconfig: squash
     GoogleCloudPlatform/guest-logging-go: squash
     GoogleCloudPlatform/guest-agent: squash
@@ -22,6 +23,17 @@ tide:
     GoogleCloudPlatform/compute-image-tools: squash
   target_url: https://oss-prow.knative.dev/tide
   queries:
+    - orgs:
+      - kubeflow
+      labels:
+      - lgtm
+      - approved
+      missingLabels:
+      - do-not-merge
+      - do-not-merge/hold
+      - do-not-merge/invalid-owners-file
+      - do-not-merge/work-in-progress
+      - needs-rebase
     - repos:
         - GoogleCloudPlatform/osconfig
         - GoogleCloudPlatform/oss-test-infra

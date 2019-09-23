@@ -3,10 +3,10 @@
 dashboards:
 - name: googleoss-gcp-guest
 - name: googleoss-test-infra
+- name: sig-big-data
 
 dashboard_groups:
   - name: googleoss
     dashboard_names:
     - googleoss-gcp-guest
     - googleoss-test-infra
-
