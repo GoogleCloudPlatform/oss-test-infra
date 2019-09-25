@@ -5,6 +5,7 @@ presubmits:
       branches:
         - master
       decorate: true
+      cluster: build
       always_run: true
       spec:
         containers:
@@ -20,6 +21,7 @@ presubmits:
       branches:
         - master
       decorate: true
+      cluster: build
       always_run: true
       spec:
         containers:

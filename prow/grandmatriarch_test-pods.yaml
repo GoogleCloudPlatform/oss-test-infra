@@ -13,6 +13,11 @@
 # limitations under the License.
 
 apiVersion: v1
+kind: Namespace
+metadata:
+  name: test-pods
+---
+apiVersion: v1
 kind: ServiceAccount
 metadata:
   name:  grandmatriarch
@@ -63,75 +68,6 @@ spec:
     metadata:
       labels:
         app: grandmatriarch-test
-    spec:
-      serviceAccountName: grandmatriarch
-      containers:
-      - name: bakery
-        image: gcr.io/k8s-prow/grandmatriarch:v20190924-cb71f84e1
-        args:
-        - /etc/robot/service-account.json
-        - http-cookiefile
-        volumeMounts:
-        - mountPath: /etc/robot
-          name: robot
-          readOnly: true
-      volumes:
-      - name: robot
-        secret:
-          defaultMode: 420
-          secretName: service-account
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name:  grandmatriarch
-  namespace: default
----
-kind: Role
-apiVersion: rbac.authorization.k8s.io/v1
-metadata:
-  name: grandmatriarch
-  namespace: default
-rules:
-- apiGroups:
-  - ""
-  resources:
-  - secrets
-  verbs:
-  - create
-  - get
-  - update
----
-
-kind: RoleBinding
-apiVersion: rbac.authorization.k8s.io/v1
-metadata:
-  name: grandmatriarch
-  namespace: default
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: grandmatriarch
-subjects:
-- kind: ServiceAccount
-  name: grandmatriarch
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: grandmatriarch
-  namespace: default
-  labels:
-    app: grandmatriarch-default
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: grandmatriarch-default
-  template:
-    metadata:
-      labels:
-        app: grandmatriarch-default
     spec:
       serviceAccountName: grandmatriarch
       containers:
