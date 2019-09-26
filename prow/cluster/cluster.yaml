@@ -188,11 +188,23 @@ spec:
         - --tide-url=http://tide/
         - --hook-url=http://hook:8888/plugin-help
         - --redirect-http-to=prow.gflocks.com
-        - --github-oauth-config-file=/etc/github/oauth
+        - --rerun-creates-job
+        - --oauth-url=/github-login
+        - --github-token-path=/etc/github/oauth
+        - --github-oauth-config-file=/etc/githuboauth/secret
         ports:
         - name: http
           containerPort: 8080
         volumeMounts:
+        - name: oauth-config
+          mountPath: /etc/githuboauth
+          readOnly: true
+        - name: cookie-secret
+          mountPath: /etc/cookie
+          readOnly: true
+        - name: oauth-token
+          mountPath: /etc/github
+          readOnly: true
         - name: config
           mountPath: /etc/config
           readOnly: true
@@ -202,10 +214,16 @@ spec:
         - mountPath: /etc/kubeconfig
           name: kubeconfig
           readOnly: true
-        - name: oauth
-          mountPath: /etc/github
-          readOnly: true
       volumes:
+      - name: oauth-config
+        secret:
+          secretName: github-oauth-config
+      - name: oauth-token
+        secret:
+          secretName: oauth-token
+      - name: cookie-secret
+        secret:
+          secretName: cookie
       - name: config
         configMap:
           name: config
@@ -216,9 +234,6 @@ spec:
         secret:
           defaultMode: 420
           secretName: kubeconfig
-      - name: oauth
-        secret:
-          secretName: oauth-token
 ---
 apiVersion: v1
 kind: Service
