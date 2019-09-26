@@ -58,6 +58,9 @@ plugins:
   GoogleCloudPlatform/osconfig:
   - golint
 
+  GoogleCloudPlatform/guest-test-infra:
+  - golint
+
   GoogleCloudPlatform/testgrid:
   - blunderbuss
   - config-updater
