@@ -31,11 +31,8 @@ update-plugins: get-cluster-credentials
 
 .PHONY: deploy
 deploy: get-cluster-credentials
-	kubectl apply -f cluster.yaml
-	kubectl apply -f cert-manager.yaml
-	kubectl apply -f grandmatriarch_default.yaml
-	kubectl apply -f grandmatriarch_test-pods.yaml
+	kubectl apply -f ./cluster/
 
 .PHONY: deploy-build
 deploy-build: get-build-cluster-credentials
-	kubectl apply -f grandmatriarch_test-pods.yaml
+	kubectl apply -f ./cluster/build/

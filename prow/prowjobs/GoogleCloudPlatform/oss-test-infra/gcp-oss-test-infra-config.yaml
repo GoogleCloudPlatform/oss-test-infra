@@ -5,7 +5,6 @@ presubmits:
       branches:
         - master
       decorate: true
-      cluster: build
       always_run: true
       spec:
         containers:
@@ -21,7 +20,6 @@ presubmits:
       branches:
         - master
       decorate: true
-      cluster: build
       always_run: true
       spec:
         containers:
@@ -30,3 +28,25 @@ presubmits:
               - go
               - test
               - ./...
+
+postsubmits:
+    GoogleCloudPlatform/oss-test-infra:
+
+    - name: post-test-infra-deploy-prow
+      cluster: test-infra-trusted
+      run_if_changed: '^prow/cluster/'
+      decorate: true
+      branches:
+      - master
+      labels:
+          preset-prow-deployer-service-account: "true"
+      spec:
+          containers:
+          - image: gcr.io/k8s-testimages/gcloud-in-go:v20190125-cc5d6ecff3
+            command:
+            - make
+            args:
+            - -C
+            - prow
+            - deploy
+            - deploy-build

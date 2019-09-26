@@ -83,3 +83,18 @@ deck:
         required_files:
           - artifacts/junit.*\.xml
     announcement: "The old job viewer, Gubernator, has been deprecated in favour of this page, Spyglass.{{if .ArtifactPath}} For now, the old page is <a href='https://gubernator-internal.googleplex.com/build/{{.ArtifactPath}}'>still available</a>.{{end}} Please send feedback to osp-engprod@google.com."
+
+presets:
+- labels:
+    preset-prow-deployer-service-account: "true"
+  env:
+  - name: GOOGLE_APPLICATION_CREDENTIALS
+    value: /creds/service-account.json
+  volumeMounts:
+  - name: creds
+    mountPath: /creds
+    readOnly: true
+  volumes:
+  - name: creds
+    secret:
+      secretName: prow-deployer-service-account
