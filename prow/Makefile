@@ -12,24 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+include Makefile.gcloud.mk
+
 # These are the usual GKE variables.
 PROJECT       ?= oss-prow
-BUILD_PROJECT ?= oss-prow
+PROJECT_BUILD ?= oss-prow-builds
 ZONE          ?= us-west1-a
 CLUSTER       ?= prow
 JOB_NAMESPACE ?= test-pods
-
-export KUBECONFIG
-
-# This prevents the Kube current-context in the execution environment from being
-# overwritten unless the intention is made explicit w/ the `save` parameter.
-# e.g.
-#		make get-cluster-credentials save=true
-.PHONY: save-kubeconfig
-save-kubeconfig:
-ifndef save
-	$(eval KUBECONFIG=$(shell mktemp))
-endif
 
 .PHONY: update-config
 update-config: get-cluster-credentials
@@ -42,9 +32,10 @@ update-plugins: get-cluster-credentials
 .PHONY: deploy
 deploy: get-cluster-credentials
 	kubectl apply -f cluster.yaml
-	kubectl apply -f grandmatriarch.yaml
 	kubectl apply -f cert-manager.yaml
+	kubectl apply -f grandmatriarch_default.yaml
+	kubectl apply -f grandmatriarch_test-pods.yaml
 
-.PHONY: get-cluster-credentials
-get-cluster-credentials: save-kubeconfig
-	gcloud container clusters get-credentials "$(CLUSTER)" --project="$(PROJECT)" --zone="$(ZONE)"
+.PHONY: deploy-build
+deploy-build: get-build-cluster-credentials
+	kubectl apply -f grandmatriarch_test-pods.yaml
