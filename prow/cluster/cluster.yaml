@@ -607,9 +607,11 @@ rules:
     resources:
       - prowjobs
     verbs:
+      - get
       - create
       - list
       - update
+      - patch
 ---
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1beta1
