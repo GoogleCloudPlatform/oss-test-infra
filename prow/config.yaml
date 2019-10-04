@@ -86,6 +86,21 @@ deck:
 
 presets:
 - labels:
+    preset-service-account: "true"
+  env:
+  - name: GOOGLE_APPLICATION_CREDENTIALS
+    value: /etc/service-account/service-account.json
+  - name: E2E_GOOGLE_APPLICATION_CREDENTIALS
+    value: /etc/service-account/service-account.json
+  volumes:
+  - name: service
+    secret:
+      secretName: service-account
+  volumeMounts:
+  - name: service
+    mountPath: /etc/service-account
+    readOnly: true
+- labels:
     preset-prow-deployer-service-account: "true"
   env:
   - name: GOOGLE_APPLICATION_CREDENTIALS
