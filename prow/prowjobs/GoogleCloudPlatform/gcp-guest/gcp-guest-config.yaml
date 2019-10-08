@@ -8,7 +8,79 @@ postsubmits:
       - image: gcr.io/gcp-guest/daisy-builder:latest
         command:
         - "/main.sh"
-        args: ["gcp-guest", "us-west1-a", "./packaging/build_packages_wf.json", "gs://osconfig-agent-package/"]
+        args: ["gcp-guest", "us-west1-a", "./packaging/build_packages_wf.json", "gs://gcp-guest-packages/osconfig/"]
+        volumeMounts:
+        - name: daisy-service-account
+          mountPath: /etc/daisy-service-account
+          readOnly: true
+        env:
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /etc/daisy-service-account/creds.json
+      volumes:
+      - name: daisy-service-account
+        secret:
+          secretName: daisy-service-account
+    max_concurrency: 10
+    branches:
+    - ^master$
+  GoogleCloudPlatform/guest-oslogin:
+  - name: oslogin-build
+    cluster: gcp-guest
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/daisy-builder:latest
+        command:
+        - "/main.sh"
+        args: ["gcp-guest", "us-west1-a", "./packaging/build_packages_wf.json", "gs://gcp-guest-packages/oslogin/"]
+        volumeMounts:
+        - name: daisy-service-account
+          mountPath: /etc/daisy-service-account
+          readOnly: true
+        env:
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /etc/daisy-service-account/creds.json
+      volumes:
+      - name: daisy-service-account
+        secret:
+          secretName: daisy-service-account
+    max_concurrency: 10
+    branches:
+    - ^master$
+  GoogleCloudPlatform/guest-configs:
+  - name: oslogin-build
+    cluster: gcp-guest
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/daisy-builder:latest
+        command:
+        - "/main.sh"
+        args: ["gcp-guest", "us-west1-a", "./packaging/build_packages_wf.json", "gs://gcp-guest-packages/guest-configs/"]
+        volumeMounts:
+        - name: daisy-service-account
+          mountPath: /etc/daisy-service-account
+          readOnly: true
+        env:
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /etc/daisy-service-account/creds.json
+      volumes:
+      - name: daisy-service-account
+        secret:
+          secretName: daisy-service-account
+    max_concurrency: 10
+    branches:
+    - ^master$
+  GoogleCloudPlatform/guest-agent:
+  - name: oslogin-build
+    cluster: gcp-guest
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/daisy-builder:latest
+        command:
+        - "/main.sh"
+        args: ["gcp-guest", "us-west1-a", "./packaging/build_packages_wf.json", "gs://gcp-guest-packages/guest-agent/"]
         volumeMounts:
         - name: daisy-service-account
           mountPath: /etc/daisy-service-account
@@ -266,3 +338,52 @@ presubmits:
       - name: daisy-service-account
         secret:
           secretName: daisy-service-account
+
+  GoogleCloudPlatform/guest-test-infra:
+  - name: infra-presubmit-gocheck
+    cluster: gcp-guest
+    run_if_changed: ".*\\.go$"
+    trigger: "(?m)^/gocheck$"
+    rerun_command: "/gocheck"
+    context: prow/presubmit/gocheck
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gocheck:latest
+        imagePullPolicy: Always
+        command:
+        - "/go/main.sh"
+  - name: infra-presubmit-gobuild
+    cluster: gcp-guest
+    run_if_changed: ".*\\.go$"
+    trigger: "(?m)^/gobuild$"
+    rerun_command: "/gobuild"
+    context: prow/presubmit/gobuild
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gobuild:latest
+        imagePullPolicy: Always
+        command:
+        - "/go/main.sh"
+  - name: infra-presubmit-gotest
+    cluster: gcp-guest
+    run_if_changed: ".*\\.go$"
+    trigger: "(?m)^/gotest$"
+    rerun_command: "/gotest"
+    context: prow/presubmit/gotest
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gotest:latest
+        imagePullPolicy: Always
+        command:
+        - "/go/main.sh"
+        volumeMounts:
+        - name: codecov
+          mountPath: /etc/codecov
+          readOnly: true
+      volumes:
+      - name: codecov
+        secret:
+          secretName: codecov
