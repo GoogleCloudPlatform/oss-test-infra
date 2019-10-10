@@ -8,7 +8,7 @@ presubmits:
       always_run: true
       spec:
         containers:
-          - image: gcr.io/k8s-prow/checkconfig:v20191008-bbd30bc09
+          - image: gcr.io/k8s-prow/checkconfig:v20191009-0492f1d6e
             imagePullPolicy: Always
             command:
               - /checkconfig
@@ -42,7 +42,7 @@ postsubmits:
           preset-prow-deployer-service-account: "true"
       spec:
           containers:
-          - image: gcr.io/k8s-testimages/gcloud-in-go:v20191008-bbd30bc09
+          - image: gcr.io/k8s-testimages/gcloud-in-go:v20191009-0492f1d6e
             command:
             - make
             args:
