@@ -2,7 +2,7 @@ presubmits:
   GoogleCloudPlatform/testgrid:
   - name: test-testgrid-all
     branches:
-    - master
+    - ^master$
     decorate: true
     always_run: true
     spec:
@@ -13,3 +13,25 @@ presubmits:
         args:
         - test
         - //...
+
+postsubmits:
+  GoogleCloudPlatform/testgrid:
+  - name: push-testgrid-images
+    branches:
+    - ^master$
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/k8s-testimages/bazelbuild:v20190916-ec59af8-0.29.1
+        env:
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /creds/service-account.json
+        command:
+        - ./images/push.sh
+        volumeMounts:
+        - name: testgrid-service-account
+          mountPath: /creds
+      volumes:
+      - name: testgrid-service-account
+        secret:
+          secretName: testgrid-service-account
