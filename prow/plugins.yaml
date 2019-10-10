@@ -38,39 +38,29 @@ plugins:
   - approve
   - assign
   - cat
+  - config-updater
   - dog
+  - golint
+  - hold
+  - label
   - lgtm
   - owners-label
+  - pony
+  - shrug
   - size
   - trigger
+  - yuks
 
   GoogleCloudPlatform/oss-test-infra:
   - blunderbuss
-  - config-updater
-  - golint
   - heart
-  - pony
-  - shrug
+  - override
   - wip
-  - yuks
-  - hold
-
-  GoogleCloudPlatform/osconfig:
-  - golint
-
-  GoogleCloudPlatform/guest-test-infra:
-  - golint
 
   GoogleCloudPlatform/testgrid:
   - blunderbuss
-  - config-updater
   - golint
-  - heart
-  - pony
-  - shrug
   - wip
-  - yuks
-  - hold
 
   googleforgames/agones:
   - approve # /approve
