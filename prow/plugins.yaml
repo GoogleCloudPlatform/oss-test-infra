@@ -38,7 +38,6 @@ plugins:
   - approve
   - assign
   - cat
-  - config-updater
   - dog
   - golint
   - hold
@@ -53,13 +52,13 @@ plugins:
 
   GoogleCloudPlatform/oss-test-infra:
   - blunderbuss
+  - config-updater
   - heart
   - override
   - wip
 
   GoogleCloudPlatform/testgrid:
   - blunderbuss
-  - golint
   - wip
 
   googleforgames/agones:
