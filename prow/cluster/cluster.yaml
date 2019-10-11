@@ -91,6 +91,8 @@ spec:
         - --skip-report=true
         - --config-path=/etc/config/config.yaml
         - --job-config-path=/etc/job-config
+        - --github-endpoint=http://ghproxy
+        - --github-endpoint=https://api.github.com
         volumeMounts:
         - name: config
           mountPath: /etc/config
@@ -192,6 +194,8 @@ spec:
         - --oauth-url=/github-login
         - --github-token-path=/etc/github/oauth
         - --github-oauth-config-file=/etc/githuboauth/secret
+        - --github-endpoint=http://ghproxy
+        - --github-endpoint=https://api.github.com
         ports:
         - name: http
           containerPort: 8080
@@ -449,6 +453,8 @@ spec:
         - --config-path=/etc/config/config.yaml
         - --job-config-path=/etc/job-config
         - --dry-run=false
+        - --github-endpoint=http://ghproxy
+        - --github-endpoint=https://api.github.com
         ports:
         - name: http
           containerPort: 8888
@@ -805,6 +811,8 @@ spec:
         - --config-path=/etc/config/config.yaml
         - --job-config-path=/etc/job-config
         - --dry-run=false
+        - --github-endpoint=http://ghproxy
+        - --github-endpoint=https://api.github.com
         ports:
           - name: http
             containerPort: 8888
