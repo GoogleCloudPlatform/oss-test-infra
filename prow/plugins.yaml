@@ -54,6 +54,7 @@ plugins:
   - blunderbuss
   - config-updater
   - heart
+  - lifecycle
   - override
   - wip
 
