@@ -15,6 +15,11 @@ presubmits:
             args:
               - --config-path=./prow/config.yaml
               - --job-config-path=./prow/prowjobs
+              - --plugin-config=prow/plugins.yaml
+              - --strict
+              # This warning can forbid valid (and convenient) config. Exclude it.
+              # Details: https://github.com/GoogleCloudPlatform/oss-test-infra/pull/131#discussion_r334208082
+              - --exclude-warning=mismatched-tide
 
     - name: pull-test-infra-go-test
       branches:
