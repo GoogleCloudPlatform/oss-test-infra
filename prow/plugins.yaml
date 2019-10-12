@@ -48,6 +48,7 @@ plugins:
   - shrug
   - size
   - trigger
+  - verify-owners
   - yuks
 
   GoogleCloudPlatform/oss-test-infra:
@@ -75,5 +76,13 @@ plugins:
   - pony # /pony
   - shrug # /shrug
   - size # auto-add size label
+  - verify-owners # validate OWNERS file changes
   - wip # draft-PR awareness
   - yuks # /joke
+
+  # This is a gerrit repo so this config doesn't do anything. It is included
+  # to satisfy the checkconfig tool which expects all repos that configure
+  # jobs to enable the trigger plugin if a plugins.yaml is specified.
+  # https://github.com/kubernetes/test-infra/issues/14743
+  https://kunit-review.googlesource.com/linux:
+  - trigger
