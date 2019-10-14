@@ -48,7 +48,7 @@ postsubmits:
     branches:
     - ^master$
   GoogleCloudPlatform/guest-configs:
-  - name: oslogin-build
+  - name: guest-config-build
     cluster: gcp-guest
     decorate: true
     spec:
@@ -72,7 +72,7 @@ postsubmits:
     branches:
     - ^master$
   GoogleCloudPlatform/guest-agent:
-  - name: oslogin-build
+  - name: guest-agent-build
     cluster: gcp-guest
     decorate: true
     spec:
@@ -218,6 +218,30 @@ presubmits:
       - name: codecov
         secret:
           secretName: codecov
+  - name: guest-agent-presubmit-build
+    cluster: gcp-guest
+    run_if_changed: ".*/packaging/.*"
+    trigger: "(?m)^/packagebuild$"
+    rerun_command: "/packagebuild"
+    context: prow/presubmit/packagebuild
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/daisy-builder:latest
+        command:
+        - "/main.sh"
+        args: ["gcp-guest", "us-west1-a", "./packaging/build_packages_wf.json"]
+        volumeMounts:
+        - name: daisy-service-account
+          mountPath: /etc/daisy-service-account
+          readOnly: true
+        env:
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /etc/daisy-service-account/creds.json
+      volumes:
+      - name: daisy-service-account
+        secret:
+          secretName: daisy-service-account
 
   GoogleCloudPlatform/guest-logging-go:
   - name: guest-logging-presubmit-gocheck
@@ -269,6 +293,30 @@ presubmits:
           secretName: codecov
 
   GoogleCloudPlatform/guest-oslogin:
+  - name: oslogin-presubmit-build
+    cluster: gcp-guest
+    run_if_changed: ".*/packaging/.*"
+    trigger: "(?m)^/packagebuild$"
+    rerun_command: "/packagebuild"
+    context: prow/presubmit/packagebuild
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/daisy-builder:latest
+        command:
+        - "/main.sh"
+        args: ["gcp-guest", "us-west1-a", "./packaging/build_packages_wf.json"]
+        volumeMounts:
+        - name: daisy-service-account
+          mountPath: /etc/daisy-service-account
+          readOnly: true
+        env:
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /etc/daisy-service-account/creds.json
+      volumes:
+      - name: daisy-service-account
+        secret:
+          secretName: daisy-service-account
   - name: oslogin-presubmit-selinux-module
     cluster: gcp-guest
     run_if_changed: ".*/policy/.*"
@@ -282,7 +330,7 @@ presubmits:
         imagePullPolicy: Always
         command:
         - "./selinux/validate.sh"
-  - name: oslogin-presubmit-build
+  - name: oslogin-presubmit-make-prowbuild
     cluster: gcp-guest
     always_run: true
     trigger: "(?m)^/build$"
