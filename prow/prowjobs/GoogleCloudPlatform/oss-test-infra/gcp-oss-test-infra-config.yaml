@@ -8,7 +8,7 @@ presubmits:
       always_run: true
       spec:
         containers:
-          - image: gcr.io/k8s-prow/checkconfig:v20191015-dfc1766ef
+          - image: gcr.io/k8s-prow/checkconfig:v20191017-af5797562
             imagePullPolicy: Always
             command:
               - /checkconfig
@@ -66,7 +66,7 @@ periodics:
     base_ref: master
   spec:
     containers:
-    - image: gcr.io/k8s-prow/autobump:v20191015-dfc1766ef
+    - image: gcr.io/k8s-prow/autobump:v20191017-af5797562
       command:
       - /autobump.sh
       args:
