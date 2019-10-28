@@ -1,6 +1,5 @@
 presubmits:
   GoogleCloudPlatform/oss-test-infra:
-
     - name: pull-prow-config-validate
       branches:
         - master
@@ -35,25 +34,46 @@ presubmits:
               - ./...
 
 postsubmits:
-    GoogleCloudPlatform/oss-test-infra:
-    - name: post-test-infra-deploy-prow
-      cluster: test-infra-trusted
-      run_if_changed: '^prow/cluster/|^prow/prowjobs/GoogleCloudPlatform/oss-test-infra/gcp-oss-test-infra-config.yaml'
-      decorate: true
-      branches:
-      - master
-      labels:
-          preset-prow-deployer-service-account: "true"
-      spec:
-          containers:
-          - image: gcr.io/k8s-testimages/gcloud-in-go:v20190125-cc5d6ecff3
-            command:
-            - make
-            args:
-            - -C
-            - prow
-            - deploy
-            - deploy-build
+  GoogleCloudPlatform/oss-test-infra:
+  - name: post-test-infra-deploy-prow
+    cluster: test-infra-trusted
+    run_if_changed: '^prow/cluster/|^prow/prowjobs/GoogleCloudPlatform/oss-test-infra/gcp-oss-test-infra-config.yaml'
+    decorate: true
+    branches:
+    - master
+    labels:
+      preset-prow-deployer-service-account: "true"
+    spec:
+      containers:
+      - image: gcr.io/k8s-testimages/gcloud-in-go:v20190125-cc5d6ecff3
+        command:
+        - make
+        args:
+        - -C
+        - prow
+        - deploy
+        - deploy-build
+  GoogleCloudPlatform/testgrid:
+  - name: push-testgrid-images
+    cluster: test-infra-trusted
+    branches:
+    - ^master$
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/k8s-testimages/bazelbuild:v20190916-ec59af8-0.29.1
+        env:
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /creds/service-account.json
+        command:
+        - ./images/push.sh
+        volumeMounts:
+        - name: testgrid-service-account
+          mountPath: /creds
+      volumes:
+      - name: testgrid-service-account
+        secret:
+          secretName: testgrid-service-account
 
 periodics:
 - cron: "05 15-23 * * 1-5"  # Run at 7:05-15:05 PST (15:05 UTC) Mon-Fri
