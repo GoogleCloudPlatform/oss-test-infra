@@ -105,6 +105,9 @@ presubmits:
     rerun_command: "/packagebuild"
     context: prow/presubmit/packagebuild
     decorate: true
+    annotations:
+      testgrid-dashboards: gcp-guest
+      testgrid-tab-name: osconfig-presubmit
     spec:
       containers:
       - image: gcr.io/gcp-guest/daisy-builder:latest
