@@ -8,7 +8,7 @@ postsubmits:
       - image: gcr.io/gcp-guest/daisy-builder:latest
         command:
         - "/main.sh"
-        args: ["gcp-guest", "us-west1-a", "./packaging/build_packages_wf.json", "gs://gcp-guest-packages/osconfig/"]
+        args: ["gcp-guest", "us-west1-a", "deb9,el6,el7,el8,goo", "gs://gcp-guest-packages/osconfig/"]
         volumeMounts:
         - name: daisy-service-account
           mountPath: /etc/daisy-service-account
@@ -104,16 +104,18 @@ presubmits:
     trigger: "(?m)^/packagebuild$"
     rerun_command: "/packagebuild"
     context: prow/presubmit/packagebuild
+    extra_refs:
+    - org: GoogleCloudPlatform
+      repo: guest-test-infra
+      base_ref: master
+      workdir: true
     decorate: true
-    annotations:
-      testgrid-dashboards: gcp-guest
-      testgrid-tab-name: osconfig-presubmit
     spec:
       containers:
       - image: gcr.io/gcp-guest/daisy-builder:latest
         command:
         - "/main.sh"
-        args: ["gcp-guest", "us-west1-a", "./packaging/build_packages_wf.json"]
+        args: ["gcp-guest", "us-west1-a", "deb9,el6,el7,el8,goo"]
         volumeMounts:
         - name: daisy-service-account
           mountPath: /etc/daisy-service-account
@@ -132,6 +134,9 @@ presubmits:
     rerun_command: "/gocheck"
     context: prow/presubmit/gocheck
     decorate: true
+    annotations:
+      testgrid-dashboards: gcp-guest
+      testgrid-tab-name: "OSConfig presubmits - gocheck"
     spec:
       containers:
       - image: gcr.io/gcp-guest/gocheck:latest
@@ -145,6 +150,9 @@ presubmits:
     rerun_command: "/gobuild"
     context: prow/presubmit/gobuild
     decorate: true
+    annotations:
+      testgrid-dashboards: gcp-guest
+      testgrid-tab-name: "OSConfig presubmits - gobuild"
     spec:
       containers:
       - image: gcr.io/gcp-guest/gobuild:latest
@@ -158,6 +166,9 @@ presubmits:
     rerun_command: "/gotest"
     context: prow/presubmit/gotest
     decorate: true
+    annotations:
+      testgrid-dashboards: gcp-guest
+      testgrid-tab-name: "OSConfig presubmits - gotest"
     spec:
       containers:
       - image: gcr.io/gcp-guest/gotest:latest
@@ -323,6 +334,11 @@ presubmits:
     trigger: "(?m)^/packagebuild$"
     rerun_command: "/packagebuild"
     context: prow/presubmit/packagebuild
+    extra_refs:
+    - org: GoogleCloudPlatform
+      repo: guest-test-infra
+      base_ref: master
+      workdir: true
     decorate: true
     spec:
       containers:
