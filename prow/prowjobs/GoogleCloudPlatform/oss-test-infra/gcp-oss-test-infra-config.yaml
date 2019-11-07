@@ -53,6 +53,33 @@ postsubmits:
         - prow
         - deploy
         - deploy-build
+  - name: post-test-infra-upload-testgrid-config
+    cluster: test-infra-trusted
+    run_if_changed: '^(prow/prowjobs/.*\.yaml)|(testgrid/config\.yaml)$'
+    decorate: true
+    branches:
+    - master
+    annotations:
+      testgrid-create-test-group: "false"
+    spec:
+      containers:
+      - image: gcr.io/k8s-prow/transfigure
+        command:
+        - /transfigure.sh
+        args:
+        - /etc/github-token/oauth
+        - prow/config.yaml
+        - prow/prowjobs
+        - testgrid/config.yaml
+        - GoogleCloudPlatform
+        volumeMounts:
+        - name: github
+          mountPath: /etc/github-token
+          readOnly: true
+      volumes:
+      - name: github
+        secret:
+          secretName: oauth-token
   GoogleCloudPlatform/testgrid:
   - name: push-testgrid-images
     cluster: test-infra-trusted
