@@ -35,12 +35,14 @@ presubmits:
 
 postsubmits:
   GoogleCloudPlatform/oss-test-infra:
-  - name: post-test-infra-deploy-prow
+  - name: post-oss-test-infra-deploy-prow
     cluster: test-infra-trusted
     run_if_changed: '^prow/cluster/|^prow/prowjobs/GoogleCloudPlatform/oss-test-infra/gcp-oss-test-infra-config.yaml'
     decorate: true
     branches:
     - master
+    annotations:
+      testgrid-dashboards: google-oss-infra
     labels:
       preset-prow-deployer-service-account: "true"
     spec:
@@ -53,14 +55,14 @@ postsubmits:
         - prow
         - deploy
         - deploy-build
-  - name: post-test-infra-upload-testgrid-config
+  - name: post-oss-test-infra-upload-testgrid-config
     cluster: test-infra-trusted
     run_if_changed: '^(prow/prowjobs/.*\.yaml)|(testgrid/config\.yaml)$'
     decorate: true
     branches:
     - master
     annotations:
-      testgrid-create-test-group: "false"
+      testgrid-dashboards: google-oss-infra
     spec:
       containers:
       - image: gcr.io/k8s-prow/transfigure
@@ -86,6 +88,9 @@ postsubmits:
     branches:
     - ^master$
     decorate: true
+    annotations:
+      testgrid-dashboards: google-oss-infra
+      testgrid-alert-email: slchase@google.com
     spec:
       containers:
       - image: gcr.io/k8s-testimages/bazelbuild:v20190916-ec59af8-0.29.1
@@ -104,13 +109,15 @@ postsubmits:
 
 periodics:
 - cron: "05 15-23 * * 1-5"  # Run at 7:05-15:05 PST (15:05 UTC) Mon-Fri
-  name: ci-test-infra-autobump-prow
+  name: ci-oss-test-infra-autobump-prow
   cluster: test-infra-trusted
   decorate: true
   extra_refs:
   - org: GoogleCloudPlatform
     repo: oss-test-infra
     base_ref: master
+  annotations:
+    testgrid-dashboards: google-oss-infra
   spec:
     containers:
     - image: gcr.io/k8s-prow/autobump:v20191030-49516b6be

@@ -1,5 +1,7 @@
 # Dashboards need to be specified here to be created on TestGrid
 # A prow annotation will be invalid if it references a dashboard that doesn't exist
 dashboards:
+- name: google-gcp-guest
+- name: google-oss-infra
 
 dashboard_groups:
