@@ -3,6 +3,8 @@ postsubmits:
   - name: osconfig-build
     cluster: gcp-guest
     decorate: true
+    annotations:
+      testgrid-dashboards: google-gcp-guest
     spec:
       containers:
       - image: gcr.io/gcp-guest/daisy-builder:latest
@@ -27,6 +29,8 @@ postsubmits:
   - name: oslogin-build
     cluster: gcp-guest
     decorate: true
+    annotations:
+      testgrid-dashboards: google-gcp-guest
     spec:
       containers:
       - image: gcr.io/gcp-guest/daisy-builder:latest
@@ -51,6 +55,8 @@ postsubmits:
   - name: guest-config-build
     cluster: gcp-guest
     decorate: true
+    annotations:
+      testgrid-dashboards: google-gcp-guest
     spec:
       containers:
       - image: gcr.io/gcp-guest/daisy-builder:latest
@@ -75,6 +81,8 @@ postsubmits:
   - name: guest-agent-build
     cluster: gcp-guest
     decorate: true
+    annotations:
+      testgrid-dashboards: google-gcp-guest
     spec:
       containers:
       - image: gcr.io/gcp-guest/daisy-builder:latest
@@ -135,7 +143,7 @@ presubmits:
     context: prow/presubmit/gocheck
     decorate: true
     annotations:
-      testgrid-dashboards: gcp-guest
+      testgrid-dashboards: google-gcp-guest
       testgrid-tab-name: "OSConfig presubmits - gocheck"
     spec:
       containers:
@@ -151,7 +159,7 @@ presubmits:
     context: prow/presubmit/gobuild
     decorate: true
     annotations:
-      testgrid-dashboards: gcp-guest
+      testgrid-dashboards: google-gcp-guest
       testgrid-tab-name: "OSConfig presubmits - gobuild"
     spec:
       containers:
@@ -167,7 +175,7 @@ presubmits:
     context: prow/presubmit/gotest
     decorate: true
     annotations:
-      testgrid-dashboards: gcp-guest
+      testgrid-dashboards: google-gcp-guest
       testgrid-tab-name: "OSConfig presubmits - gotest"
     spec:
       containers:
