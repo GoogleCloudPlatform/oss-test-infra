@@ -15,13 +15,21 @@ postsubmits:
         - name: daisy-service-account
           mountPath: /etc/daisy-service-account
           readOnly: true
+        - name: github-access-token
+          mountPath: /etc/github-access-token
+          readOnly: true
         env:
         - name: GOOGLE_APPLICATION_CREDENTIALS
           value: /etc/daisy-service-account/creds.json
+        - name: GITHUB_ACCESS_TOKEN
+          value: /etc/github-access-token/token.txt
       volumes:
       - name: daisy-service-account
         secret:
           secretName: daisy-service-account
+      - name: github-access-token
+        secret:
+          secretName: github-access-token
     max_concurrency: 10
     branches:
     - ^master$
@@ -41,13 +49,21 @@ postsubmits:
         - name: daisy-service-account
           mountPath: /etc/daisy-service-account
           readOnly: true
+        - name: github-access-token
+          mountPath: /etc/github-access-token
+          readOnly: true
         env:
         - name: GOOGLE_APPLICATION_CREDENTIALS
           value: /etc/daisy-service-account/creds.json
+        - name: GITHUB_ACCESS_TOKEN
+          value: /etc/github-access-token/token.txt
       volumes:
       - name: daisy-service-account
         secret:
           secretName: daisy-service-account
+      - name: github-access-token
+        secret:
+          secretName: github-access-token
     max_concurrency: 10
     branches:
     - ^master$
@@ -67,13 +83,21 @@ postsubmits:
         - name: daisy-service-account
           mountPath: /etc/daisy-service-account
           readOnly: true
+        - name: github-access-token
+          mountPath: /etc/github-access-token
+          readOnly: true
         env:
         - name: GOOGLE_APPLICATION_CREDENTIALS
           value: /etc/daisy-service-account/creds.json
+        - name: GITHUB_ACCESS_TOKEN
+          value: /etc/github-access-token/token.txt
       volumes:
       - name: daisy-service-account
         secret:
           secretName: daisy-service-account
+      - name: github-access-token
+        secret:
+          secretName: github-access-token
     max_concurrency: 10
     branches:
     - ^master$
@@ -93,13 +117,21 @@ postsubmits:
         - name: daisy-service-account
           mountPath: /etc/daisy-service-account
           readOnly: true
+        - name: github-access-token
+          mountPath: /etc/github-access-token
+          readOnly: true
         env:
         - name: GOOGLE_APPLICATION_CREDENTIALS
           value: /etc/daisy-service-account/creds.json
+        - name: GITHUB_ACCESS_TOKEN
+          value: /etc/github-access-token/token.txt
       volumes:
       - name: daisy-service-account
         secret:
           secretName: daisy-service-account
+      - name: github-access-token
+        secret:
+          secretName: github-access-token
     max_concurrency: 10
     branches:
     - ^master$
