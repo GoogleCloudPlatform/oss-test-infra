@@ -44,7 +44,7 @@ postsubmits:
       - image: gcr.io/gcp-guest/daisy-builder:latest
         command:
         - "/main.sh"
-        args: ["gcp-guest", "us-west1-a", "./packaging/build_packages_wf.json", "gs://gcp-guest-packages/oslogin/"]
+        args: ["gcp-guest", "us-west1-a", "deb9,deb10,el6,el7,el8", "gs://gcp-guest-packages/oslogin/"]
         volumeMounts:
         - name: daisy-service-account
           mountPath: /etc/daisy-service-account
@@ -78,7 +78,7 @@ postsubmits:
       - image: gcr.io/gcp-guest/daisy-builder:latest
         command:
         - "/main.sh"
-        args: ["gcp-guest", "us-west1-a", "./packaging/build_packages_wf.json", "gs://gcp-guest-packages/guest-configs/"]
+        args: ["gcp-guest", "us-west1-a", "deb9,el6,el7,el8", "gs://gcp-guest-packages/guest-configs/"]
         volumeMounts:
         - name: daisy-service-account
           mountPath: /etc/daisy-service-account
@@ -112,7 +112,7 @@ postsubmits:
       - image: gcr.io/gcp-guest/daisy-builder:latest
         command:
         - "/main.sh"
-        args: ["gcp-guest", "us-west1-a", "./packaging/build_packages_wf.json", "gs://gcp-guest-packages/guest-agent/"]
+        args: ["gcp-guest", "us-west1-a", "deb9,el6,el7,el8", "gs://gcp-guest-packages/guest-agent/"]
         volumeMounts:
         - name: daisy-service-account
           mountPath: /etc/daisy-service-account
@@ -284,7 +284,7 @@ presubmits:
       - image: gcr.io/gcp-guest/daisy-builder:latest
         command:
         - "/main.sh"
-        args: ["gcp-guest", "us-west1-a", "./packaging/build_packages_wf.json"]
+        args: ["gcp-guest", "us-west1-a", "deb9,el6,el7,el8"]
         volumeMounts:
         - name: daisy-service-account
           mountPath: /etc/daisy-service-account
@@ -359,7 +359,7 @@ presubmits:
       - image: gcr.io/gcp-guest/daisy-builder:latest
         command:
         - "/main.sh"
-        args: ["gcp-guest", "us-west1-a", "./packaging/build_packages_wf.json"]
+        args: ["gcp-guest", "us-west1-a", "deb9,deb10,el6,el7,el8"]
         volumeMounts:
         - name: daisy-service-account
           mountPath: /etc/daisy-service-account
@@ -433,7 +433,7 @@ presubmits:
       - image: gcr.io/gcp-guest/daisy-builder:latest
         command:
         - "/main.sh"
-        args: ["gcp-guest", "us-west1-a", "./packaging/build_packages_wf.json"]
+        args: ["gcp-guest", "us-west1-a", "deb9,el6,el7,el8"]
         volumeMounts:
         - name: daisy-service-account
           mountPath: /etc/daisy-service-account
