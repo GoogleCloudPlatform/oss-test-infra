@@ -1,0 +1,20 @@
+presubmits:
+  GoogleCloudPlatform/api-proxy:
+  - name: gcpproxy-build
+    always_run: true
+    decorate: true
+    path_alias: cloudesf.googlesource.com/gcpproxy
+    spec:
+      containers:
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20191114-v0.0.0-100-g901f883-master
+        command:
+        - ./prow/gcpproxy-build.sh
+  - name: gcpproxy-presubmit
+    always_run: true
+    decorate: true
+    path_alias: cloudesf.googlesource.com/gcpproxy
+    spec:
+      containers:
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20191114-v0.0.0-100-g901f883-master
+        command:
+        - ./prow/gcpproxy-presubmit.sh
