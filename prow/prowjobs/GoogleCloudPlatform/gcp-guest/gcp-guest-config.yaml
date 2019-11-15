@@ -2,6 +2,11 @@ postsubmits:
   GoogleCloudPlatform/osconfig:
   - name: osconfig-build
     cluster: gcp-guest
+    extra_refs:
+    - org: GoogleCloudPlatform
+      repo: guest-test-infra
+      base_ref: master
+      workdir: true
     decorate: true
     annotations:
       testgrid-dashboards: google-gcp-guest
@@ -37,6 +42,11 @@ postsubmits:
   - name: oslogin-build
     cluster: gcp-guest
     decorate: true
+    extra_refs:
+    - org: GoogleCloudPlatform
+      repo: guest-test-infra
+      base_ref: master
+      workdir: true
     annotations:
       testgrid-dashboards: google-gcp-guest
     spec:
@@ -70,6 +80,11 @@ postsubmits:
   GoogleCloudPlatform/guest-configs:
   - name: guest-config-build
     cluster: gcp-guest
+    extra_refs:
+    - org: GoogleCloudPlatform
+      repo: guest-test-infra
+      base_ref: master
+      workdir: true
     decorate: true
     annotations:
       testgrid-dashboards: google-gcp-guest
@@ -104,6 +119,11 @@ postsubmits:
   GoogleCloudPlatform/guest-agent:
   - name: guest-agent-build
     cluster: gcp-guest
+    extra_refs:
+    - org: GoogleCloudPlatform
+      repo: guest-test-infra
+      base_ref: master
+      workdir: true
     decorate: true
     annotations:
       testgrid-dashboards: google-gcp-guest
