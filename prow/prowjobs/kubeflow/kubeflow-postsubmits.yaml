@@ -12,6 +12,19 @@ postsubmits:
     annotations:
       testgrid-dashboards: sig-big-data
       description: Postsubmit kubeflow/examples.
+  kubeflow/internal-acls:
+  - name: kubeflow-internal-acls-postsubmit
+    cluster: kubeflow
+    labels:
+      preset-service-account: "true"
+    spec:
+      containers:
+      - image: gcr.io/kubeflow-ci/test-worker:latest
+        imagePullPolicy: Always
+
+    annotations:
+      testgrid-dashboards: sig-big-data
+      description: Postsubmit tests for kubeflow/internal-acls.
   kubeflow/kubeflow:
   - name: kubeflow-postsubmit
     cluster: kubeflow
@@ -25,6 +38,9 @@ postsubmits:
     annotations:
       testgrid-dashboards: sig-big-data
       description: Postsubmit tests for Kubeflow.
+      # TODO: use a public email group
+      testgrid-alert-email: kubeflow-engineering@google.com
+      testgrid-num-failures-to-alert: "3"
   kubeflow/kfctl:
   - name: kubeflow-kfctl-postsubmit
     cluster: kubeflow
@@ -38,6 +54,19 @@ postsubmits:
     annotations:
       testgrid-dashboards: sig-big-data
       description: Postsubmit tests for kubeflow/kfctl.
+  kubeflow/manifests:
+  - name: kubeflow-manifests-postsubmit
+    cluster: kubeflow
+    labels:
+      preset-service-account: "true"
+    spec:
+      containers:
+      - image: gcr.io/kubeflow-ci/test-worker:latest
+        imagePullPolicy: Always
+
+    annotations:
+      testgrid-dashboards: sig-big-data
+      description: Postsubmit tests for kubeflow/manifests.
   kubeflow/pytorch-operator:
   - name: kubeflow-pytorch-operator-postsubmit
     cluster: kubeflow
@@ -142,6 +171,19 @@ postsubmits:
     annotations:
       testgrid-dashboards: sig-big-data
       description: Postsubmit kubeflow/experimental-seldon.
+  kubeflow/experimental-beagle:
+  - name: kubeflow-experimental-beagle-postsubmit
+    cluster: kubeflow
+    labels:
+      preset-service-account: "true"
+    spec:
+      containers:
+      - image: gcr.io/kubeflow-ci/test-worker:latest
+        imagePullPolicy: Always
+
+    annotations:
+      testgrid-dashboards: sig-big-data
+      description: Postsubmit kubeflow/experimental-beagle.
   kubeflow/caffe2-operator:
   - name: kubeflow-caffe2-operator-postsubmit
     cluster: kubeflow
@@ -228,7 +270,7 @@ postsubmits:
       preset-service-account: "true"
     spec:
       containers:
-      - image: gcr.io/k8s-testimages/kubekins-e2e:v20190911-069bf1f-master
+      - image: gcr.io/k8s-testimages/kubekins-e2e:v20191106-09649c7-master
         command:
         - ./test/postsubmit-tests-with-pipeline-deployment.sh
         args:
@@ -241,3 +283,16 @@ postsubmits:
     annotations:
       testgrid-dashboards: sig-big-data
       description: Postsubmit tests for kubeflow/pipeline.
+  kubeflow/xgboost-operator:
+  - name: kubeflow-xgboost-operator-postsubmit
+    cluster: kubeflow
+    labels:
+      preset-service-account: "true"
+    spec:
+      containers:
+      - image: gcr.io/kubeflow-ci/test-worker:latest
+        imagePullPolicy: Always
+
+    annotations:
+      testgrid-dashboards: sig-big-data
+      description: Postsubmit tests for kubeflow/xgboost-operator.
