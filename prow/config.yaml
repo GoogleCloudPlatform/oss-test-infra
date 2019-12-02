@@ -85,9 +85,8 @@ deck:
           - artifacts/junit.*\.xml
     announcement: "The old job viewer, Gubernator, has been deprecated in favour of this page, Spyglass.{{if .ArtifactPath}} For now, the old page is <a href='https://gubernator-internal.googleplex.com/build/{{.ArtifactPath}}'>still available</a>.{{end}} Please send feedback to osp-engprod@google.com."
   rerun_auth_config:
-    github_team_slugs:
-    - org: GoogleCloudPlatform
-      slug: googlers
+    github_orgs:
+    - GoogleCloudPlatform
 
 presets:
 - labels:
