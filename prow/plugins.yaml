@@ -21,6 +21,30 @@ config_updater:
     prow/prowjobs/**/*.yaml:
       name: job-config
 
+triggers:
+- repos:
+  - kubeflow
+  join_org_url: "https://github.com/kubeflow/kubeflow/blob/master/CONTRIBUTING.md"
+
+label:
+  additional_labels:
+  # These labels are used by Kubeflow
+  - community/discussion
+  - community/maintenance
+  - community/question
+  - cuj/build-train-deploy
+  - cuj/multi-user
+  - platform/aws
+  - platform/azure
+  - platform/gcp
+  - platform/minikube
+  - platform/other
+
+project_config:
+  project_org_configs:
+    kubeflow:
+      org_maintainers_team_id: 3198542 # kubeflow-project-maintainers
+
 approve:
 - repos:
   - GoogleCloudPlatform
@@ -85,4 +109,22 @@ plugins:
   # jobs to enable the trigger plugin if a plugins.yaml is specified.
   # https://github.com/kubernetes/test-infra/issues/14743
   https://kunit-review.googlesource.com/linux:
+  - trigger
+
+  kubeflow:
+  - approve   # Enable /approve and /assign commands.
+  - assign
+  - blunderbuss
+  - golint
+  - help
+  - hold
+  - label
+  - lgtm
+  - lifecycle   # Lets PRs & issues be flagged as stale
+  - override
+  - project # Lets issues be tagged into projects
+  - size
+  - skip  # Allows cleaning up stale commit statuses
+  - verify-owners   # Validates OWNERS file changes in PRs.
+  - wip   # Applies a label to PRs with wip in the title to block merge
   - trigger
