@@ -126,7 +126,7 @@ periodics:
       args:
       - /etc/github-token/oauth
       - "Google OSS Prow Robot"
-      - 44651202+google-oss-robot@users.noreply.github.com
+      - google-oss-robot@google.com
       volumeMounts:
       - name: github
         mountPath: /etc/github-token
