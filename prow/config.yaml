@@ -14,26 +14,24 @@
 
 tide:
   merge_method:
-# TODO(clarketm) enable after job(s) merge.
-#    kubeflow: squash
+    kubeflow: squash
     GoogleCloudPlatform/osconfig: squash
     GoogleCloudPlatform/guest-logging-go: squash
     GoogleCloudPlatform/guest-agent: squash
     GoogleCloudPlatform/guest-test-infra: squash
   target_url: https://prow.gflocks.com/tide
   queries:
-# TODO(clarketm) enable after job(s) merge.
-#  - orgs:
-#    - kubeflow
-#    labels:
-#    - lgtm
-#    - approved
-#    missingLabels:
-#    - do-not-merge
-#    - do-not-merge/hold
-#    - do-not-merge/invalid-owners-file
-#    - do-not-merge/work-in-progress
-#    - needs-rebase
+  - orgs:
+    - kubeflow
+    labels:
+    - lgtm
+    - approved
+    missingLabels:
+    - do-not-merge
+    - do-not-merge/hold
+    - do-not-merge/invalid-owners-file
+    - do-not-merge/work-in-progress
+    - needs-rebase
   - repos:
     - GoogleCloudPlatform/osconfig
     - GoogleCloudPlatform/oss-test-infra
