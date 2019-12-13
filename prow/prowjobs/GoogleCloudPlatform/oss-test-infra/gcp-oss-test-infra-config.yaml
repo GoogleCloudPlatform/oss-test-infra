@@ -60,7 +60,7 @@ postsubmits:
     branches:
     - master
     annotations:
-      testgrid-dashboards: google-oss-infra
+      testgrid-dashboards: googleoss-test-infra
     labels:
       preset-prow-deployer-service-account: "true"
     spec:
@@ -80,7 +80,7 @@ postsubmits:
     branches:
     - master
     annotations:
-      testgrid-dashboards: google-oss-infra
+      testgrid-dashboards: googleoss-test-infra
     spec:
       containers:
       - image: gcr.io/k8s-prow/transfigure
@@ -107,7 +107,7 @@ postsubmits:
     - ^master$
     decorate: true
     annotations:
-      testgrid-dashboards: google-oss-infra
+      testgrid-dashboards: googleoss-test-infra
       testgrid-alert-email: slchase@google.com
     spec:
       containers:
@@ -135,7 +135,7 @@ periodics:
     repo: oss-test-infra
     base_ref: master
   annotations:
-    testgrid-dashboards: google-oss-infra
+    testgrid-dashboards: googleoss-test-infra
   spec:
     containers:
     - image: gcr.io/k8s-prow/autobump:v20191212-70b0b49fe
