@@ -9,7 +9,7 @@ postsubmits:
       workdir: true
     decorate: true
     annotations:
-      testgrid-dashboards: google-gcp-guest
+      testgrid-dashboards: googleoss-gcp-guest
     spec:
       containers:
       - image: gcr.io/gcp-guest/daisy-builder:latest
@@ -48,7 +48,7 @@ postsubmits:
       base_ref: master
       workdir: true
     annotations:
-      testgrid-dashboards: google-gcp-guest
+      testgrid-dashboards: googleoss-gcp-guest
     spec:
       containers:
       - image: gcr.io/gcp-guest/daisy-builder:latest
@@ -87,7 +87,7 @@ postsubmits:
       workdir: true
     decorate: true
     annotations:
-      testgrid-dashboards: google-gcp-guest
+      testgrid-dashboards: googleoss-gcp-guest
     spec:
       containers:
       - image: gcr.io/gcp-guest/daisy-builder:latest
@@ -126,7 +126,7 @@ postsubmits:
       workdir: true
     decorate: true
     annotations:
-      testgrid-dashboards: google-gcp-guest
+      testgrid-dashboards: googleoss-gcp-guest
     spec:
       containers:
       - image: gcr.io/gcp-guest/daisy-builder:latest
@@ -195,7 +195,7 @@ presubmits:
     context: prow/presubmit/gocheck
     decorate: true
     annotations:
-      testgrid-dashboards: google-gcp-guest
+      testgrid-dashboards: googleoss-gcp-guest
       testgrid-tab-name: "OSConfig presubmits - gocheck"
     spec:
       containers:
@@ -211,7 +211,7 @@ presubmits:
     context: prow/presubmit/gobuild
     decorate: true
     annotations:
-      testgrid-dashboards: google-gcp-guest
+      testgrid-dashboards: googleoss-gcp-guest
       testgrid-tab-name: "OSConfig presubmits - gobuild"
     spec:
       containers:
@@ -227,7 +227,7 @@ presubmits:
     context: prow/presubmit/gotest
     decorate: true
     annotations:
-      testgrid-dashboards: google-gcp-guest
+      testgrid-dashboards: googleoss-gcp-guest
       testgrid-tab-name: "OSConfig presubmits - gotest"
     spec:
       containers:
