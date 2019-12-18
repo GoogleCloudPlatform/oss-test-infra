@@ -3,7 +3,7 @@ presubmits:
   - name: ESPv2-build
     always_run: true
     decorate: true
-    path_alias: GoogleCloudPlatform//esp-v2
+    path_alias: GoogleCloudPlatform/esp-v2
     spec:
       containers:
       - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20191114-v0.0.0-100-g901f883-master
