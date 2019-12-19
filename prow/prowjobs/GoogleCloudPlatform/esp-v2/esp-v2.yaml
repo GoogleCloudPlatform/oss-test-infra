@@ -1,18 +1,18 @@
 presubmits:
-  GoogleCloudPlatform/api-proxy:
-  - name: gcpproxy-build
+  GoogleCloudPlatform/esp-v2:
+  - name: ESPv2-build
     always_run: true
     decorate: true
-    path_alias: cloudesf.googlesource.com/gcpproxy
+    path_alias: GoogleCloudPlatform/esp-v2
     spec:
       containers:
       - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20191114-v0.0.0-100-g901f883-master
         command:
         - ./prow/gcpproxy-build.sh
-  - name: gcpproxy-presubmit
+  - name: ESPv2-presubmit
     always_run: true
     decorate: true
-    path_alias: cloudesf.googlesource.com/gcpproxy
+    path_alias: GoogleCloudPlatform/esp-v2
     spec:
       containers:
       - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20191114-v0.0.0-100-g901f883-master
