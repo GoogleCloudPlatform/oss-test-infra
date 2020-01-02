@@ -285,6 +285,14 @@ spec:
         configMap:
           name: job-config
 ---
+apiVersion: networking.gke.io/v1beta1
+kind: ManagedCertificate
+metadata:
+  name: prow-gflocks-com
+spec:
+  domains:
+  - prow.gflocks.com
+---
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
@@ -293,13 +301,8 @@ metadata:
     kubernetes.io/ingress.global-static-ip-name: "oss-prow"
     kubernetes.io/ingress.class: "gce"
     kubernetes.io/tls-acme: "true"
-    certmanager.k8s.io/cluster-issuer: letsencrypt-prod
-    certmanager.k8s.io/acme-http01-edit-in-place: "true"
+    networking.gke.io/managed-certificates: prow-gflocks-com
 spec:
-  tls:
-  - secretName: prow-tls
-    hosts:
-    - prow.gflocks.com
   rules:
   - host: prow.gflocks.com
     http:
