@@ -7,8 +7,18 @@ presubmits:
     spec:
       containers:
       - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20191114-v0.0.0-100-g901f883-master
+        env:
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
         command:
         - ./prow/gcpproxy-build.sh
+        volumeMounts:
+        - name: cloudesf-testing-github-prow-service-account
+          mountPath: /etc/cloudesf-testing-github-prow-service-account
+      volumes:
+      - name: cloudesf-testing-github-prow-service-account
+        secret:
+          secretName: cloudesf-testing-github-prow-service-account
   - name: ESPv2-presubmit
     always_run: true
     decorate: true
