@@ -6,13 +6,13 @@ presubmits:
     spec:
       containers:
       - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20191114-v0.0.0-100-g901f883-master
+        command:
+        - ./prow/gcpproxy-build.sh
         env:
         - name: GOOGLE_APPLICATION_CREDENTIALS
           value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
         - name: CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE
             value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
-        command:
-        - ./prow/gcpproxy-build.sh
         volumeMounts:
         - name: cloudesf-testing-github-prow-service-account
           mountPath: /etc/cloudesf-testing-github-prow-service-account
@@ -23,15 +23,28 @@ presubmits:
   - name: ESPv2-presubmit
     always_run: true
     decorate: true
-    preset-prow-deployer-service-account: "true"
     spec:
       containers:
       - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20191114-v0.0.0-100-g901f883-master
         command:
         - ./prow/gcpproxy-presubmit.sh
+        env:
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
+        - name: CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE
+            value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
+        volumeMounts:
+        - name: cloudesf-testing-github-prow-service-account
+          mountPath: /etc/cloudesf-testing-github-prow-service-account
+        volumes:
+        - name: cloudesf-testing-github-prow-service-account
+          secret:
+            secretName: cloudesf-testing-github-prow-service-account
   - name: ESPv2-gke-e2e-tight-http-bookstore-managed
     always_run: true
     decorate: true
+    labels:
+      preset-service-account: "true"
     spec:
       containers:
       - args:
@@ -58,3 +71,29 @@ presubmits:
         - runner.sh
         - /workspace/scenarios/kubernetes_e2e.py
         image: gcr.io/k8s-testimages/kubekins-e2e:v20190509-e418529-master
+        env:
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
+        - name: CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE
+            value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
+        volumeMounts:
+        - name: cloudesf-testing-github-prow-service-account
+          mountPath: /etc/cloudesf-testing-github-prow-service-account
+        volumes:
+        - name: cloudesf-testing-github-prow-service-account
+          secret:
+            secretName: cloudesf-testing-github-prow-service-account
+
+periodics:
+- name: ESPv2-continuous-build
+  cron: '0 * * * *' # Run by every hour
+  decorate: true
+  extra_refs:
+  - org: GoogleCloudPlatform
+    repo: esp-v2
+    base_ref: master
+  spec:
+    containers:
+    - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20191114-v0.0.0-100-g901f883-master
+      command:
+      - ./prow/continuous-build.sh
