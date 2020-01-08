@@ -83,6 +83,17 @@ presubmits:
         - name: cloudesf-testing-github-prow-service-account
           secret:
             secretName: cloudesf-testing-github-prow-service-account
+  - name: ESPv2-cloud-run-e2e-cloud-run-http-bookstore
+    always_run: true
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20191120-v0.0.0-125-geee50dd-master
+        env:
+        - name: TEST_CASE
+          value: cloud-run-cloud-run-http-bookstore
+        command:
+        - ./prow/gcpproxy-e2e.sh
 
 periodics:
 - name: ESPv2-continuous-build
