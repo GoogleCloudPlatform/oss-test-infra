@@ -43,8 +43,6 @@ presubmits:
   - name: ESPv2-gke-e2e-tight-http-bookstore-managed
     always_run: true
     decorate: true
-    labels:
-      preset-service-account: "true"
     spec:
       containers:
       - args:
