@@ -3,13 +3,14 @@ presubmits:
   - name: ESPv2-build
     always_run: true
     decorate: true
-    path_alias: GoogleCloudPlatform/esp-v2
     spec:
       containers:
       - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20191114-v0.0.0-100-g901f883-master
         env:
         - name: GOOGLE_APPLICATION_CREDENTIALS
           value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
+        - name: CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE
+            value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
         command:
         - ./prow/gcpproxy-build.sh
         volumeMounts:
@@ -22,9 +23,37 @@ presubmits:
   - name: ESPv2-presubmit
     always_run: true
     decorate: true
-    path_alias: GoogleCloudPlatform/esp-v2
     spec:
       containers:
       - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20191114-v0.0.0-100-g901f883-master
         command:
         - ./prow/gcpproxy-presubmit.sh
+  - name: ESPv2-gke-e2e-tight-http-bookstore-managed
+    always_run: true
+    decorate: true
+    spec:
+      containers:
+      - args:
+        - --cluster=
+        - --deployment=gke
+        - --extract=gke-default
+        - --gcp-project=cloudesf-testing
+        - --gcp-zone=us-west1-b
+        - --gcp-network=default
+        - --gcp-node-image=gci
+        - --gke-create-command=container clusters create --cluster-ipv4-cidr=/19 --quiet
+        - '--gke-shape={"default":{"Nodes":1,"MachineType":"n1-standard-2"}}'
+        - --gke-environment=prod
+        - --provider=gke
+        - --env=TEST_CASE=tight-http-bookstore-managed
+        - --test=false
+        - --test-cmd=../prow/gcpproxy-e2e.sh
+        - --test-cmd-name=gcpproxy_e2e
+        - --timeout=80m
+        # docker-in-docker needs privileged mode
+        securityContext:
+          privileged: true
+        command:
+        - runner.sh
+        - /workspace/scenarios/kubernetes_e2e.py
+        image: gcr.io/k8s-testimages/kubekins-e2e:v20190509-e418529-master
