@@ -51,10 +51,6 @@ presubmits:
   - name: ESPv2-gke-e2e-tight-http-bookstore-managed
     always_run: true
     decorate: true
-    labels:
-      preset-k8s-ssh: "true"
-      preset-service-account: "true"
-      preset-dind-enabled: "true"
     spec:
       containers:
       - args:
@@ -81,6 +77,19 @@ presubmits:
         - runner.sh
         - /workspace/scenarios/kubernetes_e2e.py
         image: gcr.io/k8s-testimages/kubekins-e2e:v20190509-e418529-master
+        env:
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /etc/service-account/service-account.json
+        - name: E2E_GOOGLE_APPLICATION_CREDENTIALS
+          value: /etc/service-account/service-account.json
+        volumeMounts:
+        - name: service
+          mountPath: /etc/service-account
+          readOnly: true
+      volumes:
+      - name: service # TODO(fejta): remove https://github.com/GoogleCloudPlatform/oss-test-infra/issues/202
+        secret:
+          secretName: service-account
   - name: ESPv2-cloud-run-e2e-cloud-run-http-bookstore
     always_run: true
     decorate: true
