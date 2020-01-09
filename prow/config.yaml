@@ -52,7 +52,7 @@ plank:
       gcs_configuration:
         bucket: "oss-prow"
         path_strategy: "explicit"
-      gcs_credentials_secret: "service-account"
+      gcs_credentials_secret: "service-account" # TODO(fejta): remove https://github.com/GoogleCloudPlatform/oss-test-infra/issues/202
 
 sinker:
   resync_period: 1m
@@ -87,33 +87,3 @@ deck:
   rerun_auth_config:
     github_orgs:
     - GoogleCloudPlatform
-
-presets:
-- labels:
-    preset-service-account: "true"
-  env:
-  - name: GOOGLE_APPLICATION_CREDENTIALS
-    value: /etc/service-account/service-account.json
-  - name: E2E_GOOGLE_APPLICATION_CREDENTIALS
-    value: /etc/service-account/service-account.json
-  volumes:
-  - name: service
-    secret:
-      secretName: service-account
-  volumeMounts:
-  - name: service
-    mountPath: /etc/service-account
-    readOnly: true
-- labels:
-    preset-prow-deployer-service-account: "true"
-  env:
-  - name: GOOGLE_APPLICATION_CREDENTIALS
-    value: /creds/service-account.json
-  volumeMounts:
-  - name: creds
-    mountPath: /creds
-    readOnly: true
-  volumes:
-  - name: creds
-    secret:
-      secretName: prow-deployer-service-account

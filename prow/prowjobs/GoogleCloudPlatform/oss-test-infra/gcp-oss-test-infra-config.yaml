@@ -73,6 +73,17 @@ postsubmits:
         - prow
         - deploy
         - deploy-build
+        env:
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /creds/service-account.json
+        volumeMounts:
+        - name: creds
+          mountPath: /creds
+          readOnly: true
+      volumes:
+      - name: creds
+        secret:
+          secretName: prow-deployer-service-account
   - name: post-oss-test-infra-upload-testgrid-config
     cluster: test-infra-trusted
     run_if_changed: '^(prow/prowjobs/.*\.yaml)|(testgrid/config\.yaml)$'
@@ -123,7 +134,7 @@ postsubmits:
       volumes:
       - name: testgrid-service-account
         secret:
-          secretName: testgrid-service-account
+          secretName: testgrid-service-account # TODO(fejta): remove https://github.com/GoogleCloudPlatform/oss-test-infra/issues/202
 
 periodics:
 - cron: "05 15-23 * * 1-5"  # Run at 7:05-15:05 PST (15:05 UTC) Mon-Fri
