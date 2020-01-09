@@ -10,4 +10,5 @@ dashboard_groups:
     dashboard_names:
     - googleoss-gcp-guest
     - googleoss-test-infra
+    - googleoss-esp-v2
 
