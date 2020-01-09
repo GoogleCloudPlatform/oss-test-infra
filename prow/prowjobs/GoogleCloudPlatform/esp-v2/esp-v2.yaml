@@ -43,6 +43,8 @@ presubmits:
   - name: ESPv2-gke-e2e-tight-http-bookstore-managed
     always_run: true
     decorate: true
+    labels:
+      preset-service-account: "true"
     spec:
       containers:
       - args:
@@ -69,18 +71,6 @@ presubmits:
         - runner.sh
         - /workspace/scenarios/kubernetes_e2e.py
         image: gcr.io/k8s-testimages/kubekins-e2e:v20190509-e418529-master
-        env:
-        - name: GOOGLE_APPLICATION_CREDENTIALS
-          value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
-        - name: CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE
-          value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
-        volumeMounts:
-        - name: cloudesf-testing-github-prow-service-account
-          mountPath: /etc/cloudesf-testing-github-prow-service-account
-      volumes:
-      - name: cloudesf-testing-github-prow-service-account
-        secret:
-          secretName: cloudesf-testing-github-prow-service-account
   - name: ESPv2-cloud-run-e2e-cloud-run-http-bookstore
     always_run: true
     decorate: true
