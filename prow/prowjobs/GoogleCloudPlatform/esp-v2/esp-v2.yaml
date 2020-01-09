@@ -102,7 +102,7 @@ periodics:
     repo: esp-v2
     base_ref: master
   annotations:
-    testgrid-dashboards: googleoss-test-infra
+    testgrid-dashboards: googleoss-esp-v2
   spec:
     containers:
     - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20191114-v0.0.0-100-g901f883-master
