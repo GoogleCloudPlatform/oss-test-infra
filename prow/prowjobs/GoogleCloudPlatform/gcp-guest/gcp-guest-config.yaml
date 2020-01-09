@@ -132,7 +132,7 @@ postsubmits:
       - image: gcr.io/gcp-guest/daisy-builder:latest
         command:
         - "/main.sh"
-        args: ["gcp-guest", "us-west1-a", "deb9,el6,el7,el8", "gs://gcp-guest-package-uploads/guest-agent/"]
+        args: ["gcp-guest", "us-west1-a", "deb9,el6,el7,el8,goo", "gs://gcp-guest-package-uploads/guest-agent/"]
         volumeMounts:
         - name: daisy-service-account
           mountPath: /etc/daisy-service-account
@@ -309,7 +309,7 @@ presubmits:
       - image: gcr.io/gcp-guest/daisy-builder:latest
         command:
         - "/main.sh"
-        args: ["gcp-guest", "us-west1-a", "deb9,el6,el7,el8"]
+        args: ["gcp-guest", "us-west1-a", "deb9,el6,el7,el8,goo"]
         volumeMounts:
         - name: daisy-service-account
           mountPath: /etc/daisy-service-account
