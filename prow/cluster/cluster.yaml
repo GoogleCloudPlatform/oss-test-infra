@@ -341,7 +341,6 @@ spec:
         - --config-path=/etc/config/config.yaml
         - --job-config-path=/etc/job-config
         - --cookiefile=/etc/cookies/cookies
-        - --gcs-credentials-file=/etc/robot/service-account.json
         - --gerrit-projects=https://kunit-review.googlesource.com=linux
         - --last-sync-fallback=gs://oss-prow/last-gerrit-sync
         volumeMounts:
@@ -354,9 +353,6 @@ spec:
         - name: cookies
           mountPath: /etc/cookies
           readOnly: true
-        - name: service-account
-          mountPath: /etc/robot
-          readOnly: true
       volumes:
       - name: config
         configMap:
@@ -368,9 +364,6 @@ spec:
         secret:
           defaultMode: 420
           secretName: http-cookiefile
-      - name: service-account
-        secret:
-          secretName: service-account
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
