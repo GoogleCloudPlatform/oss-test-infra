@@ -28,18 +28,6 @@ presubmits:
       - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20191114-v0.0.0-100-g901f883-master
         command:
         - ./prow/gcpproxy-presubmit.sh
-        env:
-        - name: GOOGLE_APPLICATION_CREDENTIALS
-          value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
-        - name: CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE
-          value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
-        volumeMounts:
-        - name: cloudesf-testing-github-prow-service-account
-          mountPath: /etc/cloudesf-testing-github-prow-service-account
-      volumes:
-      - name: cloudesf-testing-github-prow-service-account
-        secret:
-          secretName: cloudesf-testing-github-prow-service-account
   - name: ESPv2-gke-e2e-tight-http-bookstore-managed
     always_run: true
     decorate: true
