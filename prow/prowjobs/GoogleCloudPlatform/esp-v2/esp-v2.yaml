@@ -52,7 +52,9 @@ presubmits:
     always_run: true
     decorate: true
     labels:
+      preset-k8s-ssh: "true"
       preset-service-account: "true"
+      preset-dind-enabled: "true"
     spec:
       containers:
       - args:
