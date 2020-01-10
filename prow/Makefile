@@ -32,6 +32,7 @@ update-plugins: get-cluster-credentials
 .PHONY: deploy
 deploy: get-cluster-credentials
 	kubectl apply -f ./cluster/
+	kubectl apply -f ./serviceaccounts/
 
 .PHONY: deploy-build
 deploy-build: get-build-cluster-credentials
