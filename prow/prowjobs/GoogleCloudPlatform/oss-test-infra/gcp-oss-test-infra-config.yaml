@@ -121,20 +121,11 @@ postsubmits:
       testgrid-dashboards: googleoss-test-infra
       testgrid-alert-email: slchase@google.com
     spec:
+      serviceAccountName: testgrid-pusher
       containers:
       - image: gcr.io/k8s-testimages/bazelbuild:v20190916-ec59af8-0.29.1
-        env:
-        - name: GOOGLE_APPLICATION_CREDENTIALS
-          value: /creds/service-account.json
         command:
         - ./images/push.sh
-        volumeMounts:
-        - name: testgrid-service-account
-          mountPath: /creds
-      volumes:
-      - name: testgrid-service-account
-        secret:
-          secretName: testgrid-service-account # TODO(fejta): remove https://github.com/GoogleCloudPlatform/oss-test-infra/issues/202
 
 periodics:
 - cron: "05 15-23 * * 1-5"  # Run at 7:05-15:05 PST (15:05 UTC) Mon-Fri
