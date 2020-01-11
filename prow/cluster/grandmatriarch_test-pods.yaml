@@ -20,6 +20,8 @@ metadata:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
+  annotations:
+    iam.gke.io/gcp-service-account: oss-prow@oss-prow.iam.gserviceaccount.com
   name:  grandmatriarch
   namespace: test-pods
 ---
@@ -84,4 +86,4 @@ spec:
       - name: robot
         secret:
           defaultMode: 420
-          secretName: service-account
+          secretName: service-account # TODO(fejta): workload-identity https://github.com/GoogleCloudPlatform/oss-test-infra/issues/202
