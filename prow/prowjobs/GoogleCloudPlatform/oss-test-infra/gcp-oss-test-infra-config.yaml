@@ -114,6 +114,20 @@ postsubmits:
       - image: gcr.io/k8s-testimages/bazelbuild:v20190916-ec59af8-0.29.1
         command:
         - ./images/push.sh
+  - name: post-testgrid-deploy
+    cluster: test-infra-trusted
+    branches:
+    - ^master$
+    run_if_changed: '^cluster/'
+    decorate: true
+    annotations:
+      testgrid-dashboards: googleoss-test-infra
+    spec:
+      serviceAccountName: testgrid-deployer
+      containers:
+      - image: gcr.io/k8s-testimages/gcloud-bazel:v20191004-v0.1-140-g5a84471
+        command:
+        - ./cluster/deploy.sh
 
 periodics:
 - cron: "05 15-23 * * 1-5"  # Run at 7:05-15:05 PST (15:05 UTC) Mon-Fri
