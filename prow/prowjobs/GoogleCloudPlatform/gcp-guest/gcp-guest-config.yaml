@@ -160,7 +160,7 @@ presubmits:
   GoogleCloudPlatform/osconfig:
   - name: osconfig-presubmit-build
     cluster: gcp-guest
-    run_if_changed: ".*/packaging/.*"
+    run_if_changed: "packaging/"
     trigger: "(?m)^/packagebuild$"
     rerun_command: "/packagebuild"
     context: prow/presubmit/packagebuild
@@ -189,7 +189,7 @@ presubmits:
           secretName: daisy-service-account
   - name: osconfig-presubmit-gocheck
     cluster: gcp-guest
-    run_if_changed: ".*\\.go$"
+    run_if_changed: '\.go$'
     trigger: "(?m)^/gocheck$"
     rerun_command: "/gocheck"
     context: prow/presubmit/gocheck
@@ -205,7 +205,7 @@ presubmits:
         - "/go/main.sh"
   - name: osconfig-presubmit-gobuild
     cluster: gcp-guest
-    run_if_changed: ".*\\.go$"
+    run_if_changed: '\.go$'
     trigger: "(?m)^/gobuild$"
     rerun_command: "/gobuild"
     context: prow/presubmit/gobuild
@@ -221,7 +221,7 @@ presubmits:
         - "/go/main.sh"
   - name: osconfig-presubmit-gotest
     cluster: gcp-guest
-    run_if_changed: ".*\\.go$"
+    run_if_changed: '\.go$'
     trigger: "(?m)^/gotest$"
     rerun_command: "/gotest"
     context: prow/presubmit/gotest
@@ -247,7 +247,7 @@ presubmits:
   GoogleCloudPlatform/guest-agent:
   - name: guest-agent-presubmit-gocheck
     cluster: gcp-guest
-    run_if_changed: ".*\\.go$"
+    run_if_changed: '\.go$'
     trigger: "(?m)^/gocheck$"
     rerun_command: "/gocheck"
     context: prow/presubmit/gocheck
@@ -260,7 +260,7 @@ presubmits:
         - "/go/main.sh"
   - name: guest-agent-presubmit-gobuild
     cluster: gcp-guest
-    run_if_changed: ".*\\.go$"
+    run_if_changed: '\.go$'
     trigger: "(?m)^/gobuild$"
     rerun_command: "/gobuild"
     context: prow/presubmit/gobuild
@@ -273,7 +273,7 @@ presubmits:
         - "/go/main.sh"
   - name: guest-agent-presubmit-gotest
     cluster: gcp-guest
-    run_if_changed: ".*\\.go$"
+    run_if_changed: '\.go$'
     trigger: "(?m)^/gotest$"
     rerun_command: "/gotest"
     context: prow/presubmit/gotest
@@ -294,7 +294,7 @@ presubmits:
           secretName: codecov
   - name: guest-agent-presubmit-build
     cluster: gcp-guest
-    run_if_changed: ".*/packaging/.*"
+    run_if_changed: "packaging/"
     trigger: "(?m)^/packagebuild$"
     rerun_command: "/packagebuild"
     context: prow/presubmit/packagebuild
@@ -325,7 +325,7 @@ presubmits:
   GoogleCloudPlatform/guest-logging-go:
   - name: guest-logging-presubmit-gocheck
     cluster: gcp-guest
-    run_if_changed: ".*\\.go$"
+    run_if_changed: '\.go$'
     trigger: "(?m)^/gocheck$"
     rerun_command: "/gocheck"
     context: prow/presubmit/gocheck
@@ -338,7 +338,7 @@ presubmits:
         - "/go/main.sh"
   - name: guest-logging-presubmit-gobuild
     cluster: gcp-guest
-    run_if_changed: ".*\\.go$"
+    run_if_changed: '\.go$'
     trigger: "(?m)^/gobuild$"
     rerun_command: "/gobuild"
     context: prow/presubmit/gobuild
@@ -351,7 +351,7 @@ presubmits:
         - "/go/main.sh"
   - name: guest-logging-presubmit-gotest
     cluster: gcp-guest
-    run_if_changed: ".*\\.go$"
+    run_if_changed: '\.go$'
     trigger: "(?m)^/gotest$"
     rerun_command: "/gotest"
     context: prow/presubmit/gotest
@@ -374,7 +374,7 @@ presubmits:
   GoogleCloudPlatform/guest-oslogin:
   - name: oslogin-presubmit-build
     cluster: gcp-guest
-    run_if_changed: ".*/packaging/.*"
+    run_if_changed: "packaging/"
     trigger: "(?m)^/packagebuild$"
     rerun_command: "/packagebuild"
     context: prow/presubmit/packagebuild
@@ -403,7 +403,7 @@ presubmits:
           secretName: daisy-service-account
   - name: oslogin-presubmit-selinux-module
     cluster: gcp-guest
-    run_if_changed: ".*/policy/.*"
+    run_if_changed: "policy/"
     trigger: "(?m)^/modcheck$"
     rerun_command: "/modcheck"
     context: prow/presubmit/selinux_module_check
@@ -448,7 +448,7 @@ presubmits:
   GoogleCloudPlatform/guest-configs:
   - name: guest-configs-presubmit-build
     cluster: gcp-guest
-    run_if_changed: ".*/packaging/.*"
+    run_if_changed: "packaging/"
     trigger: "(?m)^/packagebuild$"
     rerun_command: "/packagebuild"
     context: prow/presubmit/packagebuild
@@ -479,7 +479,7 @@ presubmits:
   GoogleCloudPlatform/guest-test-infra:
   - name: infra-presubmit-gocheck
     cluster: gcp-guest
-    run_if_changed: ".*\\.go$"
+    run_if_changed: '\.go$'
     trigger: "(?m)^/gocheck$"
     rerun_command: "/gocheck"
     context: prow/presubmit/gocheck
@@ -492,7 +492,7 @@ presubmits:
         - "/go/main.sh"
   - name: infra-presubmit-gobuild
     cluster: gcp-guest
-    run_if_changed: ".*\\.go$"
+    run_if_changed: '\.go$'
     trigger: "(?m)^/gobuild$"
     rerun_command: "/gobuild"
     context: prow/presubmit/gobuild
@@ -505,7 +505,7 @@ presubmits:
         - "/go/main.sh"
   - name: infra-presubmit-gotest
     cluster: gcp-guest
-    run_if_changed: ".*\\.go$"
+    run_if_changed: '\.go$'
     trigger: "(?m)^/gotest$"
     rerun_command: "/gotest"
     context: prow/presubmit/gotest
