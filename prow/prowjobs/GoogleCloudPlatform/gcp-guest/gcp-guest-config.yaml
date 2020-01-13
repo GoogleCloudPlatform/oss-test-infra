@@ -1,3 +1,31 @@
+presets:
+- labels:
+    preset-daisy: "true"
+  env:
+  - name: GOOGLE_APPLICATION_CREDENTIALS
+    value: /etc/daisy-service-account/creds.json
+  volumeMounts:
+  - name: daisy-service-account
+    mountPath: /etc/daisy-service-account
+    readOnly: true
+  volumes:
+  - name: daisy-service-account
+    secret:
+      secretName: daisy-service-account
+- labels:
+    preset-github: "true"
+  env:
+  - name: GITHUB_ACCESS_TOKEN
+    value: /etc/github-access-token/token.txt
+  volumeMounts:
+  - name: github-access-token
+    mountPath: /etc/github-access-token
+    readOnly: true
+  volumes:
+  - name: github-access-token
+    secret:
+      secretName: github-access-token
+
 postsubmits:
   GoogleCloudPlatform/osconfig:
   - name: osconfig-build
@@ -10,31 +38,15 @@ postsubmits:
     decorate: true
     annotations:
       testgrid-dashboards: googleoss-gcp-guest
+    labels:
+      preset-daisy: "true"
+      preset-github: "true"
     spec:
       containers:
       - image: gcr.io/gcp-guest/daisy-builder:latest
         command:
         - "/main.sh"
         args: ["gcp-guest", "us-west1-a", "deb9,el6,el7,el8,goo", "gs://gcp-guest-package-uploads/osconfig/"]
-        volumeMounts:
-        - name: daisy-service-account
-          mountPath: /etc/daisy-service-account
-          readOnly: true
-        - name: github-access-token
-          mountPath: /etc/github-access-token
-          readOnly: true
-        env:
-        - name: GOOGLE_APPLICATION_CREDENTIALS
-          value: /etc/daisy-service-account/creds.json
-        - name: GITHUB_ACCESS_TOKEN
-          value: /etc/github-access-token/token.txt
-      volumes:
-      - name: daisy-service-account
-        secret:
-          secretName: daisy-service-account
-      - name: github-access-token
-        secret:
-          secretName: github-access-token
     max_concurrency: 10
     branches:
     - ^master$
@@ -49,31 +61,15 @@ postsubmits:
       workdir: true
     annotations:
       testgrid-dashboards: googleoss-gcp-guest
+    labels:
+      preset-daisy: "true"
+      preset-github: "true"
     spec:
       containers:
       - image: gcr.io/gcp-guest/daisy-builder:latest
         command:
         - "/main.sh"
         args: ["gcp-guest", "us-west1-a", "deb9,deb10,el6,el7,el8", "gs://gcp-guest-package-uploads/oslogin/"]
-        volumeMounts:
-        - name: daisy-service-account
-          mountPath: /etc/daisy-service-account
-          readOnly: true
-        - name: github-access-token
-          mountPath: /etc/github-access-token
-          readOnly: true
-        env:
-        - name: GOOGLE_APPLICATION_CREDENTIALS
-          value: /etc/daisy-service-account/creds.json
-        - name: GITHUB_ACCESS_TOKEN
-          value: /etc/github-access-token/token.txt
-      volumes:
-      - name: daisy-service-account
-        secret:
-          secretName: daisy-service-account
-      - name: github-access-token
-        secret:
-          secretName: github-access-token
     max_concurrency: 10
     branches:
     - ^master$
@@ -88,31 +84,15 @@ postsubmits:
     decorate: true
     annotations:
       testgrid-dashboards: googleoss-gcp-guest
+    labels:
+      preset-daisy: "true"
+      preset-github: "true"
     spec:
       containers:
       - image: gcr.io/gcp-guest/daisy-builder:latest
         command:
         - "/main.sh"
         args: ["gcp-guest", "us-west1-a", "deb9,el6,el7,el8", "gs://gcp-guest-package-uploads/guest-configs/"]
-        volumeMounts:
-        - name: daisy-service-account
-          mountPath: /etc/daisy-service-account
-          readOnly: true
-        - name: github-access-token
-          mountPath: /etc/github-access-token
-          readOnly: true
-        env:
-        - name: GOOGLE_APPLICATION_CREDENTIALS
-          value: /etc/daisy-service-account/creds.json
-        - name: GITHUB_ACCESS_TOKEN
-          value: /etc/github-access-token/token.txt
-      volumes:
-      - name: daisy-service-account
-        secret:
-          secretName: daisy-service-account
-      - name: github-access-token
-        secret:
-          secretName: github-access-token
     max_concurrency: 10
     branches:
     - ^master$
@@ -127,31 +107,15 @@ postsubmits:
     decorate: true
     annotations:
       testgrid-dashboards: googleoss-gcp-guest
+    labels:
+      preset-daisy: "true"
+      preset-github: "true"
     spec:
       containers:
       - image: gcr.io/gcp-guest/daisy-builder:latest
         command:
         - "/main.sh"
         args: ["gcp-guest", "us-west1-a", "deb9,el6,el7,el8,goo", "gs://gcp-guest-package-uploads/guest-agent/"]
-        volumeMounts:
-        - name: daisy-service-account
-          mountPath: /etc/daisy-service-account
-          readOnly: true
-        - name: github-access-token
-          mountPath: /etc/github-access-token
-          readOnly: true
-        env:
-        - name: GOOGLE_APPLICATION_CREDENTIALS
-          value: /etc/daisy-service-account/creds.json
-        - name: GITHUB_ACCESS_TOKEN
-          value: /etc/github-access-token/token.txt
-      volumes:
-      - name: daisy-service-account
-        secret:
-          secretName: daisy-service-account
-      - name: github-access-token
-        secret:
-          secretName: github-access-token
     max_concurrency: 10
     branches:
     - ^master$
@@ -170,23 +134,14 @@ presubmits:
       base_ref: master
       workdir: true
     decorate: true
+    labels:
+      preset-daisy: "true"
     spec:
       containers:
       - image: gcr.io/gcp-guest/daisy-builder:latest
         command:
         - "/main.sh"
         args: ["gcp-guest", "us-west1-a", "deb9,el6,el7,el8,goo"]
-        volumeMounts:
-        - name: daisy-service-account
-          mountPath: /etc/daisy-service-account
-          readOnly: true
-        env:
-        - name: GOOGLE_APPLICATION_CREDENTIALS
-          value: /etc/daisy-service-account/creds.json
-      volumes:
-      - name: daisy-service-account
-        secret:
-          secretName: daisy-service-account
   - name: osconfig-presubmit-gocheck
     cluster: gcp-guest
     run_if_changed: '\.go$'
@@ -304,23 +259,14 @@ presubmits:
       base_ref: master
       workdir: true
     decorate: true
+    labels:
+      preset-daisy: "true"
     spec:
       containers:
       - image: gcr.io/gcp-guest/daisy-builder:latest
         command:
         - "/main.sh"
         args: ["gcp-guest", "us-west1-a", "deb9,el6,el7,el8,goo"]
-        volumeMounts:
-        - name: daisy-service-account
-          mountPath: /etc/daisy-service-account
-          readOnly: true
-        env:
-        - name: GOOGLE_APPLICATION_CREDENTIALS
-          value: /etc/daisy-service-account/creds.json
-      volumes:
-      - name: daisy-service-account
-        secret:
-          secretName: daisy-service-account
 
   GoogleCloudPlatform/guest-logging-go:
   - name: guest-logging-presubmit-gocheck
@@ -384,23 +330,14 @@ presubmits:
       base_ref: master
       workdir: true
     decorate: true
+    labels:
+      preset-daisy: "true"
     spec:
       containers:
       - image: gcr.io/gcp-guest/daisy-builder:latest
         command:
         - "/main.sh"
         args: ["gcp-guest", "us-west1-a", "deb9,deb10,el6,el7,el8"]
-        volumeMounts:
-        - name: daisy-service-account
-          mountPath: /etc/daisy-service-account
-          readOnly: true
-        env:
-        - name: GOOGLE_APPLICATION_CREDENTIALS
-          value: /etc/daisy-service-account/creds.json
-      volumes:
-      - name: daisy-service-account
-        secret:
-          secretName: daisy-service-account
   - name: oslogin-presubmit-selinux-module
     cluster: gcp-guest
     run_if_changed: "policy/"
@@ -458,23 +395,14 @@ presubmits:
       base_ref: master
       workdir: true
     decorate: true
+    labels:
+      preset-daisy: "true"
     spec:
       containers:
       - image: gcr.io/gcp-guest/daisy-builder:latest
         command:
         - "/main.sh"
         args: ["gcp-guest", "us-west1-a", "deb9,el6,el7,el8"]
-        volumeMounts:
-        - name: daisy-service-account
-          mountPath: /etc/daisy-service-account
-          readOnly: true
-        env:
-        - name: GOOGLE_APPLICATION_CREDENTIALS
-          value: /etc/daisy-service-account/creds.json
-      volumes:
-      - name: daisy-service-account
-        secret:
-          secretName: daisy-service-account
 
   GoogleCloudPlatform/guest-test-infra:
   - name: infra-presubmit-gocheck
