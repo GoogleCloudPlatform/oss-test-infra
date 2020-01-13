@@ -1,3 +1,31 @@
+presets:
+- labels:
+    preset-daisy: "true"
+  env:
+  - name: GOOGLE_APPLICATION_CREDENTIALS
+    value: /etc/daisy-service-account/creds.json
+  volumeMounts:
+  - name: daisy-service-account
+    mountPath: /etc/daisy-service-account
+    readOnly: true
+  volumes:
+  - name: daisy-service-account
+    secret:
+      secretName: daisy-service-account
+- labels:
+    preset-github: "true"
+  env:
+  - name: GITHUB_ACCESS_TOKEN
+    value: /etc/github-access-token/token.txt
+  volumeMounts:
+  - name: github-access-token
+    mountPath: /etc/github-access-token
+    readOnly: true
+  volumes:
+  - name: github-access-token
+    secret:
+      secretName: github-access-token
+
 postsubmits:
   GoogleCloudPlatform/osconfig:
   - name: osconfig-build
@@ -10,31 +38,15 @@ postsubmits:
     decorate: true
     annotations:
       testgrid-dashboards: googleoss-gcp-guest
+    labels:
+      preset-daisy: "true"
+      preset-github: "true"
     spec:
       containers:
       - image: gcr.io/gcp-guest/daisy-builder:latest
         command:
         - "/main.sh"
         args: ["gcp-guest", "us-west1-a", "deb9,el6,el7,el8,goo", "gs://gcp-guest-package-uploads/osconfig/"]
-        volumeMounts:
-        - name: daisy-service-account
-          mountPath: /etc/daisy-service-account
-          readOnly: true
-        - name: github-access-token
-          mountPath: /etc/github-access-token
-          readOnly: true
-        env:
-        - name: GOOGLE_APPLICATION_CREDENTIALS
-          value: /etc/daisy-service-account/creds.json
-        - name: GITHUB_ACCESS_TOKEN
-          value: /etc/github-access-token/token.txt
-      volumes:
-      - name: daisy-service-account
-        secret:
-          secretName: daisy-service-account
-      - name: github-access-token
-        secret:
-          secretName: github-access-token
     max_concurrency: 10
     branches:
     - ^master$
@@ -49,31 +61,15 @@ postsubmits:
       workdir: true
     annotations:
       testgrid-dashboards: googleoss-gcp-guest
+    labels:
+      preset-daisy: "true"
+      preset-github: "true"
     spec:
       containers:
       - image: gcr.io/gcp-guest/daisy-builder:latest
         command:
         - "/main.sh"
         args: ["gcp-guest", "us-west1-a", "deb9,deb10,el6,el7,el8", "gs://gcp-guest-package-uploads/oslogin/"]
-        volumeMounts:
-        - name: daisy-service-account
-          mountPath: /etc/daisy-service-account
-          readOnly: true
-        - name: github-access-token
-          mountPath: /etc/github-access-token
-          readOnly: true
-        env:
-        - name: GOOGLE_APPLICATION_CREDENTIALS
-          value: /etc/daisy-service-account/creds.json
-        - name: GITHUB_ACCESS_TOKEN
-          value: /etc/github-access-token/token.txt
-      volumes:
-      - name: daisy-service-account
-        secret:
-          secretName: daisy-service-account
-      - name: github-access-token
-        secret:
-          secretName: github-access-token
     max_concurrency: 10
     branches:
     - ^master$
@@ -88,31 +84,15 @@ postsubmits:
     decorate: true
     annotations:
       testgrid-dashboards: googleoss-gcp-guest
+    labels:
+      preset-daisy: "true"
+      preset-github: "true"
     spec:
       containers:
       - image: gcr.io/gcp-guest/daisy-builder:latest
         command:
         - "/main.sh"
         args: ["gcp-guest", "us-west1-a", "deb9,el6,el7,el8", "gs://gcp-guest-package-uploads/guest-configs/"]
-        volumeMounts:
-        - name: daisy-service-account
-          mountPath: /etc/daisy-service-account
-          readOnly: true
-        - name: github-access-token
-          mountPath: /etc/github-access-token
-          readOnly: true
-        env:
-        - name: GOOGLE_APPLICATION_CREDENTIALS
-          value: /etc/daisy-service-account/creds.json
-        - name: GITHUB_ACCESS_TOKEN
-          value: /etc/github-access-token/token.txt
-      volumes:
-      - name: daisy-service-account
-        secret:
-          secretName: daisy-service-account
-      - name: github-access-token
-        secret:
-          secretName: github-access-token
     max_concurrency: 10
     branches:
     - ^master$
@@ -127,31 +107,15 @@ postsubmits:
     decorate: true
     annotations:
       testgrid-dashboards: googleoss-gcp-guest
+    labels:
+      preset-daisy: "true"
+      preset-github: "true"
     spec:
       containers:
       - image: gcr.io/gcp-guest/daisy-builder:latest
         command:
         - "/main.sh"
         args: ["gcp-guest", "us-west1-a", "deb9,el6,el7,el8,goo", "gs://gcp-guest-package-uploads/guest-agent/"]
-        volumeMounts:
-        - name: daisy-service-account
-          mountPath: /etc/daisy-service-account
-          readOnly: true
-        - name: github-access-token
-          mountPath: /etc/github-access-token
-          readOnly: true
-        env:
-        - name: GOOGLE_APPLICATION_CREDENTIALS
-          value: /etc/daisy-service-account/creds.json
-        - name: GITHUB_ACCESS_TOKEN
-          value: /etc/github-access-token/token.txt
-      volumes:
-      - name: daisy-service-account
-        secret:
-          secretName: daisy-service-account
-      - name: github-access-token
-        secret:
-          secretName: github-access-token
     max_concurrency: 10
     branches:
     - ^master$
@@ -160,7 +124,7 @@ presubmits:
   GoogleCloudPlatform/osconfig:
   - name: osconfig-presubmit-build
     cluster: gcp-guest
-    run_if_changed: ".*/packaging/.*"
+    run_if_changed: "packaging/"
     trigger: "(?m)^/packagebuild$"
     rerun_command: "/packagebuild"
     context: prow/presubmit/packagebuild
@@ -170,26 +134,17 @@ presubmits:
       base_ref: master
       workdir: true
     decorate: true
+    labels:
+      preset-daisy: "true"
     spec:
       containers:
       - image: gcr.io/gcp-guest/daisy-builder:latest
         command:
         - "/main.sh"
         args: ["gcp-guest", "us-west1-a", "deb9,el6,el7,el8,goo"]
-        volumeMounts:
-        - name: daisy-service-account
-          mountPath: /etc/daisy-service-account
-          readOnly: true
-        env:
-        - name: GOOGLE_APPLICATION_CREDENTIALS
-          value: /etc/daisy-service-account/creds.json
-      volumes:
-      - name: daisy-service-account
-        secret:
-          secretName: daisy-service-account
   - name: osconfig-presubmit-gocheck
     cluster: gcp-guest
-    run_if_changed: ".*\\.go$"
+    run_if_changed: '\.go$'
     trigger: "(?m)^/gocheck$"
     rerun_command: "/gocheck"
     context: prow/presubmit/gocheck
@@ -205,7 +160,7 @@ presubmits:
         - "/go/main.sh"
   - name: osconfig-presubmit-gobuild
     cluster: gcp-guest
-    run_if_changed: ".*\\.go$"
+    run_if_changed: '\.go$'
     trigger: "(?m)^/gobuild$"
     rerun_command: "/gobuild"
     context: prow/presubmit/gobuild
@@ -221,7 +176,7 @@ presubmits:
         - "/go/main.sh"
   - name: osconfig-presubmit-gotest
     cluster: gcp-guest
-    run_if_changed: ".*\\.go$"
+    run_if_changed: '\.go$'
     trigger: "(?m)^/gotest$"
     rerun_command: "/gotest"
     context: prow/presubmit/gotest
@@ -247,7 +202,7 @@ presubmits:
   GoogleCloudPlatform/guest-agent:
   - name: guest-agent-presubmit-gocheck
     cluster: gcp-guest
-    run_if_changed: ".*\\.go$"
+    run_if_changed: '\.go$'
     trigger: "(?m)^/gocheck$"
     rerun_command: "/gocheck"
     context: prow/presubmit/gocheck
@@ -260,7 +215,7 @@ presubmits:
         - "/go/main.sh"
   - name: guest-agent-presubmit-gobuild
     cluster: gcp-guest
-    run_if_changed: ".*\\.go$"
+    run_if_changed: '\.go$'
     trigger: "(?m)^/gobuild$"
     rerun_command: "/gobuild"
     context: prow/presubmit/gobuild
@@ -273,7 +228,7 @@ presubmits:
         - "/go/main.sh"
   - name: guest-agent-presubmit-gotest
     cluster: gcp-guest
-    run_if_changed: ".*\\.go$"
+    run_if_changed: '\.go$'
     trigger: "(?m)^/gotest$"
     rerun_command: "/gotest"
     context: prow/presubmit/gotest
@@ -294,7 +249,7 @@ presubmits:
           secretName: codecov
   - name: guest-agent-presubmit-build
     cluster: gcp-guest
-    run_if_changed: ".*/packaging/.*"
+    run_if_changed: "packaging/"
     trigger: "(?m)^/packagebuild$"
     rerun_command: "/packagebuild"
     context: prow/presubmit/packagebuild
@@ -304,28 +259,19 @@ presubmits:
       base_ref: master
       workdir: true
     decorate: true
+    labels:
+      preset-daisy: "true"
     spec:
       containers:
       - image: gcr.io/gcp-guest/daisy-builder:latest
         command:
         - "/main.sh"
         args: ["gcp-guest", "us-west1-a", "deb9,el6,el7,el8,goo"]
-        volumeMounts:
-        - name: daisy-service-account
-          mountPath: /etc/daisy-service-account
-          readOnly: true
-        env:
-        - name: GOOGLE_APPLICATION_CREDENTIALS
-          value: /etc/daisy-service-account/creds.json
-      volumes:
-      - name: daisy-service-account
-        secret:
-          secretName: daisy-service-account
 
   GoogleCloudPlatform/guest-logging-go:
   - name: guest-logging-presubmit-gocheck
     cluster: gcp-guest
-    run_if_changed: ".*\\.go$"
+    run_if_changed: '\.go$'
     trigger: "(?m)^/gocheck$"
     rerun_command: "/gocheck"
     context: prow/presubmit/gocheck
@@ -338,7 +284,7 @@ presubmits:
         - "/go/main.sh"
   - name: guest-logging-presubmit-gobuild
     cluster: gcp-guest
-    run_if_changed: ".*\\.go$"
+    run_if_changed: '\.go$'
     trigger: "(?m)^/gobuild$"
     rerun_command: "/gobuild"
     context: prow/presubmit/gobuild
@@ -351,7 +297,7 @@ presubmits:
         - "/go/main.sh"
   - name: guest-logging-presubmit-gotest
     cluster: gcp-guest
-    run_if_changed: ".*\\.go$"
+    run_if_changed: '\.go$'
     trigger: "(?m)^/gotest$"
     rerun_command: "/gotest"
     context: prow/presubmit/gotest
@@ -374,7 +320,7 @@ presubmits:
   GoogleCloudPlatform/guest-oslogin:
   - name: oslogin-presubmit-build
     cluster: gcp-guest
-    run_if_changed: ".*/packaging/.*"
+    run_if_changed: "packaging/"
     trigger: "(?m)^/packagebuild$"
     rerun_command: "/packagebuild"
     context: prow/presubmit/packagebuild
@@ -384,26 +330,17 @@ presubmits:
       base_ref: master
       workdir: true
     decorate: true
+    labels:
+      preset-daisy: "true"
     spec:
       containers:
       - image: gcr.io/gcp-guest/daisy-builder:latest
         command:
         - "/main.sh"
         args: ["gcp-guest", "us-west1-a", "deb9,deb10,el6,el7,el8"]
-        volumeMounts:
-        - name: daisy-service-account
-          mountPath: /etc/daisy-service-account
-          readOnly: true
-        env:
-        - name: GOOGLE_APPLICATION_CREDENTIALS
-          value: /etc/daisy-service-account/creds.json
-      volumes:
-      - name: daisy-service-account
-        secret:
-          secretName: daisy-service-account
   - name: oslogin-presubmit-selinux-module
     cluster: gcp-guest
-    run_if_changed: ".*/policy/.*"
+    run_if_changed: "policy/"
     trigger: "(?m)^/modcheck$"
     rerun_command: "/modcheck"
     context: prow/presubmit/selinux_module_check
@@ -448,7 +385,7 @@ presubmits:
   GoogleCloudPlatform/guest-configs:
   - name: guest-configs-presubmit-build
     cluster: gcp-guest
-    run_if_changed: ".*/packaging/.*"
+    run_if_changed: "packaging/"
     trigger: "(?m)^/packagebuild$"
     rerun_command: "/packagebuild"
     context: prow/presubmit/packagebuild
@@ -458,28 +395,19 @@ presubmits:
       base_ref: master
       workdir: true
     decorate: true
+    labels:
+      preset-daisy: "true"
     spec:
       containers:
       - image: gcr.io/gcp-guest/daisy-builder:latest
         command:
         - "/main.sh"
         args: ["gcp-guest", "us-west1-a", "deb9,el6,el7,el8"]
-        volumeMounts:
-        - name: daisy-service-account
-          mountPath: /etc/daisy-service-account
-          readOnly: true
-        env:
-        - name: GOOGLE_APPLICATION_CREDENTIALS
-          value: /etc/daisy-service-account/creds.json
-      volumes:
-      - name: daisy-service-account
-        secret:
-          secretName: daisy-service-account
 
   GoogleCloudPlatform/guest-test-infra:
   - name: infra-presubmit-gocheck
     cluster: gcp-guest
-    run_if_changed: ".*\\.go$"
+    run_if_changed: '\.go$'
     trigger: "(?m)^/gocheck$"
     rerun_command: "/gocheck"
     context: prow/presubmit/gocheck
@@ -492,7 +420,7 @@ presubmits:
         - "/go/main.sh"
   - name: infra-presubmit-gobuild
     cluster: gcp-guest
-    run_if_changed: ".*\\.go$"
+    run_if_changed: '\.go$'
     trigger: "(?m)^/gobuild$"
     rerun_command: "/gobuild"
     context: prow/presubmit/gobuild
@@ -505,7 +433,7 @@ presubmits:
         - "/go/main.sh"
   - name: infra-presubmit-gotest
     cluster: gcp-guest
-    run_if_changed: ".*\\.go$"
+    run_if_changed: '\.go$'
     trigger: "(?m)^/gotest$"
     rerun_command: "/gotest"
     context: prow/presubmit/gotest
