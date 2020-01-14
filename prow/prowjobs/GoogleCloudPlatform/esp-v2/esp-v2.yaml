@@ -82,14 +82,24 @@ presubmits:
           value: /etc/service-account/service-account.json
         - name: E2E_GOOGLE_APPLICATION_CREDENTIALS
           value: /etc/service-account/service-account.json
+        - name: JENKINS_GCE_SSH_PRIVATE_KEY_FILE
+          value: /etc/cloudesf-ssh-key-secret/ssh-private
+        - name: JENKINS_GCE_SSH_PUBLIC_KEY_FILE
+          value: /etc/cloudesf-ssh-key-secret/ssh-public
         volumeMounts:
         - name: service
           mountPath: /etc/service-account
+          readOnly: true
+        - name: cloudesf-ssh-key-secret
+          mountPath: /etc/cloudesf-ssh-key-secret
           readOnly: true
       volumes:
       - name: service # TODO(fejta): remove https://github.com/GoogleCloudPlatform/oss-test-infra/issues/202
         secret:
           secretName: service-account
+      - name: cloudesf-ssh-key-secret
+        secret:
+          secretName: cloudesf-ssh-key-secret
   - name: ESPv2-cloud-run-e2e-cloud-run-http-bookstore
     always_run: true
     decorate: true
