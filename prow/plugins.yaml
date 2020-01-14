@@ -51,6 +51,19 @@ plugins:
   - verify-owners
   - yuks
 
+  GoogleCloudPlatform/guest-test-infra:
+  - blunderbuss
+  GoogleCloudPlatform/guest-oslogin:
+  - blunderbuss
+  GoogleCloudPlatform/osconfig:
+  - blunderbuss
+  GoogleCloudPlatform/guest-agent:
+  - blunderbuss
+  GoogleCloudPlatform/guest-agent:
+  - blunderbuss
+  GoogleCloudPlatform/compute-image-tools:
+  - blunderbuss
+
   GoogleCloudPlatform/oss-test-infra:
   - blunderbuss
   - config-updater
