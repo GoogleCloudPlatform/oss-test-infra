@@ -128,6 +128,8 @@ postsubmits:
       - image: gcr.io/k8s-testimages/gcloud-bazel:v20191004-v0.1-140-g5a84471
         command:
         - ./cluster/deploy.sh
+        args:
+        - --confirm
 
 periodics:
 - cron: "05 15-23 * * 1-5"  # Run at 7:05-15:05 PST (15:05 UTC) Mon-Fri
