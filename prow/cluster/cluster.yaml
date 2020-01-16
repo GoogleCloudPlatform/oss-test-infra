@@ -868,10 +868,10 @@ metadata:
   namespace: default
   name: "tide"
 ---
-kind: Role
-apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  namespace: default
+  # "namespace" omitted since ClusterRoles are not namespaced
   name: "tide"
 rules:
   - apiGroups:
@@ -882,8 +882,8 @@ rules:
       - create
       - list
 ---
-kind: RoleBinding
-apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   namespace: default
   name: "tide"
