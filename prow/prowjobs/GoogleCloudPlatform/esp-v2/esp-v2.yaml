@@ -4,46 +4,25 @@ presubmits:
     always_run: true
     decorate: true
     spec:
+      serviceAccountName: gcp-esp-v2-default
       containers:
       - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20191114-v0.0.0-100-g901f883-master
         command:
         - ./prow/gcpproxy-build.sh
-        env:
-        - name: GOOGLE_APPLICATION_CREDENTIALS
-          value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
-        - name: CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE
-          value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
-        volumeMounts:
-        - name: cloudesf-testing-github-prow-service-account
-          mountPath: /etc/cloudesf-testing-github-prow-service-account
-      volumes:
-      - name: cloudesf-testing-github-prow-service-account
-        secret:
-          secretName: cloudesf-testing-github-prow-service-account
   - name: ESPv2-presubmit
     always_run: true
     decorate: true
     spec:
+      serviceAccountName: gcp-esp-v2-default
       containers:
       - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20191114-v0.0.0-100-g901f883-master
         command:
         - ./prow/gcpproxy-presubmit.sh
-        env:
-        - name: GOOGLE_APPLICATION_CREDENTIALS
-          value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
-        - name: CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE
-          value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
-        volumeMounts:
-        - name: cloudesf-testing-github-prow-service-account
-          mountPath: /etc/cloudesf-testing-github-prow-service-account
-      volumes:
-      - name: cloudesf-testing-github-prow-service-account
-        secret:
-          secretName: cloudesf-testing-github-prow-service-account
   - name: ESPv2-presubmit-asan
     always_run: true
     decorate: true
     spec:
+      serviceAccountName: gcp-esp-v2-default
       containers:
       - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20191114-v0.0.0-100-g901f883-master
         command:
@@ -79,25 +58,15 @@ presubmits:
         - /workspace/scenarios/kubernetes_e2e.py
         image: gcr.io/k8s-testimages/kubekins-e2e:v20200114-6d2c483-master
         env:
-        - name: GOOGLE_APPLICATION_CREDENTIALS
-          value: /etc/service-account/service-account.json
-        - name: E2E_GOOGLE_APPLICATION_CREDENTIALS
-          value: /etc/service-account/service-account.json
         - name: JENKINS_GCE_SSH_PRIVATE_KEY_FILE
           value: /etc/cloudesf-ssh-key-secret/ssh-private
         - name: JENKINS_GCE_SSH_PUBLIC_KEY_FILE
           value: /etc/cloudesf-ssh-key-secret/ssh-public
         volumeMounts:
-        - name: service
-          mountPath: /etc/service-account
-          readOnly: true
         - name: cloudesf-ssh-key-secret
           mountPath: /etc/cloudesf-ssh-key-secret
           readOnly: true
       volumes:
-      - name: service # TODO(fejta): remove https://github.com/GoogleCloudPlatform/oss-test-infra/issues/202
-        secret:
-          secretName: service-account
       - name: cloudesf-ssh-key-secret
         secret:
           secretName: cloudesf-ssh-key-secret
@@ -105,6 +74,7 @@ presubmits:
     always_run: true
     decorate: true
     spec:
+      serviceAccountName: gcp-esp-v2-default
       containers:
       - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20191120-v0.0.0-125-geee50dd-master
         env:
@@ -124,19 +94,8 @@ periodics:
   annotations:
     testgrid-dashboards: googleoss-esp-v2
   spec:
+    serviceAccountName: gcp-esp-v2-default
     containers:
     - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20191114-v0.0.0-100-g901f883-master
       command:
       - ./prow/continuous-build.sh
-      env:
-      - name: GOOGLE_APPLICATION_CREDENTIALS
-        value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
-      - name: CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE
-        value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
-      volumeMounts:
-      - name: cloudesf-testing-github-prow-service-account
-        mountPath: /etc/cloudesf-testing-github-prow-service-account
-    volumes:
-    - name: cloudesf-testing-github-prow-service-account
-      secret:
-        secretName: cloudesf-testing-github-prow-service-account
