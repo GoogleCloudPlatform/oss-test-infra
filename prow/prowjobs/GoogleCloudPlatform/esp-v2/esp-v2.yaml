@@ -57,7 +57,7 @@ presubmits:
       - args:
         - --cluster=
         - --deployment=gke
-        - --extract=gke-default
+        - --extract=release/stable-1.14
         - --gcp-project=cloudesf-testing
         - --gcp-zone=us-west1-b
         - --gcp-network=default
