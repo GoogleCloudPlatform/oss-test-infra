@@ -75,6 +75,9 @@ metadata:
     app: plank
 spec:
   replicas: 1 # Do not scale up.
+  selector:
+    matchLabels:
+      app: plank
   template:
     metadata:
       labels:
@@ -121,6 +124,9 @@ metadata:
     app: sinker
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: sinker
   template:
     metadata:
       labels:
@@ -165,6 +171,9 @@ metadata:
     app: deck
 spec:
   replicas: 2
+  selector:
+    matchLabels:
+      app: deck
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -256,6 +265,9 @@ metadata:
     app: horologium
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: horologium
   template:
     metadata:
       labels:
@@ -373,6 +385,9 @@ metadata:
     app: crier
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: crier
   template:
     metadata:
       labels:
@@ -426,6 +441,9 @@ metadata:
     app: hook
 spec:
   replicas: 2
+  selector:
+    matchLabels:
+      app: hook
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -812,6 +830,9 @@ metadata:
     app: tide
 spec:
   replicas: 1 # Do not scale up.
+  selector:
+    matchLabels:
+      app: tide
   template:
     metadata:
       labels:
