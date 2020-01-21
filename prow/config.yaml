@@ -18,6 +18,8 @@ tide:
     GoogleCloudPlatform/guest-logging-go: squash
     GoogleCloudPlatform/guest-agent: squash
     GoogleCloudPlatform/guest-test-infra: squash
+    GoogleCloudPlatform/guest-oslogin: squash
+    GoogleCloudPlatform/compute-image-tools: squash
   target_url: https://prow.gflocks.com/tide
   queries:
     - repos:
@@ -28,6 +30,7 @@ tide:
         - GoogleCloudPlatform/guest-oslogin
         - GoogleCloudPlatform/testgrid
         - GoogleCloudPlatform/guest-test-infra
+        - GoogleCloudPlatform/compute-image-tools
       labels:
         - lgtm
         - approved
