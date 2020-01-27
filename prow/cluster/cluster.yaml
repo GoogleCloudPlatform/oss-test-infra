@@ -88,7 +88,7 @@ spec:
       serviceAccountName: plank
       containers:
       - name: plank
-        image: gcr.io/k8s-prow/plank:v20200117-c08038c1c
+        image: gcr.io/k8s-prow/plank:v20200127-357360d05
         args:
         - --kubeconfig=/etc/kubeconfig/oss-config
         - --dry-run=false
@@ -138,7 +138,7 @@ spec:
       serviceAccountName: sinker
       containers:
       - name: sinker
-        image: gcr.io/k8s-prow/sinker:v20200117-c08038c1c
+        image: gcr.io/k8s-prow/sinker:v20200127-357360d05
         args:
         - --kubeconfig=/etc/kubeconfig/oss-config
         - --config-path=/etc/config/config.yaml
@@ -192,7 +192,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
       - name: deck
-        image: gcr.io/k8s-prow/deck:v20200117-c08038c1c
+        image: gcr.io/k8s-prow/deck:v20200127-357360d05
         args:
         - --kubeconfig=/etc/kubeconfig/oss-config
         - --config-path=/etc/config/config.yaml
@@ -283,7 +283,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
       - name: horologium
-        image: gcr.io/k8s-prow/horologium:v20200117-c08038c1c
+        image: gcr.io/k8s-prow/horologium:v20200127-357360d05
         args:
         - --config-path=/etc/config/config.yaml
         - --job-config-path=/etc/job-config
@@ -357,7 +357,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
       - name: gerrit
-        image: gcr.io/k8s-prow/gerrit:v20200117-c08038c1c
+        image: gcr.io/k8s-prow/gerrit:v20200127-357360d05
         args:
         - --config-path=/etc/config/config.yaml
         - --job-config-path=/etc/job-config
@@ -407,7 +407,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
       - name: crier
-        image: gcr.io/k8s-prow/crier:v20200117-c08038c1c
+        image: gcr.io/k8s-prow/crier:v20200127-357360d05
         args:
         - --gerrit-workers=1
         - --github-workers=1
@@ -469,7 +469,7 @@ spec:
       terminationGracePeriodSeconds: 180
       containers:
       - name: hook
-        image: gcr.io/k8s-prow/hook:v20200117-c08038c1c
+        image: gcr.io/k8s-prow/hook:v20200127-357360d05
         imagePullPolicy: Always
         args:
         - --config-path=/etc/config/config.yaml
@@ -872,7 +872,7 @@ spec:
       serviceAccountName: tide
       containers:
       - name: tide
-        image: gcr.io/k8s-prow/tide:v20200117-c08038c1c
+        image: gcr.io/k8s-prow/tide:v20200127-357360d05
         args:
         - --config-path=/etc/config/config.yaml
         - --job-config-path=/etc/job-config
