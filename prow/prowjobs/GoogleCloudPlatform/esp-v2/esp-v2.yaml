@@ -110,6 +110,14 @@ presubmits:
         env:
         - name: TEST_CASE
           value: cloud-run-cloud-run-http-bookstore
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /etc/service-account/service-account.json
+        - name: E2E_GOOGLE_APPLICATION_CREDENTIALS
+          value: /etc/service-account/service-account.json
+        volumeMounts:
+        - name: service
+          mountPath: /etc/service-account
+          readOnly: true
         command:
         - ./prow/gcpproxy-e2e.sh
 
