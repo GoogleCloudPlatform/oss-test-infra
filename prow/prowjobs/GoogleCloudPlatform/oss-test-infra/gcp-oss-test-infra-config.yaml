@@ -7,7 +7,7 @@ presubmits:
     always_run: true
     spec:
       containers:
-        - image: gcr.io/k8s-prow/checkconfig:v20200128-15e661e6a
+        - image: gcr.io/k8s-prow/checkconfig:v20200203-711d3732b
           imagePullPolicy: Always
           command:
             - /checkconfig
@@ -144,7 +144,7 @@ periodics:
     testgrid-dashboards: googleoss-test-infra
   spec:
     containers:
-    - image: gcr.io/k8s-prow/autobump:v20200128-15e661e6a
+    - image: gcr.io/k8s-prow/autobump:v20200203-711d3732b
       command:
       - /autobump.sh
       args:
