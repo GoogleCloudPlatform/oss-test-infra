@@ -27,6 +27,27 @@ presets:
       secretName: github-access-token
 
 postsubmits:
+  GoogleCloudPlatform/compute-image-packages:
+  - name: gce-build
+    cluster: gcp-guest
+    trigger: "(?m)^/test$"
+    rerun_command: "/test"
+    extra_refs:
+    - org: GoogleCloudPlatform
+      repo: guest-test-infra
+      base_ref: master
+      workdir: true
+    decorate: true
+    labels:
+      preset-daisy: "true"
+      preset-github: "true"
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/daisy-builder:latest
+        imagePullPolicy: Always
+        command:
+        - "/main.sh"
+        args: ["gcp-guest", "us-west1-a", "deb9,el6,el7,el8", "gs://gcp-guest-package-uploads/google-compute-engine/", "packages/google-compute-engine"]
   GoogleCloudPlatform/osconfig:
   - name: osconfig-build
     cluster: gcp-guest
@@ -167,7 +188,7 @@ presubmits:
     decorate: true
     spec:
       containers:
-      - image: gcr.io/liamh-testing/gobuild:latest
+      - image: gcr.io/gcp-guest/gobuild:latest
         imagePullPolicy: Always
         command:
         - "/go/main.sh"
