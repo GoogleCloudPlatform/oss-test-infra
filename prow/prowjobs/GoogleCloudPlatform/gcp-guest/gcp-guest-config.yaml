@@ -38,6 +38,8 @@ postsubmits:
       base_ref: master
       workdir: true
     decorate: true
+    annotations:
+      testgrid-dashboards: googleoss-gcp-guest
     labels:
       preset-daisy: "true"
       preset-github: "true"
