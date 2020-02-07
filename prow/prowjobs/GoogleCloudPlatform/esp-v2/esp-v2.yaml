@@ -47,7 +47,7 @@ presubmits:
       containers:
       - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20191114-v0.0.0-100-g901f883-master
         command:
-        - ./prow/gcpproxy-presubmit-asan.sh
+        - ./prow/presubmit-asan.sh
         env:
         - name: GOOGLE_APPLICATION_CREDENTIALS
           value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
@@ -67,7 +67,7 @@ presubmits:
       containers:
       - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20191114-v0.0.0-100-g901f883-master
         command:
-        - ./prow/gcpproxy-presubmit-tsan.sh
+        - ./prow/presubmit-tsan.sh
         env:
         - name: GOOGLE_APPLICATION_CREDENTIALS
           value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
