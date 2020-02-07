@@ -186,7 +186,7 @@ presubmits:
       - name: cloudesf-ssh-key-secret
         secret:
           secretName: cloudesf-ssh-key-secret
-  - name: ESPv2-gke-e2e-tight-grpc-echo-managed
+  - name: ESPv2-gke-e2e-tight-grpc-interop-managed
     always_run: true
     decorate: true
     spec:
