@@ -119,6 +119,8 @@ presubmits:
           value: /etc/cloudesf-ssh-key-secret/ssh-private
         - name: JENKINS_GCE_SSH_PUBLIC_KEY_FILE
           value: /etc/cloudesf-ssh-key-secret/ssh-public
+        - name: USER
+          value: prow
         volumeMounts:
         - name: service
           mountPath: /etc/service-account
@@ -172,6 +174,8 @@ presubmits:
           value: /etc/cloudesf-ssh-key-secret/ssh-private
         - name: JENKINS_GCE_SSH_PUBLIC_KEY_FILE
           value: /etc/cloudesf-ssh-key-secret/ssh-public
+        - name: USER
+          value: prow
         volumeMounts:
         - name: service
           mountPath: /etc/service-account
@@ -225,6 +229,8 @@ presubmits:
           value: /etc/cloudesf-ssh-key-secret/ssh-private
         - name: JENKINS_GCE_SSH_PUBLIC_KEY_FILE
           value: /etc/cloudesf-ssh-key-secret/ssh-public
+        - name: USER
+          value: prow
         volumeMounts:
         - name: service
           mountPath: /etc/service-account
