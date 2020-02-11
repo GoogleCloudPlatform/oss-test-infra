@@ -34,7 +34,6 @@ presubmits:
   - name: pull-oss-test-infra-check-testgrid-config
     run_if_changed: '^(prow/prowjobs/.*\.yaml)|(testgrid/config\.yaml)$'
     decorate: true
-    optional: true
     branches:
     - master
     annotations:
