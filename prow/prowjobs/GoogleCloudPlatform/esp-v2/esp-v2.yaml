@@ -20,6 +20,9 @@ presubmits:
       - name: cloudesf-testing-github-prow-service-account
         secret:
           secretName: cloudesf-testing-github-prow-service-account
+      - name: espv2-disk
+        persistentVolumeClaim:
+          claimName: espv2-disk
   - name: ESPv2-presubmit
     always_run: true
     decorate: true
@@ -40,6 +43,9 @@ presubmits:
       - name: cloudesf-testing-github-prow-service-account
         secret:
           secretName: cloudesf-testing-github-prow-service-account
+      - name: espv2-disk
+        persistentVolumeClaim:
+          claimName: espv2-disk
   - name: ESPv2-presubmit-asan
     always_run: true
     decorate: true
@@ -60,6 +66,9 @@ presubmits:
       - name: cloudesf-testing-github-prow-service-account
         secret:
           secretName: cloudesf-testing-github-prow-service-account
+      - name: espv2-disk
+        persistentVolumeClaim:
+          claimName: espv2-disk
   - name: ESPv2-presubmit-tsan
     always_run: true
     decorate: true
@@ -80,6 +89,9 @@ presubmits:
       - name: cloudesf-testing-github-prow-service-account
         secret:
           secretName: cloudesf-testing-github-prow-service-account
+      - name: espv2-disk
+        persistentVolumeClaim:
+          claimName: espv2-disk
   - name: ESPv2-gke-e2e-tight-http-bookstore-managed
     always_run: true
     decorate: true
