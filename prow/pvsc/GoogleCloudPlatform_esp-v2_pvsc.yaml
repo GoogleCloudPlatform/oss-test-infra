@@ -1,7 +1,7 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: espv2_disk
+  name: espv2_pvsc
 spec:
   accessModes:
     - ReadWriteOnce
