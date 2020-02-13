@@ -1,11 +1,11 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: espv2_pvcs
+  name: espv2-pvcs
 spec:
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
       storage: 499Gi
-  storageClassName: espv2_disk
+  storageClassName: espv2-pvcs
