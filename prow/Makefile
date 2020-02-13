@@ -38,4 +38,4 @@ deploy: get-cluster-credentials
 deploy-build: get-build-cluster-credentials
 	kubectl apply -f ./cluster/build/
 	kubectl apply -f ./serviceaccounts/build/
-	kubectl apply -f ./pvsc/build/
+	kubectl apply -f ./pvcs/build/
