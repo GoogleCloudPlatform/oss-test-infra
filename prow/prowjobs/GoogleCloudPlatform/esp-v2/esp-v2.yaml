@@ -16,6 +16,8 @@ presubmits:
         volumeMounts:
         - name: cloudesf-testing-github-prow-service-account
           mountPath: /etc/cloudesf-testing-github-prow-service-account
+        - name: espv2-pvsc
+          mountPath: /etc/espv2-pvsc
       volumes:
       - name: cloudesf-testing-github-prow-service-account
         secret:
@@ -39,6 +41,8 @@ presubmits:
         volumeMounts:
         - name: cloudesf-testing-github-prow-service-account
           mountPath: /etc/cloudesf-testing-github-prow-service-account
+        - name: espv2-pvsc
+          mountPath: /etc/espv2-pvsc
       volumes:
       - name: cloudesf-testing-github-prow-service-account
         secret:
@@ -62,6 +66,8 @@ presubmits:
         volumeMounts:
         - name: cloudesf-testing-github-prow-service-account
           mountPath: /etc/cloudesf-testing-github-prow-service-account
+        - name: espv2-pvsc
+          mountPath: /etc/espv2-pvsc
       volumes:
       - name: cloudesf-testing-github-prow-service-account
         secret:
@@ -85,6 +91,8 @@ presubmits:
         volumeMounts:
         - name: cloudesf-testing-github-prow-service-account
           mountPath: /etc/cloudesf-testing-github-prow-service-account
+        - name: espv2-pvsc
+          mountPath: /etc/espv2-pvsc
       volumes:
       - name: cloudesf-testing-github-prow-service-account
         secret:
