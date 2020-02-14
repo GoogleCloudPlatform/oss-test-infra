@@ -5,7 +5,7 @@ presubmits:
     decorate: true
     spec:
       containers:
-      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20191114-v0.0.0-100-g901f883-master
+      - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
         command:
         - ./prow/gcpproxy-build.sh
         env:
@@ -30,7 +30,7 @@ presubmits:
     decorate: true
     spec:
       containers:
-      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20191114-v0.0.0-100-g901f883-master
+      - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
         command:
         - ./prow/gcpproxy-presubmit.sh
         env:
@@ -55,7 +55,7 @@ presubmits:
     decorate: true
     spec:
       containers:
-      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20191114-v0.0.0-100-g901f883-master
+      - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
         command:
         - ./prow/presubmit-asan.sh
         env:
@@ -80,7 +80,7 @@ presubmits:
     decorate: true
     spec:
       containers:
-      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20191114-v0.0.0-100-g901f883-master
+      - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
         command:
         - ./prow/presubmit-tsan.sh
         env:
