@@ -16,15 +16,10 @@ presubmits:
         volumeMounts:
         - name: cloudesf-testing-github-prow-service-account
           mountPath: /etc/cloudesf-testing-github-prow-service-account
-        - name: espv2-pvcs
-          mountPath: /etc/espv2-pvcs
       volumes:
       - name: cloudesf-testing-github-prow-service-account
         secret:
           secretName: cloudesf-testing-github-prow-service-account
-      - name: espv2-pvcs
-        persistentVolumeClaim:
-          claimName: espv2-pvcs
   - name: ESPv2-presubmit
     always_run: true
     decorate: true
@@ -66,15 +61,10 @@ presubmits:
         volumeMounts:
         - name: cloudesf-testing-github-prow-service-account
           mountPath: /etc/cloudesf-testing-github-prow-service-account
-        - name: espv2-pvcs
-          mountPath: /etc/espv2-pvcs
       volumes:
       - name: cloudesf-testing-github-prow-service-account
         secret:
           secretName: cloudesf-testing-github-prow-service-account
-      - name: espv2-pvcs
-        persistentVolumeClaim:
-          claimName: espv2-pvcs
   - name: ESPv2-presubmit-tsan
     always_run: true
     decorate: true
@@ -91,15 +81,10 @@ presubmits:
         volumeMounts:
         - name: cloudesf-testing-github-prow-service-account
           mountPath: /etc/cloudesf-testing-github-prow-service-account
-        - name: espv2-pvcs
-          mountPath: /etc/espv2-pvcs
       volumes:
       - name: cloudesf-testing-github-prow-service-account
         secret:
           secretName: cloudesf-testing-github-prow-service-account
-      - name: espv2-pvcs
-        persistentVolumeClaim:
-          claimName: espv2-pvcs
   - name: ESPv2-gke-e2e-tight-http-bookstore-managed
     always_run: true
     decorate: true
