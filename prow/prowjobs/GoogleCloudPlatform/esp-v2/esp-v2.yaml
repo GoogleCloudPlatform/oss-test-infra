@@ -1,6 +1,7 @@
 presubmits:
   GoogleCloudPlatform/esp-v2:
   - name: ESPv2-build
+    cluster: espv2
     always_run: true
     decorate: true
     spec:
@@ -21,6 +22,7 @@ presubmits:
         secret:
           secretName: cloudesf-testing-github-prow-service-account
   - name: ESPv2-presubmit
+    cluster: espv2
     always_run: true
     decorate: true
     spec:
@@ -36,16 +38,12 @@ presubmits:
         volumeMounts:
         - name: cloudesf-testing-github-prow-service-account
           mountPath: /etc/cloudesf-testing-github-prow-service-account
-        - name: espv2-pvcs
-          mountPath: /etc/espv2-pvcs
       volumes:
       - name: cloudesf-testing-github-prow-service-account
         secret:
           secretName: cloudesf-testing-github-prow-service-account
-      - name: espv2-pvcs
-        persistentVolumeClaim:
-          claimName: espv2-pvcs
   - name: ESPv2-presubmit-asan
+    cluster: espv2
     always_run: true
     decorate: true
     spec:
@@ -66,6 +64,7 @@ presubmits:
         secret:
           secretName: cloudesf-testing-github-prow-service-account
   - name: ESPv2-presubmit-tsan
+    cluster: espv2
     always_run: true
     decorate: true
     spec:
@@ -86,6 +85,7 @@ presubmits:
         secret:
           secretName: cloudesf-testing-github-prow-service-account
   - name: ESPv2-gke-e2e-tight-http-bookstore-managed
+    cluster: espv2
     always_run: true
     decorate: true
     spec:
@@ -141,6 +141,7 @@ presubmits:
         secret:
           secretName: cloudesf-ssh-key-secret
   - name: ESPv2-gke-e2e-tight-grpc-echo-managed
+    cluster: espv2
     always_run: true
     decorate: true
     spec:
@@ -196,6 +197,7 @@ presubmits:
         secret:
           secretName: cloudesf-ssh-key-secret
   - name: ESPv2-gke-e2e-tight-grpc-interop-managed
+    cluster: espv2
     always_run: true
     decorate: true
     spec:
@@ -251,6 +253,7 @@ presubmits:
         secret:
           secretName: cloudesf-ssh-key-secret
   - name: ESPv2-cloud-run-e2e-cloud-run-http-bookstore
+    cluster: espv2
     always_run: true
     decorate: true
     spec:
@@ -273,6 +276,7 @@ presubmits:
         secret:
           secretName: cloudesf-testing-github-prow-service-account
   - name: ESPv2-cloud-run-e2e-cloud-function-http-bookstore
+    cluster: espv2
     always_run: true
     decorate: true
     spec:
