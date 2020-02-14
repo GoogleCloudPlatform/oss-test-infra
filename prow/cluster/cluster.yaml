@@ -90,7 +90,7 @@ spec:
       - name: plank
         image: gcr.io/k8s-prow/plank:v20200203-711d3732b
         args:
-        - --kubeconfig=/etc/kubeconfig/oss-config
+        - --kubeconfig=/etc/kubeconfig/oss-config-20200214
         - --dry-run=false
         - --github-token-path=
         - --skip-report=true
@@ -140,7 +140,7 @@ spec:
       - name: sinker
         image: gcr.io/k8s-prow/sinker:v20200203-711d3732b
         args:
-        - --kubeconfig=/etc/kubeconfig/oss-config
+        - --kubeconfig=/etc/kubeconfig/oss-config-20200214
         - --config-path=/etc/config/config.yaml
         - --job-config-path=/etc/job-config
         - --dry-run=false
@@ -194,7 +194,7 @@ spec:
       - name: deck
         image: gcr.io/k8s-prow/deck:v20200203-711d3732b
         args:
-        - --kubeconfig=/etc/kubeconfig/oss-config
+        - --kubeconfig=/etc/kubeconfig/oss-config-20200214
         - --config-path=/etc/config/config.yaml
         - --job-config-path=/etc/job-config
         - --spyglass=true
