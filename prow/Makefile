@@ -37,4 +37,3 @@ deploy: get-cluster-credentials
 .PHONY: deploy-build
 deploy-build: get-build-cluster-credentials
 	kubectl apply -f ./cluster/build/
-	kubectl apply -f ./serviceaccounts/build/
