@@ -85,6 +85,7 @@ presubmits:
         secret:
           secretName: cloudesf-testing-github-prow-service-account
   - name: ESPv2-gke-e2e-tight-http-bookstore-managed
+    cluster: espv2
     always_run: true
     decorate: true
     spec:
@@ -140,6 +141,7 @@ presubmits:
         secret:
           secretName: cloudesf-ssh-key-secret
   - name: ESPv2-gke-e2e-tight-grpc-echo-managed
+    cluster: espv2
     always_run: true
     decorate: true
     spec:
@@ -195,6 +197,7 @@ presubmits:
         secret:
           secretName: cloudesf-ssh-key-secret
   - name: ESPv2-gke-e2e-tight-grpc-interop-managed
+    cluster: espv2
     always_run: true
     decorate: true
     spec:
