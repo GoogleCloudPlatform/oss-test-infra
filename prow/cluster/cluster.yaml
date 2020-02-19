@@ -324,8 +324,7 @@ metadata:
     networking.gke.io/managed-certificates: prow-gflocks-com
 spec:
   rules:
-  - host: prow.gflocks.com
-    http:
+  - http:
       paths:
       - path: /*
         backend:
