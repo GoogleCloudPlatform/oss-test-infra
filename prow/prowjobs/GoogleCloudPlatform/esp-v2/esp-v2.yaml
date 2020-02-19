@@ -278,8 +278,8 @@ presubmits:
           securityContext:
             privileged: true
           command:
-            - runner.sh
-            - /workspace/scenarios/kubernetes_e2e.py
+          - runner.sh
+          - /workspace/scenarios/kubernetes_e2e.py
           image: gcr.io/k8s-testimages/kubekins-e2e:v20200114-6d2c483-master
           env:
           - name: GOOGLE_APPLICATION_CREDENTIALS
