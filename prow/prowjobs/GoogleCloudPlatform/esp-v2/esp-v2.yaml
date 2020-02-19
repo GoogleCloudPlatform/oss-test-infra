@@ -252,7 +252,7 @@ presubmits:
       - name: cloudesf-ssh-key-secret
         secret:
           secretName: cloudesf-ssh-key-secret
-  - name: gcpproxy-anthos-cloud-run-e2e-anthos-cloud-run-http-bookstore
+  - name: ESPv2-anthos-cloud-run-e2e-anthos-cloud-run-http-bookstore
     cluster: espv2
     always_run: true
     decorate: true
@@ -306,7 +306,6 @@ presubmits:
       - name: cloudesf-ssh-key-secret
         secret:
           secretName: cloudesf-ssh-key-secret
-
   - name: ESPv2-cloud-run-e2e-cloud-run-http-bookstore
     cluster: espv2
     always_run: true
@@ -353,7 +352,7 @@ presubmits:
       - name: cloudesf-testing-github-prow-service-account
         secret:
           secretName: cloudesf-testing-github-prow-service-account
-  - name: gcpproxy-cloud-run-e2e-cloud-run-grpc-echo
+  - name: ESPv2-cloud-run-e2e-cloud-run-grpc-echo
     cluster: espv2
     always_run: true
     decorate: true
@@ -376,3 +375,370 @@ presubmits:
       - name: cloudesf-testing-github-prow-service-account
         secret:
           secretName: cloudesf-testing-github-prow-service-account
+
+periodics:
+  - name: ESPv2-continuous-build
+    cluster: espv2
+    cron: '0 * * * *' # Run by every hour
+    decorate: true
+    spec:
+      containers:
+        - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
+          command:
+            - ./prow/continuous-build.sh
+          env:
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
+            - name: CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE
+              value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
+          volumeMounts:
+            - name: cloudesf-testing-github-prow-service-account
+              mountPath: /etc/cloudesf-testing-github-prow-service-account
+      volumes:
+        - name: cloudesf-testing-github-prow-service-account
+          secret:
+            secretName: cloudesf-testing-github-prow-service-account
+  - name: ESPv2-continuous-presubmit
+    cluster: espv2
+    cron: '0 * * * *' # Run by every hour
+    decorate: true
+    spec:
+      containers:
+        - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
+          command:
+            - ./prow/gcpproxy-presubmit.sh
+          env:
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
+            - name: CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE
+              value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
+          volumeMounts:
+            - name: cloudesf-testing-github-prow-service-account
+              mountPath: /etc/cloudesf-testing-github-prow-service-account
+      volumes:
+        - name: cloudesf-testing-github-prow-service-account
+          secret:
+            secretName: cloudesf-testing-github-prow-service-account
+  - name: ESPv2-continuous-presubmit-asan
+    cluster: espv2
+    cron: '0 * * * *' # Run by every hour
+    decorate: true
+    spec:
+      containers:
+        - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
+          command:
+            - ./prow/presubmit-asan.sh
+          env:
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
+            - name: CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE
+              value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
+          volumeMounts:
+            - name: cloudesf-testing-github-prow-service-account
+              mountPath: /etc/cloudesf-testing-github-prow-service-account
+      volumes:
+        - name: cloudesf-testing-github-prow-service-account
+          secret:
+            secretName: cloudesf-testing-github-prow-service-account
+  - name: ESPv2-continuous-presubmit-tsan
+    cluster: espv2
+    cron: '0 * * * *' # Run by every hour
+    decorate: true
+    spec:
+      containers:
+        - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
+          command:
+            - ./prow/presubmit-tsan.sh
+          env:
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
+            - name: CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE
+              value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
+          volumeMounts:
+            - name: cloudesf-testing-github-prow-service-account
+              mountPath: /etc/cloudesf-testing-github-prow-service-account
+      volumes:
+        - name: cloudesf-testing-github-prow-service-account
+          secret:
+            secretName: cloudesf-testing-github-prow-service-account
+  - name: ESPv2-continuous-gke-e2e-tight-http-bookstore-managed
+    cluster: espv2
+    cron: '0 * * * *' # Run by every hour
+    decorate: true
+    spec:
+      serviceAccountName: gcp-esp-v2-default
+      containers:
+        - args:
+            - --cluster=
+            - --deployment=gke
+            - --extract=release/stable-1.14
+            - --gcp-project=cloudesf-testing
+            - --gcp-zone=us-west1-b
+            - --gcp-network=default
+            - --gcp-node-image=gci
+            - --gke-create-command=container clusters create --cluster-ipv4-cidr=/19 --quiet
+            - '--gke-shape={"default":{"Nodes":1,"MachineType":"n1-standard-2"}}'
+            - --gke-environment=prod
+            - --provider=gke
+            - --test=false
+            - --test-cmd=../prow/e2e-tight_http_bookstore_managed_long_run.sh
+            - --test-cmd-name=gcpproxy_e2e
+            - --timeout=80m
+          # docker-in-docker needs privileged mode
+          securityContext:
+            privileged: true
+          command:
+            - runner.sh
+            - /workspace/scenarios/kubernetes_e2e.py
+          image: gcr.io/k8s-testimages/kubekins-e2e:v20200114-6d2c483-master
+          env:
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /etc/service-account/service-account.json
+            - name: E2E_GOOGLE_APPLICATION_CREDENTIALS
+              value: /etc/service-account/service-account.json
+            - name: JENKINS_GCE_SSH_PRIVATE_KEY_FILE
+              value: /etc/cloudesf-ssh-key-secret/ssh-private
+            - name: JENKINS_GCE_SSH_PUBLIC_KEY_FILE
+              value: /etc/cloudesf-ssh-key-secret/ssh-public
+            - name: USER
+              value: prow
+          volumeMounts:
+            - name: service
+              mountPath: /etc/service-account
+              readOnly: true
+            - name: cloudesf-ssh-key-secret
+              mountPath: /etc/cloudesf-ssh-key-secret
+              readOnly: true
+      volumes:
+        - name: service # TODO(fejta): remove https://github.com/GoogleCloudPlatform/oss-test-infra/issues/202
+          secret:
+            secretName: service-account
+        - name: cloudesf-ssh-key-secret
+          secret:
+            secretName: cloudesf-ssh-key-secret
+  - name: ESPv2-continuous-gke-e2e-tight-grpc-echo-managed
+    cluster: espv2
+    cron: '0 * * * *' # Run by every hour
+    decorate: true
+    spec:
+      serviceAccountName: gcp-esp-v2-default
+      containers:
+        - args:
+            - --cluster=
+            - --deployment=gke
+            - --extract=release/stable-1.14
+            - --gcp-project=cloudesf-testing
+            - --gcp-zone=us-west1-b
+            - --gcp-network=default
+            - --gcp-node-image=gci
+            - --gke-create-command=container clusters create --cluster-ipv4-cidr=/19 --quiet
+            - '--gke-shape={"default":{"Nodes":1,"MachineType":"n1-standard-2"}}'
+            - --gke-environment=prod
+            - --provider=gke
+            - --test=false
+            - --test-cmd=../prow/e2e-tight_grpc_echo_managed_long_run.sh
+            - --test-cmd-name=gcpproxy_e2e
+            - --timeout=80m
+          # docker-in-docker needs privileged mode
+          securityContext:
+            privileged: true
+          command:
+            - runner.sh
+            - /workspace/scenarios/kubernetes_e2e.py
+          image: gcr.io/k8s-testimages/kubekins-e2e:v20200114-6d2c483-master
+          env:
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /etc/service-account/service-account.json
+            - name: E2E_GOOGLE_APPLICATION_CREDENTIALS
+              value: /etc/service-account/service-account.json
+            - name: JENKINS_GCE_SSH_PRIVATE_KEY_FILE
+              value: /etc/cloudesf-ssh-key-secret/ssh-private
+            - name: JENKINS_GCE_SSH_PUBLIC_KEY_FILE
+              value: /etc/cloudesf-ssh-key-secret/ssh-public
+            - name: USER
+              value: prow
+          volumeMounts:
+            - name: service
+              mountPath: /etc/service-account
+              readOnly: true
+            - name: cloudesf-ssh-key-secret
+              mountPath: /etc/cloudesf-ssh-key-secret
+              readOnly: true
+      volumes:
+        - name: service # TODO(fejta): remove https://github.com/GoogleCloudPlatform/oss-test-infra/issues/202
+          secret:
+            secretName: service-account
+        - name: cloudesf-ssh-key-secret
+          secret:
+            secretName: cloudesf-ssh-key-secret
+  - name: ESPv2-continuous-gke-e2e-tight-grpc-interop-managed
+    cluster: espv2
+    cron: '0 * * * *' # Run by every hour
+    decorate: true
+    spec:
+      serviceAccountName: gcp-esp-v2-default
+      containers:
+        - args:
+            - --cluster=
+            - --deployment=gke
+            - --extract=release/stable-1.14
+            - --gcp-project=cloudesf-testing
+            - --gcp-zone=us-west1-b
+            - --gcp-network=default
+            - --gcp-node-image=gci
+            - --gke-create-command=container clusters create --cluster-ipv4-cidr=/19 --quiet
+            - '--gke-shape={"default":{"Nodes":1,"MachineType":"n1-standard-2"}}'
+            - --gke-environment=prod
+            - --provider=gke
+            - --test=false
+            - --test-cmd=../prow/e2e-tight_grpc_interop_managed_long_run.sh
+            - --test-cmd-name=gcpproxy_e2e
+            - --timeout=80m
+          # docker-in-docker needs privileged mode
+          securityContext:
+            privileged: true
+          command:
+            - runner.sh
+            - /workspace/scenarios/kubernetes_e2e.py
+          image: gcr.io/k8s-testimages/kubekins-e2e:v20200114-6d2c483-master
+          env:
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /etc/service-account/service-account.json
+            - name: E2E_GOOGLE_APPLICATION_CREDENTIALS
+              value: /etc/service-account/service-account.json
+            - name: JENKINS_GCE_SSH_PRIVATE_KEY_FILE
+              value: /etc/cloudesf-ssh-key-secret/ssh-private
+            - name: JENKINS_GCE_SSH_PUBLIC_KEY_FILE
+              value: /etc/cloudesf-ssh-key-secret/ssh-public
+            - name: USER
+              value: prow
+          volumeMounts:
+            - name: service
+              mountPath: /etc/service-account
+              readOnly: true
+            - name: cloudesf-ssh-key-secret
+              mountPath: /etc/cloudesf-ssh-key-secret
+              readOnly: true
+      volumes:
+        - name: service # TODO(fejta): remove https://github.com/GoogleCloudPlatform/oss-test-infra/issues/202
+          secret:
+            secretName: service-account
+        - name: cloudesf-ssh-key-secret
+          secret:
+            secretName: cloudesf-ssh-key-secret
+  - name: ESPv2-continuous-anthos-cloud-run-e2e-cloud-run-http-bookstore
+    cluster: espv2
+    cron: '0 * * * *' # Run by every hour
+    decorate: true
+    spec:
+      serviceAccountName: gcp-esp-v2-default
+      containers:
+        - args:
+            - --cluster=
+            - --deployment=gke
+            - --gcp-project=cloudesf-testing
+            - --gcp-zone=us-west1-b
+            - --gcp-network=default
+            - --gcp-node-image=gci
+            - --gke-environment=prod
+            - --provider=gke
+            - --test=false
+            - --test-cmd=../prow/e2e-anthos-cloud-run-anthos-cloud-run-http-bookstore.sh
+            - --test-cmd-name=gcpproxy_e2e
+            - --timeout=80m
+            - --extract=release/stable-1.14
+          # docker-in-docker needs privileged mode
+          securityContext:
+            privileged: true
+          command:
+            - runner.sh
+            - /workspace/scenarios/kubernetes_e2e.py
+          image: gcr.io/k8s-testimages/kubekins-e2e:v20200114-6d2c483-master
+          env:
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /etc/service-account/service-account.json
+            - name: E2E_GOOGLE_APPLICATION_CREDENTIALS
+              value: /etc/service-account/service-account.json
+            - name: JENKINS_GCE_SSH_PRIVATE_KEY_FILE
+              value: /etc/cloudesf-ssh-key-secret/ssh-private
+            - name: JENKINS_GCE_SSH_PUBLIC_KEY_FILE
+              value: /etc/cloudesf-ssh-key-secret/ssh-public
+            - name: USER
+              value: prow
+          volumeMounts:
+            - name: service
+              mountPath: /etc/service-account
+              readOnly: true
+            - name: cloudesf-ssh-key-secret
+              mountPath: /etc/cloudesf-ssh-key-secret
+              readOnly: true
+      volumes:
+        - name: service # TODO(fejta): remove https://github.com/GoogleCloudPlatform/oss-test-infra/issues/202
+          secret:
+            secretName: service-account
+        - name: cloudesf-ssh-key-secret
+          secret:
+            secretName: cloudesf-ssh-key-secret
+  - name: ESPv2-continuous-cloud-run-e2e-cloud-run-http-bookstore
+    cluster: espv2
+    cron: '0 * * * *' # Run by every hour
+    decorate: true
+    spec:
+      containers:
+        - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20191120-v0.0.0-125-geee50dd-master
+          command:
+            - ./prow/e2e-cloud-run-cloud-run-http-bookstore.sh
+          env:
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
+            - name: CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE
+              value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
+          volumeMounts:
+            - name: cloudesf-testing-github-prow-service-account
+              mountPath: /etc/cloudesf-testing-github-prow-service-account
+      volumes:
+        - name: cloudesf-testing-github-prow-service-account
+          secret:
+            secretName: cloudesf-testing-github-prow-service-account
+  - name: ESPv2-continuous-cloud-run-e2e-cloud-function-http-bookstore
+    cluster: espv2
+    cron: '0 * * * *' # Run by every hour
+    decorate: true
+    spec:
+      containers:
+        - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20191120-v0.0.0-125-geee50dd-master
+          command:
+            - ./prow/e2e-cloud-run-cloud-function-http-bookstore.sh
+          env:
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
+            - name: CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE
+              value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
+          volumeMounts:
+            - name: cloudesf-testing-github-prow-service-account
+              mountPath: /etc/cloudesf-testing-github-prow-service-account
+      volumes:
+        - name: cloudesf-testing-github-prow-service-account
+          secret:
+            secretName: cloudesf-testing-github-prow-service-account
+  - name: ESPv2-continuous-cloud-run-e2e-cloud-run-grpc-echo
+    cluster: espv2
+    cron: '0 * * * *' # Run by every hour
+    decorate: true
+    spec:
+      containers:
+        - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20191120-v0.0.0-125-geee50dd-master
+          command:
+            - ./prow/e2e-cloud-run-cloud-run-grpc-echo.sh
+          env:
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
+            - name: CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE
+              value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
+          volumeMounts:
+            - name: cloudesf-testing-github-prow-service-account
+              mountPath: /etc/cloudesf-testing-github-prow-service-account
+      volumes:
+        - name: cloudesf-testing-github-prow-service-account
+          secret:
+            secretName: cloudesf-testing-github-prow-service-account
