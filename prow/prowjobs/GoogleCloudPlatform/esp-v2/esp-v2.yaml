@@ -312,7 +312,7 @@ presubmits:
     decorate: true
     spec:
       containers:
-      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20191120-v0.0.0-125-geee50dd-master
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
         command:
         - ./prow/gcpproxy-e2e.sh
         env:
@@ -335,7 +335,7 @@ presubmits:
     decorate: true
     spec:
       containers:
-      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20191120-v0.0.0-125-geee50dd-master
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
         command:
         - ./prow/gcpproxy-e2e.sh
         env:
@@ -358,7 +358,7 @@ presubmits:
     decorate: true
     spec:
       containers:
-      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20191120-v0.0.0-125-geee50dd-master
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
         command:
         - ./prow/gcpproxy-e2e.sh
         env:
@@ -685,7 +685,7 @@ periodics:
     decorate: true
     spec:
       containers:
-        - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20191120-v0.0.0-125-geee50dd-master
+        - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
           command:
             - ./prow/e2e-cloud-run-cloud-run-http-bookstore.sh
           env:
@@ -706,7 +706,7 @@ periodics:
     decorate: true
     spec:
       containers:
-        - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20191120-v0.0.0-125-geee50dd-master
+        - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
           command:
             - ./prow/e2e-cloud-run-cloud-function-http-bookstore.sh
           env:
@@ -727,7 +727,7 @@ periodics:
     decorate: true
     spec:
       containers:
-        - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20191120-v0.0.0-125-geee50dd-master
+        - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
           command:
             - ./prow/e2e-cloud-run-cloud-run-grpc-echo.sh
           env:
