@@ -626,7 +626,7 @@ periodics:
         - name: cloudesf-ssh-key-secret
           secret:
             secretName: cloudesf-ssh-key-secret
-  - name: ESPv2-continuous-anthos-cloud-run-e2e-anthos-cloud-run-http-bookstore
+  - name: ESPv2-continuous-anthos-cloud-run-e2e-cloud-run-http-bookstore
     cluster: espv2
     cron: '0 * * * *' # Run by every hour
     decorate: true
