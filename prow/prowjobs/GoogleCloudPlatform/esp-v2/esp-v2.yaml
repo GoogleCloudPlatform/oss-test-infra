@@ -381,6 +381,10 @@ periodics:
     cluster: espv2
     cron: '0 * * * *' # Run by every hour
     decorate: true
+    extra_refs:
+      - org: GoogleCloudPlatform
+        repo: esp-v2
+        base_ref: master
     spec:
       containers:
         - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
@@ -402,6 +406,10 @@ periodics:
     cluster: espv2
     cron: '0 * * * *' # Run by every hour
     decorate: true
+    extra_refs:
+      - org: GoogleCloudPlatform
+        repo: esp-v2
+        base_ref: master
     spec:
       containers:
         - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
@@ -423,6 +431,10 @@ periodics:
     cluster: espv2
     cron: '0 * * * *' # Run by every hour
     decorate: true
+    extra_refs:
+      - org: GoogleCloudPlatform
+        repo: esp-v2
+        base_ref: master
     spec:
       containers:
         - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
@@ -444,6 +456,10 @@ periodics:
     cluster: espv2
     cron: '0 * * * *' # Run by every hour
     decorate: true
+    extra_refs:
+      - org: GoogleCloudPlatform
+        repo: esp-v2
+        base_ref: master
     spec:
       containers:
         - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
@@ -465,6 +481,10 @@ periodics:
     cluster: espv2
     cron: '0 * * * *' # Run by every hour
     decorate: true
+    extra_refs:
+      - org: GoogleCloudPlatform
+        repo: esp-v2
+        base_ref: master
     spec:
       serviceAccountName: gcp-esp-v2-default
       containers:
@@ -520,6 +540,10 @@ periodics:
     cluster: espv2
     cron: '0 * * * *' # Run by every hour
     decorate: true
+    extra_refs:
+      - org: GoogleCloudPlatform
+        repo: esp-v2
+        base_ref: master
     spec:
       serviceAccountName: gcp-esp-v2-default
       containers:
@@ -575,6 +599,10 @@ periodics:
     cluster: espv2
     cron: '0 * * * *' # Run by every hour
     decorate: true
+    extra_refs:
+      - org: GoogleCloudPlatform
+        repo: esp-v2
+        base_ref: master
     spec:
       serviceAccountName: gcp-esp-v2-default
       containers:
@@ -630,6 +658,10 @@ periodics:
     cluster: espv2
     cron: '0 * * * *' # Run by every hour
     decorate: true
+    extra_refs:
+      - org: GoogleCloudPlatform
+        repo: esp-v2
+        base_ref: master
     spec:
       serviceAccountName: gcp-esp-v2-default
       containers:
@@ -683,6 +715,10 @@ periodics:
     cluster: espv2
     cron: '0 * * * *' # Run by every hour
     decorate: true
+    extra_refs:
+      - org: GoogleCloudPlatform
+        repo: esp-v2
+        base_ref: master
     spec:
       containers:
         - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
@@ -704,6 +740,10 @@ periodics:
     cluster: espv2
     cron: '0 * * * *' # Run by every hour
     decorate: true
+    extra_refs:
+      - org: GoogleCloudPlatform
+        repo: esp-v2
+        base_ref: master
     spec:
       containers:
         - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
@@ -725,6 +765,10 @@ periodics:
     cluster: espv2
     cron: '0 * * * *' # Run by every hour
     decorate: true
+    extra_refs:
+      - org: GoogleCloudPlatform
+        repo: esp-v2
+        base_ref: master
     spec:
       containers:
         - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
@@ -848,11 +892,9 @@ periodics:
     cron: '0 */3 * * *' # Run by every 3 hours
     decorate: true
     extra_refs:
-      - org: cloudesf.googlesource.com
-        repo: gcpproxy
+      - org: GoogleCloudPlatform
+        repo: esp-v2
         base_ref: master
-        path_alias: cloudesf.googlesource.com/gcpproxy
-        clone_uri: https://cloudesf.googlesource.com/gcpproxy
     spec:
       serviceAccountName: cloudesf-gcpproxy
       containers:
