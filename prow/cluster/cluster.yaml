@@ -414,6 +414,9 @@ spec:
         - --gerrit-projects=https://kunit-review.googlesource.com=linux
         - --config-path=/etc/config/config.yaml
         - --job-config-path=/etc/job-config
+        - --gcs-workers=1 
+        - --kubernetes-gcs-workers=1 
+        - --kubeconfig=/etc/kubeconfig/oss-config-20200214
         volumeMounts:
         - name: cookies
           mountPath: /etc/cookies
@@ -423,6 +426,9 @@ spec:
           readOnly: true
         - name: job-config
           mountPath: /etc/job-config
+          readOnly: true
+        - name: kubeconfig
+          mountPath: /etc/kubeconfig
           readOnly: true
         - name: oauth
           mountPath: /etc/github
@@ -438,6 +444,10 @@ spec:
       - name: job-config
         configMap:
           name: job-config
+      - name: kubeconfig
+        secret:
+          defaultMode: 420
+          secretName: kubeconfig
       - name: oauth
         secret:
           secretName: oauth-token
