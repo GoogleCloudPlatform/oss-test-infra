@@ -5,6 +5,7 @@ presubmits:
     always_run: true
     decorate: true
     spec:
+      serviceAccountName: gcp-esp-v2-default
       containers:
       - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
         command:
@@ -26,6 +27,7 @@ presubmits:
     always_run: true
     decorate: true
     spec:
+      serviceAccountName: gcp-esp-v2-default
       containers:
       - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
         command:
@@ -47,6 +49,7 @@ presubmits:
     always_run: true
     decorate: true
     spec:
+      serviceAccountName: gcp-esp-v2-default
       containers:
       - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
         command:
@@ -68,6 +71,7 @@ presubmits:
     always_run: true
     decorate: true
     spec:
+      serviceAccountName: gcp-esp-v2-default
       containers:
       - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
         command:
@@ -311,6 +315,7 @@ presubmits:
     always_run: true
     decorate: true
     spec:
+      serviceAccountName: gcp-esp-v2-default
       containers:
       - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
         command:
@@ -334,6 +339,7 @@ presubmits:
     always_run: true
     decorate: true
     spec:
+      serviceAccountName: gcp-esp-v2-default
       containers:
       - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
         command:
@@ -357,6 +363,7 @@ presubmits:
     always_run: true
     decorate: true
     spec:
+      serviceAccountName: gcp-esp-v2-default
       containers:
       - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
         command:
@@ -386,6 +393,7 @@ periodics:
         repo: esp-v2
         base_ref: master
     spec:
+      serviceAccountName: gcp-esp-v2-default
       containers:
         - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
           command:
@@ -411,6 +419,7 @@ periodics:
         repo: esp-v2
         base_ref: master
     spec:
+      serviceAccountName: gcp-esp-v2-default
       containers:
         - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
           command:
@@ -436,6 +445,7 @@ periodics:
         repo: esp-v2
         base_ref: master
     spec:
+      serviceAccountName: gcp-esp-v2-default
       containers:
         - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
           command:
@@ -461,6 +471,7 @@ periodics:
         repo: esp-v2
         base_ref: master
     spec:
+      serviceAccountName: gcp-esp-v2-default
       containers:
         - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
           command:
@@ -720,6 +731,7 @@ periodics:
         repo: esp-v2
         base_ref: master
     spec:
+      serviceAccountName: gcp-esp-v2-default
       containers:
         - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
           command:
@@ -745,6 +757,7 @@ periodics:
         repo: esp-v2
         base_ref: master
     spec:
+      serviceAccountName: gcp-esp-v2-default
       containers:
         - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
           command:
@@ -770,6 +783,7 @@ periodics:
         repo: esp-v2
         base_ref: master
     spec:
+      serviceAccountName: gcp-esp-v2-default
       containers:
         - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
           command:
@@ -800,7 +814,7 @@ periodics:
         base_ref: master
         path_alias: k8s.io/test-infra
     spec:
-      serviceAccountName: cloudesf-gcpproxy
+      serviceAccountName: gcp-esp-v2-default
       containers:
         - command:
             - runner.sh
@@ -851,7 +865,7 @@ periodics:
         base_ref: master
         path_alias: k8s.io/test-infra
     spec:
-      serviceAccountName: cloudesf-gcpproxy
+      serviceAccountName: gcp-esp-v2-default
       containers:
         - command:
             - runner.sh
@@ -896,7 +910,7 @@ periodics:
         repo: esp-v2
         base_ref: master
     spec:
-      serviceAccountName: cloudesf-gcpproxy
+      serviceAccountName: gcp-esp-v2-default
       containers:
         - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
           command:
