@@ -742,3 +742,132 @@ periodics:
         - name: cloudesf-testing-github-prow-service-account
           secret:
             secretName: cloudesf-testing-github-prow-service-account
+  - name: periodic-ESPv2-presubmit-job-janitor
+    cluster: espv2
+    cron: '0 */3 * * *' # Run by every 3 hours
+    labels:
+      preset-service-account: "true"
+    decorate: true
+    decoration_config:
+      timeout: 40m
+    extra_refs:
+      - org: kubernetes
+        repo: test-infra
+        base_ref: master
+        path_alias: k8s.io/test-infra
+    spec:
+      serviceAccountName: cloudesf-gcpproxy
+      containers:
+        - command:
+            - runner.sh
+            - ./scenarios/kubernetes_janitor.py
+          args:
+            - --mode=custom
+            - --projects=cloudesf-testing
+            - --age=1 # clean anything older than 1h
+            - '--filter=name~^e2e- AND location=us-west1-b'
+            - --verbose
+          image: gcr.io/k8s-testimages/kubekins-e2e:v20191203-6fb6647-1.17
+          env:
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /etc/service-account/service-account.json
+            - name: E2E_GOOGLE_APPLICATION_CREDENTIALS
+              value: /etc/service-account/service-account.json
+            - name: JENKINS_GCE_SSH_PRIVATE_KEY_FILE
+              value: /etc/cloudesf-ssh-key-secret/ssh-private
+            - name: JENKINS_GCE_SSH_PUBLIC_KEY_FILE
+              value: /etc/cloudesf-ssh-key-secret/ssh-public
+            - name: USER
+              value: prow
+          volumeMounts:
+            - name: service
+              mountPath: /etc/service-account
+              readOnly: true
+            - name: cloudesf-ssh-key-secret
+              mountPath: /etc/cloudesf-ssh-key-secret
+              readOnly: true
+      volumes:
+        - name: service # TODO(fejta): remove https://github.com/GoogleCloudPlatform/oss-test-infra/issues/202
+          secret:
+            secretName: service-account
+        - name: cloudesf-ssh-key-secret
+          secret:
+            secretName: cloudesf-ssh-key-secret
+  - name: periodic-ESPv2-continuous-job-janitor
+    cluster: espv2
+    cron: '0 */3 * * *' # Run by every 3 hours
+    labels:
+      preset-service-account: "true"
+    decorate: true
+    decoration_config:
+      timeout: 40m
+    extra_refs:
+      - org: kubernetes
+        repo: test-infra
+        base_ref: master
+        path_alias: k8s.io/test-infra
+    spec:
+      serviceAccountName: cloudesf-gcpproxy
+      containers:
+        - command:
+            - runner.sh
+            - ./scenarios/kubernetes_janitor.py
+          args:
+            - --mode=custom
+            - --projects=cloudesf-testing
+            - --age=5 # clean anything older than 5h
+            - '--filter=name~^e2e- AND location=us-west1-c'
+            - --verbose
+          image: gcr.io/k8s-testimages/kubekins-e2e:v20191203-6fb6647-1.17
+          env:
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /etc/service-account/service-account.json
+            - name: E2E_GOOGLE_APPLICATION_CREDENTIALS
+              value: /etc/service-account/service-account.json
+            - name: JENKINS_GCE_SSH_PRIVATE_KEY_FILE
+              value: /etc/cloudesf-ssh-key-secret/ssh-private
+            - name: JENKINS_GCE_SSH_PUBLIC_KEY_FILE
+              value: /etc/cloudesf-ssh-key-secret/ssh-public
+            - name: USER
+              value: prow
+          volumeMounts:
+            - name: service
+              mountPath: /etc/service-account
+              readOnly: true
+            - name: cloudesf-ssh-key-secret
+              mountPath: /etc/cloudesf-ssh-key-secret
+              readOnly: true
+      volumes:
+        - name: service # TODO(fejta): remove https://github.com/GoogleCloudPlatform/oss-test-infra/issues/202
+          secret:
+            secretName: service-account
+        - name: cloudesf-ssh-key-secret
+          secret:
+            secretName: cloudesf-ssh-key-secret
+  - name: periodic-ESPv2-serverless-janitor
+    cron: '0 */3 * * *' # Run by every 3 hours
+    decorate: true
+    extra_refs:
+      - org: cloudesf.googlesource.com
+        repo: gcpproxy
+        base_ref: master
+        path_alias: cloudesf.googlesource.com/gcpproxy
+        clone_uri: https://cloudesf.googlesource.com/gcpproxy
+    spec:
+      serviceAccountName: cloudesf-gcpproxy
+      containers:
+        - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
+          command:
+            - ./prow/janitor.sh
+          env:
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
+            - name: CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE
+              value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
+          volumeMounts:
+            - name: cloudesf-testing-github-prow-service-account
+              mountPath: /etc/cloudesf-testing-github-prow-service-account
+      volumes:
+        - name: cloudesf-testing-github-prow-service-account
+          secret:
+            secretName: cloudesf-testing-github-prow-service-account
