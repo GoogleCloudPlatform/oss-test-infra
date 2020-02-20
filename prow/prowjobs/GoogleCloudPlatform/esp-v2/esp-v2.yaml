@@ -867,7 +867,7 @@ periodics:
           volumeMounts:
             - name: cloudesf-testing-github-prow-service-account
               mountPath: /etc/cloudesf-testing-github-prow-service-account
-        volumes:
-          - name: cloudesf-testing-github-prow-service-account
-            secret:
-              secretName: cloudesf-testing-github-prow-service-account
+      volumes:
+        - name: cloudesf-testing-github-prow-service-account
+          secret:
+            secretName: cloudesf-testing-github-prow-service-account
