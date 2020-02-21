@@ -101,7 +101,6 @@ presubmits:
         - --extract=release/stable-1.14
         - --gcp-project=cloudesf-testing
         - --gcp-zone=us-west1-b
-        - --gcp-network=default
         - --gcp-node-image=gci
         - --gke-create-command=container clusters create --cluster-ipv4-cidr=/19 --quiet
         - '--gke-shape={"default":{"Nodes":1,"MachineType":"n1-standard-2"}}'
@@ -157,7 +156,6 @@ presubmits:
         - --extract=release/stable-1.14
         - --gcp-project=cloudesf-testing
         - --gcp-zone=us-west1-b
-        - --gcp-network=default
         - --gcp-node-image=gci
         - --gke-create-command=container clusters create --cluster-ipv4-cidr=/19 --quiet
         - '--gke-shape={"default":{"Nodes":1,"MachineType":"n1-standard-2"}}'
@@ -213,7 +211,6 @@ presubmits:
         - --extract=release/stable-1.14
         - --gcp-project=cloudesf-testing
         - --gcp-zone=us-west1-b
-        - --gcp-network=default
         - --gcp-node-image=gci
         - --gke-create-command=container clusters create --cluster-ipv4-cidr=/19 --quiet
         - '--gke-shape={"default":{"Nodes":1,"MachineType":"n1-standard-2"}}'
@@ -268,7 +265,6 @@ presubmits:
         - --deployment=gke
         - --gcp-project=cloudesf-testing
         - --gcp-zone=us-west1-b
-        - --gcp-network=default
         - --gcp-node-image=gci
         - --gke-environment=prod
         - --provider=gke
@@ -505,7 +501,6 @@ periodics:
             - --extract=release/stable-1.14
             - --gcp-project=cloudesf-testing
             - --gcp-zone=us-west1-b
-            - --gcp-network=default
             - --gcp-node-image=gci
             - --gke-create-command=container clusters create --cluster-ipv4-cidr=/19 --quiet
             - '--gke-shape={"default":{"Nodes":1,"MachineType":"n1-standard-2"}}'
@@ -564,7 +559,6 @@ periodics:
             - --extract=release/stable-1.14
             - --gcp-project=cloudesf-testing
             - --gcp-zone=us-west1-b
-            - --gcp-network=default
             - --gcp-node-image=gci
             - --gke-create-command=container clusters create --cluster-ipv4-cidr=/19 --quiet
             - '--gke-shape={"default":{"Nodes":1,"MachineType":"n1-standard-2"}}'
@@ -623,7 +617,6 @@ periodics:
             - --extract=release/stable-1.14
             - --gcp-project=cloudesf-testing
             - --gcp-zone=us-west1-b
-            - --gcp-network=default
             - --gcp-node-image=gci
             - --gke-create-command=container clusters create --cluster-ipv4-cidr=/19 --quiet
             - '--gke-shape={"default":{"Nodes":1,"MachineType":"n1-standard-2"}}'
@@ -681,7 +674,6 @@ periodics:
             - --deployment=gke
             - --gcp-project=cloudesf-testing
             - --gcp-zone=us-west1-b
-            - --gcp-network=default
             - --gcp-node-image=gci
             - --gke-environment=prod
             - --provider=gke
