@@ -20,7 +20,7 @@ tide:
     GoogleCloudPlatform/guest-test-infra: squash
     GoogleCloudPlatform/guest-oslogin: squash
     GoogleCloudPlatform/compute-image-tools: squash
-  target_url: https://prow.gflocks.com/tide
+  target_url: http://oss-prow.knative.dev/tide
   queries:
     - repos:
         - GoogleCloudPlatform/osconfig
@@ -41,7 +41,7 @@ tide:
 
 plank:
   job_url_prefix_config:
-    '*': https://prow.gflocks.com/view/gcs/
+    '*': http://oss-prow.knative.dev/view/gcs/
   pod_pending_timeout: 15m
   pod_unscheduled_timeout: 1m
   default_decoration_configs:
@@ -71,10 +71,9 @@ log_level: debug
 deck:
   spyglass:
     size_limit: 500000000 # 500MB
-    gcs_browser_prefix: https://pantheon.corp.google.com/storage/browser/
-    # TODO(krzyzacy): no testgrid support yet, consider use k8s.testgrid, or deploy a new testgrid instance
-    # testgrid_config: gs://testgrid/config
-    # testgrid_root: https://testgrid.corp.google.com/
+    gcs_browser_prefix: https://pantheon.corp.google.com/storage/browser/ # TODO(fejta): something publicly accessible
+    testgrid_config: gs://k8s-testgrid/config
+    testgrid_root: https://testgrid.k8s.io/
     lenses:
       - lens:
           name: metadata
@@ -94,7 +93,6 @@ deck:
           name: podinfo
         required_files:
           - podinfo.json
-    announcement: "The old job viewer, Gubernator, has been deprecated in favour of this page, Spyglass.{{if .ArtifactPath}} For now, the old page is <a href='https://gubernator-internal.googleplex.com/build/{{.ArtifactPath}}'>still available</a>.{{end}} Please send feedback to osp-engprod@google.com."
   rerun_auth_config:
     github_orgs:
     - GoogleCloudPlatform
