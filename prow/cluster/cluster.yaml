@@ -310,6 +310,15 @@ metadata:
   namespace: default
 spec:
   domains:
+  - prow.gflocks.com
+---
+apiVersion: networking.gke.io/v1beta1
+kind: ManagedCertificate
+metadata:
+  name: oss-prow-knative-dev
+  namespace: default
+spec:
+  domains:
   - oss-prow.knative.dev
 ---
 apiVersion: extensions/v1beta1
@@ -321,7 +330,7 @@ metadata:
     kubernetes.io/ingress.global-static-ip-name: "oss-prow"
     kubernetes.io/ingress.class: "gce"
     kubernetes.io/tls-acme: "true"
-    networking.gke.io/managed-certificates: prow-gflocks-com
+    networking.gke.io/managed-certificates: oss-prow-knative-dev
 spec:
   rules:
   - http:
