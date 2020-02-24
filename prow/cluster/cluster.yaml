@@ -921,8 +921,6 @@ kind: Service
 metadata:
   name: tide
   namespace: default
-  annotations:
-    "iam.gke.io/gcp-service-account": "oss-prow@oss-prow.iam.gserviceaccount.com"
 spec:
   selector:
     app: tide
@@ -937,6 +935,8 @@ kind: ServiceAccount
 metadata:
   name: tide
   namespace: default
+  annotations:
+    "iam.gke.io/gcp-service-account": "oss-prow@oss-prow.iam.gserviceaccount.com"
 ---
 kind: Role
 apiVersion: rbac.authorization.k8s.io/v1beta1
