@@ -414,8 +414,8 @@ spec:
         - --gerrit-projects=https://kunit-review.googlesource.com=linux
         - --config-path=/etc/config/config.yaml
         - --job-config-path=/etc/job-config
-        - --gcs-workers=1 
-        - --kubernetes-gcs-workers=1 
+        - --gcs-workers=1
+        - --kubernetes-gcs-workers=1
         - --kubeconfig=/etc/kubeconfig/oss-config-20200214
         volumeMounts:
         - name: cookies
@@ -538,6 +538,8 @@ kind: ServiceAccount
 metadata:
   name: deck
   namespace: default
+  annotations:
+    "iam.gke.io/gcp-service-account": "oss-prow@oss-prow.iam.gserviceaccount.com"
 ---
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1beta1
@@ -789,6 +791,8 @@ apiVersion: v1
 metadata:
   name: crier
   namespace: default
+  annotations:
+    "iam.gke.io/gcp-service-account": "oss-prow@oss-prow.iam.gserviceaccount.com"
 ---
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
@@ -886,6 +890,8 @@ spec:
         - --config-path=/etc/config/config.yaml
         - --job-config-path=/etc/job-config
         - --dry-run=false
+        - --history-uri=gs://oss-prow/tide-history.json
+        - --status-path=gs://oss-prow/tide-status-checkpoint.yaml
         ports:
           - name: http
             containerPort: 8888
@@ -915,6 +921,8 @@ kind: Service
 metadata:
   name: tide
   namespace: default
+  annotations:
+    "iam.gke.io/gcp-service-account": "oss-prow@oss-prow.iam.gserviceaccount.com"
 spec:
   selector:
     app: tide
