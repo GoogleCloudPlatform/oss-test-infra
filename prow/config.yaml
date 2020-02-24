@@ -20,7 +20,7 @@ tide:
     GoogleCloudPlatform/guest-test-infra: squash
     GoogleCloudPlatform/guest-oslogin: squash
     GoogleCloudPlatform/compute-image-tools: squash
-  target_url: http://oss-prow.knative.dev/tide
+  target_url: https://oss-prow.knative.dev/tide
   queries:
     - repos:
         - GoogleCloudPlatform/osconfig
@@ -41,7 +41,7 @@ tide:
 
 plank:
   job_url_prefix_config:
-    '*': http://oss-prow.knative.dev/view/gcs/
+    '*': https://oss-prow.knative.dev/view/gcs/
   pod_pending_timeout: 15m
   pod_unscheduled_timeout: 1m
   default_decoration_configs:

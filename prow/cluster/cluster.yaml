@@ -200,7 +200,7 @@ spec:
         - --spyglass=true
         - --tide-url=http://tide/
         - --hook-url=http://hook:8888/plugin-help
-        # --redirect-http-to=oss-prow.knative.dev
+        - --redirect-http-to=oss-prow.knative.dev
         - --rerun-creates-job
         - --oauth-url=/github-login
         - --github-token-path=/etc/github/oauth
@@ -310,7 +310,7 @@ metadata:
   namespace: default
 spec:
   domains:
-  - prow.gflocks.com
+  - oss-prow.knative.dev
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress
