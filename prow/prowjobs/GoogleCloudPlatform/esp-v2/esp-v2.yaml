@@ -893,6 +893,7 @@ periodics:
           secret:
             secretName: cloudesf-ssh-key-secret
   - name: ESPv2-serverless-janitor
+    cluster: espv2
     cron: '0 6 * * *' # Run every day at 6am
     decorate: true
     extra_refs:
