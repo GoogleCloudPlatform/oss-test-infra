@@ -778,7 +778,7 @@ periodics:
         - name: cloudesf-testing-github-prow-service-account
           secret:
             secretName: cloudesf-testing-github-prow-service-account
-  - name: periodic-ESPv2-presubmit-job-janitor
+  - name: ESPv2-presubmit-job-janitor
     cluster: espv2
     cron: '0 */3 * * *' # Run by every 3 hours
     labels:
@@ -828,7 +828,7 @@ periodics:
         - name: cloudesf-ssh-key-secret
           secret:
             secretName: cloudesf-ssh-key-secret
-  - name: periodic-ESPv2-continuous-job-janitor
+  - name: ESPv2-continuous-job-janitor
     cluster: espv2
     cron: '0 */3 * * *' # Run by every 3 hours
     labels:
@@ -878,8 +878,8 @@ periodics:
         - name: cloudesf-ssh-key-secret
           secret:
             secretName: cloudesf-ssh-key-secret
-  - name: periodic-ESPv2-serverless-janitor
-    cron: '0 */3 * * *' # Run by every 3 hours
+  - name: ESPv2-serverless-janitor
+    cron: '0 6 * * *' # Run every day at 6am
     decorate: true
     extra_refs:
       - org: GoogleCloudPlatform
