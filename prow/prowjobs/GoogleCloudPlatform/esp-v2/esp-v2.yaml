@@ -715,6 +715,8 @@ periodics:
     cluster: espv2
     cron: '0 * * * *' # Run by every hour
     decorate: true
+    decoration_config:
+      timeout: 5h
     extra_refs:
       - org: GoogleCloudPlatform
         repo: esp-v2
@@ -740,6 +742,8 @@ periodics:
     cluster: espv2
     cron: '0 * * * *' # Run by every hour
     decorate: true
+    decoration_config:
+      timeout: 5h
     extra_refs:
       - org: GoogleCloudPlatform
         repo: esp-v2
@@ -765,6 +769,8 @@ periodics:
     cluster: espv2
     cron: '0 * * * *' # Run by every hour
     decorate: true
+    decoration_config:
+      timeout: 5h
     extra_refs:
       - org: GoogleCloudPlatform
         repo: esp-v2
