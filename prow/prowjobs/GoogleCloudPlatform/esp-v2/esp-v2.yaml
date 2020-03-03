@@ -792,44 +792,7 @@ periodics:
         - name: cloudesf-testing-github-prow-service-account
           secret:
             secretName: cloudesf-testing-github-prow-service-account
-  - name: ESPv2-presubmit-job-janitor
-    cluster: espv2
-    cron: '0 */3 * * *' # Run by every 3 hours
-    labels:
-      preset-service-account: "true"
-    decorate: true
-    decoration_config:
-      timeout: 40m
-    extra_refs:
-      - org: kubernetes
-        repo: test-infra
-        base_ref: master
-        path_alias: k8s.io/test-infra
-    spec:
-      containers:
-        - command:
-            - runner.sh
-            - ./scenarios/kubernetes_janitor.py
-          args:
-            - --mode=custom
-            - --projects=cloudesf-testing
-            - --age=1 # clean anything older than 1h
-            - '--filter=name~^e2e- AND location=us-west1-b'
-            - --verbose
-          image: gcr.io/k8s-testimages/kubekins-e2e:v20191203-6fb6647-1.17
-          env:
-          - name: GOOGLE_APPLICATION_CREDENTIALS
-            value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
-          - name: CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE
-            value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
-          volumeMounts:
-          - name: cloudesf-testing-github-prow-service-account
-            mountPath: /etc/cloudesf-testing-github-prow-service-account
-      volumes:
-      - name: cloudesf-testing-github-prow-service-account
-        secret:
-          secretName: cloudesf-testing-github-prow-service-account
-  - name: ESPv2-continuous-job-janitor
+  - name: ESPv2-gke-janitor
     cluster: espv2
     cron: '0 */3 * * *' # Run by every 3 hours
     labels:
@@ -851,7 +814,7 @@ periodics:
             - --mode=custom
             - --projects=cloudesf-testing
             - --age=5 # clean anything older than 5h
-            - '--filter=name~^e2e- AND location=us-west1-c'
+            - '--filter=name~^e2e-'
             - --verbose
           image: gcr.io/k8s-testimages/kubekins-e2e:v20191203-6fb6647-1.17
           env:
