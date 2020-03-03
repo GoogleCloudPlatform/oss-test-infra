@@ -60,6 +60,7 @@ postsubmits:
     - master
     annotations:
       testgrid-dashboards: googleoss-test-infra
+      testgrid-tab-name: prow-deploy
     spec:
       serviceAccountName: prow-deployer
       containers:
@@ -79,6 +80,7 @@ postsubmits:
     - master
     annotations:
       testgrid-dashboards: googleoss-test-infra
+      testgrid-tab-name: testgrid-upload
     spec:
       containers:
       - image: gcr.io/k8s-prow/transfigure
@@ -107,6 +109,7 @@ postsubmits:
     annotations:
       testgrid-dashboards: googleoss-test-infra
       testgrid-alert-email: slchase@google.com
+      testgrid-tab-name: testgrid-push
     spec:
       serviceAccountName: testgrid-pusher
       containers:
@@ -121,6 +124,7 @@ postsubmits:
     decorate: true
     annotations:
       testgrid-dashboards: googleoss-test-infra
+      testgrid-tab-name: testgrid-deploy-prod
     spec:
       serviceAccountName: testgrid-deployer
       containers:
@@ -138,6 +142,7 @@ postsubmits:
     decorate: true
     annotations:
       testgrid-dashboards: googleoss-test-infra
+      testgrid-tab-name: testgrid-deploy-canary
     spec:
       serviceAccountName: testgrid-deployer
       containers:
@@ -159,6 +164,7 @@ periodics:
     base_ref: master
   annotations:
     testgrid-dashboards: googleoss-test-infra
+    testgrid-tab-name: autobump-prow
   spec:
     containers:
     - image: gcr.io/k8s-prow/autobump:v20200228-31c76444e
@@ -189,3 +195,24 @@ periodics:
     - name: github
       secret:
         secretName: oauth-token
+- interval: 5m
+  name: ci-test-infra-resultstore-upload
+  annotations:
+    testgrid-dashboards: googleoss-test-infra
+    testgrid-tab-name: resultstore
+    description: transfer finished results into resultstore
+  cluster: test-infra-trusted
+  decorate: true
+  spec:
+    serviceAccountName: resultstore
+    containers:
+    - image: gcr.io/k8s-testimages/resultstore:v20200303-1ce7483c2
+      command:
+      - /app/experiment/resultstore/app.binary
+      args:
+      - --config=gs://k8s-testgrid/config
+      - --upload=oss-prow # Must be able to upload results into this project
+      - --deadline=10m
+      - --latest=5
+      - --gcs-auth # resultstore@oss-prow.iam.gserviceaccount.com
+      - --bucket=gs://oss-prow # Must be able to write to bucket
