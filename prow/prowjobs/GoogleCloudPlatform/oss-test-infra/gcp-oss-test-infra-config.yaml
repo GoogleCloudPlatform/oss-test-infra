@@ -19,6 +19,7 @@ presubmits:
             # This warning can forbid valid (and convenient) config. Exclude it.
             # Details: https://github.com/GoogleCloudPlatform/oss-test-infra/pull/131#discussion_r334208082
             - --exclude-warning=mismatched-tide
+            - --exclude-warning=non-decorated-jobs
   - name: pull-test-infra-go-test
     branches:
       - master
