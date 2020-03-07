@@ -102,8 +102,6 @@ presubmits:
         command:
         - ./prow/gcpproxy-coverage.sh
         env:
-        - name: JOB_TYPE
-          value: presubmit
         - name: GOOGLE_APPLICATION_CREDENTIALS
           value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
         - name: CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE
@@ -540,8 +538,6 @@ periodics:
         command:
         - ./prow/gcpproxy-coverage.sh
         env:
-        - name: JOB_TYPE
-          value: continuous
         - name: GOOGLE_APPLICATION_CREDENTIALS
           value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
         - name: CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE
