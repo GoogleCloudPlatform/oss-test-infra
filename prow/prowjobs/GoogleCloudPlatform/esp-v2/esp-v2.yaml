@@ -96,6 +96,8 @@ presubmits:
     cluster: espv2
     always_run: true
     decorate: true
+    annotations:
+      testgrid-dashboards: googleoss-esp-v2
     spec:
       containers:
       - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
@@ -528,6 +530,8 @@ periodics:
     cluster: espv2
     cron: '0 * * * *' # Run by every hour
     decorate: true
+    annotations:
+      testgrid-dashboards: googleoss-esp-v2
     extra_refs:
     - org: GoogleCloudPlatform
       repo: esp-v2
