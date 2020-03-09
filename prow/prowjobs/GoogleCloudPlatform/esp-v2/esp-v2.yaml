@@ -4,6 +4,8 @@ presubmits:
     cluster: espv2
     always_run: true
     decorate: true
+    annotations:
+      testgrid-dashboards: googleoss-esp-v2
     spec:
       containers:
       - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
@@ -25,6 +27,8 @@ presubmits:
     cluster: espv2
     always_run: true
     decorate: true
+    annotations:
+      testgrid-dashboards: googleoss-esp-v2
     spec:
       containers:
       - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
@@ -46,6 +50,8 @@ presubmits:
     cluster: espv2
     always_run: true
     decorate: true
+    annotations:
+      testgrid-dashboards: googleoss-esp-v2
     spec:
       containers:
       - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
@@ -67,6 +73,8 @@ presubmits:
     cluster: espv2
     always_run: true
     decorate: true
+    annotations:
+      testgrid-dashboards: googleoss-esp-v2
     spec:
       containers:
       - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
@@ -88,6 +96,8 @@ presubmits:
     cluster: espv2
     always_run: true
     decorate: true
+    annotations:
+      testgrid-dashboards: googleoss-esp-v2
     spec:
       containers:
       - args:
@@ -143,6 +153,8 @@ presubmits:
     cluster: espv2
     always_run: true
     decorate: true
+    annotations:
+      testgrid-dashboards: googleoss-esp-v2
     spec:
       containers:
       - args:
@@ -198,6 +210,8 @@ presubmits:
     cluster: espv2
     always_run: true
     decorate: true
+    annotations:
+      testgrid-dashboards: googleoss-esp-v2
     spec:
       containers:
       - args:
@@ -253,6 +267,8 @@ presubmits:
     cluster: espv2
     always_run: true
     decorate: true
+    annotations:
+      testgrid-dashboards: googleoss-esp-v2
     spec:
       containers:
       - args:
@@ -306,6 +322,8 @@ presubmits:
     cluster: espv2
     always_run: true
     decorate: true
+    annotations:
+      testgrid-dashboards: googleoss-esp-v2
     spec:
       containers:
       - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
@@ -329,6 +347,8 @@ presubmits:
     cluster: espv2
     always_run: true
     decorate: true
+    annotations:
+      testgrid-dashboards: googleoss-esp-v2
     spec:
       containers:
       - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
@@ -352,6 +372,8 @@ presubmits:
     cluster: espv2
     always_run: true
     decorate: true
+    annotations:
+      testgrid-dashboards: googleoss-esp-v2
     spec:
       containers:
       - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
@@ -377,6 +399,8 @@ periodics:
     cluster: espv2
     cron: '0 * * * *' # Run by every hour
     decorate: true
+    annotations:
+      testgrid-dashboards: googleoss-esp-v2
     extra_refs:
       - org: GoogleCloudPlatform
         repo: esp-v2
@@ -402,6 +426,8 @@ periodics:
     cluster: espv2
     cron: '0 * * * *' # Run by every hour
     decorate: true
+    annotations:
+      testgrid-dashboards: googleoss-esp-v2
     extra_refs:
       - org: GoogleCloudPlatform
         repo: esp-v2
@@ -427,6 +453,8 @@ periodics:
     cluster: espv2
     cron: '0 * * * *' # Run by every hour
     decorate: true
+    annotations:
+      testgrid-dashboards: googleoss-esp-v2
     extra_refs:
       - org: GoogleCloudPlatform
         repo: esp-v2
@@ -452,6 +480,8 @@ periodics:
     cluster: espv2
     cron: '0 * * * *' # Run by every hour
     decorate: true
+    annotations:
+      testgrid-dashboards: googleoss-esp-v2
     extra_refs:
       - org: GoogleCloudPlatform
         repo: esp-v2
@@ -479,6 +509,8 @@ periodics:
     decorate: true
     decoration_config:
         timeout: 5h
+    annotations:
+      testgrid-dashboards: googleoss-esp-v2
     extra_refs:
       - org: GoogleCloudPlatform
         repo: esp-v2
@@ -539,6 +571,8 @@ periodics:
     decorate: true
     decoration_config:
       timeout: 5h
+    annotations:
+      testgrid-dashboards: googleoss-esp-v2
     extra_refs:
       - org: GoogleCloudPlatform
         repo: esp-v2
@@ -599,6 +633,8 @@ periodics:
     decorate: true
     decoration_config:
       timeout: 5h
+    annotations:
+      testgrid-dashboards: googleoss-esp-v2
     extra_refs:
       - org: GoogleCloudPlatform
         repo: esp-v2
@@ -659,6 +695,8 @@ periodics:
     decorate: true
     decoration_config:
       timeout: 5h
+    annotations:
+      testgrid-dashboards: googleoss-esp-v2
     extra_refs:
       - org: GoogleCloudPlatform
         repo: esp-v2
@@ -717,6 +755,8 @@ periodics:
     decorate: true
     decoration_config:
       timeout: 5h
+    annotations:
+      testgrid-dashboards: googleoss-esp-v2
     extra_refs:
       - org: GoogleCloudPlatform
         repo: esp-v2
@@ -744,6 +784,8 @@ periodics:
     decorate: true
     decoration_config:
       timeout: 5h
+    annotations:
+      testgrid-dashboards: googleoss-esp-v2
     extra_refs:
       - org: GoogleCloudPlatform
         repo: esp-v2
@@ -771,6 +813,8 @@ periodics:
     decorate: true
     decoration_config:
       timeout: 5h
+    annotations:
+      testgrid-dashboards: googleoss-esp-v2
     extra_refs:
       - org: GoogleCloudPlatform
         repo: esp-v2
@@ -800,6 +844,8 @@ periodics:
     decorate: true
     decoration_config:
       timeout: 40m
+    annotations:
+      testgrid-dashboards: googleoss-esp-v2
     extra_refs:
       - org: kubernetes
         repo: test-infra
@@ -833,6 +879,8 @@ periodics:
     cluster: espv2
     cron: '0 6 * * *' # Run every day at 6am
     decorate: true
+    annotations:
+      testgrid-dashboards: googleoss-esp-v2
     extra_refs:
       - org: GoogleCloudPlatform
         repo: esp-v2
