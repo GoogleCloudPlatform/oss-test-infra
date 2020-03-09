@@ -8,7 +8,7 @@ presubmits:
       testgrid-dashboards: googleoss-esp-v2
     spec:
       containers:
-      - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
+      - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200309-v2.6.0-15-gd62fe00-master
         command:
         - ./prow/gcpproxy-build.sh
         env:
@@ -31,7 +31,7 @@ presubmits:
       testgrid-dashboards: googleoss-esp-v2
     spec:
       containers:
-      - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
+      - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200309-v2.6.0-15-gd62fe00-master
         command:
         - ./prow/gcpproxy-presubmit.sh
         env:
@@ -54,7 +54,7 @@ presubmits:
       testgrid-dashboards: googleoss-esp-v2
     spec:
       containers:
-      - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
+      - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200309-v2.6.0-15-gd62fe00-master
         command:
         - ./prow/presubmit-asan.sh
         env:
@@ -77,7 +77,7 @@ presubmits:
       testgrid-dashboards: googleoss-esp-v2
     spec:
       containers:
-      - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
+      - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200309-v2.6.0-15-gd62fe00-master
         command:
         - ./prow/presubmit-tsan.sh
         env:
@@ -100,7 +100,7 @@ presubmits:
       testgrid-dashboards: googleoss-esp-v2
     spec:
       containers:
-      - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
+      - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200309-v2.6.0-15-gd62fe00-master
         command:
         - ./prow/gcpproxy-coverage.sh
         env:
@@ -349,7 +349,7 @@ presubmits:
       testgrid-dashboards: googleoss-esp-v2
     spec:
       containers:
-      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20200309-v2.6.0-15-gd62fe00-master
         command:
         - ./prow/gcpproxy-e2e.sh
         env:
@@ -374,7 +374,7 @@ presubmits:
       testgrid-dashboards: googleoss-esp-v2
     spec:
       containers:
-      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20200309-v2.6.0-15-gd62fe00-master
         command:
         - ./prow/gcpproxy-e2e.sh
         env:
@@ -399,7 +399,7 @@ presubmits:
       testgrid-dashboards: googleoss-esp-v2
     spec:
       containers:
-      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20200309-v2.6.0-15-gd62fe00-master
         command:
         - ./prow/gcpproxy-e2e.sh
         env:
@@ -430,7 +430,7 @@ periodics:
         base_ref: master
     spec:
       containers:
-        - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
+        - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200309-v2.6.0-15-gd62fe00-master
           command:
             - ./prow/continuous-build.sh
           env:
@@ -457,7 +457,7 @@ periodics:
         base_ref: master
     spec:
       containers:
-        - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
+        - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200309-v2.6.0-15-gd62fe00-master
           command:
             - ./prow/gcpproxy-presubmit.sh
           env:
@@ -484,7 +484,7 @@ periodics:
         base_ref: master
     spec:
       containers:
-        - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
+        - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200309-v2.6.0-15-gd62fe00-master
           command:
             - ./prow/presubmit-asan.sh
           env:
@@ -511,7 +511,7 @@ periodics:
         base_ref: master
     spec:
       containers:
-        - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
+        - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200309-v2.6.0-15-gd62fe00-master
           command:
             - ./prow/presubmit-tsan.sh
           env:
@@ -538,7 +538,7 @@ periodics:
       base_ref: master
     spec:
       containers:
-      - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
+      - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200309-v2.6.0-15-gd62fe00-master
         command:
         - ./prow/gcpproxy-coverage.sh
         env:
@@ -813,7 +813,7 @@ periodics:
         base_ref: master
     spec:
       containers:
-        - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
+        - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20200309-v2.6.0-15-gd62fe00-master
           command:
             - ./prow/e2e-cloud-run-cloud-run-http-bookstore.sh
           env:
@@ -842,7 +842,7 @@ periodics:
         base_ref: master
     spec:
       containers:
-        - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
+        - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20200309-v2.6.0-15-gd62fe00-master
           command:
             - ./prow/e2e-cloud-run-cloud-function-http-bookstore.sh
           env:
@@ -871,7 +871,7 @@ periodics:
         base_ref: master
     spec:
       containers:
-        - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
+        - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20200309-v2.6.0-15-gd62fe00-master
           command:
             - ./prow/e2e-cloud-run-cloud-run-grpc-echo.sh
           env:
@@ -937,7 +937,7 @@ periodics:
         base_ref: master
     spec:
       containers:
-        - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20200207-v2.4.0-9-g17334b8-master
+        - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20200309-v2.6.0-15-gd62fe00-master
           command:
             - ./prow/janitor.sh
           env:
