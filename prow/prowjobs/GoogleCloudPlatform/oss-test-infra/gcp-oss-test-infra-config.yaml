@@ -197,7 +197,7 @@ periodics:
       secret:
         secretName: oauth-token
 - interval: 5m
-  name: ci-test-infra-resultstore-upload
+  name: ci-google-oss-test-infra-resultstore-upload
   annotations:
     testgrid-dashboards: googleoss-test-infra
     testgrid-tab-name: resultstore
