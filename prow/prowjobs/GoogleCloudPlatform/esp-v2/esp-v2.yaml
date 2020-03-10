@@ -100,7 +100,7 @@ presubmits:
       testgrid-dashboards: googleoss-esp-v2
     spec:
       containers:
-      - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200309-v2.6.0-15-gd62fe00-master
+      - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200309-v2.6.0-18-g884cf4f-master
         command:
         - ./prow/gcpproxy-coverage.sh
         env:
@@ -538,7 +538,7 @@ periodics:
       base_ref: master
     spec:
       containers:
-      - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200309-v2.6.0-15-gd62fe00-master
+      - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200309-v2.6.0-18-g884cf4f-master
         command:
         - ./prow/gcpproxy-coverage.sh
         env:
