@@ -207,13 +207,13 @@ periodics:
   spec:
     serviceAccountName: resultstore
     containers:
-    - image: gcr.io/k8s-testimages/resultstore:v20200303-1ce7483c2
+    - image: gcr.io/k8s-testimages/resultstore:v20200306-2c8702645
       command:
       - /app/experiment/resultstore/app.binary
       args:
       - --config=gs://k8s-testgrid/config
       - --upload=oss-prow # Must be able to upload results into this project
-      - --deadline=10m
+      - --timeout=10m
       - --latest=5
       - --gcs-auth # resultstore@oss-prow.iam.gserviceaccount.com
       - --bucket=gs://oss-prow # Must be able to write to bucket
