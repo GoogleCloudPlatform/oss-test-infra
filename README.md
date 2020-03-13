@@ -16,6 +16,6 @@ limitations under the License.
 
 Here lives the OSS [prow](https://github.com/kubernetes/test-infra/tree/master/prow) config for google-owned OSS projects.
 
-Prow deck: https://prow.gflocks.com/
+Prow deck: https://oss-prow.knative.dev/
 
 Please follow https://github.com/kubernetes/test-infra/blob/master/prow/jobs.md#how-to-configure-new-jobs for how to configure prowjobs in [config.yaml](./prow/config.yaml).
