@@ -306,15 +306,6 @@ spec:
 apiVersion: networking.gke.io/v1beta1
 kind: ManagedCertificate
 metadata:
-  name: prow-gflocks-com
-  namespace: default
-spec:
-  domains:
-  - prow.gflocks.com
----
-apiVersion: networking.gke.io/v1beta1
-kind: ManagedCertificate
-metadata:
   name: oss-prow-knative-dev
   namespace: default
 spec:
