@@ -30,8 +30,6 @@ postsubmits:
   GoogleCloudPlatform/compute-image-packages:
   - name: gce-build
     cluster: gcp-guest
-    trigger: "(?m)^/test$"
-    rerun_command: "/test"
     extra_refs:
     - org: GoogleCloudPlatform
       repo: guest-test-infra
@@ -50,6 +48,26 @@ postsubmits:
         command:
         - "/main.sh"
         args: ["gcp-guest", "us-west1-a", "deb9,el6,el7,el8", "gs://gcp-guest-package-uploads/google-compute-engine/", "packages/google-compute-engine"]
+  - name: disk-expand-build
+    cluster: gcp-guest
+    extra_refs:
+    - org: GoogleCloudPlatform
+      repo: guest-test-infra
+      base_ref: master
+      workdir: true
+    decorate: true
+    annotations:
+      testgrid-dashboards: googleoss-gcp-guest
+    labels:
+      preset-daisy: "true"
+      preset-github: "true"
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/daisy-builder:latest
+        imagePullPolicy: Always
+        command:
+        - "/main.sh"
+        args: ["gcp-guest", "us-west1-a", "deb9,el7", "gs://gcp-guest-package-uploads/gce-disk-expand/", "packages/gce-disk-expand"]
   GoogleCloudPlatform/osconfig:
   - name: osconfig-build
     cluster: gcp-guest
@@ -144,6 +162,49 @@ postsubmits:
     - ^master$
 
 presubmits:
+  GoogleCloudPlatform/compute-image-packages:
+  - name: gce-presubmit-build
+    cluster: gcp-guest
+    extra_refs:
+    - org: GoogleCloudPlatform
+      repo: guest-test-infra
+      base_ref: master
+      workdir: true
+    trigger: "(?m)^/packagebuild$"
+    rerun_command: "/packagebuild"
+    context: prow/presubmit/packagebuild
+    decorate: true
+    labels:
+      preset-daisy: "true"
+      preset-github: "true"
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/daisy-builder:latest
+        imagePullPolicy: Always
+        command:
+        - "/main.sh"
+        args: ["gcp-guest", "us-west1-a", "deb9,el6,el7,el8", "gs://gcp-guest-package-uploads/google-compute-engine/", "packages/google-compute-engine"]
+  - name: disk-expand-presubmit-build
+    cluster: gcp-guest
+    extra_refs:
+    - org: GoogleCloudPlatform
+      repo: guest-test-infra
+      base_ref: master
+      workdir: true
+    trigger: "(?m)^/packagebuild$"
+    rerun_command: "/packagebuild"
+    context: prow/presubmit/packagebuild
+    decorate: true
+    labels:
+      preset-daisy: "true"
+      preset-github: "true"
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/daisy-builder:latest
+        imagePullPolicy: Always
+        command:
+        - "/main.sh"
+        args: ["gcp-guest", "us-west1-a", "deb9,el7", "gs://gcp-guest-package-uploads/gce-disk-expand/", "packages/gce-disk-expand"]
   GoogleCloudPlatform/compute-image-tools:
   - name: clitools-presubmit-gocheck
     cluster: gcp-guest
