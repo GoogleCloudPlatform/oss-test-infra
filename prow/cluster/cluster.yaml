@@ -231,7 +231,7 @@ spec:
       volumes:
       - name: oauth-config
         secret:
-          secretName: github-oauth-config
+          secretName: github-oauth-config-20200326-oss-prow-knative-dev
       - name: oauth-token
         secret:
           secretName: oauth-token
