@@ -27,7 +27,7 @@ presets:
       secretName: github-access-token
 
 postsubmits:
-  GoogleCloudPlatform/compute-image-packages:
+  GoogleCloudPlatform/guest-configs:
   - name: gce-build
     cluster: gcp-guest
     extra_refs:
@@ -47,7 +47,8 @@ postsubmits:
         imagePullPolicy: Always
         command:
         - "/main.sh"
-        args: ["gcp-guest", "us-west1-a", "deb9,el6,el7,el8", "gs://gcp-guest-package-uploads/google-compute-engine/", "packages/google-compute-engine"]
+        args: ["gcp-guest", "us-west1-a", "deb9,el6,el7,el8", "gs://gcp-guest-package-uploads/google-compute-engine/"]
+  GoogleCloudPlatform/compute-image-packages:
   - name: disk-expand-build
     cluster: gcp-guest
     extra_refs:
@@ -162,7 +163,7 @@ postsubmits:
     - ^master$
 
 presubmits:
-  GoogleCloudPlatform/compute-image-packages:
+  GoogleCloudPlatform/guest-configs:
   - name: gce-presubmit-build
     cluster: gcp-guest
     extra_refs:
@@ -183,7 +184,8 @@ presubmits:
         imagePullPolicy: Always
         command:
         - "/main.sh"
-        args: ["gcp-guest", "us-west1-a", "deb9,el6,el7,el8", "gs://gcp-guest-package-uploads/google-compute-engine/", "packages/google-compute-engine"]
+        args: ["gcp-guest", "us-west1-a", "deb9,el6,el7,el8", "gs://gcp-guest-package-uploads/google-compute-engine/"]
+  GoogleCloudPlatform/compute-image-packages:
   - name: disk-expand-presubmit-build
     cluster: gcp-guest
     extra_refs:
