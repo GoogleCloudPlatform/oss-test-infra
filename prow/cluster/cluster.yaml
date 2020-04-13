@@ -64,7 +64,6 @@ spec:
                   - "success"
                   - "failure"
                   - "error"
-                  - "aborted"
           - required:
             - completionTime
 ---
@@ -843,6 +842,8 @@ rules:
     verbs:
       - create
       - get
+      - list
+      - update
   - apiGroups:
       - ""
     resources:
