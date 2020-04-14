@@ -17,6 +17,7 @@ tide:
     GoogleCloudPlatform/osconfig: squash
     GoogleCloudPlatform/guest-logging-go: squash
     GoogleCloudPlatform/guest-agent: squash
+    GoogleCloudPlatform/guest-configs: squash
     GoogleCloudPlatform/guest-test-infra: squash
     GoogleCloudPlatform/guest-oslogin: squash
     GoogleCloudPlatform/compute-image-tools: squash
@@ -27,6 +28,7 @@ tide:
         - GoogleCloudPlatform/oss-test-infra
         - GoogleCloudPlatform/guest-logging-go
         - GoogleCloudPlatform/guest-agent
+        - GoogleCloudPlatform/guest-configs
         - GoogleCloudPlatform/guest-oslogin
         - GoogleCloudPlatform/testgrid
         - GoogleCloudPlatform/guest-test-infra
