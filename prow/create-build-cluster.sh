@@ -27,7 +27,7 @@ function main() {
   parseArgs "$@"
   prompt "Create project" createProject
   prompt "Create cluster" createCluster
-	prompt "Create a SA and secret for uploading results to GCS" createUploadSASecret
+  prompt "Create a SA and secret for uploading results to GCS" createUploadSASecret
   prompt "Generate kubeconfig credentials for Prow" gencreds
   echo "All done!"
 }
@@ -53,7 +53,7 @@ function prompt() {
   fi
 }
 function pause() {
-	read -n 1 -s -r
+  read -n 1 -s -r
 }
 
 authed=""
@@ -64,7 +64,7 @@ function getClusterCreds() {
   fi
 }
 function createProject() {
-	# Create project, configure billing, enable GKE, add IAM rule for oncall team.
+  # Create project, configure billing, enable GKE, add IAM rule for oncall team.
   echo "Creating project '${PROJECT}' (this may take a few minutes)..."
   gcloud projects create "${PROJECT}" --name="${PROJECT}" --folder="${FOLDER_ID}"
   gcloud beta billing projects link "${PROJECT}" --billing-account="${BILLING_ACCOUNT_ID}"
@@ -80,9 +80,9 @@ function createCluster() {
   kubectl create namespace "test-pods"
 }
 function createUploadSASecret() {
-	getClusterCreds
-	local sa="prow-pod-utils"
-	local saFull="${sa}@${PROJECT}.iam.gserviceaccount.com"
+  getClusterCreds
+  local sa="prow-pod-utils"
+  local saFull="${sa}@${PROJECT}.iam.gserviceaccount.com"
   # Create a service account for uploading to GCS.
   gcloud beta iam service-accounts create "${sa}" --project="${PROJECT}" --description="SA for Prow's pod utilities to use to upload job results to GCS." --display-name="Prow Pod Utilities"
   # Generate private key and attach to the service account.
