@@ -57,7 +57,7 @@ plugins:
   - blunderbuss
   GoogleCloudPlatform/osconfig:
   - blunderbuss
-  GoogleCloudPlatform/guest-agent:
+  GoogleCloudPlatform/guest-configs:
   - blunderbuss
   GoogleCloudPlatform/guest-agent:
   - blunderbuss
