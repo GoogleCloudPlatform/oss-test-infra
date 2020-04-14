@@ -33,6 +33,12 @@ lgtm:
   - googleforgames
   review_acts_as_lgtm: true
 
+triggers:
+- repos:
+  - google/cadvisor
+  trusted_org: kubernetes
+  join_org_url: "https://git.k8s.io/community/community-membership.md#member"
+
 plugins:
   GoogleCloudPlatform:
   - approve
@@ -50,6 +56,8 @@ plugins:
   - trigger
   - verify-owners
   - yuks
+  google/cadvisor:
+  - trigger
 
   GoogleCloudPlatform/guest-test-infra:
   - blunderbuss
