@@ -10,18 +10,26 @@
 set -o errexit
 set -o nounset
 set -o pipefail
+
 TEAM="${TEAM:-}"
 PROJECT="${PROJECT:-oss-prow-build-${TEAM}}"
 ZONE="${ZONE:-us-west1-b}"
 CLUSTER="${CLUSTER:-${PROJECT}}"
+
+# Only needed for creating cluster
 MACHINE="${MACHINE:-n1-highmem-8}"
 NODECOUNT="${NODECOUNT:-15}"
 DISKSIZE="${DISKSIZE:-100GB}"
+
+# Only needed for creating project
 FOLDER_ID="${FOLDER_ID:-0123}"
 BILLING_ACCOUNT_ID="${BILLING_ACCOUNT_ID:-0123}"  # Find the billing account ID in the cloud console.
 
 # Specific to Prow instance VV
-GCSBUCKET="oss-prow"
+GCSBUCKET="${GCSBUCKET:-oss-prow}"
+
+# Overriding output
+OUT_FILE="${OUT_FILE:-build-cluster-kubeconfig.yaml}"
 
 function main() {
   parseArgs "$@"
@@ -102,7 +110,7 @@ tempdir="$( mktemp -d )"
 function gencreds() {
   getClusterCreds
   local clusterAlias="build-${TEAM}"
-  local outfile="build-cluster-kubeconfig.yaml"
+  local outfile="${OUT_FILE}"
   # TODO: Make gencred build without bazel so we can use something like the following:
   # GO111MODULE=on go run k8s.io/test-infra/gencred --serviceaccount --name "${clusterAlias}"
   cd "${tempdir}"
