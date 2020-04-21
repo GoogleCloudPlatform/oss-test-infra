@@ -95,6 +95,7 @@ deck:
           name: podinfo
         required_files:
           - podinfo.json
-  rerun_auth_config:
-    github_orgs:
-    - GoogleCloudPlatform
+  rerun_auth_configs:
+    '*':
+      github_orgs:
+      - GoogleCloudPlatform
