@@ -21,6 +21,9 @@ metadata:
     app: ghproxy
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: ghproxy
   template:
     metadata:
       labels:
