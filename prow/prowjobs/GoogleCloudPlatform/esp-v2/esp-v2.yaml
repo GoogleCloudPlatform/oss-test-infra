@@ -5,7 +5,9 @@ presubmits:
     always_run: true
     decorate: true
     annotations:
-      testgrid-dashboards: googleoss-esp-v2
+      testgrid-dashboards: googleoss-esp-v2-presubmit
+      testgrid-tab-name: build
+      description: "Generates docker images to deploy in e2e tests."
     spec:
       containers:
       - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200309-v2.6.0-15-gd62fe00-master
@@ -28,7 +30,9 @@ presubmits:
     always_run: true
     decorate: true
     annotations:
-      testgrid-dashboards: googleoss-esp-v2
+      testgrid-dashboards: googleoss-esp-v2-presubmit
+      testgrid-tab-name: presubmit
+      description: "Runs all unit and integration tests."
     spec:
       containers:
       - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200309-v2.6.0-15-gd62fe00-master
@@ -51,7 +55,9 @@ presubmits:
     always_run: true
     decorate: true
     annotations:
-      testgrid-dashboards: googleoss-esp-v2
+      testgrid-dashboards: googleoss-esp-v2-presubmit
+      testgrid-tab-name: presubmit-asan
+      description: "Runs all unit and integration tests with ASan."
     spec:
       containers:
       - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200309-v2.6.0-15-gd62fe00-master
@@ -74,7 +80,9 @@ presubmits:
     always_run: true
     decorate: true
     annotations:
-      testgrid-dashboards: googleoss-esp-v2
+      testgrid-dashboards: googleoss-esp-v2-presubmit
+      testgrid-tab-name: presubmit-tsan
+      description: "Runs all unit and integration tests with TSan."
     spec:
       containers:
       - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200309-v2.6.0-15-gd62fe00-master
@@ -97,7 +105,9 @@ presubmits:
     always_run: true
     decorate: true
     annotations:
-      testgrid-dashboards: googleoss-esp-v2
+      testgrid-dashboards: googleoss-esp-v2-presubmit
+      testgrid-tab-name: coverage
+      description: "Generates coverage report for a subset of presubmit tests."
     spec:
       containers:
       - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200309-v2.6.0-18-g884cf4f-master
@@ -120,7 +130,9 @@ presubmits:
     always_run: true
     decorate: true
     annotations:
-      testgrid-dashboards: googleoss-esp-v2
+      testgrid-dashboards: googleoss-esp-v2-presubmit
+      testgrid-tab-name: e2e-gke-http-bookstore
+      description: "Runs e2e tests for GKE."
     spec:
       containers:
       - args:
@@ -177,7 +189,9 @@ presubmits:
     always_run: true
     decorate: true
     annotations:
-      testgrid-dashboards: googleoss-esp-v2
+      testgrid-dashboards: googleoss-esp-v2-presubmit
+      testgrid-tab-name: e2e-gke-grpc-echo
+      description: "Runs e2e tests for GKE."
     spec:
       containers:
       - args:
@@ -234,7 +248,9 @@ presubmits:
     always_run: true
     decorate: true
     annotations:
-      testgrid-dashboards: googleoss-esp-v2
+      testgrid-dashboards: googleoss-esp-v2-presubmit
+      testgrid-tab-name: e2e-gke-grpc-interop
+      description: "Runs e2e tests for GKE."
     spec:
       containers:
       - args:
@@ -291,7 +307,9 @@ presubmits:
     always_run: true
     decorate: true
     annotations:
-      testgrid-dashboards: googleoss-esp-v2
+      testgrid-dashboards: googleoss-esp-v2-presubmit
+      testgrid-tab-name: e2e-cloud-run-anthos-http-bookstore
+      description: "Runs e2e tests for Cloud Run with Anthos."
     spec:
       containers:
       - args:
@@ -346,7 +364,9 @@ presubmits:
     always_run: true
     decorate: true
     annotations:
-      testgrid-dashboards: googleoss-esp-v2
+      testgrid-dashboards: googleoss-esp-v2-presubmit
+      testgrid-tab-name: e2e-cloud-run-http-bookstore
+      description: "Runs e2e tests for Cloud Run."
     spec:
       containers:
       - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20200309-v2.6.0-15-gd62fe00-master
@@ -371,7 +391,9 @@ presubmits:
     always_run: true
     decorate: true
     annotations:
-      testgrid-dashboards: googleoss-esp-v2
+      testgrid-dashboards: googleoss-esp-v2-presubmit
+      testgrid-tab-name: e2e-cloud-function-http-bookstore
+      description: "Runs e2e tests for Cloud Functions."
     spec:
       containers:
       - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20200309-v2.6.0-15-gd62fe00-master
@@ -396,7 +418,9 @@ presubmits:
     always_run: true
     decorate: true
     annotations:
-      testgrid-dashboards: googleoss-esp-v2
+      testgrid-dashboards: googleoss-esp-v2-presubmit
+      testgrid-tab-name: e2e-cloud-run-grpc-echo
+      description: "Runs e2e tests for Cloud Run."
     spec:
       containers:
       - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20200309-v2.6.0-15-gd62fe00-master
@@ -423,7 +447,9 @@ periodics:
     cron: '0 * * * *' # Run by every hour
     decorate: true
     annotations:
-      testgrid-dashboards: googleoss-esp-v2
+      testgrid-dashboards: googleoss-esp-v2-periodic
+      testgrid-tab-name: build
+      description: "Generates docker images to deploy in e2e tests."
     extra_refs:
       - org: GoogleCloudPlatform
         repo: esp-v2
@@ -450,7 +476,9 @@ periodics:
     cron: '0 * * * *' # Run by every hour
     decorate: true
     annotations:
-      testgrid-dashboards: googleoss-esp-v2
+      testgrid-dashboards: googleoss-esp-v2-periodic
+      testgrid-tab-name: presubmit
+      description: "Runs all unit and integration tests."
     extra_refs:
       - org: GoogleCloudPlatform
         repo: esp-v2
@@ -477,7 +505,9 @@ periodics:
     cron: '0 * * * *' # Run by every hour
     decorate: true
     annotations:
-      testgrid-dashboards: googleoss-esp-v2
+      testgrid-dashboards: googleoss-esp-v2-periodic
+      testgrid-tab-name: presubmit-asan
+      description: "Runs all unit and integration tests with ASan."
     extra_refs:
       - org: GoogleCloudPlatform
         repo: esp-v2
@@ -504,7 +534,9 @@ periodics:
     cron: '0 * * * *' # Run by every hour
     decorate: true
     annotations:
-      testgrid-dashboards: googleoss-esp-v2
+      testgrid-dashboards: googleoss-esp-v2-periodic
+      testgrid-tab-name: presubmit-tsan
+      description: "Runs all unit and integration tests with TSan."
     extra_refs:
       - org: GoogleCloudPlatform
         repo: esp-v2
@@ -531,7 +563,9 @@ periodics:
     cron: '0 * * * *' # Run by every hour
     decorate: true
     annotations:
-      testgrid-dashboards: googleoss-esp-v2
+      testgrid-dashboards: googleoss-esp-v2-periodic
+      testgrid-tab-name: coverage
+      description: "Generates coverage report for a subset of presubmit tests."
     extra_refs:
     - org: GoogleCloudPlatform
       repo: esp-v2
@@ -560,7 +594,9 @@ periodics:
     decoration_config:
         timeout: 5h
     annotations:
-      testgrid-dashboards: googleoss-esp-v2
+      testgrid-dashboards: googleoss-esp-v2-periodic
+      testgrid-tab-name: e2e-gke-http-bookstore
+      description: "Runs e2e tests for GKE."
     extra_refs:
       - org: GoogleCloudPlatform
         repo: esp-v2
@@ -622,7 +658,9 @@ periodics:
     decoration_config:
       timeout: 5h
     annotations:
-      testgrid-dashboards: googleoss-esp-v2
+      testgrid-dashboards: googleoss-esp-v2-periodic
+      testgrid-tab-name: e2e-gke-grpc-echo
+      description: "Runs e2e tests for GKE."
     extra_refs:
       - org: GoogleCloudPlatform
         repo: esp-v2
@@ -684,7 +722,9 @@ periodics:
     decoration_config:
       timeout: 5h
     annotations:
-      testgrid-dashboards: googleoss-esp-v2
+      testgrid-dashboards: googleoss-esp-v2-periodic
+      testgrid-tab-name: e2e-gke-grpc-interop
+      description: "Runs e2e tests for GKE."
     extra_refs:
       - org: GoogleCloudPlatform
         repo: esp-v2
@@ -746,7 +786,9 @@ periodics:
     decoration_config:
       timeout: 5h
     annotations:
-      testgrid-dashboards: googleoss-esp-v2
+      testgrid-dashboards: googleoss-esp-v2-periodic
+      testgrid-tab-name: e2e-cloud-run-anthos-http-bookstore
+      description: "Runs e2e tests for Cloud Run with Anthos."
     extra_refs:
       - org: GoogleCloudPlatform
         repo: esp-v2
@@ -806,7 +848,9 @@ periodics:
     decoration_config:
       timeout: 5h
     annotations:
-      testgrid-dashboards: googleoss-esp-v2
+      testgrid-dashboards: googleoss-esp-v2-periodic
+      testgrid-tab-name: e2e-cloud-run-http-bookstore
+      description: "Runs e2e tests for Cloud Run."
     extra_refs:
       - org: GoogleCloudPlatform
         repo: esp-v2
@@ -835,7 +879,9 @@ periodics:
     decoration_config:
       timeout: 5h
     annotations:
-      testgrid-dashboards: googleoss-esp-v2
+      testgrid-dashboards: googleoss-esp-v2-periodic
+      testgrid-tab-name: e2e-cloud-function-http-bookstore
+      description: "Runs e2e tests for Cloud Functions."
     extra_refs:
       - org: GoogleCloudPlatform
         repo: esp-v2
@@ -864,7 +910,9 @@ periodics:
     decoration_config:
       timeout: 5h
     annotations:
-      testgrid-dashboards: googleoss-esp-v2
+      testgrid-dashboards: googleoss-esp-v2-periodic
+      testgrid-tab-name: e2e-cloud-run-grpc-echo
+      description: "Runs e2e tests for Cloud Run."
     extra_refs:
       - org: GoogleCloudPlatform
         repo: esp-v2
@@ -895,7 +943,9 @@ periodics:
     decoration_config:
       timeout: 40m
     annotations:
-      testgrid-dashboards: googleoss-esp-v2
+      testgrid-dashboards: googleoss-esp-v2-periodic
+      testgrid-tab-name: janitor-gke
+      description: "Cleans up orphan e2e resources for GKE."
     extra_refs:
       - org: kubernetes
         repo: test-infra
@@ -930,7 +980,9 @@ periodics:
     cron: '0 6 * * *' # Run every day at 6am
     decorate: true
     annotations:
-      testgrid-dashboards: googleoss-esp-v2
+      testgrid-dashboards: googleoss-esp-v2-periodic
+      testgrid-tab-name: janitor-serverless
+      description: "Cleans up orphan e2e resources for Serverless."
     extra_refs:
       - org: GoogleCloudPlatform
         repo: esp-v2
