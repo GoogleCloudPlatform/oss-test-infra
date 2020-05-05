@@ -48,7 +48,7 @@ postsubmits:
         command:
         - "/main.sh"
         args: ["gcp-guest", "us-west1-a", "deb9,el6,el7,el8", "gs://gcp-guest-package-uploads/google-compute-engine/"]
-  GoogleCloudPlatform/compute-image-packages:
+  GoogleCloudPlatform/guest-diskexpand:
   - name: disk-expand-build
     cluster: gcp-guest
     extra_refs:
@@ -68,7 +68,7 @@ postsubmits:
         imagePullPolicy: Always
         command:
         - "/main.sh"
-        args: ["gcp-guest", "us-west1-a", "deb9,el7", "gs://gcp-guest-package-uploads/gce-disk-expand/", "packages/gce-disk-expand"]
+        args: ["gcp-guest", "us-west1-a", "deb10,el7", "gs://gcp-guest-package-uploads/gce-disk-expand/"]
   GoogleCloudPlatform/osconfig:
   - name: osconfig-build
     cluster: gcp-guest
@@ -112,29 +112,6 @@ postsubmits:
         command:
         - "/main.sh"
         args: ["gcp-guest", "us-west1-a", "deb9,deb10,el6,el7,el8", "gs://gcp-guest-package-uploads/oslogin/"]
-    max_concurrency: 10
-    branches:
-    - ^master$
-  GoogleCloudPlatform/guest-configs:
-  - name: guest-config-build
-    cluster: gcp-guest
-    extra_refs:
-    - org: GoogleCloudPlatform
-      repo: guest-test-infra
-      base_ref: master
-      workdir: true
-    decorate: true
-    annotations:
-      testgrid-dashboards: googleoss-gcp-guest
-    labels:
-      preset-daisy: "true"
-      preset-github: "true"
-    spec:
-      containers:
-      - image: gcr.io/gcp-guest/daisy-builder:latest
-        command:
-        - "/main.sh"
-        args: ["gcp-guest", "us-west1-a", "deb9,el6,el7,el8", "gs://gcp-guest-package-uploads/guest-configs/"]
     max_concurrency: 10
     branches:
     - ^master$
@@ -185,7 +162,8 @@ presubmits:
         command:
         - "/main.sh"
         args: ["gcp-guest", "us-west1-a", "deb9,el6,el7,el8", "gs://gcp-guest-package-uploads/google-compute-engine/"]
-  GoogleCloudPlatform/compute-image-packages:
+
+  GoogleCloudPlatform/guest-diskexpand:
   - name: disk-expand-presubmit-build
     cluster: gcp-guest
     extra_refs:
@@ -206,7 +184,8 @@ presubmits:
         imagePullPolicy: Always
         command:
         - "/main.sh"
-        args: ["gcp-guest", "us-west1-a", "deb9,el7", "gs://gcp-guest-package-uploads/gce-disk-expand/", "packages/gce-disk-expand"]
+        args: ["gcp-guest", "us-west1-a", "deb10,el7", "gs://gcp-guest-package-uploads/gce-disk-expand/"]
+
   GoogleCloudPlatform/compute-image-tools:
   - name: clitools-presubmit-gocheck
     cluster: gcp-guest
@@ -519,28 +498,6 @@ presubmits:
         - make
         args:
         - prowtest
-
-  GoogleCloudPlatform/guest-configs:
-  - name: guest-configs-presubmit-build
-    cluster: gcp-guest
-    run_if_changed: "packaging/"
-    trigger: "(?m)^/packagebuild$"
-    rerun_command: "/packagebuild"
-    context: prow/presubmit/packagebuild
-    extra_refs:
-    - org: GoogleCloudPlatform
-      repo: guest-test-infra
-      base_ref: master
-      workdir: true
-    decorate: true
-    labels:
-      preset-daisy: "true"
-    spec:
-      containers:
-      - image: gcr.io/gcp-guest/daisy-builder:latest
-        command:
-        - "/main.sh"
-        args: ["gcp-guest", "us-west1-a", "deb9,el6,el7,el8"]
 
   GoogleCloudPlatform/guest-test-infra:
   - name: infra-presubmit-gocheck
