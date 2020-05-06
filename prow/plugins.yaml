@@ -59,6 +59,8 @@ plugins:
   - blunderbuss
   GoogleCloudPlatform/guest-configs:
   - blunderbuss
+  GoogleCloudPlatform/guest-diskexpand:
+  - blunderbuss
   GoogleCloudPlatform/guest-agent:
   - blunderbuss
   GoogleCloudPlatform/compute-image-tools:
