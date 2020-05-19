@@ -199,7 +199,7 @@ presubmits:
      - image: gcr.io/gcp-guest/flake8:latest
         imagePullPolicy: Always
         command:
-        - "/go/main.sh"
+        - "/main.sh"
   - name: import-export-tests-presubmit-gocheck
     cluster: gcp-guest
     run_if_changed: 'cli_tools_e2e_test/gce_image_import_export_tests/.*'
@@ -782,11 +782,3 @@ presubmits:
         imagePullPolicy: Always
         command:
         - "/go/main.sh"
-        volumeMounts:
-        - name: codecov
-          mountPath: /etc/codecov
-          readOnly: true
-      volumes:
-      - name: codecov
-        secret:
-          secretName: codecov
