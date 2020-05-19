@@ -195,8 +195,8 @@ presubmits:
     context: prow/presubmit/flake8
     decorate: true
     spec:
-     containers:
-     - image: gcr.io/gcp-guest/flake8:latest
+      containers:
+      - image: gcr.io/gcp-guest/flake8:latest
         imagePullPolicy: Always
         command:
         - "/main.sh"
@@ -208,8 +208,8 @@ presubmits:
     context: prow/presubmit/gocheck/import-export-tests
     decorate: true
     spec:
-     containers:
-     - image: gcr.io/gcp-guest/gocheck:latest
+      containers:
+      - image: gcr.io/gcp-guest/gocheck:latest
         imagePullPolicy: Always
         command:
         - "/go/main.sh"
@@ -222,8 +222,8 @@ presubmits:
     context: prow/presubmit/gocheck/import-precheck
     decorate: true
     spec:
-     containers:
-     - image: gcr.io/gcp-guest/gocheck:latest
+      containers:
+      - image: gcr.io/gcp-guest/gocheck:latest
         imagePullPolicy: Always
         command:
         - "/go/main.sh"
@@ -236,8 +236,8 @@ presubmits:
     context: prow/presubmit/gocheck/gce-image-publish
     decorate: true
     spec:
-     containers:
-     - image: gcr.io/gcp-guest/gocheck:latest
+      containers:
+      - image: gcr.io/gcp-guest/gocheck:latest
         imagePullPolicy: Always
         command:
         - "/go/main.sh"
@@ -250,8 +250,8 @@ presubmits:
     context: prow/presubmit/gocheck/gce-export
     decorate: true
     spec:
-     containers:
-     - image: gcr.io/gcp-guest/gocheck:latest
+      containers:
+      - image: gcr.io/gcp-guest/gocheck:latest
         imagePullPolicy: Always
         command:
         - "/go/main.sh"
@@ -264,8 +264,8 @@ presubmits:
     context: prow/presubmit/gocheck/daisy-test-runner
     decorate: true
     spec:
-     containers:
-     - image: gcr.io/gcp-guest/gocheck:latest
+      containers:
+      - image: gcr.io/gcp-guest/gocheck:latest
         imagePullPolicy: Always
         command:
         - "/go/main.sh"
@@ -278,8 +278,8 @@ presubmits:
     context: prow/presubmit/gocheck/daisy
     decorate: true
     spec:
-     containers:
-     - image: gcr.io/gcp-guest/gocheck:latest
+      containers:
+      - image: gcr.io/gcp-guest/gocheck:latest
         imagePullPolicy: Always
         command:
         - "/go/main.sh"
@@ -292,8 +292,8 @@ presubmits:
     context: prow/presubmit/gotest/ovf-import-tests
     decorate: true
     spec:
-     containers:
-     - image: gcr.io/gcp-guest/gotest:latest
+      containers:
+      - image: gcr.io/gcp-guest/gotest:latest
         imagePullPolicy: Always
         command:
         - "/go/main.sh"
@@ -306,8 +306,8 @@ presubmits:
     context: prow/presubmit/gotest/import-export-tests
     decorate: true
     spec:
-     containers:
-     - image: gcr.io/gcp-guest/gotest:latest
+      containers:
+      - image: gcr.io/gcp-guest/gotest:latest
         imagePullPolicy: Always
         command:
         - "/go/main.sh"
@@ -320,8 +320,8 @@ presubmits:
     context: prow/presubmit/gotest/import-precheck
     decorate: true
     spec:
-     containers:
-     - image: gcr.io/gcp-guest/gotest:latest
+      containers:
+      - image: gcr.io/gcp-guest/gotest:latest
         imagePullPolicy: Always
         command:
         - "/go/main.sh"
@@ -334,8 +334,8 @@ presubmits:
     context: prow/presubmit/gotest/gce-image-publish
     decorate: true
     spec:
-     containers:
-     - image: gcr.io/gcp-guest/gotest:latest
+      containers:
+      - image: gcr.io/gcp-guest/gotest:latest
         imagePullPolicy: Always
         command:
         - "/go/main.sh"
@@ -348,8 +348,8 @@ presubmits:
     context: prow/presubmit/gotest/gce-export
     decorate: true
     spec:
-     containers:
-     - image: gcr.io/gcp-guest/gotest:latest
+      containers:
+      - image: gcr.io/gcp-guest/gotest:latest
         imagePullPolicy: Always
         command:
         - "/go/main.sh"
@@ -362,8 +362,8 @@ presubmits:
     context: prow/presubmit/gotest/daisy-test-runner
     decorate: true
     spec:
-     containers:
-     - image: gcr.io/gcp-guest/gotest:latest
+      containers:
+      - image: gcr.io/gcp-guest/gotest:latest
         imagePullPolicy: Always
         command:
         - "/go/main.sh"
@@ -376,8 +376,8 @@ presubmits:
     context: prow/presubmit/gotest/daisy
     decorate: true
     spec:
-     containers:
-     - image: gcr.io/gcp-guest/gotest:latest
+      containers:
+      - image: gcr.io/gcp-guest/gotest:latest
         imagePullPolicy: Always
         command:
         - "/go/main.sh"
@@ -390,8 +390,8 @@ presubmits:
     context: prow/presubmit/gobuild/ovf-import-tests
     decorate: true
     spec:
-     containers:
-     - image: gcr.io/gcp-guest/gobuild:latest
+      containers:
+      - image: gcr.io/gcp-guest/gobuild:latest
         imagePullPolicy: Always
         command:
         - "/go/main.sh"
@@ -404,8 +404,8 @@ presubmits:
     context: prow/presubmit/gobuild/import-export-tests
     decorate: true
     spec:
-     containers:
-     - image: gcr.io/gcp-guest/gobuild:latest
+      containers:
+      - image: gcr.io/gcp-guest/gobuild:latest
         imagePullPolicy: Always
         command:
         - "/go/main.sh"
@@ -418,8 +418,8 @@ presubmits:
     context: prow/presubmit/gobuild/import-precheck
     decorate: true
     spec:
-     containers:
-     - image: gcr.io/gcp-guest/gobuild:latest
+      containers:
+      - image: gcr.io/gcp-guest/gobuild:latest
         imagePullPolicy: Always
         command:
         - "/go/main.sh"
@@ -432,8 +432,8 @@ presubmits:
     context: prow/presubmit/gobuild/gce-image-publish
     decorate: true
     spec:
-     containers:
-     - image: gcr.io/gcp-guest/gobuild:latest
+      containers:
+      - image: gcr.io/gcp-guest/gobuild:latest
         imagePullPolicy: Always
         command:
         - "/go/main.sh"
@@ -446,8 +446,8 @@ presubmits:
     context: prow/presubmit/gobuild/gce-export
     decorate: true
     spec:
-     containers:
-     - image: gcr.io/gcp-guest/gobuild:latest
+      containers:
+      - image: gcr.io/gcp-guest/gobuild:latest
         imagePullPolicy: Always
         command:
         - "/go/main.sh"
@@ -460,8 +460,8 @@ presubmits:
     context: prow/presubmit/gobuild/daisy-test-runner
     decorate: true
     spec:
-     containers:
-     - image: gcr.io/gcp-guest/gobuild:latest
+      containers:
+      - image: gcr.io/gcp-guest/gobuild:latest
         imagePullPolicy: Always
         command:
         - "/go/main.sh"
@@ -474,8 +474,8 @@ presubmits:
     context: prow/presubmit/gobuild/daisy
     decorate: true
     spec:
-     containers:
-     - image: gcr.io/gcp-guest/gobuild:latest
+      containers:
+      - image: gcr.io/gcp-guest/gobuild:latest
         imagePullPolicy: Always
         command:
         - "/go/main.sh"
