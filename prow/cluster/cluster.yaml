@@ -487,6 +487,7 @@ spec:
         - --config-path=/etc/config/config.yaml
         - --job-config-path=/etc/job-config
         - --dry-run=false
+        - --github-token-path=/etc/github/oauth
         - --github-endpoint=http://ghproxy
         - --github-endpoint=https://api.github.com
         ports:
@@ -899,6 +900,7 @@ spec:
         - --dry-run=false
         - --history-uri=gs://oss-prow/tide-history.json
         - --status-path=gs://oss-prow/tide-status-checkpoint.yaml
+        - --github-token-path=/etc/github/oauth
         - --github-endpoint=http://ghproxy
         - --github-endpoint=https://api.github.com
         ports:
