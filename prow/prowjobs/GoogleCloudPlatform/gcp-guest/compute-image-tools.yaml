@@ -1,0 +1,359 @@
+presubmits:
+  GoogleCloudPlatform/compute-image-tools:
+  - name: compute-image-tools-flake8
+    cluster: gcp-guest
+    run_if_changed: '.*\.py$'
+    trigger: "(?m)^/flake8$"
+    rerun_command: "/flake8"
+    context: prow/presubmit/flake8
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/flake8:latest
+        imagePullPolicy: Always
+        command:
+        - "/main.sh"
+
+  - name: gce-windows-upgrade-presubmit-gocheck
+    cluster: gcp-guest
+    run_if_changed: 'cli_tools/gce_windows_upgrade/.*'
+    trigger: "(?m)^/gocheck-gce-windows-upgrade$"
+    rerun_command: "/gocheck-gce-windows-upgrade"
+    context: prow/presubmit/gocheck/gce-windows-upgrade
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gocheck:latest
+        imagePullPolicy: Always
+        command:
+        - "/go/main.sh"
+        args: ["cli_tools/gce_windows_upgrade/"]
+  - name: gce-windows-upgrade-presubmit-gotest
+    cluster: gcp-guest
+    run_if_changed: 'cli_tools/gce_windows_upgrade/.*'
+    trigger: "(?m)^/gotest-gce-windows-upgrade$"
+    rerun_command: "/gotest-gce-windows-upgrade"
+    context: prow/presubmit/gotest/gce-windows-upgrade
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gotest:latest
+        imagePullPolicy: Always
+        command:
+        - "/go/main.sh"
+        args: ["cli_tools/gce_windows_upgrade/"]
+  - name: gce-windows-upgrade-presubmit-gobuild
+    cluster: gcp-guest
+    run_if_changed: 'cli_tools/gce_windows_upgrade/.*'
+    trigger: "(?m)^/gobuild-gce-windows-upgrade$"
+    rerun_command: "/gobuild-gce-windows-upgrade"
+    context: prow/presubmit/gobuild/gce-windows-upgrade
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gobuild:latest
+        imagePullPolicy: Always
+        command:
+        - "/go/main.sh"
+        args: ["cli_tools/gce_windows_upgrade/"]
+
+  - name: import-export-tests-presubmit-gocheck
+    cluster: gcp-guest
+    run_if_changed: 'cli_tools_e2e_test/gce_image_import_export_tests/.*'
+    trigger: "(?m)^/gocheck-import-export-tests$"
+    rerun_command: "/gocheck-import-export-tests"
+    context: prow/presubmit/gocheck/import-export-tests
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gocheck:latest
+        imagePullPolicy: Always
+        command:
+        - "/go/main.sh"
+        args: ["cli_tools_e2e_test/gce_image_import_export_tests/"]
+  - name: import-export-tests-presubmit-gotest
+    cluster: gcp-guest
+    run_if_changed: 'cli_tools_e2e_test/gce_image_import_export_tests/.*'
+    trigger: "(?m)^/gotest-import-export-tests$"
+    rerun_command: "/gotest-import-export-tests"
+    context: prow/presubmit/gotest/import-export-tests
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gotest:latest
+        imagePullPolicy: Always
+        command:
+        - "/go/main.sh"
+        args: ["cli_tools_e2e_test/gce_image_import_export_tests/"]
+  - name: import-export-tests-presubmit-gobuild
+    cluster: gcp-guest
+    run_if_changed: 'cli_tools_e2e_test/gce_image_import_export_tests/.*'
+    trigger: "(?m)^/gobuild-import-export-tests$"
+    rerun_command: "/gobuild-import-export-tests"
+    context: prow/presubmit/gobuild/import-export-tests
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gobuild:latest
+        imagePullPolicy: Always
+        command:
+        - "/go/main.sh"
+        args: ["cli_tools_e2e_test/gce_image_import_export_tests/"]
+
+  - name: import-precheck-presubmit-gocheck
+    cluster: gcp-guest
+    run_if_changed: 'cli_tools/import_precheck/.*'
+    trigger: "(?m)^/gocheck-import-precheck$"
+    rerun_command: "/gocheck-import-precheck"
+    context: prow/presubmit/gocheck/import-precheck
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gocheck:latest
+        imagePullPolicy: Always
+        command:
+        - "/go/main.sh"
+        args: ["cli_tools/import_precheck/"]
+  - name: import-precheck-presubmit-gotest
+    cluster: gcp-guest
+    run_if_changed: 'cli_tools/import_precheck/.*'
+    trigger: "(?m)^/gotest-import-precheck$"
+    rerun_command: "/gotest-import-precheck"
+    context: prow/presubmit/gotest/import-precheck
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gotest:latest
+        imagePullPolicy: Always
+        command:
+        - "/go/main.sh"
+        args: ["cli_tools/import_precheck/"]
+  - name: import-precheck-presubmit-gobuild
+    cluster: gcp-guest
+    run_if_changed: 'cli_tools/import_precheck/.*'
+    trigger: "(?m)^/gobuild-import-precheck$"
+    rerun_command: "/gobuild-import-precheck"
+    context: prow/presubmit/gobuild/import-precheck
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gobuild:latest
+        imagePullPolicy: Always
+        command:
+        - "/go/main.sh"
+        args: ["cli_tools/import_precheck/"]
+
+  - name: gce-image-publish-presubmit-gocheck
+    cluster: gcp-guest
+    run_if_changed: 'cli_tools/gce_image_publish/.*'
+    trigger: "(?m)^/gocheck-gce-image-publish$"
+    rerun_command: "/gocheck-gce-image-publish"
+    context: prow/presubmit/gocheck/gce-image-publish
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gocheck:latest
+        imagePullPolicy: Always
+        command:
+        - "/go/main.sh"
+        args: ["cli_tools/gce_image_publish/"]
+  - name: gce-image-publish-presubmit-gotest
+    cluster: gcp-guest
+    run_if_changed: 'cli_tools/gce_image_publish/.*'
+    trigger: "(?m)^/gotest-gce-image-publish$"
+    rerun_command: "/gotest-gce-image-publish"
+    context: prow/presubmit/gotest/gce-image-publish
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gotest:latest
+        imagePullPolicy: Always
+        command:
+        - "/go/main.sh"
+        args: ["cli_tools/gce_image_publish/"]
+  - name: gce-image-publish-presubmit-gobuild
+    cluster: gcp-guest
+    run_if_changed: 'cli_tools/gce_image_publish/.*'
+    trigger: "(?m)^/gobuild-gce-image-publish$"
+    rerun_command: "/gobuild-gce-image-publish"
+    context: prow/presubmit/gobuild/gce-image-publish
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gobuild:latest
+        imagePullPolicy: Always
+        command:
+        - "/go/main.sh"
+        args: ["cli_tools/gce_image_publish/"]
+
+  - name: gce-export-presubmit-gocheck
+    cluster: gcp-guest
+    run_if_changed: 'cli_tools/gce_export/.*'
+    trigger: "(?m)^/gocheck-gce-export$"
+    rerun_command: "/gocheck-gce-export"
+    context: prow/presubmit/gocheck/gce-export
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gocheck:latest
+        imagePullPolicy: Always
+        command:
+        - "/go/main.sh"
+        args: ["cli_tools/gce_export/"]
+  - name: gce-export-presubmit-gotest
+    cluster: gcp-guest
+    run_if_changed: 'cli_tools/gce_export/.*'
+    trigger: "(?m)^/gotest-gce-export$"
+    rerun_command: "/gotest-gce-export"
+    context: prow/presubmit/gotest/gce-export
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gotest:latest
+        imagePullPolicy: Always
+        command:
+        - "/go/main.sh"
+        args: ["cli_tools/gce_export/"]
+  - name: gce-export-presubmit-gobuild
+    cluster: gcp-guest
+    run_if_changed: 'cli_tools/gce_export/.*'
+    trigger: "(?m)^/gobuild-gce-export$"
+    rerun_command: "/gobuild-gce-export"
+    context: prow/presubmit/gobuild/gce-export
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gobuild:latest
+        imagePullPolicy: Always
+        command:
+        - "/go/main.sh"
+        args: ["cli_tools/gce_export/"]
+
+  - name: daisy-test-runner-presubmit-gocheck
+    cluster: gcp-guest
+    run_if_changed: 'daisy/daisy_test_runner/.*'
+    trigger: "(?m)^/gocheck-daisy-test-runner$"
+    rerun_command: "/gocheck-daisy-test-runner"
+    context: prow/presubmit/gocheck/daisy-test-runner
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gocheck:latest
+        imagePullPolicy: Always
+        command:
+        - "/go/main.sh"
+        args: ["daisy/daisy_test_runner/"]
+  - name: daisy-test-runner-presubmit-gotest
+    cluster: gcp-guest
+    run_if_changed: 'daisy/daisy_test_runner/.*'
+    trigger: "(?m)^/gotest-daisy-test-runner$"
+    rerun_command: "/gotest-daisy-test-runner"
+    context: prow/presubmit/gotest/daisy-test-runner
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gotest:latest
+        imagePullPolicy: Always
+        command:
+        - "/go/main.sh"
+        args: ["daisy/daisy_test_runner/"]
+  - name: daisy-test-runner-presubmit-gobuild
+    cluster: gcp-guest
+    run_if_changed: 'daisy/daisy_test_runner/.*'
+    trigger: "(?m)^/gobuild-daisy-test-runner$"
+    rerun_command: "/gobuild-daisy-test-runner"
+    context: prow/presubmit/gobuild/daisy-test-runner
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gobuild:latest
+        imagePullPolicy: Always
+        command:
+        - "/go/main.sh"
+        args: ["daisy/daisy_test_runner/"]
+
+  - name: daisy-presubmit-gocheck
+    cluster: gcp-guest
+    run_if_changed: 'daisy/cli/.*'
+    trigger: "(?m)^/gocheck-daisy$"
+    rerun_command: "/gocheck-daisy"
+    context: prow/presubmit/gocheck/daisy
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gocheck:latest
+        imagePullPolicy: Always
+        command:
+        - "/go/main.sh"
+        args: ["daisy/cli/"]
+  - name: daisy-presubmit-gotest
+    cluster: gcp-guest
+    run_if_changed: 'daisy/cli/.*'
+    trigger: "(?m)^/gotest-daisy$"
+    rerun_command: "/gotest-daisy"
+    context: prow/presubmit/gotest/daisy
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gotest:latest
+        imagePullPolicy: Always
+        command:
+        - "/go/main.sh"
+        args: ["daisy/cli/"]
+  - name: daisy-presubmit-gobuild
+    cluster: gcp-guest
+    run_if_changed: 'daisy/cli/.*'
+    trigger: "(?m)^/gobuild-daisy$"
+    rerun_command: "/gobuild-daisy"
+    context: prow/presubmit/gobuild/daisy
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gobuild:latest
+        imagePullPolicy: Always
+        command:
+        - "/go/main.sh"
+        args: ["daisy/cli/"]
+
+  - name: ovf-import-tests-presubmit-gocheck
+    cluster: gcp-guest
+    run_if_changed: 'cli_tools_e2e_test/gce_ovf_import_tests/.*'
+    trigger: "(?m)^/gocheck-ovf-import-tests$"
+    rerun_command: "/gocheck-ovf-import-tests"
+    context: prow/presubmit/gocheck/ovf-import-tests
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gocheck:latest
+        imagePullPolicy: Always
+        command:
+        - "/go/main.sh"
+        args: ["cli_tools_e2e_test/gce_ovf_import_tests/"]
+  - name: ovf-import-tests-presubmit-gotest
+    cluster: gcp-guest
+    run_if_changed: 'cli_tools_e2e_test/gce_ovf_import_tests/.*'
+    trigger: "(?m)^/gotest-ovf-import-tests$"
+    rerun_command: "/gotest-ovf-import-tests"
+    context: prow/presubmit/gotest/ovf-import-tests
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gotest:latest
+        imagePullPolicy: Always
+        command:
+        - "/go/main.sh"
+        args: ["cli_tools_e2e_test/gce_ovf_import_tests/"]
+  - name: ovf-import-tests-presubmit-gobuild
+    cluster: gcp-guest
+    run_if_changed: 'cli_tools_e2e_test/gce_ovf_import_tests/.*'
+    trigger: "(?m)^/gobuild-ovf-import-tests$"
+    rerun_command: "/gobuild-ovf-import-tests"
+    context: prow/presubmit/gobuild/ovf-import-tests
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gobuild:latest
+        imagePullPolicy: Always
+        command:
+        - "/go/main.sh"
+        args: ["cli_tools_e2e_test/gce_ovf_import_tests/"]
