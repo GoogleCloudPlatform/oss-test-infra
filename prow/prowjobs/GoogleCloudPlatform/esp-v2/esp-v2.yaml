@@ -369,7 +369,7 @@ presubmits:
       description: "Runs e2e tests for Cloud Run."
     spec:
       containers:
-      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20200527-v2.10.0-7-g332387c-master
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20200309-v2.6.0-15-gd62fe00-master
         command:
         - ./prow/gcpproxy-e2e.sh
         env:
@@ -396,7 +396,7 @@ presubmits:
       description: "Runs e2e tests for Cloud Functions."
     spec:
       containers:
-      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20200527-v2.10.0-7-g332387c-master
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20200309-v2.6.0-15-gd62fe00-master
         command:
         - ./prow/gcpproxy-e2e.sh
         env:
@@ -423,7 +423,7 @@ presubmits:
       description: "Runs e2e tests for Cloud Run."
     spec:
       containers:
-      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20200527-v2.10.0-7-g332387c-master
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20200309-v2.6.0-15-gd62fe00-master
         command:
         - ./prow/gcpproxy-e2e.sh
         env:
@@ -857,7 +857,7 @@ periodics:
         base_ref: master
     spec:
       containers:
-        - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20200527-v2.10.0-7-g332387c-master
+        - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20200309-v2.6.0-15-gd62fe00-master
           command:
             - ./prow/e2e-cloud-run-cloud-run-http-bookstore.sh
           env:
@@ -888,7 +888,7 @@ periodics:
         base_ref: master
     spec:
       containers:
-        - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20200527-v2.10.0-7-g332387c-master
+        - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20200309-v2.6.0-15-gd62fe00-master
           command:
             - ./prow/e2e-cloud-run-cloud-function-http-bookstore.sh
           env:
@@ -919,7 +919,7 @@ periodics:
         base_ref: master
     spec:
       containers:
-        - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20200527-v2.10.0-7-g332387c-master
+        - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20200309-v2.6.0-15-gd62fe00-master
           command:
             - ./prow/e2e-cloud-run-cloud-run-grpc-echo.sh
           env:
