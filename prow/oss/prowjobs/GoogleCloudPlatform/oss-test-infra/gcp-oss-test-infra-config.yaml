@@ -70,7 +70,7 @@ postsubmits:
         - make
         args:
         - -C
-        - prow
+        - prow/oss
         - deploy
         - deploy-build
   - name: post-oss-test-infra-upload-testgrid-config
