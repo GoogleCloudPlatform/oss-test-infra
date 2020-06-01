@@ -1,0 +1,103 @@
+# Copyright 2018 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+config_updater:
+  maps:
+    prow/config.yaml:
+      name: config
+    prow/plugins.yaml:
+      name: plugins
+    prow/prowjobs/**/*.yaml:
+      name: job-config
+
+approve:
+- repos:
+  - GoogleCloudPlatform
+  - googleforgames
+  require_self_approval: false
+
+lgtm:
+- repos:
+  - GoogleCloudPlatform
+  - googleforgames
+  review_acts_as_lgtm: true
+
+plugins:
+  GoogleCloudPlatform:
+  - approve
+  - assign
+  - cat
+  - dog
+  - golint
+  - hold
+  - label
+  - lgtm
+  - owners-label
+  - pony
+  - shrug
+  - size
+  - trigger
+  - verify-owners
+  - yuks
+
+  GoogleCloudPlatform/guest-test-infra:
+  - blunderbuss
+  GoogleCloudPlatform/guest-oslogin:
+  - blunderbuss
+  GoogleCloudPlatform/osconfig:
+  - blunderbuss
+  GoogleCloudPlatform/guest-configs:
+  - blunderbuss
+  GoogleCloudPlatform/guest-diskexpand:
+  - blunderbuss
+  GoogleCloudPlatform/guest-agent:
+  - blunderbuss
+  GoogleCloudPlatform/compute-image-tools:
+  - blunderbuss
+
+  GoogleCloudPlatform/oss-test-infra:
+  - blunderbuss
+  - config-updater
+  - heart
+  - lifecycle
+  - override
+  - wip
+
+  GoogleCloudPlatform/testgrid:
+  - blunderbuss
+  - wip
+
+  googleforgames/agones:
+  - approve # /approve
+  - assign # /assign and /cc
+  - blunderbuss # auto-/cc
+  - cat # /meow
+  - dog # /woof
+  - golint # /lint
+  - heart # encourage OWNERS changes
+  - hold # /hold PR from merge
+  - lgtm # /lgtm
+  - pony # /pony
+  - shrug # /shrug
+  - size # auto-add size label
+  - verify-owners # validate OWNERS file changes
+  - wip # draft-PR awareness
+  - yuks # /joke
+
+  # This is a gerrit repo so this config doesn't do anything. It is included
+  # to satisfy the checkconfig tool which expects all repos that configure
+  # jobs to enable the trigger plugin if a plugins.yaml is specified.
+  # https://github.com/kubernetes/test-infra/issues/14743
+  https://kunit-review.googlesource.com/linux:
+  - trigger

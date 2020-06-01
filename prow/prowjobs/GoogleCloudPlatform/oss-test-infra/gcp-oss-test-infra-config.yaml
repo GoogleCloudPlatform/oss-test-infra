@@ -1,0 +1,219 @@
+presubmits:
+  GoogleCloudPlatform/oss-test-infra:
+  - name: pull-prow-config-validate
+    branches:
+      - master
+    decorate: true
+    always_run: true
+    spec:
+      containers:
+        - image: gcr.io/k8s-prow/checkconfig:v20200526-c96f7e37b
+          imagePullPolicy: Always
+          command:
+            - /checkconfig
+          args:
+            - --config-path=./prow/config.yaml
+            - --job-config-path=./prow/prowjobs
+            - --plugin-config=prow/plugins.yaml
+            - --strict
+            # This warning can forbid valid (and convenient) config. Exclude it.
+            # Details: https://github.com/GoogleCloudPlatform/oss-test-infra/pull/131#discussion_r334208082
+            - --exclude-warning=mismatched-tide
+            - --exclude-warning=non-decorated-jobs
+  - name: pull-test-infra-go-test
+    branches:
+      - master
+    decorate: true
+    always_run: true
+    spec:
+      containers:
+        - image: golang:1.13
+          command:
+            - go
+            - test
+            - ./...
+  - name: pull-oss-test-infra-check-testgrid-config
+    run_if_changed: '^(prow/prowjobs/.*\.yaml)|(testgrid/config\.yaml)$'
+    decorate: true
+    branches:
+    - master
+    annotations:
+      testgrid-create-test-group: "false"
+    spec:
+      containers:
+      - image: gcr.io/k8s-prow/transfigure
+        command:
+        - /transfigure.sh
+        args:
+        - test
+        - prow/config.yaml
+        - prow/prowjobs
+        - testgrid/config.yaml
+        - GoogleCloudPlatform
+
+postsubmits:
+  GoogleCloudPlatform/oss-test-infra:
+  - name: post-oss-test-infra-deploy-prow
+    cluster: test-infra-trusted
+    run_if_changed: '^prow/cluster/|^prow/serviceaccounts/|^prow/prowjobs/GoogleCloudPlatform/oss-test-infra/gcp-oss-test-infra-config.yaml'
+    decorate: true
+    branches:
+    - master
+    annotations:
+      testgrid-dashboards: googleoss-test-infra
+      testgrid-tab-name: prow-deploy
+    spec:
+      serviceAccountName: prow-deployer
+      containers:
+      - image: gcr.io/k8s-testimages/gcloud-in-go:v20200109-87b811d
+        command:
+        - make
+        args:
+        - -C
+        - prow
+        - deploy
+        - deploy-build
+  - name: post-oss-test-infra-upload-testgrid-config
+    cluster: test-infra-trusted
+    run_if_changed: '^(prow/prowjobs/.*\.yaml)|(testgrid/config\.yaml)$'
+    decorate: true
+    branches:
+    - master
+    annotations:
+      testgrid-dashboards: googleoss-test-infra
+      testgrid-tab-name: testgrid-upload
+    spec:
+      containers:
+      - image: gcr.io/k8s-prow/transfigure
+        command:
+        - /transfigure.sh
+        args:
+        - /etc/github-token/oauth
+        - prow/config.yaml
+        - prow/prowjobs
+        - testgrid/config.yaml
+        - GoogleCloudPlatform
+        volumeMounts:
+        - name: github
+          mountPath: /etc/github-token
+          readOnly: true
+      volumes:
+      - name: github
+        secret:
+          secretName: oauth-token
+  GoogleCloudPlatform/testgrid:
+  - name: push-testgrid-images
+    cluster: test-infra-trusted
+    branches:
+    - ^master$
+    decorate: true
+    annotations:
+      testgrid-dashboards: googleoss-test-infra
+      testgrid-alert-email: slchase@google.com
+      testgrid-tab-name: testgrid-push
+    spec:
+      serviceAccountName: testgrid-pusher
+      containers:
+      - image: gcr.io/k8s-testimages/bazelbuild:v20200212-b304d89-2.1.0
+        command:
+        - ./images/push.sh
+  - name: post-testgrid-deploy-prod
+    cluster: test-infra-trusted
+    branches:
+    - ^master$
+    run_if_changed: '^cluster/prod'
+    decorate: true
+    annotations:
+      testgrid-dashboards: googleoss-test-infra
+      testgrid-tab-name: testgrid-deploy-prod
+    spec:
+      serviceAccountName: testgrid-deployer
+      containers:
+      - image: gcr.io/k8s-testimages/gcloud-bazel:v20200211-v0.4-10-g26b1b47
+        command:
+        - ./cluster/deploy.sh
+        args:
+        - --confirm
+        - //cluster/prod:prod.apply
+  - name: post-testgrid-deploy-canary
+    cluster: test-infra-trusted
+    branches:
+    - ^master$
+    run_if_changed: '^cluster/canary'
+    decorate: true
+    annotations:
+      testgrid-dashboards: googleoss-test-infra
+      testgrid-tab-name: testgrid-deploy-canary
+    spec:
+      serviceAccountName: testgrid-deployer
+      containers:
+      - image: gcr.io/k8s-testimages/gcloud-bazel:v20200211-v0.4-10-g26b1b47
+        command:
+        - ./cluster/deploy.sh
+        args:
+        - --confirm
+        - //cluster/canary/canary:apply
+
+periodics:
+- cron: "05 15-23 * * 1-5"  # Run at 7:05-15:05 PST (15:05 UTC) Mon-Fri
+  name: ci-oss-test-infra-autobump-prow
+  cluster: test-infra-trusted
+  decorate: true
+  extra_refs:
+  - org: GoogleCloudPlatform
+    repo: oss-test-infra
+    base_ref: master
+  annotations:
+    testgrid-dashboards: googleoss-test-infra
+    testgrid-tab-name: autobump-prow
+  spec:
+    containers:
+    - image: gcr.io/k8s-prow/autobump:v20200526-c96f7e37b
+      command:
+      - /autobump.sh
+      args:
+      - /etc/github-token/oauth
+      - "Google OSS Prow Robot"
+      - google-oss-robot@google.com
+      volumeMounts:
+      - name: github
+        mountPath: /etc/github-token
+        readOnly: true
+      env:
+      - name: GH_ORG
+        value: GoogleCloudPlatform
+      - name: GH_REPO
+        value: oss-test-infra
+      - name: PLANK_DEPLOYMENT_FILE
+        value: prow/cluster/cluster.yaml
+      - name: COMPONENT_FILE_DIR
+        value: prow/cluster
+      - name: CONFIG_PATH
+        value: prow/config.yaml
+      - name: JOB_CONFIG_PATH
+        value: prow/prowjobs
+    volumes:
+    - name: github
+      secret:
+        secretName: oauth-token
+- interval: 5m
+  name: ci-google-oss-test-infra-resultstore-upload
+  annotations:
+    testgrid-dashboards: googleoss-test-infra
+    testgrid-tab-name: resultstore
+    description: transfer finished results into resultstore
+  cluster: test-infra-trusted
+  decorate: true
+  spec:
+    serviceAccountName: resultstore
+    containers:
+    - image: gcr.io/k8s-testimages/resultstore:v20200316-54260945b
+      command:
+      - /app/experiment/resultstore/app.binary
+      args:
+      - --bucket=gs://oss-prow # Must be able to write to bucket
+      - --config=gs://k8s-testgrid/config
+      - --gcs-auth # resultstore@oss-prow.iam.gserviceaccount.com
+      - --latest=5
+      - --timeout=10m
+      - --upload=oss-prow # Must be able to upload results into this project

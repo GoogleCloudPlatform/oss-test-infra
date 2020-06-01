@@ -1,0 +1,978 @@
+# Copyright 2018 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# This file contains Kubernetes YAML files for the most important prow
+# components. Don't edit resources in this file. Instead, pull them out into
+# their own files.
+---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  name: prowjobs.prow.k8s.io
+  # namespace: not-namespaced
+spec:
+  group: prow.k8s.io
+  version: v1
+  names:
+    kind: ProwJob
+    singular: prowjob
+    plural: prowjobs
+  scope: Namespaced
+  validation:
+    openAPIV3Schema:
+      properties:
+        spec:
+          properties:
+            max_concurrency:
+              type: integer
+              minimum: 0
+            type:
+              type: string
+              enum:
+              - "presubmit"
+              - "postsubmit"
+              - "periodic"
+              - "batch"
+        status:
+          properties:
+            state:
+              type: string
+              enum:
+              - "triggered"
+              - "pending"
+              - "success"
+              - "failure"
+              - "aborted"
+              - "error"
+          anyOf:
+          - not:
+              properties:
+                state:
+                  type: string
+                  enum:
+                  - "success"
+                  - "failure"
+                  - "error"
+          - required:
+            - completionTime
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: plank
+  namespace: default
+  labels:
+    app: plank
+spec:
+  replicas: 1 # Do not scale up.
+  selector:
+    matchLabels:
+      app: plank
+  template:
+    metadata:
+      labels:
+        app: plank
+    spec:
+      serviceAccountName: plank
+      containers:
+      - name: plank
+        image: gcr.io/k8s-prow/plank:v20200526-c96f7e37b
+        args:
+        - --kubeconfig=/etc/kubeconfig/oss-config-20200214
+        - --dry-run=false
+        - --github-token-path=
+        - --skip-report=true
+        - --config-path=/etc/config/config.yaml
+        - --job-config-path=/etc/job-config
+        volumeMounts:
+        - name: config
+          mountPath: /etc/config
+          readOnly: true
+        - name: job-config
+          mountPath: /etc/job-config
+          readOnly: true
+        - mountPath: /etc/kubeconfig
+          name: kubeconfig
+          readOnly: true
+      volumes:
+      - name: config
+        configMap:
+          name: config
+      - name: job-config
+        configMap:
+          name: job-config
+      - name: kubeconfig
+        secret:
+          defaultMode: 420
+          secretName: kubeconfig
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sinker
+  namespace: default
+  labels:
+    app: sinker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sinker
+  template:
+    metadata:
+      labels:
+        app: sinker
+    spec:
+      serviceAccountName: sinker
+      containers:
+      - name: sinker
+        image: gcr.io/k8s-prow/sinker:v20200526-c96f7e37b
+        args:
+        - --kubeconfig=/etc/kubeconfig/oss-config-20200214
+        - --config-path=/etc/config/config.yaml
+        - --job-config-path=/etc/job-config
+        - --dry-run=false
+        volumeMounts:
+        - name: config
+          mountPath: /etc/config
+          readOnly: true
+        - name: job-config
+          mountPath: /etc/job-config
+          readOnly: true
+        - mountPath: /etc/kubeconfig
+          name: kubeconfig
+          readOnly: true
+      volumes:
+      - name: config
+        configMap:
+          name: config
+      - name: job-config
+        configMap:
+          name: job-config
+      - name: kubeconfig
+        secret:
+          defaultMode: 420
+          secretName: kubeconfig
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deck
+  namespace: default
+  labels:
+    app: deck
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: deck
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: deck
+    spec:
+      serviceAccountName: deck
+      terminationGracePeriodSeconds: 30
+      containers:
+      - name: deck
+        image: gcr.io/k8s-prow/deck:v20200526-c96f7e37b
+        args:
+        - --kubeconfig=/etc/kubeconfig/oss-config-20200214
+        - --config-path=/etc/config/config.yaml
+        - --job-config-path=/etc/job-config
+        - --spyglass=true
+        - --tide-url=http://tide/
+        - --hook-url=http://hook:8888/plugin-help
+        - --redirect-http-to=oss-prow.knative.dev
+        - --rerun-creates-job
+        - --oauth-url=/github-login
+        - --github-token-path=/etc/github/oauth
+        - --github-oauth-config-file=/etc/githuboauth/secret
+        - --github-endpoint=http://ghproxy
+        - --github-endpoint=https://api.github.com
+        - --cookie-secret=/etc/cookie/secret
+        ports:
+        - name: http
+          containerPort: 8080
+        volumeMounts:
+        - name: oauth-config
+          mountPath: /etc/githuboauth
+          readOnly: true
+        - name: cookie-secret
+          mountPath: /etc/cookie
+          readOnly: true
+        - name: oauth-token
+          mountPath: /etc/github
+          readOnly: true
+        - name: config
+          mountPath: /etc/config
+          readOnly: true
+        - name: job-config
+          mountPath: /etc/job-config
+          readOnly: true
+        - mountPath: /etc/kubeconfig
+          name: kubeconfig
+          readOnly: true
+      volumes:
+      - name: oauth-config
+        secret:
+          secretName: github-oauth-config-20200326-oss-prow-knative-dev
+      - name: oauth-token
+        secret:
+          secretName: oauth-token
+      - name: cookie-secret
+        secret:
+          secretName: cookie
+      - name: config
+        configMap:
+          name: config
+      - name: job-config
+        configMap:
+          name: job-config
+      - name: kubeconfig
+        secret:
+          defaultMode: 420
+          secretName: kubeconfig
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: deck
+  namespace: default
+spec:
+  selector:
+    app: deck
+  ports:
+  - port: 80
+    targetPort: 8080
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: horologium
+  namespace: default
+  labels:
+    app: horologium
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: horologium
+  template:
+    metadata:
+      labels:
+        app: horologium
+    spec:
+      serviceAccountName: horologium
+      terminationGracePeriodSeconds: 30
+      containers:
+      - name: horologium
+        image: gcr.io/k8s-prow/horologium:v20200526-c96f7e37b
+        args:
+        - --config-path=/etc/config/config.yaml
+        - --job-config-path=/etc/job-config
+        - --dry-run=false
+        volumeMounts:
+        - name: config
+          mountPath: /etc/config
+          readOnly: true
+        - name: job-config
+          mountPath: /etc/job-config
+          readOnly: true
+      volumes:
+      - name: config
+        configMap:
+          name: config
+      - name: job-config
+        configMap:
+          name: job-config
+---
+apiVersion: networking.gke.io/v1beta1
+kind: ManagedCertificate
+metadata:
+  name: oss-prow-knative-dev
+  namespace: default
+spec:
+  domains:
+  - oss-prow.knative.dev
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: deck-ing
+  namespace: default
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: "oss-prow"
+    kubernetes.io/ingress.class: "gce"
+    kubernetes.io/tls-acme: "true"
+    networking.gke.io/managed-certificates: oss-prow-knative-dev
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: deck
+          servicePort: 80
+      - path: /hook
+        backend:
+          serviceName: hook
+          servicePort: 8888
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gerrit
+  namespace: default
+  labels:
+    app: gerrit
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gerrit
+  template:
+    metadata:
+      labels:
+        app: gerrit
+    spec:
+      serviceAccountName: gerrit
+      terminationGracePeriodSeconds: 30
+      containers:
+      - name: gerrit
+        image: gcr.io/k8s-prow/gerrit:v20200526-c96f7e37b
+        args:
+        - --config-path=/etc/config/config.yaml
+        - --job-config-path=/etc/job-config
+        - --cookiefile=/etc/cookies/cookies
+        - --gerrit-projects=https://kunit-review.googlesource.com=linux
+        - --last-sync-fallback=gs://oss-prow/last-gerrit-sync
+        volumeMounts:
+        - name: config
+          mountPath: /etc/config
+          readOnly: true
+        - name: job-config
+          mountPath: /etc/job-config
+          readOnly: true
+        - name: cookies
+          mountPath: /etc/cookies
+          readOnly: true
+      volumes:
+      - name: config
+        configMap:
+          name: config
+      - name: job-config
+        configMap:
+          name: job-config
+      - name: cookies
+        secret:
+          defaultMode: 420
+          secretName: http-cookiefile
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crier
+  namespace: default
+  labels:
+    app: crier
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: crier
+  template:
+    metadata:
+      labels:
+        app: crier
+    spec:
+      serviceAccountName: crier
+      terminationGracePeriodSeconds: 30
+      containers:
+      - name: crier
+        image: gcr.io/k8s-prow/crier:v20200526-c96f7e37b
+        args:
+        - --gerrit-workers=1
+        - --github-workers=1
+        - --cookiefile=/etc/cookies/cookies
+        - --gerrit-projects=https://kunit-review.googlesource.com=linux
+        - --config-path=/etc/config/config.yaml
+        - --job-config-path=/etc/job-config
+        - --gcs-workers=1
+        - --kubernetes-gcs-workers=1
+        - --kubeconfig=/etc/kubeconfig/oss-config-20200214
+        - --github-endpoint=http://ghproxy
+        - --github-endpoint=https://api.github.com
+        volumeMounts:
+        - name: cookies
+          mountPath: /etc/cookies
+          readOnly: true
+        - name: config
+          mountPath: /etc/config
+          readOnly: true
+        - name: job-config
+          mountPath: /etc/job-config
+          readOnly: true
+        - name: kubeconfig
+          mountPath: /etc/kubeconfig
+          readOnly: true
+        - name: oauth
+          mountPath: /etc/github
+          readOnly: true
+      volumes:
+      - name: cookies
+        secret:
+          defaultMode: 420
+          secretName: http-cookiefile
+      - name: config
+        configMap:
+          name: config
+      - name: job-config
+        configMap:
+          name: job-config
+      - name: kubeconfig
+        secret:
+          defaultMode: 420
+          secretName: kubeconfig
+      - name: oauth
+        secret:
+          secretName: oauth-token
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hook
+  namespace: default
+  labels:
+    app: hook
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: hook
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: hook
+    spec:
+      serviceAccountName: hook
+      terminationGracePeriodSeconds: 180
+      containers:
+      - name: hook
+        image: gcr.io/k8s-prow/hook:v20200526-c96f7e37b
+        imagePullPolicy: Always
+        args:
+        - --config-path=/etc/config/config.yaml
+        - --job-config-path=/etc/job-config
+        - --dry-run=false
+        - --github-token-path=/etc/github/oauth
+        - --github-endpoint=http://ghproxy
+        - --github-endpoint=https://api.github.com
+        ports:
+        - name: http
+          containerPort: 8888
+        volumeMounts:
+        - name: hmac
+          mountPath: /etc/webhook
+          readOnly: true
+        - name: oauth
+          mountPath: /etc/github
+          readOnly: true
+        - name: config
+          mountPath: /etc/config
+          readOnly: true
+        - name: job-config
+          mountPath: /etc/job-config
+          readOnly: true
+        - name: plugins
+          mountPath: /etc/plugins
+          readOnly: true
+      volumes:
+      - name: hmac
+        secret:
+          secretName: hmac-token
+      - name: oauth
+        secret:
+          secretName: oauth-token
+      - name: config
+        configMap:
+          name: config
+      - name: job-config
+        configMap:
+          name: job-config
+      - name: plugins
+        configMap:
+          name: plugins
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hook
+  namespace: default
+spec:
+  selector:
+    app: hook
+  ports:
+  - port: 8888
+  type: NodePort
+### Cluster rbac rules
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: deck
+  namespace: default
+  annotations:
+    "iam.gke.io/gcp-service-account": "oss-prow@oss-prow.iam.gserviceaccount.com"
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: deck
+  # namespace: not-namespaced, must get pods in other namespaces
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - pods/log
+    verbs:
+      - get
+  - apiGroups:
+      - "prow.k8s.io"
+    resources:
+      - prowjobs
+    verbs:
+      - get
+      - list
+      - watch
+      # Required when deck runs with `--rerun-creates-job=true`
+      - create
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: deck
+  namespace: default
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: "deck"
+subjects:
+- kind: ServiceAccount
+  name: "deck"
+  namespace: "default"
+- kind: ServiceAccount
+  name: "deck"
+  namespace: "test-pods"
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: deck-oauth
+  # namespace: not-namespaced, are we sure?
+rules:
+  - apiGroups:
+    - authentication.k8s.io
+    resources:
+    - tokenreviews
+    verbs:
+    - create
+  - apiGroups:
+    - authorization.k8s.io
+    resources:
+    - subjectaccessreviews
+    verbs:
+    - create
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: deck-oauth
+  namespace: default
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: "deck-oauth"
+subjects:
+- kind: ServiceAccount
+  name: "deck"
+  namespace: ci
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: horologium
+  namespace: default
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: horologium
+  namespace: default
+rules:
+  - apiGroups:
+      - "prow.k8s.io"
+    resources:
+      - prowjobs
+    verbs:
+      - create
+      - list
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: horologium
+  namespace: default
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: "horologium"
+subjects:
+- kind: ServiceAccount
+  name: "horologium"
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: plank
+  namespace: default
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: plank
+  # namespace: not-namespaced, create pods in other namespaces
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - pods
+    verbs:
+      - create
+      - delete
+      - list
+  - apiGroups:
+      - "prow.k8s.io"
+    resources:
+      - prowjobs
+    verbs:
+      - get
+      - create
+      - list
+      - update
+      - patch
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: plank
+  namespace: default
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: "plank"
+subjects:
+- kind: ServiceAccount
+  name: "plank"
+  namespace: "default"
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: sinker
+  namespace: default
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: sinker
+  # namespace: not-namespaced, delete pods in other namespaces
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - pods
+    verbs:
+      - delete
+      - list
+  - apiGroups:
+      - "prow.k8s.io"
+    resources:
+      - prowjobs
+    verbs:
+      - delete
+      - list
+      - watch
+      - get
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+    resourceNames:
+      - prow-sinker-leaderlock
+    verbs:
+      - get
+      - update
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+      - events
+    verbs:
+      - create
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: sinker
+  namespace: default
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: "sinker"
+subjects:
+- kind: ServiceAccount
+  name: "sinker"
+  namespace: "default"
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  annotations:
+    "iam.gke.io/gcp-service-account": "oss-prow@oss-prow.iam.gserviceaccount.com"
+  name: gerrit
+  namespace: default
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: gerrit
+  namespace: default
+rules:
+- apiGroups:
+    - "prow.k8s.io"
+  resources:
+    - prowjobs
+  verbs:
+    - create
+    - list
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: gerrit
+  namespace: default
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: "gerrit"
+subjects:
+- kind: ServiceAccount
+  name: "gerrit"
+---
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: crier
+  namespace: default
+  annotations:
+    "iam.gke.io/gcp-service-account": "oss-prow@oss-prow.iam.gserviceaccount.com"
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: crier
+  # namespace: not-namespaced, todo: fix (prowjobs live in one namespace)
+rules:
+- apiGroups:
+    - "prow.k8s.io"
+  resources:
+    - "prowjobs"
+  verbs:
+    - "get"
+    - "watch"
+    - "list"
+    - "patch"
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: crier
+  namespace: default
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: "crier"
+subjects:
+- kind: ServiceAccount
+  name: "crier"
+  namespace: "default"
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: hook
+  namespace: default
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: hook
+  namespace: default
+rules:
+  - apiGroups:
+      - "prow.k8s.io"
+    resources:
+      - prowjobs
+    verbs:
+      - create
+      - get
+      - list
+      - update
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+    verbs:
+      - create
+      - get
+      - update
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: hook
+  namespace: default
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: "hook"
+subjects:
+- kind: ServiceAccount
+  name: "hook"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tide
+  namespace: default
+  labels:
+    app: tide
+spec:
+  replicas: 1 # Do not scale up.
+  selector:
+    matchLabels:
+      app: tide
+  template:
+    metadata:
+      labels:
+        app: tide
+    spec:
+      serviceAccountName: tide
+      containers:
+      - name: tide
+        image: gcr.io/k8s-prow/tide:v20200526-c96f7e37b
+        args:
+        - --config-path=/etc/config/config.yaml
+        - --job-config-path=/etc/job-config
+        - --dry-run=false
+        - --history-uri=gs://oss-prow/tide-history.json
+        - --status-path=gs://oss-prow/tide-status-checkpoint.yaml
+        - --github-token-path=/etc/github/oauth
+        - --github-endpoint=http://ghproxy
+        - --github-endpoint=https://api.github.com
+        ports:
+          - name: http
+            containerPort: 8888
+        volumeMounts:
+        - name: oauth
+          mountPath: /etc/github
+          readOnly: true
+        - name: config
+          mountPath: /etc/config
+          readOnly: true
+        - name: job-config
+          mountPath: /etc/job-config
+          readOnly: true
+      volumes:
+      - name: oauth
+        secret:
+          secretName: oauth-token
+      - name: config
+        configMap:
+          name: config
+      - name: job-config
+        configMap:
+          name: job-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tide
+  namespace: default
+spec:
+  selector:
+    app: tide
+  ports:
+  - port: 80
+    targetPort: 8888
+  type: NodePort
+---
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: tide
+  namespace: default
+  annotations:
+    "iam.gke.io/gcp-service-account": "oss-prow@oss-prow.iam.gserviceaccount.com"
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: tide
+  namespace: default
+rules:
+  - apiGroups:
+      - prow.k8s.io
+    resources:
+      - prowjobs
+    verbs:
+      - create
+      - list
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: tide
+  namespace: default
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: tide
+subjects:
+- kind: ServiceAccount
+  name: tide
+
