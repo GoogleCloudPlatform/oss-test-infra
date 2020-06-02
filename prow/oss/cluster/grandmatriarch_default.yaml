@@ -1,0 +1,74 @@
+# Copyright 2018 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  annotations:
+    iam.gke.io/gcp-service-account: oss-prow@oss-prow.iam.gserviceaccount.com
+  name:  grandmatriarch
+  namespace: default
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: grandmatriarch
+  namespace: default
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - secrets
+  verbs:
+  - create
+  - get
+  - update
+---
+
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: grandmatriarch
+  namespace: default
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: grandmatriarch
+subjects:
+- kind: ServiceAccount
+  name: grandmatriarch
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grandmatriarch
+  namespace: default
+  labels:
+    app: grandmatriarch-default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grandmatriarch-default
+  template:
+    metadata:
+      labels:
+        app: grandmatriarch-default
+    spec:
+      serviceAccountName: grandmatriarch
+      containers:
+      - name: bakery
+        image: gcr.io/k8s-prow/grandmatriarch:v20200601-4efada0619
+        args:
+        - http-cookiefile
