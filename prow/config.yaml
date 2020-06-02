@@ -14,34 +14,37 @@
 
 tide:
   merge_method:
-    GoogleCloudPlatform/osconfig: squash
-    GoogleCloudPlatform/guest-logging-go: squash
+    GoogleCloudPlatform/compute-image-tools: squash
     GoogleCloudPlatform/guest-agent: squash
     GoogleCloudPlatform/guest-configs: squash
     GoogleCloudPlatform/guest-diskexpand: squash
-    GoogleCloudPlatform/guest-test-infra: squash
+    GoogleCloudPlatform/guest-logging-go: squash
     GoogleCloudPlatform/guest-oslogin: squash
-    GoogleCloudPlatform/compute-image-tools: squash
+    GoogleCloudPlatform/guest-test-infra: squash
+    GoogleCloudPlatform/osconfig: squash
+    google/exposure-notifications-server: squash
   target_url: https://oss-prow.knative.dev/tide
   queries:
-    - repos:
-        - GoogleCloudPlatform/osconfig
-        - GoogleCloudPlatform/oss-test-infra
-        - GoogleCloudPlatform/guest-logging-go
-        - GoogleCloudPlatform/guest-agent
-        - GoogleCloudPlatform/guest-configs
-        - GoogleCloudPlatform/guest-diskexpand
-        - GoogleCloudPlatform/guest-oslogin
-        - GoogleCloudPlatform/testgrid
-        - GoogleCloudPlatform/guest-test-infra
-        - GoogleCloudPlatform/compute-image-tools
-      labels:
-        - lgtm
-        - approved
-      missingLabels:
-        - do-not-merge
-        - do-not-merge/hold
-        - do-not-merge/work-in-progress
+  - repos:
+    - GoogleCloudPlatform/compute-image-tools
+    - GoogleCloudPlatform/guest-agent
+    - GoogleCloudPlatform/guest-configs
+    - GoogleCloudPlatform/guest-diskexpand
+    - GoogleCloudPlatform/guest-logging-go
+    - GoogleCloudPlatform/guest-oslogin
+    - GoogleCloudPlatform/guest-test-infra
+    - GoogleCloudPlatform/osconfig
+    - GoogleCloudPlatform/oss-test-infra
+    - GoogleCloudPlatform/testgrid
+    - google/exposure-notifications-server
+    labels:
+    - lgtm
+    - approved
+    missingLabels:
+    - do-not-merge
+    - do-not-merge/hold
+    - do-not-merge/invalid-owners-file
+    - do-not-merge/work-in-progress
 
 plank:
   job_url_prefix_config:
