@@ -101,3 +101,27 @@ deck:
     '*':
       github_orgs:
       - GoogleCloudPlatform
+
+presets:
+# docker-in-docker preset
+#
+# NOTE: This requires using an entrypoint or base image with the runner.sh
+# script. An example can be found at:
+#
+#   https://github.com/kubernetes/test-infra/blob/master/images/bootstrap/runner.sh
+#
+# You must ALSO set the following on your PodSpec:
+#
+#   securityContext:
+#     privileged: true
+- labels:
+    preset-dind-enabled: "true"
+  env:
+  - name: DOCKER_IN_DOCKER_ENABLED
+    value: "true"
+  volumes:
+  - name: docker-graph
+    emptyDir: {}
+  volumeMounts:
+  - name: docker-graph
+    mountPath: /docker-graph

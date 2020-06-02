@@ -95,6 +95,9 @@ plugins:
   - wip # draft-PR awareness
   - yuks # /joke
 
+  google:
+  - trigger
+
   # This is a gerrit repo so this config doesn't do anything. It is included
   # to satisfy the checkconfig tool which expects all repos that configure
   # jobs to enable the trigger plugin if a plugins.yaml is specified.
