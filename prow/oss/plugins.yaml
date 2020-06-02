@@ -14,9 +14,9 @@
 
 config_updater:
   maps:
-    prow/config.yaml:
+    prow/oss/config.yaml:
       name: config
-    prow/plugins.yaml:
+    prow/oss/plugins.yaml:
       name: plugins
     prow/prowjobs/**/*.yaml:
       name: job-config
