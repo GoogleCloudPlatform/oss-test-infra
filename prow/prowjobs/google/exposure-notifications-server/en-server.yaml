@@ -20,5 +20,5 @@ presubmits:
           privileged: true
         resources:
           requests:
-            cpu: 8
+            cpu: 7
             memory: '16Gi'
