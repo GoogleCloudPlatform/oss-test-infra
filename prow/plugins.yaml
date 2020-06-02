@@ -24,12 +24,14 @@ config_updater:
 approve:
 - repos:
   - GoogleCloudPlatform
+  - google
   - googleforgames
   require_self_approval: false
 
 lgtm:
 - repos:
   - GoogleCloudPlatform
+  - google
   - googleforgames
   review_acts_as_lgtm: true
 
@@ -96,7 +98,26 @@ plugins:
   - yuks # /joke
 
   google:
+  - approve
+  - assign
+  - cat
+  - dog
+  - golint
+  - hold
+  - label
+  - lgtm
+  - owners-label
+  - pony
+  - shrug
+  - size
   - trigger
+  - verify-owners
+  - wip
+  - yuks
+
+  google/exposure-notifications-server:
+  - blunderbuss
+  - lifecycle
 
   # This is a gerrit repo so this config doesn't do anything. It is included
   # to satisfy the checkconfig tool which expects all repos that configure
