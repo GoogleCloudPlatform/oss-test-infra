@@ -1,0 +1,20 @@
+presubmits:
+  google/exposure-notifications-server:
+  - name: pull-en-server-release-unit
+    always_run: true
+    skip_report: true  # Remove when we disable to job on the internal instance.
+    decorate: true
+    labels:
+      preset-dind-enabled: "true"
+    spec:
+      containers:
+      - image: gcr.io/cloud-devrel-public-resources/exposure-notifications/presubmit-test
+        command:
+        - /bin/runner.sh
+        args:
+        - ./scripts/presubmit.sh
+        env:
+        - name: GO111MODULE
+          value: "on"
+        securityContext:
+          privileged: true
