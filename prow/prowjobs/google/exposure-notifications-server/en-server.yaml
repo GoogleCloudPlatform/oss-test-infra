@@ -16,4 +16,9 @@ presubmits:
         - name: GO111MODULE
           value: "on"
         securityContext:
+          # We run docker-in-docker which requires privileged mode
           privileged: true
+        resources:
+          requests:
+            cpu: 8
+            memory: '16Gi'
