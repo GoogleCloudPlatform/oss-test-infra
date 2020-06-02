@@ -409,17 +409,18 @@ spec:
       - name: crier
         image: gcr.io/k8s-prow/crier:v20200601-4efada0619
         args:
-        - --gerrit-workers=1
-        - --github-workers=1
+        - --blob-storage-workers=1
+        - --config-path=/etc/config/config.yaml
         - --cookiefile=/etc/cookies/cookies
         - --gerrit-projects=https://kunit-review.googlesource.com=linux
-        - --config-path=/etc/config/config.yaml
-        - --job-config-path=/etc/job-config
-        - --gcs-workers=1
-        - --kubernetes-gcs-workers=1
-        - --kubeconfig=/etc/kubeconfig/oss-config-20200214
+        - --gerrit-workers=1
         - --github-endpoint=http://ghproxy
         - --github-endpoint=https://api.github.com
+        - --github-token-path=/etc/github/oauth
+        - --github-workers=1
+        - --job-config-path=/etc/job-config
+        - --kubeconfig=/etc/kubeconfig/oss-config-20200214
+        - --kubernetes-blob-storage-workers=1
         volumeMounts:
         - name: cookies
           mountPath: /etc/cookies
