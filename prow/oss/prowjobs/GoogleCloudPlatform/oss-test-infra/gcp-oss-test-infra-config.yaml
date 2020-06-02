@@ -7,14 +7,14 @@ presubmits:
     always_run: true
     spec:
       containers:
-        - image: gcr.io/k8s-prow/checkconfig:v20200601-4efada0619
+        - image: gcr.io/k8s-prow/checkconfig:v20200526-c96f7e37b
           imagePullPolicy: Always
           command:
             - /checkconfig
           args:
-            - --config-path=./prow/oss/config.yaml
-            - --job-config-path=./prow/oss/prowjobs
-            - --plugin-config=prow/oss/plugins.yaml
+            - --config-path=./prow/config.yaml
+            - --job-config-path=./prow/prowjobs
+            - --plugin-config=prow/plugins.yaml
             - --strict
             # This warning can forbid valid (and convenient) config. Exclude it.
             # Details: https://github.com/GoogleCloudPlatform/oss-test-infra/pull/131#discussion_r334208082
@@ -33,7 +33,7 @@ presubmits:
             - test
             - ./...
   - name: pull-oss-test-infra-check-testgrid-config
-    run_if_changed: '^(prow/oss/prowjobs/.*\.yaml)|(testgrid/config\.yaml)$'
+    run_if_changed: '^(prow/prowjobs/.*\.yaml)|(testgrid/config\.yaml)$'
     decorate: true
     branches:
     - master
@@ -46,8 +46,8 @@ presubmits:
         - /transfigure.sh
         args:
         - test
-        - prow/oss/config.yaml
-        - prow/oss/prowjobs
+        - prow/config.yaml
+        - prow/prowjobs
         - testgrid/config.yaml
         - GoogleCloudPlatform
 
@@ -55,7 +55,7 @@ postsubmits:
   GoogleCloudPlatform/oss-test-infra:
   - name: post-oss-test-infra-deploy-prow
     cluster: test-infra-trusted
-    run_if_changed: '^prow/oss/cluster/|^prow/oss/serviceaccounts/|^prow/oss/prowjobs/GoogleCloudPlatform/oss-test-infra/gcp-oss-test-infra-config.yaml'
+    run_if_changed: '^prow/cluster/|^prow/serviceaccounts/|^prow/prowjobs/GoogleCloudPlatform/oss-test-infra/gcp-oss-test-infra-config.yaml'
     decorate: true
     branches:
     - master
@@ -70,7 +70,7 @@ postsubmits:
         - make
         args:
         - -C
-        - prow/oss
+        - prow
         - deploy
         - deploy-build
   - name: post-oss-test-infra-upload-testgrid-config
@@ -89,8 +89,8 @@ postsubmits:
         - /transfigure.sh
         args:
         - /etc/github-token/oauth
-        - prow/oss/config.yaml
-        - prow/oss/prowjobs
+        - prow/config.yaml
+        - prow/prowjobs
         - testgrid/config.yaml
         - GoogleCloudPlatform
         volumeMounts:
@@ -168,7 +168,7 @@ periodics:
     testgrid-tab-name: autobump-prow
   spec:
     containers:
-    - image: gcr.io/k8s-prow/autobump:v20200601-4efada0619
+    - image: gcr.io/k8s-prow/autobump:v20200526-c96f7e37b
       command:
       - /autobump.sh
       args:
@@ -185,13 +185,13 @@ periodics:
       - name: GH_REPO
         value: oss-test-infra
       - name: PLANK_DEPLOYMENT_FILE
-        value: prow/oss/cluster/cluster.yaml
+        value: prow/cluster/cluster.yaml
       - name: COMPONENT_FILE_DIR
-        value: prow/oss/cluster
+        value: prow/cluster
       - name: CONFIG_PATH
-        value: prow/oss/config.yaml
+        value: prow/config.yaml
       - name: JOB_CONFIG_PATH
-        value: prow/oss/prowjobs
+        value: prow/prowjobs
     volumes:
     - name: github
       secret:

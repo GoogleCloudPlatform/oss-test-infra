@@ -7,7 +7,7 @@ Please check recent [prow announcements](https://github.com/kubernetes/test-infr
 ```shell
 prow/bump.sh --auto
 # commit change and merge PR
-make -C prow/oss deploy
+make -C prow deploy
 # kubectl get pods and watch for problems
 # https://oss-prow.knative.dev and watch for problems
 # Look at stack driver logs (go/oss-prow-debug or whatever) and look for problems)

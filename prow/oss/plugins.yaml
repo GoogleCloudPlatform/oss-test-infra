@@ -14,24 +14,22 @@
 
 config_updater:
   maps:
-    prow/oss/config.yaml:
+    prow/config.yaml:
       name: config
-    prow/oss/plugins.yaml:
+    prow/plugins.yaml:
       name: plugins
-    prow/oss/prowjobs/**/*.yaml:
+    prow/prowjobs/**/*.yaml:
       name: job-config
 
 approve:
 - repos:
   - GoogleCloudPlatform
-  - google
   - googleforgames
   require_self_approval: false
 
 lgtm:
 - repos:
   - GoogleCloudPlatform
-  - google
   - googleforgames
   review_acts_as_lgtm: true
 
@@ -96,29 +94,6 @@ plugins:
   - verify-owners # validate OWNERS file changes
   - wip # draft-PR awareness
   - yuks # /joke
-
-  google:
-  - approve
-  - assign
-  - cat
-  - dog
-  - golint
-  - hold
-  - label
-  - lgtm
-  - owners-label
-  - pony
-  - shrug
-  - size
-  - trigger
-  - verify-owners
-  - wip
-  - yuks
-
-  google/exposure-notifications-server:
-  - blunderbuss
-  - lifecycle
-  - override # Temporarily allow admins to override `pull-release-unit` job that no longer exists.
 
   # This is a gerrit repo so this config doesn't do anything. It is included
   # to satisfy the checkconfig tool which expects all repos that configure
