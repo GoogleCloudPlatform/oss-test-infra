@@ -37,7 +37,8 @@ func TestFileDeletion(t *testing.T) {
 // are consistent with files under `prow/oss` directory
 func TestContent(t *testing.T) {
 	if err := filepath.Walk(".", func(path string, info os.FileInfo, err error) error {
-		if info.IsDir() || strings.HasPrefix(path, ossDir+"/") || path == bumpSh {
+		if info.IsDir() || strings.HasPrefix(path, ossDir+"/") || path == bumpSh ||
+			path == "temp_test.go" {
 			return nil
 		}
 		content, err := ioutil.ReadFile(path)

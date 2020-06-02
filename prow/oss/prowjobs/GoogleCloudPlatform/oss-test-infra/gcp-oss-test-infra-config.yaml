@@ -12,9 +12,9 @@ presubmits:
           command:
             - /checkconfig
           args:
-            - --config-path=./prow/config.yaml
-            - --job-config-path=./prow/prowjobs
-            - --plugin-config=prow/plugins.yaml
+            - --config-path=./prow/oss/config.yaml
+            - --job-config-path=./prow/oss/prowjobs
+            - --plugin-config=prow/oss/plugins.yaml
             - --strict
             # This warning can forbid valid (and convenient) config. Exclude it.
             # Details: https://github.com/GoogleCloudPlatform/oss-test-infra/pull/131#discussion_r334208082
@@ -33,7 +33,7 @@ presubmits:
             - test
             - ./...
   - name: pull-oss-test-infra-check-testgrid-config
-    run_if_changed: '^(prow/prowjobs/.*\.yaml)|(testgrid/config\.yaml)$'
+    run_if_changed: '^(prow/oss/prowjobs/.*\.yaml)|(testgrid/config\.yaml)$'
     decorate: true
     branches:
     - master
@@ -46,8 +46,8 @@ presubmits:
         - /transfigure.sh
         args:
         - test
-        - prow/config.yaml
-        - prow/prowjobs
+        - prow/oss/config.yaml
+        - prow/oss/prowjobs
         - testgrid/config.yaml
         - GoogleCloudPlatform
 
@@ -55,7 +55,7 @@ postsubmits:
   GoogleCloudPlatform/oss-test-infra:
   - name: post-oss-test-infra-deploy-prow
     cluster: test-infra-trusted
-    run_if_changed: '^prow/cluster/|^prow/serviceaccounts/|^prow/prowjobs/GoogleCloudPlatform/oss-test-infra/gcp-oss-test-infra-config.yaml'
+    run_if_changed: '^prow/oss/cluster/|^prow/serviceaccounts/|^prow/oss/prowjobs/GoogleCloudPlatform/oss-test-infra/gcp-oss-test-infra-config.yaml'
     decorate: true
     branches:
     - master
@@ -70,12 +70,12 @@ postsubmits:
         - make
         args:
         - -C
-        - prow
+        - prow/oss
         - deploy
         - deploy-build
   - name: post-oss-test-infra-upload-testgrid-config
     cluster: test-infra-trusted
-    run_if_changed: '^(prow/prowjobs/.*\.yaml)|(testgrid/config\.yaml)$'
+    run_if_changed: '^(prow/oss/prowjobs/.*\.yaml)|(testgrid/config\.yaml)$'
     decorate: true
     branches:
     - master
@@ -89,8 +89,8 @@ postsubmits:
         - /transfigure.sh
         args:
         - /etc/github-token/oauth
-        - prow/config.yaml
-        - prow/prowjobs
+        - prow/oss/config.yaml
+        - prow/oss/prowjobs
         - testgrid/config.yaml
         - GoogleCloudPlatform
         volumeMounts:
@@ -185,13 +185,13 @@ periodics:
       - name: GH_REPO
         value: oss-test-infra
       - name: PLANK_DEPLOYMENT_FILE
-        value: prow/cluster/cluster.yaml
+        value: prow/oss/cluster/cluster.yaml
       - name: COMPONENT_FILE_DIR
-        value: prow/cluster
+        value: prow/oss/cluster
       - name: CONFIG_PATH
-        value: prow/config.yaml
+        value: prow/oss/config.yaml
       - name: JOB_CONFIG_PATH
-        value: prow/prowjobs
+        value: prow/oss/prowjobs
     volumes:
     - name: github
       secret:
