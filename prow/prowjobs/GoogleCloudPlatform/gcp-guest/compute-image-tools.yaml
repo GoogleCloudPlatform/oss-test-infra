@@ -274,7 +274,7 @@ presubmits:
 
   - name: daisy-presubmit-gocheck
     cluster: gcp-guest
-    run_if_changed: 'daisy/cli/.*'
+    run_if_changed: 'daisy/.*'
     trigger: "(?m)^/gocheck-daisy$"
     rerun_command: "/gocheck-daisy"
     context: prow/presubmit/gocheck/daisy
@@ -288,7 +288,7 @@ presubmits:
         args: ["daisy/cli/"]
   - name: daisy-presubmit-gotest
     cluster: gcp-guest
-    run_if_changed: 'daisy/cli/.*'
+    run_if_changed: 'daisy/.*'
     trigger: "(?m)^/gotest-daisy$"
     rerun_command: "/gotest-daisy"
     context: prow/presubmit/gotest/daisy
@@ -302,7 +302,7 @@ presubmits:
         args: ["daisy/cli/"]
   - name: daisy-presubmit-gobuild
     cluster: gcp-guest
-    run_if_changed: 'daisy/cli/.*'
+    run_if_changed: 'daisy/.*'
     trigger: "(?m)^/gobuild-daisy$"
     rerun_command: "/gobuild-daisy"
     context: prow/presubmit/gobuild/daisy
