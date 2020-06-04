@@ -14,7 +14,6 @@
 
 tide:
   merge_method:
-    GoogleCloudPlatform/compute-image-tools: squash
     GoogleCloudPlatform/guest-agent: squash
     GoogleCloudPlatform/guest-configs: squash
     GoogleCloudPlatform/guest-diskexpand: squash
@@ -26,7 +25,6 @@ tide:
   target_url: https://oss-prow.knative.dev/tide
   queries:
   - repos:
-    - GoogleCloudPlatform/compute-image-tools
     - GoogleCloudPlatform/guest-agent
     - GoogleCloudPlatform/guest-configs
     - GoogleCloudPlatform/guest-diskexpand
