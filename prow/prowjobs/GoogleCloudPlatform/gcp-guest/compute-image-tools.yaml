@@ -56,7 +56,7 @@ presubmits:
         command:
         - "/go/main.sh"
         args: ["cli_tools/gce_windows_upgrade/"]
-        
+
   - name: gce-ovf-import-presubmit-gocheck
     cluster: gcp-guest
     run_if_changed: 'cli_tools/gce_ovf_import/.*'
