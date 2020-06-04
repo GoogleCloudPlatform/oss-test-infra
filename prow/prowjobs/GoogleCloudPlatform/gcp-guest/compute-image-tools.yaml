@@ -13,7 +13,65 @@ presubmits:
         imagePullPolicy: Always
         command:
         - "/main.sh"
+        
+  - name: cli-tools-common-presubmit-gocheck
+    cluster: gcp-guest
+    run_if_changed: 'cli_tools/common/.*'
+    trigger: "(?m)^/gocheck-cli-tools-common$"
+    rerun_command: "/gocheck-cli-tools-common"
+    context: prow/presubmit/gocheck/cli-tools-common
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gocheck:latest
+        imagePullPolicy: Always
+        command:
+        - "/go/main.sh"
+        args: ["cli_tools/common/"]
+  - name: cli-tools-common-presubmit-gotest
+    cluster: gcp-guest
+    run_if_changed: 'cli_tools/common/.*'
+    trigger: "(?m)^/gotest-cli-tools-common$"
+    rerun_command: "/gotest-cli-tools-common"
+    context: prow/presubmit/gotest/cli-tools-common
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gotest:latest
+        imagePullPolicy: Always
+        command:
+        - "/go/main.sh"
+        args: ["cli_tools/common/"]
 
+  - name: cli-tools-daisycommon-presubmit-gocheck
+    cluster: gcp-guest
+    run_if_changed: 'cli_tools/daisycommon/.*'
+    trigger: "(?m)^/gocheck-cli-tools-daisycommon$"
+    rerun_command: "/gocheck-cli-tools-daisycommon"
+    context: prow/presubmit/gocheck/cli-tools-daisycommon
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gocheck:latest
+        imagePullPolicy: Always
+        command:
+        - "/go/main.sh"
+        args: ["cli_tools/daisycommon/"]
+  - name: cli-tools-daisycommon-presubmit-gotest
+    cluster: gcp-guest
+    run_if_changed: 'cli_tools/daisycommon/.*'
+    trigger: "(?m)^/gotest-cli-tools-daisycommon$"
+    rerun_command: "/gotest-cli-tools-daisycommon"
+    context: prow/presubmit/gotest/cli-tools-daisycommon
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gotest:latest
+        imagePullPolicy: Always
+        command:
+        - "/go/main.sh"
+        args: ["cli_tools/daisycommon/"]
+        
   - name: gce-windows-upgrade-presubmit-gocheck
     cluster: gcp-guest
     run_if_changed: 'cli_tools/gce_windows_upgrade/.*'
