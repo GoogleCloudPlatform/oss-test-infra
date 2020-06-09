@@ -123,6 +123,6 @@ else
 fi
 
 ${SED} -i "s/\(k8s-prow\/.\+:\)v[a-f0-9-]\+/\1${new_version}/I" \
-  prow/config.yaml prow/cluster/cluster.yaml \
-  prow/cluster/grandmatriarch_*.yaml \
+  prow/oss/config.yaml prow/oss/cluster/cluster.yaml \
+  prow/oss/cluster/grandmatriarch_*.yaml \
   prow/prowjobs/GoogleCloudPlatform/oss-test-infra/gcp-oss-test-infra-config.yaml

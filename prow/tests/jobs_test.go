@@ -1,5 +1,5 @@
 /*
-Copyright 2019 Google LLC
+Copyright 2020 Google LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ import (
 	"k8s.io/test-infra/prow/config"
 )
 
-var configPath = flag.String("config", "../config.yaml", "Path to prow config")
+var configPath = flag.String("config", "../oss/config.yaml", "Path to prow config")
 var jobConfigPath = flag.String("job-config", "../prowjobs/", "Path to prow job config")
 
 // Loaded at TestMain.
