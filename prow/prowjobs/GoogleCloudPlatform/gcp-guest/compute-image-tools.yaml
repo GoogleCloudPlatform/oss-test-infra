@@ -100,7 +100,7 @@ presubmits:
         - "/go/main.sh"
         args: ["daisy/"]
 
-- name: cli-tools-e2e-tests-presubmit-gocheck
+  - name: cli-tools-e2e-tests-presubmit-gocheck
     cluster: gcp-guest
     run_if_changed: 'cli_tools_e2e_test/.*'
     trigger: "(?m)^/gocheck-cli-tools-e2e-tests$"
