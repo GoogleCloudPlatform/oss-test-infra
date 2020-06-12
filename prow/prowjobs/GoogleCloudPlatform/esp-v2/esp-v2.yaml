@@ -444,7 +444,7 @@ presubmits:
 periodics:
   - name: ESPv2-continuous-build
     cluster: espv2
-    cron: '0 0 0/12 ? * * *' # Run every 12 hours, starting at midnight.
+    cron: '0 0,12 * * *' # Run every 12 hours, starting at midnight.
     decorate: true
     annotations:
       testgrid-dashboards: googleoss-esp-v2-periodic
@@ -473,7 +473,7 @@ periodics:
             secretName: cloudesf-testing-github-prow-service-account
   - name: ESPv2-continuous-presubmit
     cluster: espv2
-    cron: '0 0 0/12 ? * * *' # Run every 12 hours, starting at midnight.
+    cron: '0 0,12 * * *' # Run every 12 hours, starting at midnight.
     decorate: true
     annotations:
       testgrid-dashboards: googleoss-esp-v2-periodic
@@ -502,7 +502,7 @@ periodics:
             secretName: cloudesf-testing-github-prow-service-account
   - name: ESPv2-continuous-presubmit-asan
     cluster: espv2
-    cron: '0 0 0/12 ? * * *' # Run every 12 hours, starting at midnight.
+    cron: '0 0,12 * * *' # Run every 12 hours, starting at midnight.
     decorate: true
     annotations:
       testgrid-dashboards: googleoss-esp-v2-periodic
@@ -531,7 +531,7 @@ periodics:
             secretName: cloudesf-testing-github-prow-service-account
   - name: ESPv2-continuous-presubmit-tsan
     cluster: espv2
-    cron: '0 0 0/12 ? * * *' # Run every 12 hours, starting at midnight.
+    cron: '0 0,12 * * *' # Run every 12 hours, starting at midnight.
     decorate: true
     annotations:
       testgrid-dashboards: googleoss-esp-v2-periodic
@@ -560,7 +560,7 @@ periodics:
             secretName: cloudesf-testing-github-prow-service-account
   - name: ESPv2-continuous-coverage
     cluster: espv2
-    cron: '0 0 0/12 ? * * *' # Run every 12 hours, starting at midnight.
+    cron: '0 0,12 * * *' # Run every 12 hours, starting at midnight.
     decorate: true
     annotations:
       testgrid-dashboards: googleoss-esp-v2-periodic
@@ -589,7 +589,7 @@ periodics:
           secretName: cloudesf-testing-github-prow-service-account
   - name: ESPv2-continuous-gke-e2e-tight-http-bookstore-managed
     cluster: espv2
-    cron: '0 0 0/12 ? * * *' # Run every 12 hours, starting at midnight.
+    cron: '0 0,12 * * *' # Run every 12 hours, starting at midnight.
     decorate: true
     decoration_config:
         timeout: 5h
@@ -653,7 +653,7 @@ periodics:
             secretName: cloudesf-ssh-key-secret
   - name: ESPv2-continuous-gke-e2e-tight-grpc-echo-managed
     cluster: espv2
-    cron: '0 0 0/12 ? * * *' # Run every 12 hours, starting at midnight.
+    cron: '0 0,12 * * *' # Run every 12 hours, starting at midnight.
     decorate: true
     decoration_config:
       timeout: 5h
@@ -717,7 +717,7 @@ periodics:
             secretName: cloudesf-ssh-key-secret
   - name: ESPv2-continuous-gke-e2e-tight-grpc-interop-managed
     cluster: espv2
-    cron: '0 0 0/12 ? * * *' # Run every 12 hours, starting at midnight.
+    cron: '0 0,12 * * *' # Run every 12 hours, starting at midnight.
     decorate: true
     decoration_config:
       timeout: 5h
@@ -781,7 +781,7 @@ periodics:
             secretName: cloudesf-ssh-key-secret
   - name: ESPv2-continuous-anthos-cloud-run-e2e-cloud-run-http-bookstore
     cluster: espv2
-    cron: '0 0 0/12 ? * * *' # Run every 12 hours, starting at midnight.
+    cron: '0 0,12 * * *' # Run every 12 hours, starting at midnight.
     decorate: true
     decoration_config:
       timeout: 5h
@@ -843,7 +843,7 @@ periodics:
             secretName: cloudesf-ssh-key-secret
   - name: ESPv2-continuous-cloud-run-e2e-cloud-run-http-bookstore
     cluster: espv2
-    cron: '0 0 0/12 ? * * *' # Run every 12 hours, starting at midnight.
+    cron: '0 0,12 * * *' # Run every 12 hours, starting at midnight.
     decorate: true
     decoration_config:
       timeout: 5h
@@ -874,7 +874,7 @@ periodics:
             secretName: cloudesf-testing-github-prow-service-account
   - name: ESPv2-continuous-cloud-run-e2e-cloud-function-http-bookstore
     cluster: espv2
-    cron: '0 0 0/12 ? * * *' # Run every 12 hours, starting at midnight.
+    cron: '0 0,12 * * *' # Run every 12 hours, starting at midnight.
     decorate: true
     decoration_config:
       timeout: 5h
@@ -905,7 +905,7 @@ periodics:
             secretName: cloudesf-testing-github-prow-service-account
   - name: ESPv2-continuous-cloud-run-e2e-cloud-run-grpc-echo
     cluster: espv2
-    cron: '0 0 0/12 ? * * *' # Run every 12 hours, starting at midnight.
+    cron: '0 0,12 * * *' # Run every 12 hours, starting at midnight.
     decorate: true
     decoration_config:
       timeout: 5h
