@@ -15,25 +15,16 @@
 include ../Makefile.gcloud.mk
 
 # These are the usual GKE variables.
-PROJECT       ?= oss-prow
-PROJECT_BUILD ?= oss-prow-builds
-ZONE          ?= us-west1-a
+PROJECT       ?= knative-tests
+PROJECT_BUILD ?= knative-tests
+ZONE          ?= us-central1-f
 CLUSTER       ?= prow
-CLUSTER_BUILD ?= prow
+CLUSTER_BUILD ?= knative-prow-build-cluster
 JOB_NAMESPACE ?= test-pods
-
-.PHONY: update-config
-update-config: get-cluster-credentials
-	kubectl create configmap config --from-file=config.yaml=config.yaml --dry-run -o yaml | kubectl replace configmap config -f -
-
-.PHONY: update-plugins
-update-plugins: get-cluster-credentials
-	kubectl create configmap plugins --from-file=plugins.yaml=plugins.yaml --dry-run -o yaml | kubectl replace configmap plugins -f -
 
 .PHONY: deploy
 deploy: get-cluster-credentials
 	kubectl apply -f ./cluster/
-	kubectl apply -f ./serviceaccounts/
 
 .PHONY: deploy-build
 deploy-build: get-build-cluster-credentials
