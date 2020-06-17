@@ -125,4 +125,6 @@ fi
 ${SED} -i "s/\(k8s-prow\/.\+:\)v[a-f0-9-]\+/\1${new_version}/I" \
   prow/oss/config.yaml prow/oss/cluster/cluster.yaml \
   prow/oss/cluster/grandmatriarch_*.yaml \
-  prow/prowjobs/GoogleCloudPlatform/oss-test-infra/gcp-oss-test-infra-config.yaml
+  prow/prowjobs/GoogleCloudPlatform/oss-test-infra/gcp-oss-test-infra-config.yaml \
+  prow/knative/cluster/400-*.yaml \
+  prow/knative/cluster/build/400-*.yaml \
