@@ -36,6 +36,8 @@ postsubmits:
       base_ref: master
       workdir: true
     decorate: true
+    branches:
+    - ^master$
     annotations:
       testgrid-dashboards: googleoss-gcp-guest
     labels:
@@ -57,6 +59,8 @@ postsubmits:
       base_ref: master
       workdir: true
     decorate: true
+    branches:
+    - ^master$
     annotations:
       testgrid-dashboards: googleoss-gcp-guest
     labels:
@@ -78,6 +82,8 @@ postsubmits:
       base_ref: master
       workdir: true
     decorate: true
+    branches:
+    - ^master$
     annotations:
       testgrid-dashboards: googleoss-gcp-guest
     labels:
@@ -96,6 +102,8 @@ postsubmits:
   - name: oslogin-build
     cluster: gcp-guest
     decorate: true
+    branches:
+    - ^master$
     extra_refs:
     - org: GoogleCloudPlatform
       repo: guest-test-infra
@@ -124,6 +132,8 @@ postsubmits:
       base_ref: master
       workdir: true
     decorate: true
+    branches:
+    - ^master$
     annotations:
       testgrid-dashboards: googleoss-gcp-guest
     labels:
