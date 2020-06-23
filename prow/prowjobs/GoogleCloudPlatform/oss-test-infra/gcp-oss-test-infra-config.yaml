@@ -73,6 +73,26 @@ postsubmits:
         - prow/oss
         - deploy
         - deploy-build
+  - name: post-oss-test-infra-deploy-knative-prow
+    cluster: test-infra-trusted
+    run_if_changed: '^prow/knative/cluster/|^prow/oss/serviceaccounts/'
+    decorate: true
+    branches:
+    - master
+    annotations:
+      testgrid-dashboards: googleoss-test-infra
+      testgrid-tab-name: knative-prow-deploy
+    spec:
+      serviceAccountName: prow-deployer
+      containers:
+      - image: gcr.io/k8s-testimages/gcloud-in-go:v20200109-87b811d
+        command:
+        - make
+        args:
+        - -C
+        - prow/knative
+        - deploy
+        - deploy-build
   - name: post-oss-test-infra-upload-testgrid-config
     cluster: test-infra-trusted
     run_if_changed: '^(prow/prowjobs/.*\.yaml)|(testgrid/config\.yaml)$'
