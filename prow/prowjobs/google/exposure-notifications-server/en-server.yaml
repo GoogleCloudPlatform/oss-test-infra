@@ -1,6 +1,7 @@
 presubmits:
   google/exposure-notifications-server:
   - name: pull-en-server-release-unit
+    cluster: build-apollo-server
     always_run: true
     decorate: true
     labels:
