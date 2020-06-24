@@ -1,0 +1,24 @@
+presubmits:
+  google/exposure-notifications-verification-server:
+  - name: pull-en-server-release-unit
+    always_run: true
+    decorate: true
+    labels:
+      preset-dind-enabled: "true"
+    spec:
+      containers:
+      - image: gcr.io/cloud-devrel-public-resources/exposure-notifications/presubmit-test
+        command:
+        - /bin/runner.sh
+        args:
+        - ./scripts/presubmit.sh
+        env:
+        - name: GO111MODULE
+          value: "on"
+        securityContext:
+          # We run docker-in-docker which requires privileged mode
+          privileged: true
+        resources:
+          requests:
+            cpu: 7
+            memory: '16Gi'
