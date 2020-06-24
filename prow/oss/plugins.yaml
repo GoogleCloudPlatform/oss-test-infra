@@ -120,7 +120,7 @@ plugins:
   - lifecycle
   - override # Temporarily allow admins to override `pull-release-unit` job that no longer exists.
 
-  google/exposure-notifications-server:
+  google/exposure-notifications-verification-server:
     - blunderbuss
     - lifecycle
     - override # Temporarily allow admins to override `pull-release-unit` job that no longer exists.
