@@ -22,6 +22,7 @@ tide:
     GoogleCloudPlatform/guest-test-infra: squash
     GoogleCloudPlatform/osconfig: squash
     google/exposure-notifications-server: squash
+    google/exposure-notifications-verification-server: squash
   target_url: https://oss-prow.knative.dev/tide
   queries:
   - repos:
@@ -35,6 +36,7 @@ tide:
     - GoogleCloudPlatform/oss-test-infra
     - GoogleCloudPlatform/testgrid
     - google/exposure-notifications-server
+    - google/exposure-notifications-verification-server
     labels:
     - lgtm
     - approved
