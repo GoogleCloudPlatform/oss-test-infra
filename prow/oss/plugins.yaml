@@ -123,7 +123,6 @@ plugins:
   google/exposure-notifications-verification-server:
     - blunderbuss
     - lifecycle
-    - override # Temporarily allow admins to override `pull-release-unit` job that no longer exists.
   
   # This is a gerrit repo so this config doesn't do anything. It is included
   # to satisfy the checkconfig tool which expects all repos that configure
