@@ -23,6 +23,7 @@ import (
 	"path"
 	"testing"
 
+	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/test-infra/prow/config"
 )
 
@@ -46,33 +47,42 @@ func TestMain(m *testing.M) {
 }
 
 func TestTrustedJobs(t *testing.T) {
-	const trusted = "test-infra-trusted"
-	trustedPath := path.Join(*jobConfigPath, "GoogleCloudPlatform", "oss-test-infra", "gcp-oss-test-infra-config.yaml")
+	var protectedClusters = map[string][]string{
+		"test-infra-trusted": {
+			path.Join(*jobConfigPath, "GoogleCloudPlatform", "oss-test-infra", "gcp-oss-test-infra-config.yaml"),
+		},
+		"knative-prow-trusted": nil, // Nothing is allowed to run on this cluster
+	}
 
-	// Presubmits may not use trusted clusters.
+	// Presubmits may not use protected clusters.
 	for _, pre := range c.AllPresubmits(nil) {
-		if pre.Cluster == trusted {
-			t.Errorf("%s: presubmits cannot use trusted clusters", pre.Name)
+		if _, ok := protectedClusters[pre.Cluster]; ok {
+			t.Errorf("%q: presubmits cannot use protected clusters %q",
+				pre.Name, pre.Cluster)
 		}
 	}
 
 	// Trusted postsubmits must be defined in trustedPath
 	for _, post := range c.AllPostsubmits(nil) {
-		if post.Cluster != trusted {
+		ps, ok := protectedClusters[post.Cluster]
+		if !ok {
 			continue
 		}
-		if post.SourcePath != trustedPath {
-			t.Errorf("%s defined in %s may not run in trusted cluster", post.Name, post.SourcePath)
+		if !sets.NewString(ps...).Has(post.SourcePath) {
+			t.Errorf("%q defined in %q may not run in protected cluster %q",
+				post.Name, post.SourcePath, post.Cluster)
 		}
 	}
 
 	// Trusted periodics must be defined in trustedPath
 	for _, per := range c.AllPeriodics() {
-		if per.Cluster != trusted {
+		ps, ok := protectedClusters[per.Cluster]
+		if !ok {
 			continue
 		}
-		if per.SourcePath != trustedPath {
-			t.Errorf("%s defined in %s may not run in trusted cluster", per.Name, per.SourcePath)
+		if !sets.NewString(ps...).Has(per.SourcePath) {
+			t.Errorf("%q defined in %q may not run in protected cluster %q",
+				per.Name, per.SourcePath, per.Cluster)
 		}
 	}
 }
