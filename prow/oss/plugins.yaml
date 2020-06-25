@@ -28,6 +28,9 @@ approve:
   - googleforgames
   require_self_approval: false
 
+blunderbuss:
+  use_status_availability: true
+
 lgtm:
 - repos:
   - GoogleCloudPlatform
