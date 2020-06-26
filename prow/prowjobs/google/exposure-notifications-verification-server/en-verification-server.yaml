@@ -1,6 +1,7 @@
 presubmits:
   google/exposure-notifications-verification-server:
   - name: pull-en-server-release-unit
+    cluster: build-apollo-server
     always_run: true
     decorate: true
     labels:
@@ -15,6 +16,13 @@ presubmits:
         env:
         - name: GO111MODULE
           value: "on"
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /etc/gcs-access-service-account/service-account.json
+        - name: GOOGLE_CLOUD_BUCKET
+          value: apollo-server-prow-test-bucket
+        volumeMounts:
+        - name: gcs-access-service-account
+          mountPath: /etc/gcs-access-service-account
         securityContext:
           # We run docker-in-docker which requires privileged mode
           privileged: true
@@ -22,3 +30,7 @@ presubmits:
           requests:
             cpu: 7
             memory: '16Gi'
+      volumes:
+      - name: gcs-access-service-account
+        secret:
+          secretName: gcs-access-service-account
