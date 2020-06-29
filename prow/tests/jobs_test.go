@@ -26,8 +26,10 @@ import (
 	"k8s.io/test-infra/prow/config"
 )
 
-var configPath = flag.String("config", "../oss/config.yaml", "Path to prow config")
-var jobConfigPath = flag.String("job-config", "../prowjobs/", "Path to prow job config")
+var (
+	configPath    = flag.String("config", "../oss/config.yaml", "Path to prow config")
+	jobConfigPath = flag.String("job-config", "../prowjobs/", "Path to prow job config")
+)
 
 // Loaded at TestMain.
 var c *config.Config
@@ -74,5 +76,27 @@ func TestTrustedJobs(t *testing.T) {
 		if per.SourcePath != trustedPath {
 			t.Errorf("%s defined in %s may not run in trusted cluster", per.Name, per.SourcePath)
 		}
+	}
+}
+
+// Knative cluster is not meant to run any prow job from this repo
+func TestKnativeCluster(t *testing.T) {
+	const protected = "knative-prow-trusted"
+	var verifyFunc func(t *testing.T, jobName, cluster string)
+	verifyFunc = func(t *testing.T, jobName, cluster string) {
+		if cluster == protected {
+			t.Errorf("%s: cannot use knative cluster", jobName)
+		}
+	}
+	for _, pre := range c.AllPresubmits(nil) {
+		verifyFunc(t, pre.Name, pre.Cluster)
+	}
+
+	for _, post := range c.AllPostsubmits(nil) {
+		verifyFunc(t, post.Name, post.Cluster)
+	}
+
+	for _, per := range c.AllPeriodics() {
+		verifyFunc(t, per.Name, per.Cluster)
 	}
 }
