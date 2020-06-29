@@ -23,12 +23,13 @@ import (
 	"path"
 	"testing"
 
-	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/test-infra/prow/config"
 )
 
-var configPath = flag.String("config", "../oss/config.yaml", "Path to prow config")
-var jobConfigPath = flag.String("job-config", "../prowjobs/", "Path to prow job config")
+var (
+	configPath    = flag.String("config", "../oss/config.yaml", "Path to prow config")
+	jobConfigPath = flag.String("job-config", "../prowjobs/", "Path to prow job config")
+)
 
 // Loaded at TestMain.
 var c *config.Config
@@ -47,42 +48,55 @@ func TestMain(m *testing.M) {
 }
 
 func TestTrustedJobs(t *testing.T) {
-	var protectedClusters = map[string][]string{
-		"test-infra-trusted": {
-			path.Join(*jobConfigPath, "GoogleCloudPlatform", "oss-test-infra", "gcp-oss-test-infra-config.yaml"),
-		},
-		"knative-prow-trusted": nil, // Nothing is allowed to run on this cluster
-	}
+	const trusted = "test-infra-trusted"
+	trustedPath := path.Join(*jobConfigPath, "GoogleCloudPlatform", "oss-test-infra", "gcp-oss-test-infra-config.yaml")
 
-	// Presubmits may not use protected clusters.
+	// Presubmits may not use trusted clusters.
 	for _, pre := range c.AllPresubmits(nil) {
-		if _, ok := protectedClusters[pre.Cluster]; ok {
-			t.Errorf("%q: presubmits cannot use protected clusters %q",
-				pre.Name, pre.Cluster)
+		if pre.Cluster == trusted {
+			t.Errorf("%s: presubmits cannot use trusted clusters", pre.Name)
 		}
 	}
 
 	// Trusted postsubmits must be defined in trustedPath
 	for _, post := range c.AllPostsubmits(nil) {
-		ps, ok := protectedClusters[post.Cluster]
-		if !ok {
+		if post.Cluster != trusted {
 			continue
 		}
-		if !sets.NewString(ps...).Has(post.SourcePath) {
-			t.Errorf("%q defined in %q may not run in protected cluster %q",
-				post.Name, post.SourcePath, post.Cluster)
+		if post.SourcePath != trustedPath {
+			t.Errorf("%s defined in %s may not run in trusted cluster", post.Name, post.SourcePath)
 		}
 	}
 
 	// Trusted periodics must be defined in trustedPath
 	for _, per := range c.AllPeriodics() {
-		ps, ok := protectedClusters[per.Cluster]
-		if !ok {
+		if per.Cluster != trusted {
 			continue
 		}
-		if !sets.NewString(ps...).Has(per.SourcePath) {
-			t.Errorf("%q defined in %q may not run in protected cluster %q",
-				per.Name, per.SourcePath, per.Cluster)
+		if per.SourcePath != trustedPath {
+			t.Errorf("%s defined in %s may not run in trusted cluster", per.Name, per.SourcePath)
 		}
+	}
+}
+
+// Knative cluster is not meant to run any prow job from this repo
+func TestKnativeCluster(t *testing.T) {
+	const protected = "knative-prow-trusted"
+	var verifyFunc func(t *testing.T, jobName, cluster string)
+	verifyFunc = func(t *testing.T, jobName, cluster string) {
+		if cluster == protected {
+			t.Errorf("%s: cannot use knative cluster", jobName)
+		}
+	}
+	for _, pre := range c.AllPresubmits(nil) {
+		verifyFunc(t, pre.Name, pre.Cluster)
+	}
+
+	for _, post := range c.AllPostsubmits(nil) {
+		verifyFunc(t, post.Name, post.Cluster)
+	}
+
+	for _, per := range c.AllPeriodics() {
+		verifyFunc(t, per.Name, per.Cluster)
 	}
 }
