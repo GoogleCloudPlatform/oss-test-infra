@@ -212,6 +212,8 @@ periodics:
         value: prow/oss/config.yaml
       - name: JOB_CONFIG_PATH
         value: prow/prowjobs
+      - name: PROW_INSTANCE_NAME
+        value: oss-prow
     volumes:
     - name: github
       secret:
@@ -250,9 +252,7 @@ periodics:
       - name: COMPONENT_FILE_DIR
         value: prow/knative/cluster
       - name: CONFIG_PATH
-        value: prow/knative/cluster/400-plank.yaml # Trick autobump as this is required
-      - name: JOB_CONFIG_PATH
-        value: prow/knative/cluster/400-plank.yaml # Ditto trick
+        value: prow/knative/config.yaml
       - name: PROW_INSTANCE_NAME
         value: knative-prow
     volumes:
