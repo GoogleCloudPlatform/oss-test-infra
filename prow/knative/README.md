@@ -6,9 +6,8 @@ This directory contains prow configs hosted for Knative. This prow is bumped by
 ### Prow Clusters
 
 - [Prow control plane cluster(default prow cluster)](https://pantheon.corp.google.com/kubernetes/clusters/details/us-central1-f/prow?project=knative-tests)
-  - Prow deployments are hosted in this repo
-  - Core configs, plugins, and job configs are hosted in knative/test-infra
-    repo
+  - Prow deployments, core configs, and plugins are hosted in this repo
+  - Prow job configs are hosted in knative/test-infra repo
 - [Build cluster](https://pantheon.corp.google.com/kubernetes/clusters/details/us-central1-f/knative-prow-build-cluster)
   - Build cluster deployments are hosted in this repo
   - Boskos resources are hosted in knative/test-infra repo
