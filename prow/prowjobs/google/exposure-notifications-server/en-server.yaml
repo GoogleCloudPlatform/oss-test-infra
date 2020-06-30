@@ -34,3 +34,32 @@ presubmits:
       - name: gcs-access-service-account
         secret:
           secretName: gcs-access-service-account
+periodics:
+  - cron: "0 8 * * *"  # Run at 00:00 PST
+    name: ci-en-server-performance
+    cluster: build-apollo-server
+    decorate: true
+    extra_refs:
+    - org: google
+      repo: exposure-notifications-server
+      base_ref: master
+    labels:
+      preset-dind-enabled: "true"
+    spec:
+      containers:
+      - image: gcr.io/cloud-devrel-public-resources/exposure-notifications/presubmit-test
+        command:
+        - /bin/runner.sh
+        args:
+        - ./scripts/performance.sh
+        env:
+        - name: GO111MODULE
+          value: "on"
+        volumeMounts:
+        securityContext:
+          # We run docker-in-docker which requires privileged mode
+          privileged: true
+        resources:
+          requests:
+            cpu: 7
+            memory: '16Gi'
