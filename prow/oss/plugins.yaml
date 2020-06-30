@@ -20,6 +20,16 @@ config_updater:
       name: plugins
     prow/prowjobs/**/*.yaml:
       name: job-config
+    prow/knative/config.yaml: # For knative prow
+      name: config
+      clusters:
+        knative-prow-trusted:
+        - default
+    prow/knative/plugins.yaml: # For knative prow
+      name: plugins
+      clusters:
+        knative-prow-trusted:
+        - default
 
 approve:
 - repos:
