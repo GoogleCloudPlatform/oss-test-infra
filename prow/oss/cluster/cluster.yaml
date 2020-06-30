@@ -89,7 +89,7 @@ spec:
       - name: plank
         image: gcr.io/k8s-prow/plank:v20200622-168a90f1b0
         args:
-        - --kubeconfig=/etc/kubeconfig/oss-config-20200623
+        - --kubeconfig=/etc/kubeconfig/oss-config-20200630
         - --dry-run=false
         - --github-token-path=
         - --skip-report=true
@@ -139,7 +139,7 @@ spec:
       - name: sinker
         image: gcr.io/k8s-prow/sinker:v20200622-168a90f1b0
         args:
-        - --kubeconfig=/etc/kubeconfig/oss-config-20200623
+        - --kubeconfig=/etc/kubeconfig/oss-config-20200630
         - --config-path=/etc/config/config.yaml
         - --job-config-path=/etc/job-config
         - --dry-run=false
@@ -193,7 +193,7 @@ spec:
       - name: deck
         image: gcr.io/k8s-prow/deck:v20200622-168a90f1b0
         args:
-        - --kubeconfig=/etc/kubeconfig/oss-config-20200623
+        - --kubeconfig=/etc/kubeconfig/oss-config-20200630
         - --config-path=/etc/config/config.yaml
         - --job-config-path=/etc/job-config
         - --spyglass=true
@@ -419,7 +419,7 @@ spec:
         - --github-token-path=/etc/github/oauth
         - --github-workers=1
         - --job-config-path=/etc/job-config
-        - --kubeconfig=/etc/kubeconfig/oss-config-20200623
+        - --kubeconfig=/etc/kubeconfig/oss-config-20200630
         - --kubernetes-blob-storage-workers=1
         volumeMounts:
         - name: cookies
