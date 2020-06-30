@@ -43,6 +43,9 @@ periodics:
     - org: google
       repo: exposure-notifications-server
       base_ref: master
+    annotations:
+      testgrid-dashboards: googleoss-en-server
+      testgrid-tab-name: performance
     labels:
       preset-dind-enabled: "true"
     spec:
