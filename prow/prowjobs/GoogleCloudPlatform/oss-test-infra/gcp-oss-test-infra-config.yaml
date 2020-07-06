@@ -212,6 +212,49 @@ periodics:
         value: prow/oss/config.yaml
       - name: JOB_CONFIG_PATH
         value: prow/prowjobs
+      - name: PROW_INSTANCE_NAME
+        value: oss-prow
+    volumes:
+    - name: github
+      secret:
+        secretName: oauth-token
+- cron: "15 15-23 * * 1-5"  # Run at 7:15-15:15 PST (15:15 UTC) Mon-Fri
+  name: ci-oss-test-infra-autobump-knative-prow
+  cluster: test-infra-trusted
+  decorate: true
+  extra_refs:
+  - org: GoogleCloudPlatform
+    repo: oss-test-infra
+    base_ref: master
+  annotations:
+    testgrid-dashboards: googleoss-test-infra
+    testgrid-tab-name: autobump-knative-prow
+  spec:
+    containers:
+    - image: gcr.io/k8s-prow/autobump:v20200703-4509c055d7
+      command:
+      - /autobump.sh
+      args:
+      - /etc/github-token/oauth
+      - "Google OSS Prow Robot"
+      - google-oss-robot@google.com
+      volumeMounts:
+      - name: github
+        mountPath: /etc/github-token
+        readOnly: true
+      env:
+      - name: GH_ORG
+        value: GoogleCloudPlatform
+      - name: GH_REPO
+        value: oss-test-infra
+      - name: PLANK_DEPLOYMENT_FILE
+        value: prow/knative/cluster/400-plank.yaml
+      - name: COMPONENT_FILE_DIR
+        value: prow/knative/cluster
+      - name: CONFIG_PATH
+        value: prow/knative/config.yaml
+      - name: PROW_INSTANCE_NAME
+        value: knative-prow
     volumes:
     - name: github
       secret:
