@@ -42,7 +42,7 @@ periodics:
     extra_refs:
     - org: google
       repo: exposure-notifications-server
-      base_ref: master
+      base_ref: main
     annotations:
       testgrid-dashboards: googleoss-en-server
       testgrid-tab-name: performance
