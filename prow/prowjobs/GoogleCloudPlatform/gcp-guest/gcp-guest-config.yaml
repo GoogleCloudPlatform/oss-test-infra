@@ -72,7 +72,7 @@ postsubmits:
         imagePullPolicy: Always
         command:
         - "/main.sh"
-        args: ["gcp-guest", "us-west1-a", "deb10,el7", "gs://gcp-guest-package-uploads/gce-disk-expand/"]
+        args: ["gcp-guest", "us-west1-a", "deb10,el7,el8", "gs://gcp-guest-package-uploads/gce-disk-expand/"]
   GoogleCloudPlatform/osconfig:
   - name: osconfig-build
     cluster: gcp-guest
