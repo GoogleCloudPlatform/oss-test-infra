@@ -7,10 +7,7 @@ presubmits:
     always_run: true
     spec:
       containers:
-      - image: launcher.gcr.io/google/bazel:2.1.0
-        env:
-        - name: USE_BAZEL_VERSION
-          value: real # Ignore .bazelversion in CI
+      - image: gcr.io/k8s-prow/launcher.gcr.io/google/bazel:v20200708-6aff115-testgrid
         command:
         - bazel
         args:
