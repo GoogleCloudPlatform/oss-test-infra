@@ -74,6 +74,7 @@ presubmits:
             # Details: https://github.com/GoogleCloudPlatform/oss-test-infra/pull/131#discussion_r334208082
             - --exclude-warning=mismatched-tide
             - --exclude-warning=non-decorated-jobs
+            - --exclude-warning=long-job-names
 
 postsubmits:
   GoogleCloudPlatform/oss-test-infra:
