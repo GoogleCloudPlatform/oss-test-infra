@@ -159,7 +159,7 @@ postsubmits:
     spec:
       serviceAccountName: testgrid-pusher
       containers:
-      - image: gcr.io/k8s-testimages/bazelbuild:v20200212-b304d89-2.1.0
+      - image: gcr.io/k8s-testimages/bazelbuild:v20200609-e7bfd25-test-infra
         command:
         - ./images/push.sh
   - name: post-testgrid-deploy-prod
@@ -174,7 +174,7 @@ postsubmits:
     spec:
       serviceAccountName: testgrid-deployer
       containers:
-      - image: gcr.io/k8s-testimages/gcloud-bazel:v20200211-v0.4-10-g26b1b47
+      - image: gcr.io/k8s-testimages/gcloud-bazel:v20200520-v0.4-30-g9d6313a
         command:
         - ./cluster/deploy.sh
         args:
@@ -192,7 +192,7 @@ postsubmits:
     spec:
       serviceAccountName: testgrid-deployer
       containers:
-      - image: gcr.io/k8s-testimages/gcloud-bazel:v20200211-v0.4-10-g26b1b47
+      - image: gcr.io/k8s-testimages/gcloud-bazel:v20200520-v0.4-30-g9d6313a
         command:
         - ./cluster/deploy.sh
         args:
