@@ -12,4 +12,5 @@ presubmits:
         - bazel
         args:
         - test
+        - --config=ci
         - //...
