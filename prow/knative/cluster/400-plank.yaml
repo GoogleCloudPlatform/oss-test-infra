@@ -29,7 +29,7 @@ spec:
       containers:
       - name: plank
         # Update plank utility_images versions in config.yaml when updating this version
-        image: gcr.io/k8s-prow/plank:v20200708-1254fdd37f
+        image: gcr.io/k8s-prow/plank:v20200710-f1d386e7c4
         args:
         - --config-path=/etc/config/config.yaml
         - --job-config-path=/etc/job-config
