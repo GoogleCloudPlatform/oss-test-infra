@@ -16,6 +16,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: deck
+  namespace: default
   labels:
     app: deck
 spec:
