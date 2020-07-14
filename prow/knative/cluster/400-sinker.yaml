@@ -16,6 +16,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: sinker
+  namespace: default
   labels:
     app: sinker
 spec:

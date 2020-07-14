@@ -17,6 +17,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: hook
+  namespace: default
   labels:
     app: hook
 spec:
