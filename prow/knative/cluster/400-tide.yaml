@@ -30,6 +30,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: tide
+  namespace: default
   labels:
     app: tide
 spec:
