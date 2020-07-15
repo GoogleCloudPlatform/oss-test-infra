@@ -930,6 +930,37 @@ periodics:
         - name: cloudesf-testing-github-prow-service-account
           secret:
             secretName: cloudesf-testing-github-prow-service-account
+  - name: ESPv2-continuous-cloud-run-e2e-app-engine-http-bookstore
+    cluster: espv2
+    cron: '0 0,12 * * *' # Run every 12 hours, starting at midnight.
+    decorate: true
+    decoration_config:
+      timeout: 5h
+    annotations:
+      testgrid-dashboards: googleoss-esp-v2-periodic
+      testgrid-tab-name: e2e-app-engine-http-bookstore
+      description: "Runs e2e tests for App Engine."
+    extra_refs:
+    - org: GoogleCloudPlatform
+      repo: esp-v2
+      base_ref: master
+    spec:
+      containers:
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20200309-v2.6.0-15-gd62fe00-master
+        command:
+        - ./prow/e2e-cloud-run-app-engine-http-bookstore.sh
+        env:
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
+        - name: CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE
+          value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
+        volumeMounts:
+        - name: cloudesf-testing-github-prow-service-account
+          mountPath: /etc/cloudesf-testing-github-prow-service-account
+      volumes:
+      - name: cloudesf-testing-github-prow-service-account
+        secret:
+          secretName: cloudesf-testing-github-prow-service-account
   - name: ESPv2-continuous-cloud-run-e2e-cloud-run-grpc-echo
     cluster: espv2
     cron: '0 0,12 * * *' # Run every 12 hours, starting at midnight.
