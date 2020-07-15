@@ -30,7 +30,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
       - name: crier
-        image: gcr.io/k8s-prow/crier:v20200710-f1d386e7c4
+        image: gcr.io/k8s-prow/crier:v20200717-96f632166e
         args:
         - --pubsub-workers=5 # Arbitrary number of multiplier
         - --blob-storage-workers=1
@@ -43,6 +43,8 @@ spec:
         - --github-workers=5
         - --github-endpoint=http://ghproxy
         - --github-endpoint=https://api.github.com
+        - --slack-workers=1
+        - --slack-token-file=/etc/slack/token
         volumeMounts:
         - mountPath: /etc/kubeconfig
           name: kubeconfig
@@ -58,6 +60,9 @@ spec:
           readOnly: true
         - name: service-account
           mountPath: /etc/service-account
+          readOnly: true
+        - name: slack
+          mountPath: /etc/slack
           readOnly: true
       volumes:
       - name: config
@@ -76,3 +81,6 @@ spec:
         secret:
           defaultMode: 420
           secretName: kubeconfig
+      - name: slack
+        secret:
+          secretName: slack-token

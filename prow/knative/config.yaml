@@ -11,6 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 plank:
   job_url_template: 'https://prow.knative.dev/view/gcs/knative-prow/{{if or (eq .Spec.Type "presubmit") (eq .Spec.Type "batch")}}pr-logs/pull{{with .Spec.Refs}}/{{.Org}}_{{.Repo}}{{end}}{{else}}logs{{end}}{{if eq .Spec.Type "presubmit"}}/{{with index .Spec.Refs.Pulls 0}}{{.Number}}{{end}}{{else if eq .Spec.Type "batch"}}/batch{{end}}/{{.Spec.Job}}/{{.Status.BuildID}}/'
   report_templates:
@@ -37,6 +38,17 @@ plank:
           requests:
             cpu: 100m
             memory: 20Mi
+
+slack_reporter_configs:
+  "*":
+    # Do not report any job types by default.
+    job_types_to_report:
+    # Do not report any job states by default.
+    job_states_to_report:
+    # By default reporting to the test channel, it is required so it has to be set here.
+    channel: test
+    report_template: "Job `{{.Spec.Job}}` ended with state *{{.Status.State}}*: <{{.Status.URL}}|View logs>"
+
 deck:
   spyglass:
     size_limit: 500000000 # 500MB
@@ -104,9 +116,11 @@ deck:
     '*':
       github_team_ids:
         - 3012514 # Knative Milestone Maintainers
+
 prowjob_namespace: default
 pod_namespace: test-pods
 log_level: debug
+
 branch-protection:
   orgs:
     knative:
@@ -121,6 +135,7 @@ branch-protection:
     google:
       protect: true
       enforce_admins: false
+
 tide:
   queries:
   - orgs:
