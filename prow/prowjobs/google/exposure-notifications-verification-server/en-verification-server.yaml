@@ -16,6 +16,16 @@ presubmits:
         env:
         - name: GO111MODULE
           value: "on"
+        - name: TWILIO_ACCOUNT_SID
+          valueFrom:
+            secretKeyRef:
+              name: twilio
+              key: accountSid
+        - name: TWILIO_AUTH_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: twilio
+              key: authToken
         securityContext:
           # We run docker-in-docker which requires privileged mode
           privileged: true
