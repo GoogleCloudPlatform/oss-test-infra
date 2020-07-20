@@ -20,16 +20,6 @@ presubmits:
           value: /etc/gcs-access-service-account/service-account.json
         - name: GOOGLE_CLOUD_BUCKET
           value: apollo-server-prow-test-bucket
-        - name: TWILIO_ACCOUNT_SID
-          valueFrom:
-            secretKeyRef:
-              name: twilio
-              key: accountSid
-        - name: TWILIO_AUTH_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: twilio
-              key: authToken
         volumeMounts:
         - name: gcs-access-service-account
           mountPath: /etc/gcs-access-service-account
