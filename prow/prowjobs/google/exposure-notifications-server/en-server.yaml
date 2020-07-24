@@ -58,7 +58,11 @@ periodics:
         env:
         - name: GO111MODULE
           value: "on"
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /etc/mako-access-service-account/service-account.json
         volumeMounts:
+        - name: mako-access-service-account
+          mountPath: /etc/mako-access-service-account
         securityContext:
           # We run docker-in-docker which requires privileged mode
           privileged: true
@@ -66,3 +70,7 @@ periodics:
           requests:
             cpu: 7
             memory: '16Gi'
+      volumes:
+      - name: mako-access-service-account
+        secret:
+          secretName: mako-access-service-account
