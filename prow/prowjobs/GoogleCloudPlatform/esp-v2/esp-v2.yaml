@@ -770,7 +770,7 @@ periodics:
       timeout: 5h
     annotations:
       testgrid-dashboards: googleoss-esp-v2-periodic
-      testgrid-tab-name: e2e-gke-http-bookstore
+      testgrid-tab-name: e2e-gke-http-bookstore-using-sa-cred
       description: "Runs e2e tests for GKE."
     extra_refs:
     - org: GoogleCloudPlatform
