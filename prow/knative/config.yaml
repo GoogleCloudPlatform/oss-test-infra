@@ -17,7 +17,7 @@ plank:
   report_templates:
     '*': '[Full PR test history](https://gubernator.knative.dev/pr/{{.Spec.Refs.Org}}_{{.Spec.Refs.Repo}}/{{with index .Spec.Refs.Pulls 0}}{{.Number}}{{end}}). [Your PR dashboard](https://gubernator.knative.dev/pr/{{with index .Spec.Refs.Pulls 0}}{{.Author}}{{end}}).'
   job_url_prefix_config:
-    '*': https://prow.knative.dev/view/gcs/
+    '*': https://prow.knative.dev/view/
   pod_pending_timeout: 60m
   default_decoration_configs:
     '*':

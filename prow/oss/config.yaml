@@ -48,7 +48,7 @@ tide:
 
 plank:
   job_url_prefix_config:
-    '*': https://oss-prow.knative.dev/view/gcs/
+    '*': https://oss-prow.knative.dev/view/
   pod_pending_timeout: 15m
   pod_unscheduled_timeout: 1m
   default_decoration_configs:
