@@ -125,7 +125,7 @@ presubmits:
       - name: cloudesf-testing-github-prow-service-account
         secret:
           secretName: cloudesf-testing-github-prow-service-account
-  - name: ESPv2-gke-e2e-tight-http-bookstore-managed
+  - name: ESPv2-gke-e2e-http-bookstore-managed
     cluster: espv2
     always_run: true
     decorate: true
@@ -184,7 +184,7 @@ presubmits:
       - name: cloudesf-ssh-key-secret
         secret:
           secretName: cloudesf-ssh-key-secret
-  - name: ESPv2-gke-e2e-tight-http-bookstore-managed-using-sa-cred
+  - name: ESPv2-gke-e2e-http-bookstore-managed-using-sa-cred
     cluster: espv2
     always_run: true
     decorate: true
@@ -243,7 +243,7 @@ presubmits:
       - name: cloudesf-ssh-key-secret
         secret:
           secretName: cloudesf-ssh-key-secret
-  - name: ESPv2-gke-e2e-tight-grpc-echo-managed
+  - name: ESPv2-gke-e2e-grpc-echo-managed
     cluster: espv2
     always_run: true
     decorate: true
@@ -302,7 +302,7 @@ presubmits:
       - name: cloudesf-ssh-key-secret
         secret:
           secretName: cloudesf-ssh-key-secret
-  - name: ESPv2-gke-e2e-tight-grpc-interop-managed
+  - name: ESPv2-gke-e2e-grpc-interop-managed
     cluster: espv2
     always_run: true
     decorate: true
@@ -698,7 +698,7 @@ periodics:
       - name: cloudesf-testing-github-prow-service-account
         secret:
           secretName: cloudesf-testing-github-prow-service-account
-  - name: ESPv2-continuous-gke-e2e-tight-http-bookstore-managed
+  - name: ESPv2-continuous-gke-e2e-http-bookstore-managed
     cluster: espv2
     cron: '0 0,12 * * *' # Run every 12 hours, starting at midnight.
     decorate: true
@@ -762,7 +762,7 @@ periodics:
         - name: cloudesf-ssh-key-secret
           secret:
             secretName: cloudesf-ssh-key-secret
-  - name: ESPv2-continuous-gke-e2e-tight-http-bookstore-managed-using-sa-cred
+  - name: ESPv2-continuous-gke-e2e-http-bookstore-managed-using-sa-cred
     cluster: espv2
     cron: '0 0,12 * * *' # Run every 12 hours, starting at midnight.
     decorate: true
@@ -826,7 +826,7 @@ periodics:
       - name: cloudesf-ssh-key-secret
         secret:
           secretName: cloudesf-ssh-key-secret
-  - name: ESPv2-continuous-gke-e2e-tight-grpc-echo-managed
+  - name: ESPv2-continuous-gke-e2e-grpc-echo-managed
     cluster: espv2
     cron: '0 0,12 * * *' # Run every 12 hours, starting at midnight.
     decorate: true
@@ -890,7 +890,7 @@ periodics:
         - name: cloudesf-ssh-key-secret
           secret:
             secretName: cloudesf-ssh-key-secret
-  - name: ESPv2-continuous-gke-e2e-tight-grpc-interop-managed
+  - name: ESPv2-continuous-gke-e2e-grpc-interop-managed
     cluster: espv2
     cron: '0 0,12 * * *' # Run every 12 hours, starting at midnight.
     decorate: true
