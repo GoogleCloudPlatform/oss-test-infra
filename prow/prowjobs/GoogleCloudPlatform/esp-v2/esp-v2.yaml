@@ -125,7 +125,7 @@ presubmits:
       - name: cloudesf-testing-github-prow-service-account
         secret:
           secretName: cloudesf-testing-github-prow-service-account
-  - name: ESPv2-gke-e2e-tight-http-bookstore-managed
+  - name: ESPv2-gke-e2e-http-bookstore-managed
     cluster: espv2
     always_run: true
     decorate: true
@@ -184,7 +184,66 @@ presubmits:
       - name: cloudesf-ssh-key-secret
         secret:
           secretName: cloudesf-ssh-key-secret
-  - name: ESPv2-gke-e2e-tight-grpc-echo-managed
+  - name: ESPv2-gke-e2e-http-bookstore-managed-using-sa-cred
+    cluster: espv2
+    always_run: true
+    decorate: true
+    annotations:
+      testgrid-dashboards: googleoss-esp-v2-presubmit
+      testgrid-tab-name: e2e-gke-using-sa-cred
+      description: "Runs e2e tests for GKE."
+    spec:
+      containers:
+      - args:
+        - --cluster=
+        - --deployment=gke
+        - --extract=release/stable-1.14
+        - --gcp-project=cloudesf-testing
+        - --gcp-zone=us-west1-b
+        - --gcp-network=default
+        - --gcp-node-image=gci
+        - --gke-create-command=container clusters create --cluster-ipv4-cidr=/19 --quiet
+        - '--gke-shape={"default":{"Nodes":1,"MachineType":"n1-standard-2"}}'
+        - --gke-environment=prod
+        - --provider=gke
+        - --env=TEST_CASE=tight-http-bookstore-managed-using-sa-cred
+        - --test=false
+        - --test-cmd=../prow/gcpproxy-e2e.sh
+        - --test-cmd-name=gcpproxy_e2e
+        - --timeout=80m
+        # docker-in-docker needs privileged mode
+        securityContext:
+          privileged: true
+        command:
+        - runner.sh
+        - /workspace/scenarios/kubernetes_e2e.py
+        image: gcr.io/k8s-testimages/kubekins-e2e:v20200114-6d2c483-master
+        env:
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /etc/service-account/service-account.json
+        - name: E2E_GOOGLE_APPLICATION_CREDENTIALS
+          value: /etc/service-account/service-account.json
+        - name: JENKINS_GCE_SSH_PRIVATE_KEY_FILE
+          value: /etc/cloudesf-ssh-key-secret/ssh-private
+        - name: JENKINS_GCE_SSH_PUBLIC_KEY_FILE
+          value: /etc/cloudesf-ssh-key-secret/ssh-public
+        - name: USER
+          value: prow
+        volumeMounts:
+        - name: service
+          mountPath: /etc/service-account
+          readOnly: true
+        - name: cloudesf-ssh-key-secret
+          mountPath: /etc/cloudesf-ssh-key-secret
+          readOnly: true
+      volumes:
+      - name: service # TODO(fejta): remove https://github.com/GoogleCloudPlatform/oss-test-infra/issues/202
+        secret:
+          secretName: service-account
+      - name: cloudesf-ssh-key-secret
+        secret:
+          secretName: cloudesf-ssh-key-secret
+  - name: ESPv2-gke-e2e-grpc-echo-managed
     cluster: espv2
     always_run: true
     decorate: true
@@ -243,7 +302,7 @@ presubmits:
       - name: cloudesf-ssh-key-secret
         secret:
           secretName: cloudesf-ssh-key-secret
-  - name: ESPv2-gke-e2e-tight-grpc-interop-managed
+  - name: ESPv2-gke-e2e-grpc-interop-managed
     cluster: espv2
     always_run: true
     decorate: true
@@ -639,7 +698,7 @@ periodics:
       - name: cloudesf-testing-github-prow-service-account
         secret:
           secretName: cloudesf-testing-github-prow-service-account
-  - name: ESPv2-continuous-gke-e2e-tight-http-bookstore-managed
+  - name: ESPv2-continuous-gke-e2e-http-bookstore-managed
     cluster: espv2
     cron: '0 0,12 * * *' # Run every 12 hours, starting at midnight.
     decorate: true
@@ -703,7 +762,71 @@ periodics:
         - name: cloudesf-ssh-key-secret
           secret:
             secretName: cloudesf-ssh-key-secret
-  - name: ESPv2-continuous-gke-e2e-tight-grpc-echo-managed
+  - name: ESPv2-continuous-gke-e2e-http-bookstore-managed-using-sa-cred
+    cluster: espv2
+    cron: '0 0,12 * * *' # Run every 12 hours, starting at midnight.
+    decorate: true
+    decoration_config:
+      timeout: 5h
+    annotations:
+      testgrid-dashboards: googleoss-esp-v2-periodic
+      testgrid-tab-name: e2e-gke-using-sa-cred
+      description: "Runs e2e tests for GKE."
+    extra_refs:
+    - org: GoogleCloudPlatform
+      repo: esp-v2
+      base_ref: master
+    spec:
+      containers:
+      - args:
+        - --cluster=
+        - --deployment=gke
+        - --extract=release/stable-1.14
+        - --gcp-project=cloudesf-testing
+        - --gcp-zone=us-west1-c
+        - --gcp-network=default
+        - --gcp-node-image=gci
+        - --gke-create-command=container clusters create --cluster-ipv4-cidr=/19 --quiet
+        - '--gke-shape={"default":{"Nodes":1,"MachineType":"n1-standard-2"}}'
+        - --gke-environment=prod
+        - --provider=gke
+        - --test=false
+        - --test-cmd=../prow/e2e-tight_http_bookstore_managed_using_sa_cred_long_run.sh
+        - --test-cmd-name=gcpproxy_e2e
+        - --timeout=300m
+        # docker-in-docker needs privileged mode
+        securityContext:
+          privileged: true
+        command:
+        - runner.sh
+        - /workspace/scenarios/kubernetes_e2e.py
+        image: gcr.io/k8s-testimages/kubekins-e2e:v20200114-6d2c483-master
+        env:
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /etc/service-account/service-account.json
+        - name: E2E_GOOGLE_APPLICATION_CREDENTIALS
+          value: /etc/service-account/service-account.json
+        - name: JENKINS_GCE_SSH_PRIVATE_KEY_FILE
+          value: /etc/cloudesf-ssh-key-secret/ssh-private
+        - name: JENKINS_GCE_SSH_PUBLIC_KEY_FILE
+          value: /etc/cloudesf-ssh-key-secret/ssh-public
+        - name: USER
+          value: prow
+        volumeMounts:
+        - name: service
+          mountPath: /etc/service-account
+          readOnly: true
+        - name: cloudesf-ssh-key-secret
+          mountPath: /etc/cloudesf-ssh-key-secret
+          readOnly: true
+      volumes:
+      - name: service # TODO(fejta): remove https://github.com/GoogleCloudPlatform/oss-test-infra/issues/202
+        secret:
+          secretName: service-account
+      - name: cloudesf-ssh-key-secret
+        secret:
+          secretName: cloudesf-ssh-key-secret
+  - name: ESPv2-continuous-gke-e2e-grpc-echo-managed
     cluster: espv2
     cron: '0 0,12 * * *' # Run every 12 hours, starting at midnight.
     decorate: true
@@ -767,7 +890,7 @@ periodics:
         - name: cloudesf-ssh-key-secret
           secret:
             secretName: cloudesf-ssh-key-secret
-  - name: ESPv2-continuous-gke-e2e-tight-grpc-interop-managed
+  - name: ESPv2-continuous-gke-e2e-grpc-interop-managed
     cluster: espv2
     cron: '0 0,12 * * *' # Run every 12 hours, starting at midnight.
     decorate: true
