@@ -35,7 +35,7 @@ presubmits:
         secret:
           secretName: gcs-access-service-account
 periodics:
-  - cron: "0 8 * * *"  # Run at 00:00 PST
+  - cron: "* */3 * * *"  # Run every 3 hours
     name: ci-en-server-performance
     cluster: build-apollo-server
     decorate: true
