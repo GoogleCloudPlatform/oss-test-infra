@@ -48,6 +48,7 @@ project_config:
         eventing-contrib:
           # TODO(grantr): replace with a new team eventing-contrib-project-maintainers
           repo_maintainers_team_id: 3012514 # knative-milestone-maintainers
+
 # Settings for the "label" plugin.
 label:
   additional_labels:
@@ -70,12 +71,17 @@ label:
   - source/github
   - source/kafka
   - source/prometheus
+
 # Settings for the "config-updater" plugin.
 config_updater:
   maps:
     config/prod/prow/jobs/**/*.yaml:
       name: job-config
       gzip: true
+
+blunderbuss:
+  use_status_availability: true
+
 # Plugins enabled for each repo.
 plugins:
   knative:
