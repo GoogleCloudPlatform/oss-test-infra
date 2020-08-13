@@ -13,7 +13,20 @@ presubmits:
         imagePullPolicy: Always
         command:
         - "/main.sh"
-        
+  - name: boot-inspect-pytest
+    cluster: gcp-guest
+    run_if_changed: 'daisy_workflows/image_import/inspection/.*'
+    trigger: "(?m)^/pytest-boot-inspect$"
+    rerun_command: "/pytest-boot-inspect"
+    context: prow/presubmit/pytest/boot-inspect
+    decorate: true
+    spec:
+      containers:
+        - image: gcr.io/gcp-guest/pytest:latest
+          imagePullPolicy: Always
+          command:
+            - "/main.py"
+          args: ["daisy_workflows/image_import/inspection"]
   - name: cli-tools-presubmit-gocheck
     cluster: gcp-guest
     run_if_changed: 'cli_tools/.*'
