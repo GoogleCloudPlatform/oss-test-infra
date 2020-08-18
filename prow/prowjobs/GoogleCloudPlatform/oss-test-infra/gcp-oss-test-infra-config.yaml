@@ -146,6 +146,47 @@ postsubmits:
       - name: github
         secret:
           secretName: oauth-token
+  - name: post-oss-test-infra-reconcile-hmacs
+    cluster: test-infra-trusted
+    run_if_changed: 'prow/oss/config.yaml'
+    decorate: true
+    annotations:
+      testgrid-dashboards: googleoss-test-infra
+      testgrid-tab-name: hmacs-reconcilation
+    branches:
+    - master
+    spec:
+      containers:
+      - image: gcr.io/k8s-prow/hmac:v20200808-0caff2cd1b
+        command:
+        - /hmac
+        args:
+        - --config-path=prow/oss/config.yaml
+        - --hook-url=https://oss-prow.knative.dev/hook
+        - --hmac-token-secret-name=hmac-token
+        - --hmac-token-key=hmac
+        - --kubeconfig=/etc/kubeconfig/config
+        - --kubeconfig-context=prow-services
+        - --github-token-path=/etc/github/oauth
+        - --github-endpoint=http://ghproxy.default.svc.cluster.local
+        - --github-endpoint=https://api.github.com
+        - --dry-run=false
+        volumeMounts:
+        - name: kubeconfig
+          mountPath: /etc/kubeconfig
+          readOnly: true
+        - name: oauth
+          mountPath: /etc/github
+          readOnly: true
+      volumes:
+      - name: kubeconfig
+        secret:
+          defaultMode: 420
+          secretName: kubeconfig-prow-services
+      - name: oauth
+        secret:
+          defaultMode: 420
+          secretName: oauth-token
   GoogleCloudPlatform/testgrid:
   - name: push-testgrid-images
     cluster: test-infra-trusted

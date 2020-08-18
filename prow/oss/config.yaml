@@ -75,6 +75,14 @@ prowjob_namespace: default
 pod_namespace: test-pods
 log_level: debug
 
+managed_webhooks:
+  # This has to be true if any of the managed repo/org is using the legacy global token that is manually created.
+  respect_legacy_global_token: true
+  # Config for orgs and repos that have been onboarded to this Prow instance.
+  org_repo_config:
+#    [org_name]/[repo_name]:
+#      token_created_after: 2020-08-18T00:10:00Z
+
 deck:
   spyglass:
     size_limit: 500000000 # 500MB
