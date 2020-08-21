@@ -152,7 +152,7 @@ postsubmits:
     decorate: true
     annotations:
       testgrid-dashboards: googleoss-test-infra
-      testgrid-tab-name: hmacs-reconcilation
+      testgrid-tab-name: hmacs-reconciliation
     branches:
     - master
     spec:
