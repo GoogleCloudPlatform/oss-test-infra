@@ -127,20 +127,6 @@ presubmits:
         command:
         - "/go/main.sh"
         args: ["cli_tools_e2e_test/"]
-  - name: cli-tools-e2e-tests-presubmit-gotest
-    cluster: gcp-guest
-    run_if_changed: 'cli_tools_e2e_test/.*'
-    trigger: "(?m)^/gotest-cli-tools-e2e-tests$"
-    rerun_command: "/gotest-cli-tools-e2e-tests"
-    context: prow/presubmit/gotest/cli-tools-e2e-tests
-    decorate: true
-    spec:
-      containers:
-      - image: gcr.io/gcp-guest/gotest:latest
-        imagePullPolicy: Always
-        command:
-        - "/go/main.sh"
-        args: ["cli_tools_e2e_test/"]
   - name: cli-tools-e2e-tests-presubmit-gobuild
     cluster: gcp-guest
     run_if_changed: 'cli_tools_e2e_test/.*'
