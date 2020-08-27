@@ -50,6 +50,31 @@ presubmits:
       - name: cloudesf-testing-github-prow-service-account
         secret:
           secretName: cloudesf-testing-github-prow-service-account
+  - name: ESPv2-API-regression-test
+    cluster: espv2
+    always_run: true
+    decorate: true
+    annotations:
+      testgrid-dashboards: googleoss-esp-v2-api-regression
+      testgrid-tab-name: api-regression
+      description: "Runs all integration tests with latest envoy and old configmanager for api backward compatibility"
+    spec:
+      containers:
+      - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200527-v2.10.0-7-g332387c-master
+        command:
+        - ./prow/gcpproxy-api-regression-test
+        env:
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
+        - name: CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE
+          value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
+        volumeMounts:
+        - name: cloudesf-testing-github-prow-service-account
+          mountPath: /etc/cloudesf-testing-github-prow-service-account
+      volumes:
+      - name: cloudesf-testing-github-prow-service-account
+        secret:
+          secretName: cloudesf-testing-github-prow-service-account
   - name: ESPv2-presubmit-asan
     cluster: espv2
     always_run: true
