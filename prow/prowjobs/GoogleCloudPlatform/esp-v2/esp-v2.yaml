@@ -62,7 +62,7 @@ presubmits:
       containers:
       - image:  gcr.io/cloudesf-testing/gcpproxy-prow:v20200527-v2.10.0-7-g332387c-master
         command:
-        - ./prow/gcpproxy-api-regression-test
+        - ./prow/gcpproxy-api-regression.sh
         env:
         - name: GOOGLE_APPLICATION_CREDENTIALS
           value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
