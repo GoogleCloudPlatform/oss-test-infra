@@ -145,6 +145,12 @@ tide:
   - orgs:
     - "knative"
     - "knative-sandbox"
+    excludedRepos:
+    - knative/build
+    - knative/build-templates
+    - knative/eventing-operator
+    - knative/serving-operator
+    - knative/observability
     labels:
     - lgtm
     - approved
