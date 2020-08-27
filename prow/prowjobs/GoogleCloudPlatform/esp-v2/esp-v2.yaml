@@ -55,7 +55,7 @@ presubmits:
     always_run: true
     decorate: true
     annotations:
-      testgrid-dashboards: googleoss-esp-v2-api-regression
+      testgrid-dashboards: googleoss-esp-v2-presubmit
       testgrid-tab-name: api-regression
       description: "Runs all integration tests with latest envoy and old configmanager for api backward compatibility"
     spec:
