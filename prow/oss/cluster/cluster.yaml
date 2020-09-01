@@ -91,7 +91,6 @@ spec:
         args:
         - --kubeconfig=/etc/kubeconfig/oss-config-20200630
         - --dry-run=false
-        - --github-token-path=
         - --skip-report=true
         - --config-path=/etc/config/config.yaml
         - --job-config-path=/etc/job-config
