@@ -36,6 +36,7 @@ presubmits:
   - name: pull-en-verification-server-release-e2e-canary
     cluster: build-apollo-server
     always_run: false
+    optional: true
     decorate: true
     labels:
       preset-dind-enabled: "true"
