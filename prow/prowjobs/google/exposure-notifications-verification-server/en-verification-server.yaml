@@ -33,3 +33,33 @@ presubmits:
           requests:
             cpu: 7
             memory: '16Gi'
+  - name: pull-en-verification-server-release-e2e-canary
+    cluster: build-apollo-server
+    always_run: false
+    optional: true
+    decorate: true
+    labels:
+      preset-dind-enabled: "true"
+    spec:
+      containers:
+      - image: gcr.io/cloud-devrel-public-resources/exposure-notifications/presubmit-test
+        command:
+        - /bin/runner.sh
+        args:
+        - ./scripts/e2e-test.sh
+        env:
+        - name: GO111MODULE
+          value: "on"
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /etc/e2e-test-service-account/service-account.json
+        volumeMounts:
+        - name: e2e-test-service-account
+          mountPath: /etc/e2e-test-service-account
+        resources:
+          requests:
+            cpu: 7
+            memory: '16Gi'
+      volumes:
+      - name: e2e-test-service-account
+        secret:
+          secretName: e2e-test-service-account
