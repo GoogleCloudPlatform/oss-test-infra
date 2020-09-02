@@ -35,7 +35,7 @@ presubmits:
             memory: '16Gi'
   - name: pull-en-verification-server-release-e2e-canary
     cluster: build-apollo-server
-    always_run: true
+    always_run: false
     decorate: true
     labels:
       preset-dind-enabled: "true"
