@@ -67,6 +67,45 @@ presubmits:
         secret:
           secretName: e2e-test-service-account
 periodics:
+  - cron: "0 */2 * * *"  # Run every 2 hours
+    name: ci-en-server-terraform-smoke
+    cluster: build-apollo-server
+    decorate: true
+    extra_refs:
+    - org: google
+      repo: exposure-notifications-server
+      base_ref: main
+    annotations:
+      testgrid-dashboards: googleoss-en-server
+      testgrid-tab-name: terrafrom-smoke
+    labels:
+      preset-dind-enabled: "true"
+    spec:
+      containers:
+      - image: gcr.io/cloud-devrel-public-resources/exposure-notifications/presubmit-test
+        command:
+        - /bin/runner.sh
+        args:
+        - ./scripts/e2e-test.sh
+        env:
+        - name: GO111MODULE
+          value: "on"
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /etc/e2e-test-service-account/service-account.json
+        volumeMounts:
+        - name: e2e-test-service-account
+          mountPath: /etc/e2e-test-service-account
+        securityContext:
+          # We run docker-in-docker which requires privileged mode
+          privileged: true
+        resources:
+          requests:
+            cpu: 7
+            memory: '16Gi'
+      volumes:
+      - name: e2e-test-service-account
+        secret:
+          secretName: e2e-test-service-account
   - cron: "0 */3 * * *"  # Run every 3 hours
     name: ci-en-server-performance
     cluster: build-apollo-server
