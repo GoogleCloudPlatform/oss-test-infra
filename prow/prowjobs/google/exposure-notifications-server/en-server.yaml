@@ -78,6 +78,8 @@ periodics:
     annotations:
       testgrid-dashboards: googleoss-en-server
       testgrid-tab-name: terrafrom-smoke
+      testgrid-alert-email: en-server-prow-test-alert@google.com
+      testgrid-num-failures-to-alert: '1'
     labels:
       preset-dind-enabled: "true"
     spec:
@@ -117,6 +119,8 @@ periodics:
     annotations:
       testgrid-dashboards: googleoss-en-server
       testgrid-tab-name: performance
+      testgrid-alert-email: en-server-prow-test-alert@google.com
+      testgrid-num-failures-to-alert: '1'
     labels:
       preset-dind-enabled: "true"
     spec:
