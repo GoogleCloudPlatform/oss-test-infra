@@ -1,3 +1,32 @@
+periodics:
+  - name: disk-inspect
+    interval: 4h
+    cluster: gcp-guest
+    decorate: true
+    extra_refs:
+      - org: GoogleCloudPlatform
+        repo: compute-image-tools
+        base_ref: master
+        workdir: true
+    labels:
+      preset-daisy: "true"
+    annotations:
+      testgrid-dashboards: googleoss-compute-image-tools
+      testgrid-tab-name: disk-inspect
+    spec:
+      containers:
+        - image: gcr.io/gcp-guest/gotest:latest
+          imagePullPolicy: Always
+          command:
+            - "/go/main.sh"
+          args: ["cli_tools_e2e_test/diskinspect"]
+          env:
+            - name: GOOGLE_CLOUD_PROJECT
+              value: compute-image-tools-test
+            - name: GOOGLE_CLOUD_ZONE
+              value: us-west1-b
+
+
 presubmits:
   GoogleCloudPlatform/compute-image-tools:
   - name: compute-image-tools-flake8
