@@ -87,7 +87,7 @@ spec:
       serviceAccountName: plank
       containers:
       - name: plank
-        image: gcr.io/k8s-prow/plank:v20200910-8c70361b39
+        image: gcr.io/k8s-prow/plank:v20200914-b086fe0aaf
         args:
         - --kubeconfig=/etc/kubeconfig/oss-config-20200630
         - --dry-run=false
@@ -135,7 +135,7 @@ spec:
       serviceAccountName: sinker
       containers:
       - name: sinker
-        image: gcr.io/k8s-prow/sinker:v20200910-8c70361b39
+        image: gcr.io/k8s-prow/sinker:v20200914-b086fe0aaf
         args:
         - --kubeconfig=/etc/kubeconfig/oss-config-20200630
         - --config-path=/etc/config/config.yaml
@@ -189,7 +189,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
       - name: deck
-        image: gcr.io/k8s-prow/deck:v20200910-8c70361b39
+        image: gcr.io/k8s-prow/deck:v20200914-b086fe0aaf
         args:
         - --kubeconfig=/etc/kubeconfig/oss-config-20200630
         - --config-path=/etc/config/config.yaml
@@ -282,7 +282,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
       - name: horologium
-        image: gcr.io/k8s-prow/horologium:v20200910-8c70361b39
+        image: gcr.io/k8s-prow/horologium:v20200914-b086fe0aaf
         args:
         - --config-path=/etc/config/config.yaml
         - --job-config-path=/etc/job-config
@@ -355,7 +355,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
       - name: gerrit
-        image: gcr.io/k8s-prow/gerrit:v20200910-8c70361b39
+        image: gcr.io/k8s-prow/gerrit:v20200914-b086fe0aaf
         args:
         - --config-path=/etc/config/config.yaml
         - --job-config-path=/etc/job-config
@@ -405,7 +405,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
       - name: crier
-        image: gcr.io/k8s-prow/crier:v20200910-8c70361b39
+        image: gcr.io/k8s-prow/crier:v20200914-b086fe0aaf
         args:
         - --blob-storage-workers=1
         - --config-path=/etc/config/config.yaml
@@ -480,7 +480,7 @@ spec:
       terminationGracePeriodSeconds: 180
       containers:
       - name: hook
-        image: gcr.io/k8s-prow/hook:v20200910-8c70361b39
+        image: gcr.io/k8s-prow/hook:v20200914-b086fe0aaf
         imagePullPolicy: Always
         args:
         - --kubeconfig=/etc/kubeconfig/oss-config-20200630
@@ -900,7 +900,7 @@ spec:
       serviceAccountName: tide
       containers:
       - name: tide
-        image: gcr.io/k8s-prow/tide:v20200910-8c70361b39
+        image: gcr.io/k8s-prow/tide:v20200914-b086fe0aaf
         args:
         - --config-path=/etc/config/config.yaml
         - --job-config-path=/etc/job-config
