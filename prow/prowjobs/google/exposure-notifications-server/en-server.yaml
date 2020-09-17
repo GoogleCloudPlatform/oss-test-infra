@@ -109,7 +109,7 @@ periodics:
       - name: e2e-test-service-account
         secret:
           secretName: e2e-test-service-account
-    - cron: "0 */2 * * *"  # Run every 2 hours
+  - cron: "0 */2 * * *"  # Run every 2 hours
     name: ci-en-server-terraform-e2e
     cluster: build-apollo-server
     decorate: true
