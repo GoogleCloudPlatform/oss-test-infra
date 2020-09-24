@@ -1,0 +1,178 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deck
+  namespace: default
+  labels:
+    app: deck
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: deck
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: deck
+    spec:
+      serviceAccountName: deck
+      terminationGracePeriodSeconds: 30
+      containers:
+      - name: deck
+        image: gcr.io/k8s-prow/deck:v20200921-becd8c9356
+        args:
+        - --kubeconfig=/etc/kubeconfig/oss-config-20200630
+        - --config-path=/etc/config/config.yaml
+        - --job-config-path=/etc/job-config
+        - --spyglass=true
+        - --tide-url=http://tide/
+        - --hook-url=http://hook:8888/plugin-help
+        - --redirect-http-to=oss-prow.knative.dev
+        - --rerun-creates-job
+        - --oauth-url=/github-login
+        - --github-token-path=/etc/github/oauth
+        - --github-oauth-config-file=/etc/githuboauth/secret
+        - --github-endpoint=http://ghproxy
+        - --github-endpoint=https://api.github.com
+        - --cookie-secret=/etc/cookie/secret
+        ports:
+        - name: http
+          containerPort: 8080
+        volumeMounts:
+        - name: oauth-config
+          mountPath: /etc/githuboauth
+          readOnly: true
+        - name: cookie-secret
+          mountPath: /etc/cookie
+          readOnly: true
+        - name: oauth-token
+          mountPath: /etc/github
+          readOnly: true
+        - name: config
+          mountPath: /etc/config
+          readOnly: true
+        - name: job-config
+          mountPath: /etc/job-config
+          readOnly: true
+        - mountPath: /etc/kubeconfig
+          name: kubeconfig
+          readOnly: true
+      volumes:
+      - name: oauth-config
+        secret:
+          secretName: github-oauth-config-20200326-oss-prow-knative-dev
+      - name: oauth-token
+        secret:
+          secretName: oauth-token
+      - name: cookie-secret
+        secret:
+          secretName: cookie
+      - name: config
+        configMap:
+          name: config
+      - name: job-config
+        configMap:
+          name: job-config
+      - name: kubeconfig
+        secret:
+          defaultMode: 420
+          secretName: kubeconfig
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: deck
+  namespace: default
+spec:
+  selector:
+    app: deck
+  ports:
+  - port: 80
+    targetPort: 8080
+  type: NodePort
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: deck
+  namespace: default
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: "deck"
+subjects:
+- kind: ServiceAccount
+  name: "deck"
+  namespace: "default"
+- kind: ServiceAccount
+  name: "deck"
+  namespace: "test-pods"
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: deck
+  namespace: default
+  annotations:
+    "iam.gke.io/gcp-service-account": "oss-prow@oss-prow.iam.gserviceaccount.com"
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: deck
+  # namespace: not-namespaced, must get pods in other namespaces
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - pods/log
+    verbs:
+      - get
+  - apiGroups:
+      - "prow.k8s.io"
+    resources:
+      - prowjobs
+    verbs:
+      - get
+      - list
+      - watch
+      # Required when deck runs with `--rerun-creates-job=true`
+      - create
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: deck-oauth
+  # namespace: not-namespaced, are we sure?
+rules:
+  - apiGroups:
+    - authentication.k8s.io
+    resources:
+    - tokenreviews
+    verbs:
+    - create
+  - apiGroups:
+    - authorization.k8s.io
+    resources:
+    - subjectaccessreviews
+    verbs:
+    - create
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: deck-oauth
+  namespace: default
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: "deck-oauth"
+subjects:
+- kind: ServiceAccount
+  name: "deck"
+  namespace: ci

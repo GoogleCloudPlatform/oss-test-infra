@@ -1,0 +1,108 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crier
+  namespace: default
+  labels:
+    app: crier
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: crier
+  template:
+    metadata:
+      labels:
+        app: crier
+    spec:
+      serviceAccountName: crier
+      terminationGracePeriodSeconds: 30
+      containers:
+      - name: crier
+        image: gcr.io/k8s-prow/crier:v20200921-becd8c9356
+        args:
+        - --blob-storage-workers=1
+        - --config-path=/etc/config/config.yaml
+        - --cookiefile=/etc/cookies/cookies
+        - --gerrit-projects=https://kunit-review.googlesource.com=linux
+        - --gerrit-workers=1
+        - --github-endpoint=http://ghproxy
+        - --github-endpoint=https://api.github.com
+        - --github-token-path=/etc/github/oauth
+        - --github-workers=1
+        - --job-config-path=/etc/job-config
+        - --kubeconfig=/etc/kubeconfig/oss-config-20200630
+        - --kubernetes-blob-storage-workers=1
+        volumeMounts:
+        - name: cookies
+          mountPath: /etc/cookies
+          readOnly: true
+        - name: config
+          mountPath: /etc/config
+          readOnly: true
+        - name: job-config
+          mountPath: /etc/job-config
+          readOnly: true
+        - name: kubeconfig
+          mountPath: /etc/kubeconfig
+          readOnly: true
+        - name: oauth
+          mountPath: /etc/github
+          readOnly: true
+      volumes:
+      - name: cookies
+        secret:
+          defaultMode: 420
+          secretName: http-cookiefile
+      - name: config
+        configMap:
+          name: config
+      - name: job-config
+        configMap:
+          name: job-config
+      - name: kubeconfig
+        secret:
+          defaultMode: 420
+          secretName: kubeconfig
+      - name: oauth
+        secret:
+          secretName: oauth-token
+---
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: crier
+  namespace: default
+  annotations:
+    "iam.gke.io/gcp-service-account": "oss-prow@oss-prow.iam.gserviceaccount.com"
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: crier
+  # namespace: not-namespaced, todo: fix (prowjobs live in one namespace)
+rules:
+- apiGroups:
+    - "prow.k8s.io"
+  resources:
+    - "prowjobs"
+  verbs:
+    - "get"
+    - "watch"
+    - "list"
+    - "patch"
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: crier
+  namespace: default
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: "crier"
+subjects:
+- kind: ServiceAccount
+  name: "crier"
+  namespace: "default"

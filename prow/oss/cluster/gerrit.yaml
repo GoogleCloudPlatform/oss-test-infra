@@ -1,0 +1,86 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gerrit
+  namespace: default
+  labels:
+    app: gerrit
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gerrit
+  template:
+    metadata:
+      labels:
+        app: gerrit
+    spec:
+      serviceAccountName: gerrit
+      terminationGracePeriodSeconds: 30
+      containers:
+      - name: gerrit
+        image: gcr.io/k8s-prow/gerrit:v20200921-becd8c9356
+        args:
+        - --config-path=/etc/config/config.yaml
+        - --job-config-path=/etc/job-config
+        - --cookiefile=/etc/cookies/cookies
+        - --gerrit-projects=https://kunit-review.googlesource.com=linux
+        - --last-sync-fallback=gs://oss-prow/last-gerrit-sync
+        volumeMounts:
+        - name: config
+          mountPath: /etc/config
+          readOnly: true
+        - name: job-config
+          mountPath: /etc/job-config
+          readOnly: true
+        - name: cookies
+          mountPath: /etc/cookies
+          readOnly: true
+      volumes:
+      - name: config
+        configMap:
+          name: config
+      - name: job-config
+        configMap:
+          name: job-config
+      - name: cookies
+        secret:
+          defaultMode: 420
+          secretName: http-cookiefile
+### Cluster rbac rules
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  annotations:
+    "iam.gke.io/gcp-service-account": "oss-prow@oss-prow.iam.gserviceaccount.com"
+  name: gerrit
+  namespace: default
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: gerrit
+  namespace: default
+rules:
+- apiGroups:
+    - "prow.k8s.io"
+  resources:
+    - prowjobs
+  verbs:
+    - create
+    - list
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: gerrit
+  namespace: default
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: "gerrit"
+subjects:
+- kind: ServiceAccount
+  name: "gerrit"
