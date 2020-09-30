@@ -113,12 +113,12 @@ presubmits:
         - "/go/main.sh"
         args: ["daisy/"]
 
-  - name: cli-tools-e2e-tests-presubmit-gocheck
+  - name: cli-tools-tests-presubmit-gocheck
     cluster: gcp-guest
-    run_if_changed: 'cli_tools_e2e_test/.*'
-    trigger: "(?m)^/gocheck-cli-tools-e2e-tests$"
-    rerun_command: "/gocheck-cli-tools-e2e-tests"
-    context: prow/presubmit/gocheck/cli-tools-e2e-tests
+    run_if_changed: 'cli_tools_tests/.*'
+    trigger: "(?m)^/gocheck-cli-tools-tests$"
+    rerun_command: "/gocheck-cli-tools-tests"
+    context: prow/presubmit/gocheck/cli-tools-tests
     decorate: true
     spec:
       containers:
@@ -126,27 +126,13 @@ presubmits:
         imagePullPolicy: Always
         command:
         - "/go/main.sh"
-        args: ["cli_tools_e2e_test/"]
-  - name: cli-tools-e2e-tests-presubmit-gotest
+        args: ["cli_tools_tests/"]
+  - name: cli-tools-tests-presubmit-gobuild
     cluster: gcp-guest
-    run_if_changed: 'cli_tools_e2e_test/.*'
-    trigger: "(?m)^/gotest-cli-tools-e2e-tests$"
-    rerun_command: "/gotest-cli-tools-e2e-tests"
-    context: prow/presubmit/gotest/cli-tools-e2e-tests
-    decorate: true
-    spec:
-      containers:
-      - image: gcr.io/gcp-guest/gotest:latest
-        imagePullPolicy: Always
-        command:
-        - "/go/main.sh"
-        args: ["cli_tools_e2e_test/"]
-  - name: cli-tools-e2e-tests-presubmit-gobuild
-    cluster: gcp-guest
-    run_if_changed: 'cli_tools_e2e_test/.*'
-    trigger: "(?m)^/gobuild-cli-tools-e2e-tests$"
-    rerun_command: "/gobuild-cli-tools-e2e-tests"
-    context: prow/presubmit/gobuild/cli-tools-e2e-tests
+    run_if_changed: 'cli_tools_tests/.*'
+    trigger: "(?m)^/gobuild-cli-tools-tests$"
+    rerun_command: "/gobuild-cli-tools-tests"
+    context: prow/presubmit/gobuild/cli-tools-tests
     decorate: true
     spec:
       containers:
@@ -154,4 +140,4 @@ presubmits:
         imagePullPolicy: Always
         command:
         - "/go/main.sh"
-        args: ["cli_tools_e2e_test/"]
+        args: ["cli_tools_tests/"]
