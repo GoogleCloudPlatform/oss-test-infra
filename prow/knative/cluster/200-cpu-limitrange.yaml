@@ -19,8 +19,6 @@ metadata:
   namespace: test-pods
 spec:
   limits:
-    - default:
-        cpu: 8000m
-      defaultRequest:
+    - defaultRequest:
         cpu: 2000m
       type: Container
