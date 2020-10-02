@@ -21,7 +21,7 @@ spec:
       - name: sinker
         image: gcr.io/k8s-prow/sinker:v20200925-a1858f46d6
         args:
-        - --kubeconfig=/etc/kubeconfig/oss-config-20200630
+        - --kubeconfig=/etc/kubeconfig/config-20201002
         - --config-path=/etc/config/config.yaml
         - --job-config-path=/etc/job-config
         - --dry-run=false
