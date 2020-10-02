@@ -113,6 +113,49 @@ presubmits:
         - "/go/main.sh"
         args: ["daisy/"]
 
+  - name: cli-tools-common-presubmit-gocheck
+    cluster: gcp-guest
+    run_if_changed: 'common/.*'
+    trigger: "(?m)^/gocheck-common$"
+    rerun_command: "/gocheck-common"
+    context: prow/presubmit/gocheck/common
+    decorate: true
+    spec:
+      containers:
+        - image: gcr.io/gcp-guest/gocheck:latest
+          imagePullPolicy: Always
+          command:
+            - "/go/main.sh"
+          args: ["common/"]
+  - name: cli-tools-common-presubmit-gotest
+    cluster: gcp-guest
+    run_if_changed: 'common/.*'
+    trigger: "(?m)^/gotest-common$"
+    rerun_command: "/gotest-common"
+    context: prow/presubmit/gotest/common
+    decorate: true
+    spec:
+      containers:
+        - image: gcr.io/gcp-guest/gotest:latest
+          imagePullPolicy: Always
+          command:
+            - "/go/main.sh"
+          args: ["common/"]
+  - name: cli-tools-common-presubmit-gobuild
+    cluster: gcp-guest
+    run_if_changed: 'common/.*'
+    trigger: "(?m)^/gobuild-common$"
+    rerun_command: "/gobuild-common"
+    context: prow/presubmit/gobuild/common
+    decorate: true
+    spec:
+      containers:
+        - image: gcr.io/gcp-guest/gobuild:latest
+          imagePullPolicy: Always
+          command:
+            - "/go/main.sh"
+          args: ["common/"]
+
   - name: cli-tools-tests-presubmit-gocheck
     cluster: gcp-guest
     run_if_changed: 'cli_tools_tests/.*'
