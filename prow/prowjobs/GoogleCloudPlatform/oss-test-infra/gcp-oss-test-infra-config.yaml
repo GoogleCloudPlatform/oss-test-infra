@@ -271,7 +271,7 @@ periodics:
       - name: GH_REPO
         value: oss-test-infra
       - name: PLANK_DEPLOYMENT_FILE
-        value: prow/oss/cluster/cluster.yaml
+        value: prow/oss/cluster/plank.yaml
       - name: COMPONENT_FILE_DIR
         value: prow/oss/cluster
       - name: CONFIG_PATH
