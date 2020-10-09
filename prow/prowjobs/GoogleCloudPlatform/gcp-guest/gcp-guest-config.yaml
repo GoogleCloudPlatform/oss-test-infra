@@ -275,6 +275,28 @@ presubmits:
           secretName: codecov
 
   GoogleCloudPlatform/guest-agent:
+  - name: guest-agent-integ
+    cluster: gcp-guest
+    run_if_changed: '\.go$'
+    trigger: "(?m)^/gointeg$"
+    rerun_command: "/gointeg"
+    context: prow/presubmit/gointeg
+    decorate: true
+    labels:
+      preset-daisy: "true"
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gointegtest:latest
+        imagePullPolicy: Always
+        command:
+        - "/main.sh"
+        env:
+        - name: ZONE
+          value: us-west1-b
+        - name: PROJECT
+          value: gcp-guest
+        - name: GCS_BUCKET
+          value: gs://gcp-guest-test-outputs
   - name: guest-agent-presubmit-gocheck
     cluster: gcp-guest
     run_if_changed: '\.go$'
