@@ -110,6 +110,7 @@ deck:
     - lens:
         name: junit
       required_files:
+      # Nested folders is a valid use case  
       - artifacts(/.*/|/)junit.*\.xml
     - lens:
         name: podinfo
