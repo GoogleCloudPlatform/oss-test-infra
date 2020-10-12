@@ -92,6 +92,20 @@ rules:
     - "watch"
     - "list"
     - "patch"
+- apiGroups:
+    - ""
+  resources:
+    - "pods"
+    - "events"
+  verbs:
+    - "get"
+    - "list"
+- apiGroups:
+    - ""
+  resources:
+    - "pods"
+  verbs:
+    - "patch"
 ---
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1beta1
