@@ -18,28 +18,33 @@ spec:
     targetPort: nginx
   selector:
     app: grafana
----
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  annotations:
-    kubernetes.io/ingress.global-static-ip-name: prow-monitoring-grafana
-    kubernetes.io/tls-acme: "true"
-    certmanager.k8s.io/cluster-issuer: letsencrypt-prod
-    certmanager.k8s.io/acme-http01-edit-in-place: "true"
-    kubernetes.io/ingress.class: "gce"
-    networking.gke.io/managed-certificates: monitoring-prow-k8s-io
-  name: grafana
-  namespace: prow-monitoring
-spec:
-  tls:
-    - secretName: grafana-tls
-      hosts:
-        - monitoring.prow.k8s.io
-  rules:
-    - host: monitoring.prow.k8s.io
-      http:
-        paths:
-          - backend:
-              serviceName: grafana
-              servicePort: 80
+# TODO(chaodaiG): uncomment this once figure out how to support ingress
+# ---
+# apiVersion: networking.gke.io/v1beta1
+# kind: ManagedCertificate
+# metadata:
+#   name: oss-prow-knative-dev
+#   namespace: prow-monitoring
+# spec:
+#   domains:
+#   - oss-prow.knative.dev
+# ---
+# apiVersion: extensions/v1beta1
+# kind: Ingress
+# metadata:
+#   name: grafana
+#   namespace: prow-monitoring
+#   annotations:
+#     kubernetes.io/ingress.global-static-ip-name: prow-monitoring-grafana
+#     kubernetes.io/ingress.class: "gce"
+#     kubernetes.io/tls-acme: "true"
+#     networking.gke.io/managed-certificates: oss-prow-knative-dev
+# spec:
+#   rules:
+#   - host: oss-prow.knative.dev
+#     http:
+#       paths:
+#       - path: /monitoring
+#         backend:
+#           serviceName: grafana
+#           servicePort: 80

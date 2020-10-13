@@ -7,6 +7,4 @@
 (import 'sinker_alerts.libsonnet') +
 (import 'tide_alerts.libsonnet') +
 (import 'prober_alerts.libsonnet') +
-(import 'boskos_alerts.libsonnet') +
-(import 'plank_alerts.libsonnet') +
 (import 'slo_recordrules.libsonnet')

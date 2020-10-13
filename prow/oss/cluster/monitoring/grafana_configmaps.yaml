@@ -23,9 +23,6 @@ data:
             if ($request_uri = '/healthy') {
                 return 200 'ok';
             }
-            if ($http_x_forwarded_proto != 'https') {
-                return 301 https://$host$request_uri;
-            }
             location / {
                 proxy_pass          http://localhost:3001;
             }

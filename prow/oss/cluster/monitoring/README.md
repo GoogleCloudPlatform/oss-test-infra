@@ -4,21 +4,19 @@ This folder contains the manifest files for monitoring prow resources.
 
 ## Deploy
 
-The deployment has been
-[integrated into our CI system](https://github.com/kubernetes/test-infra/blob/201c7788b244ab2fc3efae7249fb939223ef6e1e/prow/deploy.sh#L91-L92),
-except `secret` objects.
 Cluster admins need to create `secret`s  manually.
 
 ```
 ### replace the sensitive inforamtion in the files before executing:
-$ kubectl create -f grafana_secret.yaml
-$ kubectl create -f alertmanager-prow_secret.yaml
-
+$ kubectl create -f secrets/grafana_secret.yaml
+$ kubectl create -f secrets/alertmanager-prow_secret.yaml
 ```
 
-The grafana `Ingress` in [grafana_expose.yaml](grafana_expose.yaml) has
-GCE specific annotations. It can be modified/removed if [other ways](https://cloud.google.com/kubernetes-engine/docs/how-to/exposing-apps)
-of exposing a service are preferred.
+After this, monitoring components can be deployed by running:
+
+```
+make apply
+```
 
 A successful deploy will spawn a stack of monitoring for prow in namespace `prow-monitoring`: _prometheus_, _alertmanager_, and _grafana_.
 
@@ -64,31 +62,10 @@ We use [jsonnet](https://jsonnet.org) to generate the json files for grafana das
 Developing a new dashboard can be achieved by
 
 * Create a new file `<dashhoard_name>.jsonnet` in folder [grafana_dashboards](grafana_dashboards).
-* Add `bazel` target to [grafana_dashboards/BUILD.bazel](grafana_dashboards/BUILD.bazel) for generating the corresponding json file `<dashhoard_name>.json`.
-
-    ```
-    ### if you want to take a look at some json file, eg, hook.json
-    $ bazel build //config/prow/cluster/monitoring/mixins/grafana_dashboards:hook
-    $ cat bazel-bin/config/prow/cluster/monitoring/mixins/grafana_dashboards/hook.json
-    ```
-
-* Add `bazel` target to [dashboards_out/BUILD.bazel](grafana_dashboards/BUILD.bazel) for generating the configMap with the json file above.
-
-    ```
-    ### if you want to apply the configMaps
-    $ bazel run //prow/cluster/monitoring/mixins/dashboards_out:grafana-configmaps.apply
-    ```
 
 * Use the configMap above in [grafana_deployment.yaml](grafana_deployment.yaml).
 
-As an alternative to `bazel`, the Makefile in [mixin](mixins/Makefile) folder can be used to generate the yaml/json
-files from `jsonnet` for debugging locally. As prerequisites, [`jsonnet`](https://github.com/google/jsonnet)
-and [`gojsontoyaml`](https://github.com/brancz/gojsontoyaml) should be included in `${PATH}`.
-
 ## Access components' Web page
-
-* For `grafana`, visit [monitoring.prow.k8s.io](https://monitoring.prow.k8s.io). Anonymous users are with read-only mode.
-Use `adm` and [password](https://github.com/kubernetes/test-infra/blob/master/config/prow/cluster/monitoring/grafana_deployment.yaml#L39-L45) to become admin.
 
 * For `prometheus` and `alertmanager`, there is no public domain configured based on the security
 concerns (no authorization out of the box).
