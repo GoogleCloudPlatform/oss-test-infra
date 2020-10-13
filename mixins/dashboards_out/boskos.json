@@ -1,0 +1,1090 @@
+{
+   "__inputs": [ ],
+   "__requires": [ ],
+   "annotations": {
+      "list": [ ]
+   },
+   "editable": false,
+   "gnetId": null,
+   "graphTooltip": 0,
+   "hideControls": false,
+   "id": null,
+   "links": [ ],
+   "panels": [
+      {
+         "aliasColors": {
+            "busy": "#ff0000",
+            "cleaning": "#00eeff",
+            "dirty": "#ff8000",
+            "free": "#00ff00",
+            "leased": "#ee00ff",
+            "other": "#aaaaff",
+            "toBeDeleted": "#fafa00",
+            "tombstone": "#cccccc"
+         },
+         "bars": false,
+         "dashLength": 10,
+         "dashes": false,
+         "datasource": "prometheus",
+         "description": "The number of AWS accounts in each state.",
+         "fill": 3,
+         "gridPos": {
+            "h": 9,
+            "w": 24,
+            "x": 0,
+            "y": 0
+         },
+         "id": 2,
+         "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": null,
+            "total": false,
+            "values": false
+         },
+         "lines": true,
+         "linewidth": 0,
+         "links": [ ],
+         "nullPointMode": "null",
+         "percentage": false,
+         "pointradius": 5,
+         "points": false,
+         "renderer": "flot",
+         "repeat": null,
+         "seriesOverrides": [ ],
+         "spaceLength": 10,
+         "stack": true,
+         "steppedLine": false,
+         "targets": [
+            {
+               "expr": "sum(boskos_resources{type=\"aws-account\",instance=\"104.197.27.114:9090\"}) by (state)",
+               "format": "time_series",
+               "intervalFactor": 2,
+               "legendFormat": "{{state}}",
+               "refId": "A"
+            }
+         ],
+         "thresholds": [ ],
+         "timeFrom": null,
+         "timeShift": null,
+         "title": "AWS account usage status",
+         "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+         },
+         "type": "graph",
+         "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": [ ]
+         },
+         "yaxes": [
+            {
+               "format": "short",
+               "label": null,
+               "logBase": 1,
+               "max": null,
+               "min": null,
+               "show": true
+            },
+            {
+               "format": "short",
+               "label": null,
+               "logBase": 1,
+               "max": null,
+               "min": null,
+               "show": true
+            }
+         ]
+      },
+      {
+         "aliasColors": {
+            "busy": "#ff0000",
+            "cleaning": "#00eeff",
+            "dirty": "#ff8000",
+            "free": "#00ff00",
+            "leased": "#ee00ff",
+            "other": "#aaaaff",
+            "toBeDeleted": "#fafa00",
+            "tombstone": "#cccccc"
+         },
+         "bars": false,
+         "dashLength": 10,
+         "dashes": false,
+         "datasource": "prometheus",
+         "description": "The number of GCE projects in each state.",
+         "fill": 3,
+         "gridPos": {
+            "h": 9,
+            "w": 24,
+            "x": 0,
+            "y": 0
+         },
+         "id": 3,
+         "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": null,
+            "total": false,
+            "values": false
+         },
+         "lines": true,
+         "linewidth": 0,
+         "links": [ ],
+         "nullPointMode": "null",
+         "percentage": false,
+         "pointradius": 5,
+         "points": false,
+         "renderer": "flot",
+         "repeat": null,
+         "seriesOverrides": [ ],
+         "spaceLength": 10,
+         "stack": true,
+         "steppedLine": false,
+         "targets": [
+            {
+               "expr": "sum(boskos_resources{type=\"gce-project\",instance=\"104.197.27.114:9090\"}) by (state)",
+               "format": "time_series",
+               "intervalFactor": 2,
+               "legendFormat": "{{state}}",
+               "refId": "A"
+            }
+         ],
+         "thresholds": [ ],
+         "timeFrom": null,
+         "timeShift": null,
+         "title": "GCE project usage status",
+         "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+         },
+         "type": "graph",
+         "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": [ ]
+         },
+         "yaxes": [
+            {
+               "format": "short",
+               "label": null,
+               "logBase": 1,
+               "max": null,
+               "min": null,
+               "show": true
+            },
+            {
+               "format": "short",
+               "label": null,
+               "logBase": 1,
+               "max": null,
+               "min": null,
+               "show": true
+            }
+         ]
+      },
+      {
+         "aliasColors": {
+            "busy": "#ff0000",
+            "cleaning": "#00eeff",
+            "dirty": "#ff8000",
+            "free": "#00ff00",
+            "leased": "#ee00ff",
+            "other": "#aaaaff",
+            "toBeDeleted": "#fafa00",
+            "tombstone": "#cccccc"
+         },
+         "bars": false,
+         "dashLength": 10,
+         "dashes": false,
+         "datasource": "prometheus",
+         "description": "The number of GCE project (k8s-infra)s in each state.",
+         "fill": 3,
+         "gridPos": {
+            "h": 9,
+            "w": 24,
+            "x": 0,
+            "y": 0
+         },
+         "id": 4,
+         "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": null,
+            "total": false,
+            "values": false
+         },
+         "lines": true,
+         "linewidth": 0,
+         "links": [ ],
+         "nullPointMode": "null",
+         "percentage": false,
+         "pointradius": 5,
+         "points": false,
+         "renderer": "flot",
+         "repeat": null,
+         "seriesOverrides": [ ],
+         "spaceLength": 10,
+         "stack": true,
+         "steppedLine": false,
+         "targets": [
+            {
+               "expr": "sum(boskos_resources{type=\"gce-project\",instance=\"35.225.208.117:9090\"}) by (state)",
+               "format": "time_series",
+               "intervalFactor": 2,
+               "legendFormat": "{{state}}",
+               "refId": "A"
+            }
+         ],
+         "thresholds": [ ],
+         "timeFrom": null,
+         "timeShift": null,
+         "title": "GCE project (k8s-infra) usage status",
+         "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+         },
+         "type": "graph",
+         "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": [ ]
+         },
+         "yaxes": [
+            {
+               "format": "short",
+               "label": null,
+               "logBase": 1,
+               "max": null,
+               "min": null,
+               "show": true
+            },
+            {
+               "format": "short",
+               "label": null,
+               "logBase": 1,
+               "max": null,
+               "min": null,
+               "show": true
+            }
+         ]
+      },
+      {
+         "aliasColors": {
+            "busy": "#ff0000",
+            "cleaning": "#00eeff",
+            "dirty": "#ff8000",
+            "free": "#00ff00",
+            "leased": "#ee00ff",
+            "other": "#aaaaff",
+            "toBeDeleted": "#fafa00",
+            "tombstone": "#cccccc"
+         },
+         "bars": false,
+         "dashLength": 10,
+         "dashes": false,
+         "datasource": "prometheus",
+         "description": "The number of GKE projects in each state.",
+         "fill": 3,
+         "gridPos": {
+            "h": 9,
+            "w": 24,
+            "x": 0,
+            "y": 0
+         },
+         "id": 5,
+         "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": null,
+            "total": false,
+            "values": false
+         },
+         "lines": true,
+         "linewidth": 0,
+         "links": [ ],
+         "nullPointMode": "null",
+         "percentage": false,
+         "pointradius": 5,
+         "points": false,
+         "renderer": "flot",
+         "repeat": null,
+         "seriesOverrides": [ ],
+         "spaceLength": 10,
+         "stack": true,
+         "steppedLine": false,
+         "targets": [
+            {
+               "expr": "sum(boskos_resources{type=\"gke-project\",instance=\"104.197.27.114:9090\"}) by (state)",
+               "format": "time_series",
+               "intervalFactor": 2,
+               "legendFormat": "{{state}}",
+               "refId": "A"
+            }
+         ],
+         "thresholds": [ ],
+         "timeFrom": null,
+         "timeShift": null,
+         "title": "GKE project usage status",
+         "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+         },
+         "type": "graph",
+         "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": [ ]
+         },
+         "yaxes": [
+            {
+               "format": "short",
+               "label": null,
+               "logBase": 1,
+               "max": null,
+               "min": null,
+               "show": true
+            },
+            {
+               "format": "short",
+               "label": null,
+               "logBase": 1,
+               "max": null,
+               "min": null,
+               "show": true
+            }
+         ]
+      },
+      {
+         "aliasColors": {
+            "busy": "#ff0000",
+            "cleaning": "#00eeff",
+            "dirty": "#ff8000",
+            "free": "#00ff00",
+            "leased": "#ee00ff",
+            "other": "#aaaaff",
+            "toBeDeleted": "#fafa00",
+            "tombstone": "#cccccc"
+         },
+         "bars": false,
+         "dashLength": 10,
+         "dashes": false,
+         "datasource": "prometheus",
+         "description": "The number of GPU projects in each state.",
+         "fill": 3,
+         "gridPos": {
+            "h": 9,
+            "w": 24,
+            "x": 0,
+            "y": 0
+         },
+         "id": 6,
+         "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": null,
+            "total": false,
+            "values": false
+         },
+         "lines": true,
+         "linewidth": 0,
+         "links": [ ],
+         "nullPointMode": "null",
+         "percentage": false,
+         "pointradius": 5,
+         "points": false,
+         "renderer": "flot",
+         "repeat": null,
+         "seriesOverrides": [ ],
+         "spaceLength": 10,
+         "stack": true,
+         "steppedLine": false,
+         "targets": [
+            {
+               "expr": "sum(boskos_resources{type=\"gpu-project\",instance=\"104.197.27.114:9090\"}) by (state)",
+               "format": "time_series",
+               "intervalFactor": 2,
+               "legendFormat": "{{state}}",
+               "refId": "A"
+            }
+         ],
+         "thresholds": [ ],
+         "timeFrom": null,
+         "timeShift": null,
+         "title": "GPU project usage status",
+         "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+         },
+         "type": "graph",
+         "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": [ ]
+         },
+         "yaxes": [
+            {
+               "format": "short",
+               "label": null,
+               "logBase": 1,
+               "max": null,
+               "min": null,
+               "show": true
+            },
+            {
+               "format": "short",
+               "label": null,
+               "logBase": 1,
+               "max": null,
+               "min": null,
+               "show": true
+            }
+         ]
+      },
+      {
+         "aliasColors": {
+            "busy": "#ff0000",
+            "cleaning": "#00eeff",
+            "dirty": "#ff8000",
+            "free": "#00ff00",
+            "leased": "#ee00ff",
+            "other": "#aaaaff",
+            "toBeDeleted": "#fafa00",
+            "tombstone": "#cccccc"
+         },
+         "bars": false,
+         "dashLength": 10,
+         "dashes": false,
+         "datasource": "prometheus",
+         "description": "The number of GPU project (k8s-infra)s in each state.",
+         "fill": 3,
+         "gridPos": {
+            "h": 9,
+            "w": 24,
+            "x": 0,
+            "y": 0
+         },
+         "id": 7,
+         "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": null,
+            "total": false,
+            "values": false
+         },
+         "lines": true,
+         "linewidth": 0,
+         "links": [ ],
+         "nullPointMode": "null",
+         "percentage": false,
+         "pointradius": 5,
+         "points": false,
+         "renderer": "flot",
+         "repeat": null,
+         "seriesOverrides": [ ],
+         "spaceLength": 10,
+         "stack": true,
+         "steppedLine": false,
+         "targets": [
+            {
+               "expr": "sum(boskos_resources{type=\"gpu-project\",instance=\"35.225.208.117:9090\"}) by (state)",
+               "format": "time_series",
+               "intervalFactor": 2,
+               "legendFormat": "{{state}}",
+               "refId": "A"
+            }
+         ],
+         "thresholds": [ ],
+         "timeFrom": null,
+         "timeShift": null,
+         "title": "GPU project (k8s-infra) usage status",
+         "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+         },
+         "type": "graph",
+         "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": [ ]
+         },
+         "yaxes": [
+            {
+               "format": "short",
+               "label": null,
+               "logBase": 1,
+               "max": null,
+               "min": null,
+               "show": true
+            },
+            {
+               "format": "short",
+               "label": null,
+               "logBase": 1,
+               "max": null,
+               "min": null,
+               "show": true
+            }
+         ]
+      },
+      {
+         "aliasColors": {
+            "busy": "#ff0000",
+            "cleaning": "#00eeff",
+            "dirty": "#ff8000",
+            "free": "#00ff00",
+            "leased": "#ee00ff",
+            "other": "#aaaaff",
+            "toBeDeleted": "#fafa00",
+            "tombstone": "#cccccc"
+         },
+         "bars": false,
+         "dashLength": 10,
+         "dashes": false,
+         "datasource": "prometheus",
+         "description": "The number of Ingress projects in each state.",
+         "fill": 3,
+         "gridPos": {
+            "h": 9,
+            "w": 24,
+            "x": 0,
+            "y": 0
+         },
+         "id": 8,
+         "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": null,
+            "total": false,
+            "values": false
+         },
+         "lines": true,
+         "linewidth": 0,
+         "links": [ ],
+         "nullPointMode": "null",
+         "percentage": false,
+         "pointradius": 5,
+         "points": false,
+         "renderer": "flot",
+         "repeat": null,
+         "seriesOverrides": [ ],
+         "spaceLength": 10,
+         "stack": true,
+         "steppedLine": false,
+         "targets": [
+            {
+               "expr": "sum(boskos_resources{type=\"ingress-project\",instance=\"104.197.27.114:9090\"}) by (state)",
+               "format": "time_series",
+               "intervalFactor": 2,
+               "legendFormat": "{{state}}",
+               "refId": "A"
+            }
+         ],
+         "thresholds": [ ],
+         "timeFrom": null,
+         "timeShift": null,
+         "title": "Ingress project usage status",
+         "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+         },
+         "type": "graph",
+         "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": [ ]
+         },
+         "yaxes": [
+            {
+               "format": "short",
+               "label": null,
+               "logBase": 1,
+               "max": null,
+               "min": null,
+               "show": true
+            },
+            {
+               "format": "short",
+               "label": null,
+               "logBase": 1,
+               "max": null,
+               "min": null,
+               "show": true
+            }
+         ]
+      },
+      {
+         "aliasColors": {
+            "busy": "#ff0000",
+            "cleaning": "#00eeff",
+            "dirty": "#ff8000",
+            "free": "#00ff00",
+            "leased": "#ee00ff",
+            "other": "#aaaaff",
+            "toBeDeleted": "#fafa00",
+            "tombstone": "#cccccc"
+         },
+         "bars": false,
+         "dashLength": 10,
+         "dashes": false,
+         "datasource": "prometheus",
+         "description": "The number of Node e2e projects in each state.",
+         "fill": 3,
+         "gridPos": {
+            "h": 9,
+            "w": 24,
+            "x": 0,
+            "y": 0
+         },
+         "id": 9,
+         "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": null,
+            "total": false,
+            "values": false
+         },
+         "lines": true,
+         "linewidth": 0,
+         "links": [ ],
+         "nullPointMode": "null",
+         "percentage": false,
+         "pointradius": 5,
+         "points": false,
+         "renderer": "flot",
+         "repeat": null,
+         "seriesOverrides": [ ],
+         "spaceLength": 10,
+         "stack": true,
+         "steppedLine": false,
+         "targets": [
+            {
+               "expr": "sum(boskos_resources{type=\"node-e2e-project\",instance=\"104.197.27.114:9090\"}) by (state)",
+               "format": "time_series",
+               "intervalFactor": 2,
+               "legendFormat": "{{state}}",
+               "refId": "A"
+            }
+         ],
+         "thresholds": [ ],
+         "timeFrom": null,
+         "timeShift": null,
+         "title": "Node e2e project usage status",
+         "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+         },
+         "type": "graph",
+         "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": [ ]
+         },
+         "yaxes": [
+            {
+               "format": "short",
+               "label": null,
+               "logBase": 1,
+               "max": null,
+               "min": null,
+               "show": true
+            },
+            {
+               "format": "short",
+               "label": null,
+               "logBase": 1,
+               "max": null,
+               "min": null,
+               "show": true
+            }
+         ]
+      },
+      {
+         "aliasColors": {
+            "busy": "#ff0000",
+            "cleaning": "#00eeff",
+            "dirty": "#ff8000",
+            "free": "#00ff00",
+            "leased": "#ee00ff",
+            "other": "#aaaaff",
+            "toBeDeleted": "#fafa00",
+            "tombstone": "#cccccc"
+         },
+         "bars": false,
+         "dashLength": 10,
+         "dashes": false,
+         "datasource": "prometheus",
+         "description": "The number of Scalability projects in each state.",
+         "fill": 3,
+         "gridPos": {
+            "h": 9,
+            "w": 24,
+            "x": 0,
+            "y": 0
+         },
+         "id": 10,
+         "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": null,
+            "total": false,
+            "values": false
+         },
+         "lines": true,
+         "linewidth": 0,
+         "links": [ ],
+         "nullPointMode": "null",
+         "percentage": false,
+         "pointradius": 5,
+         "points": false,
+         "renderer": "flot",
+         "repeat": null,
+         "seriesOverrides": [ ],
+         "spaceLength": 10,
+         "stack": true,
+         "steppedLine": false,
+         "targets": [
+            {
+               "expr": "sum(boskos_resources{type=\"scalability-project\",instance=\"104.197.27.114:9090\"}) by (state)",
+               "format": "time_series",
+               "intervalFactor": 2,
+               "legendFormat": "{{state}}",
+               "refId": "A"
+            }
+         ],
+         "thresholds": [ ],
+         "timeFrom": null,
+         "timeShift": null,
+         "title": "Scalability project usage status",
+         "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+         },
+         "type": "graph",
+         "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": [ ]
+         },
+         "yaxes": [
+            {
+               "format": "short",
+               "label": null,
+               "logBase": 1,
+               "max": null,
+               "min": null,
+               "show": true
+            },
+            {
+               "format": "short",
+               "label": null,
+               "logBase": 1,
+               "max": null,
+               "min": null,
+               "show": true
+            }
+         ]
+      },
+      {
+         "aliasColors": {
+            "busy": "#ff0000",
+            "cleaning": "#00eeff",
+            "dirty": "#ff8000",
+            "free": "#00ff00",
+            "leased": "#ee00ff",
+            "other": "#aaaaff",
+            "toBeDeleted": "#fafa00",
+            "tombstone": "#cccccc"
+         },
+         "bars": false,
+         "dashLength": 10,
+         "dashes": false,
+         "datasource": "prometheus",
+         "description": "The number of Scalability project (k8s-infra)s in each state.",
+         "fill": 3,
+         "gridPos": {
+            "h": 9,
+            "w": 24,
+            "x": 0,
+            "y": 0
+         },
+         "id": 11,
+         "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": null,
+            "total": false,
+            "values": false
+         },
+         "lines": true,
+         "linewidth": 0,
+         "links": [ ],
+         "nullPointMode": "null",
+         "percentage": false,
+         "pointradius": 5,
+         "points": false,
+         "renderer": "flot",
+         "repeat": null,
+         "seriesOverrides": [ ],
+         "spaceLength": 10,
+         "stack": true,
+         "steppedLine": false,
+         "targets": [
+            {
+               "expr": "sum(boskos_resources{type=\"scalability-project\",instance=\"35.225.208.117:9090\"}) by (state)",
+               "format": "time_series",
+               "intervalFactor": 2,
+               "legendFormat": "{{state}}",
+               "refId": "A"
+            }
+         ],
+         "thresholds": [ ],
+         "timeFrom": null,
+         "timeShift": null,
+         "title": "Scalability project (k8s-infra) usage status",
+         "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+         },
+         "type": "graph",
+         "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": [ ]
+         },
+         "yaxes": [
+            {
+               "format": "short",
+               "label": null,
+               "logBase": 1,
+               "max": null,
+               "min": null,
+               "show": true
+            },
+            {
+               "format": "short",
+               "label": null,
+               "logBase": 1,
+               "max": null,
+               "min": null,
+               "show": true
+            }
+         ]
+      },
+      {
+         "aliasColors": {
+            "busy": "#ff0000",
+            "cleaning": "#00eeff",
+            "dirty": "#ff8000",
+            "free": "#00ff00",
+            "leased": "#ee00ff",
+            "other": "#aaaaff",
+            "toBeDeleted": "#fafa00",
+            "tombstone": "#cccccc"
+         },
+         "bars": false,
+         "dashLength": 10,
+         "dashes": false,
+         "datasource": "prometheus",
+         "description": "The number of Scalability presubmit projects in each state.",
+         "fill": 3,
+         "gridPos": {
+            "h": 9,
+            "w": 24,
+            "x": 0,
+            "y": 0
+         },
+         "id": 12,
+         "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": null,
+            "total": false,
+            "values": false
+         },
+         "lines": true,
+         "linewidth": 0,
+         "links": [ ],
+         "nullPointMode": "null",
+         "percentage": false,
+         "pointradius": 5,
+         "points": false,
+         "renderer": "flot",
+         "repeat": null,
+         "seriesOverrides": [ ],
+         "spaceLength": 10,
+         "stack": true,
+         "steppedLine": false,
+         "targets": [
+            {
+               "expr": "sum(boskos_resources{type=\"scalability-presubmit-project\",instance=\"104.197.27.114:9090\"}) by (state)",
+               "format": "time_series",
+               "intervalFactor": 2,
+               "legendFormat": "{{state}}",
+               "refId": "A"
+            }
+         ],
+         "thresholds": [ ],
+         "timeFrom": null,
+         "timeShift": null,
+         "title": "Scalability presubmit project usage status",
+         "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+         },
+         "type": "graph",
+         "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": [ ]
+         },
+         "yaxes": [
+            {
+               "format": "short",
+               "label": null,
+               "logBase": 1,
+               "max": null,
+               "min": null,
+               "show": true
+            },
+            {
+               "format": "short",
+               "label": null,
+               "logBase": 1,
+               "max": null,
+               "min": null,
+               "show": true
+            }
+         ]
+      }
+   ],
+   "refresh": "",
+   "rows": [ ],
+   "schemaVersion": 18,
+   "style": "dark",
+   "tags": [ ],
+   "templating": {
+      "list": [ ]
+   },
+   "time": {
+      "from": "now-1d",
+      "to": "now"
+   },
+   "timepicker": {
+      "refresh_intervals": [
+         "5s",
+         "10s",
+         "30s",
+         "1m",
+         "5m",
+         "15m",
+         "30m",
+         "1h",
+         "2h",
+         "1d"
+      ],
+      "time_options": [
+         "5m",
+         "15m",
+         "1h",
+         "6h",
+         "12h",
+         "24h",
+         "2d",
+         "7d",
+         "30d"
+      ]
+   },
+   "timezone": "browser",
+   "title": "Boskos Resource Usage",
+   "uid": "wSrfvNxWz",
+   "version": 0
+}
