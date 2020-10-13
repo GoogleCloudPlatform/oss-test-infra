@@ -46,7 +46,7 @@ presubmits:
         command:
         - /bin/runner.sh
         args:
-        - ./scripts/e2e-test.sh
+        - ./scripts/e2e-test.sh incremental
         env:
         - name: GO111MODULE
           value: "on"
