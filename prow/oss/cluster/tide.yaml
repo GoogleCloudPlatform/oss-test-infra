@@ -64,6 +64,8 @@ spec:
   ports:
   - port: 80
     targetPort: 8888
+  - name: metrics
+    port: 9090
   type: NodePort
 ---
 apiVersion: v1
