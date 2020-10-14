@@ -126,21 +126,6 @@ prowjob_namespace: default
 pod_namespace: test-pods
 log_level: debug
 
-branch-protection:
-  orgs:
-    knative:
-      # Protect all branches in knative
-      # This means all prow jobs with "always_run" set are required
-      # to pass before tide can merge the PR.
-      # Currently this is manually enabled by the knative org admins,
-      # but it's stated here for documentation and reference purposes.
-      protect: true
-      # Admins can overrule checks
-      enforce_admins: false
-    google:
-      protect: true
-      enforce_admins: false
-
 tide:
   queries:
   - orgs:
