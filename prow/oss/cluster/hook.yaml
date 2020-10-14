@@ -88,6 +88,8 @@ spec:
     app: hook
   ports:
   - port: 8888
+  - name: metrics
+    port: 9090
   type: NodePort
 ---
 apiVersion: v1

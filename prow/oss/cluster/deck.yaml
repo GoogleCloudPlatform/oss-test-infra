@@ -94,6 +94,8 @@ spec:
   ports:
   - port: 80
     targetPort: 8080
+  - name: metrics
+    port: 9090
   type: NodePort
 ---
 kind: ClusterRoleBinding

@@ -108,3 +108,17 @@ subjects:
 - kind: ServiceAccount
   name: "sinker"
   namespace: "default"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: sinker
+  namespace: default
+  name: sinker
+spec:
+  ports:
+    - name: metrics
+      port: 9090
+  selector:
+    app: sinker
