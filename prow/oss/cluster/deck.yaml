@@ -92,7 +92,8 @@ spec:
   selector:
     app: deck
   ports:
-  - port: 80
+  - name: main
+    port: 80
     targetPort: 8080
   - name: metrics
     port: 9090

@@ -62,7 +62,8 @@ spec:
   selector:
     app: tide
   ports:
-  - port: 80
+  - name: main
+    port: 80
     targetPort: 8888
   - name: metrics
     port: 9090
