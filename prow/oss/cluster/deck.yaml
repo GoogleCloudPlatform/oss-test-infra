@@ -86,6 +86,8 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
+  labels:
+    app: deck
   name: deck
   namespace: default
 spec:
