@@ -81,6 +81,8 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
+  labels:
+    app: hook
   name: hook
   namespace: default
 spec:
