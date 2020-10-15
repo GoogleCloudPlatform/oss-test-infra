@@ -57,6 +57,7 @@ spec:
           args:
             - --cache-dir=/cache
             - --cache-sizeGB=99
+            - --legacy-disable-disk-cache-partitions-by-auth-header=false
           ports:
             - containerPort: 8888
           volumeMounts:
