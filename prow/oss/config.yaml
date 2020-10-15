@@ -80,6 +80,8 @@ managed_webhooks:
   respect_legacy_global_token: true
   # Config for orgs and repos that have been onboarded to this Prow instance.
   org_repo_config:
+    GoogleCloudPlatform/secrets-store-csi-driver-provider-gcp:
+      token_created_after: 2020-10-13T00:10:00Z
 #    [org_name]/[repo_name]:
 #      token_created_after: 2020-08-18T00:10:00Z
 
