@@ -67,7 +67,7 @@ presubmits:
         secret:
           secretName: e2e-test-service-account
 periodics:
-  - cron: "0 */2 * * *"  # Run every 2 hours
+  - cron: "0 0/2 * * *"  # Run every 2 hours starting 00:00
     name: ci-en-server-terraform-smoke
     cluster: build-apollo-server
     decorate: true
@@ -109,7 +109,7 @@ periodics:
       - name: e2e-test-service-account
         secret:
           secretName: e2e-test-service-account
-  - cron: "0 */2 * * *"  # Run every 2 hours
+  - cron: "30 0/2 * * *"  # Run every 2 hours starting 00:30
     name: ci-en-server-terraform-e2e
     cluster: build-apollo-server
     decorate: true

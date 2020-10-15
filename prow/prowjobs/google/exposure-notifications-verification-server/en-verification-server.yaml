@@ -64,7 +64,7 @@ presubmits:
         secret:
           secretName: e2e-test-service-account
 periodics:
-  - cron: "0 */2 * * *"  # Run every 2 hours
+  - cron: "0 1/2 * * *"  # Run every 2 hours starting 01:00
     name: ci-en-verification-server-terraform-smoke
     cluster: build-apollo-server
     decorate: true
