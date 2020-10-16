@@ -187,6 +187,7 @@ postsubmits:
         secret:
           defaultMode: 420
           secretName: oauth-token
+
   GoogleCloudPlatform/testgrid:
   - name: push-testgrid-images
     cluster: test-infra-trusted
