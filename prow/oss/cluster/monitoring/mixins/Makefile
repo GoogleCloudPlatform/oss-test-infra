@@ -20,6 +20,11 @@ PROJECT       ?= oss-prow
 ZONE          ?= us-west1-a
 CLUSTER       ?= prow
 
+export PATH
+
+expose-gobin:
+	$(eval PATH=${PATH}:${GOPATH}/bin)
+
 grafana-dashboards: install clean-dashboard-out
 	@mkdir -p dashboards_out
 	@for input in $(shell ls grafana_dashboards); do \
@@ -57,9 +62,11 @@ clean: clean-dashboard-out clean-prometheus-out
 install:
 	@if [[ -z "$$(which jsonnet)" ]]; then \
 	  go get github.com/google/go-jsonnet/cmd/jsonnet; \
+	  expose-gobin; \
 	fi
 	@if [[ -z "$$(which gojsontoyaml)" ]]; then \
 	  go get github.com/brancz/gojsontoyaml; \
+	  expose-gobin; \
 	fi
 
-.PHONY: grafana-dashboards apply-configmaps apply-prow-prometheusrule apply install clean-dashboard-out clean-prometheus-out clean
+.PHONY: expose-gobin grafana-dashboards apply-configmaps apply-prow-prometheusrule apply install clean-dashboard-out clean-prometheus-out clean
