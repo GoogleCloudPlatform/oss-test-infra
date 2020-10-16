@@ -23,6 +23,5 @@ apply-components: get-cluster-credentials
 
 apply: apply-components
 	$(MAKE) -C ./mixins apply
-	$(MAKE) -C ./mixins clean
 
 .PHONY: apply-components apply

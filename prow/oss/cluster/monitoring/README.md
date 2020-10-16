@@ -67,12 +67,13 @@ Developing a new dashboard can be achieved by
 
 ## Access components' Web page
 
-* For `prometheus` and `alertmanager`, there is no public domain configured based on the security
+* For `grafana`, `prometheus` and `alertmanager`, there is no public domain configured based on the security
 concerns (no authorization out of the box).
 Cluster admins can use [k8s port-forward](https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/) to
 access the web.
 
     ```
+    $ kubectl -n prow-monitoring port-forward $( kubectl -n prow-monitoring get pods --selector app=grafana -o jsonpath={.items[0].metadata.name} ) 8080:80
     $ kubectl -n prow-monitoring port-forward $( kubectl -n prow-monitoring get pods --selector app=prometheus -o jsonpath={.items[0].metadata.name} ) 9090
     $ kubectl -n prow-monitoring port-forward $( kubectl -n prow-monitoring get pods --selector app=alertmanager -o jsonpath={.items[0].metadata.name} ) 9093
     ```

@@ -20,7 +20,7 @@ PROJECT       ?= oss-prow
 ZONE          ?= us-west1-a
 CLUSTER       ?= prow
 
-grafana-dashboards: install
+grafana-dashboards: install clean-dashboard-out
 	@mkdir -p dashboards_out
 	@for input in $(shell ls grafana_dashboards); do \
 		output="$${input%.*}.json"; \
@@ -28,7 +28,7 @@ grafana-dashboards: install
 		jsonnet -J vendor/ -J lib/ "grafana_dashboards/$${input}" > "./dashboards_out/$${output}"; \
 	done
 
-prow_prometheusrule.yaml: install
+prow_prometheusrule.yaml: install clean-prometheus-out
 	@mkdir -p prometheus_out
 	@echo "Generating prow_prometheusrule.yaml ..."
 	jsonnet -J lib/ ./prometheus/prow_prometheusrule.jsonnet | gojsontoyaml > prometheus_out/$@
@@ -43,12 +43,16 @@ apply-configmaps: get-cluster-credentials grafana-dashboards
 apply-prow-prometheusrule: get-cluster-credentials prow_prometheusrule.yaml
 	kubectl apply -f prometheus_out/
 
-apply: apply-configmaps apply-prow-prometheusrule
+apply: apply-configmaps apply-prow-prometheusrule clean
 
-clean:
+clean-dashboard-out:
 	rm -rfv ./dashboards_out/*.json
+
+clean-prometheus-out:
 	rm -rfv ./prometheus_out/*.json
 	rm -rfv ./prometheus_out/*.yaml
+
+clean: clean-dashboard-out clean-prometheus-out
 
 install:
 	@if [[ -z "$$(which jsonnet)" ]]; then \
@@ -58,4 +62,4 @@ install:
 	  go get github.com/brancz/gojsontoyaml; \
 	fi
 
-.PHONY: grafana-dashboards apply-configmaps apply-prow-prometheusrule apply install clean
+.PHONY: grafana-dashboards apply-configmaps apply-prow-prometheusrule apply install clean-dashboard-out clean-prometheus-out clean
