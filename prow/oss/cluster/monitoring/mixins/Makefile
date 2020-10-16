@@ -59,14 +59,12 @@ clean-prometheus-out:
 
 clean: clean-dashboard-out clean-prometheus-out
 
-install:
+install: expose-gobin
 	@if [[ -z "$$(which jsonnet)" ]]; then \
 	  go get github.com/google/go-jsonnet/cmd/jsonnet; \
-	  expose-gobin; \
 	fi
 	@if [[ -z "$$(which gojsontoyaml)" ]]; then \
 	  go get github.com/brancz/gojsontoyaml; \
-	  expose-gobin; \
 	fi
 
 .PHONY: expose-gobin grafana-dashboards apply-configmaps apply-prow-prometheusrule apply install clean-dashboard-out clean-prometheus-out clean
