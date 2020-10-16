@@ -98,6 +98,7 @@ postsubmits:
         - prow/oss
         - deploy
         - deploy-build
+        - deploy-monitoring
   - name: post-oss-test-infra-deploy-knative-prow
     cluster: test-infra-trusted
     run_if_changed: '^prow/knative/cluster/|^prow/oss/serviceaccounts/'
