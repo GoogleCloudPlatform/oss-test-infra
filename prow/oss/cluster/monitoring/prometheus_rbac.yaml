@@ -14,9 +14,9 @@ roleRef:
   kind: ClusterRole
   name: prometheus-prow
 subjects:
-  - kind: ServiceAccount
-    name: prometheus-prow
-    namespace: prow-monitoring
+- kind: ServiceAccount
+  name: prometheus-prow
+  namespace: prow-monitoring
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -24,25 +24,25 @@ metadata:
   name: prometheus-prow
 rules:
   - apiGroups:
-      - ""
+    - ""
     resources:
-      - nodes
-      - services
-      - endpoints
-      - pods
+    - nodes
+    - services
+    - endpoints
+    - pods
     verbs:
-      - get
-      - list
-      - watch
+    - get
+    - list
+    - watch
   - apiGroups:
-      - ""
+    - ""
     resources:
-      - configmaps
+    - configmaps
     verbs:
-      - get
+    - get
   - apiGroups: null
     nonResourceURLs:
-      - /metrics
+    - /metrics
     resources: []
     verbs:
-      - get
+    - get
