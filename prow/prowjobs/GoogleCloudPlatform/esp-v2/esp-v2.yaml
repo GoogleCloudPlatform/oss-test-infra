@@ -135,7 +135,7 @@ presubmits:
       description: "Generates coverage report for a subset of presubmit tests."
     spec:
       containers:
-      - image: gcr.io/cloudesf-testing/gcpproxy-prow":v20201019-v2.16.0-99-g199d093-master
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20201019-v2.16.0-99-g199d093-master
         command:
         - ./prow/gcpproxy-coverage.sh
         env:
@@ -710,7 +710,7 @@ periodics:
       base_ref: master
     spec:
       containers:
-      - image: gcr.io/cloudesf-testing/gcpproxy-prow":v20201019-v2.16.0-99-g199d093-master
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20201019-v2.16.0-99-g199d093-master
         command:
         - ./prow/gcpproxy-coverage.sh
         env:
