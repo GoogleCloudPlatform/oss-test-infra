@@ -16,8 +16,8 @@ SHELL=/bin/bash -o pipefail
 
 include ../../../../Makefile.gcloud.mk
 
-PROJECT       ?= oss-prow
-ZONE          ?= us-west1-a
+PROJECT       ?= knative-tests
+ZONE          ?= us-central1-f
 CLUSTER       ?= prow
 
 export PATH

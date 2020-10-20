@@ -23,11 +23,11 @@ spec:
 # apiVersion: networking.gke.io/v1beta1
 # kind: ManagedCertificate
 # metadata:
-#   name: oss-prow-knative-dev
+#   name: prow-knative-dev
 #   namespace: prow-monitoring
 # spec:
 #   domains:
-#   - oss-prow.knative.dev
+#   - prow.knative.dev
 # ---
 # apiVersion: extensions/v1beta1
 # kind: Ingress
@@ -38,10 +38,10 @@ spec:
 #     kubernetes.io/ingress.global-static-ip-name: prow-monitoring-grafana
 #     kubernetes.io/ingress.class: "gce"
 #     kubernetes.io/tls-acme: "true"
-#     networking.gke.io/managed-certificates: oss-prow-knative-dev
+#     networking.gke.io/managed-certificates: prow-knative-dev
 # spec:
 #   rules:
-#   - host: oss-prow.knative.dev
+#   - host: prow.knative.dev
 #     http:
 #       paths:
 #       - path: /monitoring

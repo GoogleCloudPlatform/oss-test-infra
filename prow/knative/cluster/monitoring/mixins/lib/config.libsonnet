@@ -39,8 +39,7 @@
     // Additional scraping endpoints
     probeTargets: [
     # ATTENTION: Keep this in sync with the list in ../../additional-scrape-configs_secret.yaml
-      // {url: 'https://oss-prow.knative.dev/monitoring', labels: {slo: comps.monitoring}},
-      {url: 'https://oss-prow.knative.dev', labels: {slo: comps.deck}},
+      {url: 'https://prow.knative.dev', labels: {slo: comps.deck}},
     ],
 
     // Boskos endpoints to be monitored
