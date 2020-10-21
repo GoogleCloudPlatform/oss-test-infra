@@ -86,6 +86,7 @@ periodics:
         - /bin/runner.sh
         args:
         - ./scripts/e2e-test.sh
+        - smoke
         env:
         - name: GO111MODULE
           value: "on"
