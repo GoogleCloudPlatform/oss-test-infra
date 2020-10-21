@@ -77,3 +77,17 @@ spec:
       - name: slack
         secret:
           secretName: slack-token
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: crier
+  namespace: default
+  name: crier
+spec:
+  ports:
+  - name: metrics
+    port: 9090
+  selector:
+    app: crier
