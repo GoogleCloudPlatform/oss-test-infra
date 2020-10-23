@@ -46,7 +46,7 @@ presubmits:
         command:
         - /bin/runner.sh
         args:
-        - ./scripts/e2e-test.sh
+        - ./scripts/ci-e2e-test.sh
         env:
         - name: GO111MODULE
           value: "on"
@@ -85,7 +85,7 @@ periodics:
         command:
         - /bin/runner.sh
         args:
-        - ./scripts/e2e-test.sh
+        - ./scripts/ci-e2e-test.sh
         - smoke
         env:
         - name: GO111MODULE
