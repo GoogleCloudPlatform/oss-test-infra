@@ -10,7 +10,7 @@ presubmits:
       - name: shared-mem
         emptyDir: {}
       containers:
-      - image: gcr.io/kunit-presubmit/kunit
+      - image: gcr.io/kunit-prow-container-registry/kunit
         securityContext:
           privileged: true
         command:
