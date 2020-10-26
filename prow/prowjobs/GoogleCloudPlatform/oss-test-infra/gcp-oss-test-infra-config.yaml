@@ -7,7 +7,7 @@ presubmits:
     always_run: true
     spec:
       containers:
-        - image: gcr.io/k8s-prow/checkconfig:v20201019-3b28521b87
+        - image: gcr.io/k8s-prow/checkconfig:v20201026-f7d653694b
           imagePullPolicy: Always
           command:
             - /checkconfig
@@ -61,7 +61,7 @@ presubmits:
       base_ref: master
     spec:
       containers:
-        - image: gcr.io/k8s-prow/checkconfig:v20201019-3b28521b87
+        - image: gcr.io/k8s-prow/checkconfig:v20201026-f7d653694b
           imagePullPolicy: Always
           command:
             - /checkconfig
@@ -158,7 +158,7 @@ postsubmits:
     - master
     spec:
       containers:
-      - image: gcr.io/k8s-prow/hmac:v20201019-3b28521b87
+      - image: gcr.io/k8s-prow/hmac:v20201026-f7d653694b
         command:
         - /hmac
         args:
@@ -256,7 +256,7 @@ periodics:
     testgrid-tab-name: autobump-prow
   spec:
     containers:
-    - image: gcr.io/k8s-prow/autobump:v20201019-3b28521b87
+    - image: gcr.io/k8s-prow/autobump:v20201026-f7d653694b
       command:
       - /autobump.sh
       args:
@@ -299,7 +299,7 @@ periodics:
     testgrid-tab-name: autobump-knative-prow
   spec:
     containers:
-    - image: gcr.io/k8s-prow/autobump:v20201019-3b28521b87
+    - image: gcr.io/k8s-prow/autobump:v20201026-f7d653694b
       command:
       - /autobump.sh
       args:
