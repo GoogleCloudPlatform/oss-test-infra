@@ -29,3 +29,7 @@ deploy: get-cluster-credentials
 .PHONY: deploy-build
 deploy-build: get-build-cluster-credentials
 	kubectl apply -f ./cluster/build/
+
+.PHONY: deploy-monitoring
+deploy-monitoring:
+	$(MAKE) -C ./cluster/monitoring apply

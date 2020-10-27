@@ -119,6 +119,7 @@ postsubmits:
         - prow/knative
         - deploy
         - deploy-build
+        - deploy-monitoring
   - name: post-oss-test-infra-upload-testgrid-config
     cluster: test-infra-trusted
     run_if_changed: '^(prow/prowjobs/.*\.yaml)|(testgrid/config\.yaml)$'
