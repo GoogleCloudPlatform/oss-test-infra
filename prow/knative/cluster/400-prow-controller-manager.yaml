@@ -6,7 +6,7 @@ metadata:
   labels:
     app: prow-controller-manager
 spec:
-  replicas: 1 # TODO(fejta) - delete plank
+  replicas: 1
   revisionHistoryLimit: 2
   selector:
     matchLabels:
