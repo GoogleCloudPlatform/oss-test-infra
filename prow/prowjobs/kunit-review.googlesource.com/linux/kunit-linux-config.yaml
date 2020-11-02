@@ -3,6 +3,7 @@ presubmits:
   - name: kunit-test-presubmit
     branches:
     - kunit/alpha/master
+    - torvalds/master
     decorate: true
     always_run: true
     spec:
