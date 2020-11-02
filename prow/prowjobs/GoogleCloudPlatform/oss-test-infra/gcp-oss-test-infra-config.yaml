@@ -257,7 +257,7 @@ periodics:
     testgrid-tab-name: autobump-prow
   spec:
     containers:
-    - image: gcr.io/k8s-prow/autobump:v20201026-f7d653694b
+    - image: gcr.io/k8s-prow/autobump:v20201102-45eeca6478
       command:
       - /autobump.sh
       args:
@@ -273,8 +273,8 @@ periodics:
         value: GoogleCloudPlatform
       - name: GH_REPO
         value: oss-test-infra
-      - name: PLANK_DEPLOYMENT_FILE
-        value: prow/oss/cluster/plank.yaml
+      - name: PROW_CONTROLLER_MANAGER_FILE
+        value: prow/oss/cluster/controller-manager.yaml
       - name: COMPONENT_FILE_DIR
         value: prow/oss/cluster
       - name: CONFIG_PATH
@@ -300,7 +300,7 @@ periodics:
     testgrid-tab-name: autobump-knative-prow
   spec:
     containers:
-    - image: gcr.io/k8s-prow/autobump:v20201026-f7d653694b
+    - image: gcr.io/k8s-prow/autobump:v20201102-45eeca6478
       command:
       - /autobump.sh
       args:
@@ -316,8 +316,8 @@ periodics:
         value: GoogleCloudPlatform
       - name: GH_REPO
         value: oss-test-infra
-      - name: PLANK_DEPLOYMENT_FILE
-        value: prow/knative/cluster/400-plank.yaml
+      - name: PROW_CONTROLLER_MANAGER_FILE
+        value: prow/knative/cluster/400-prow-controller-manager.yaml
       - name: COMPONENT_FILE_DIR
         value: prow/knative/cluster
       - name: CONFIG_PATH
