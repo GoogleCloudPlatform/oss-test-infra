@@ -257,7 +257,7 @@ periodics:
     testgrid-tab-name: autobump-prow
   spec:
     containers:
-    - image: gcr.io/k8s-prow/autobump:v20201026-f7d653694b
+    - image: gcr.io/k8s-prow/autobump:v20201102-45eeca6478
       command:
       - /autobump.sh
       args:
@@ -300,7 +300,7 @@ periodics:
     testgrid-tab-name: autobump-knative-prow
   spec:
     containers:
-    - image: gcr.io/k8s-prow/autobump:v20201026-f7d653694b
+    - image: gcr.io/k8s-prow/autobump:v20201102-45eeca6478
       command:
       - /autobump.sh
       args:
