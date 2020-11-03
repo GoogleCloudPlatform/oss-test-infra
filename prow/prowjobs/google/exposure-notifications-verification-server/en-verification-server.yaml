@@ -31,7 +31,7 @@ presubmits:
           privileged: true
         resources:
           requests:
-            cpu: 7
+            cpu: 30
             memory: '16Gi'
   - name: pull-en-verification-server-release-e2e-canary
     cluster: build-apollo-server
@@ -57,7 +57,7 @@ presubmits:
           mountPath: /etc/e2e-test-service-account
         resources:
           requests:
-            cpu: 7
+            cpu: 30
             memory: '16Gi'
       volumes:
       - name: e2e-test-service-account
@@ -100,7 +100,7 @@ periodics:
           privileged: true
         resources:
           requests:
-            cpu: 7
+            cpu: 30
             memory: '16Gi'
       volumes:
       - name: e2e-test-service-account
