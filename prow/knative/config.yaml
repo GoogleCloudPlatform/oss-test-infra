@@ -148,6 +148,7 @@ tide:
     - needs-rebase
   - repos:
     - "google/knative-gcp"
+    - "knative-prow-robot/test-infra"
     labels:
     - lgtm
     - approved
