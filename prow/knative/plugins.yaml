@@ -17,6 +17,7 @@ approve:
   - "knative"
   - "knative-sandbox"
   - "google/knative-gcp"
+  - "knative-prow-robot/test-infra"
   require_self_approval: false
   ignore_review_state: false
 # Settings for the "heart" plugin.
@@ -162,6 +163,32 @@ plugins:
   - welcome
   - wip
   - yuks
+  knative-prow-robot/test-infra:
+  - approve
+  - assign
+  - blunderbuss
+  - buildifier
+  - cat
+  - dog
+  - golint
+  - heart
+  - help
+  - hold
+  - label
+  - lgtm
+  - lifecycle
+  - milestone
+  - override
+  - owners-label
+  - project
+  - shrug
+  - size
+  - skip
+  - trigger
+  - verify-owners
+  - welcome
+  - wip
+  - yuks
   knative/test-infra:
   - config-updater
 external_plugins:
@@ -176,6 +203,11 @@ external_plugins:
       - issue_comment
       - pull_request
   google/knative-gcp:
+  - name: needs-rebase
+    events:
+      - issue_comment
+      - pull_request
+  knative-prow-robot/test-infra:
   - name: needs-rebase
     events:
       - issue_comment
