@@ -26,6 +26,8 @@ presubmits:
             secretKeyRef:
               name: twilio
               key: authToken
+        - name: CI_POSTGRES_IMAGE
+          value: "us-docker.pkg.dev/apollo-verification-us/mirrors/postgres:12-alpine"
         securityContext:
           # We run docker-in-docker which requires privileged mode
           privileged: true
@@ -52,6 +54,8 @@ presubmits:
           value: "on"
         - name: GOOGLE_APPLICATION_CREDENTIALS
           value: /etc/e2e-test-service-account/service-account.json
+        - name: CI_POSTGRES_IMAGE
+          value: "us-docker.pkg.dev/apollo-verification-us/mirrors/postgres:12-alpine"
         volumeMounts:
         - name: e2e-test-service-account
           mountPath: /etc/e2e-test-service-account
@@ -92,6 +96,8 @@ periodics:
           value: "on"
         - name: GOOGLE_APPLICATION_CREDENTIALS
           value: /etc/e2e-test-service-account/service-account.json
+        - name: CI_POSTGRES_IMAGE
+          value: "us-docker.pkg.dev/apollo-verification-us/mirrors/postgres:12-alpine"
         volumeMounts:
         - name: e2e-test-service-account
           mountPath: /etc/e2e-test-service-account
