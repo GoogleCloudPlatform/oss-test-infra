@@ -49,7 +49,7 @@ postsubmits:
         imagePullPolicy: Always
         command:
         - "/main.sh"
-        args: ["gcp-guest", "us-west1-a", "deb9,el6,el7,el8", "gs://gcp-guest-package-uploads/google-compute-engine/"]
+        args: ["gcp-guest", "us-west1-a", "deb9,el7,el8", "gs://gcp-guest-package-uploads/google-compute-engine/"]
   GoogleCloudPlatform/guest-diskexpand:
   - name: disk-expand-build
     cluster: gcp-guest
@@ -94,7 +94,7 @@ postsubmits:
       - image: gcr.io/gcp-guest/daisy-builder:latest
         command:
         - "/main.sh"
-        args: ["gcp-guest", "us-west1-a", "deb9,el6,el7,el8,goo", "gs://gcp-guest-package-uploads/osconfig/"]
+        args: ["gcp-guest", "us-west1-a", "deb9,el7,el8,goo", "gs://gcp-guest-package-uploads/osconfig/"]
     max_concurrency: 10
   GoogleCloudPlatform/guest-oslogin:
   - name: oslogin-build
@@ -117,7 +117,7 @@ postsubmits:
       - image: gcr.io/gcp-guest/daisy-builder:latest
         command:
         - "/main.sh"
-        args: ["gcp-guest", "us-west1-a", "deb9,deb10,el6,el7,el8", "gs://gcp-guest-package-uploads/oslogin/"]
+        args: ["gcp-guest", "us-west1-a", "deb9,deb10,el7,el8", "gs://gcp-guest-package-uploads/oslogin/"]
     max_concurrency: 10
   GoogleCloudPlatform/guest-agent:
   - name: guest-agent-build
@@ -140,7 +140,7 @@ postsubmits:
       - image: gcr.io/gcp-guest/daisy-builder:latest
         command:
         - "/main.sh"
-        args: ["gcp-guest", "us-west1-a", "deb9,el6,el7,el8,goo", "gs://gcp-guest-package-uploads/guest-agent/"]
+        args: ["gcp-guest", "us-west1-a", "deb9,el7,el8,goo", "gs://gcp-guest-package-uploads/guest-agent/"]
     max_concurrency: 10
 
 presubmits:
@@ -165,7 +165,7 @@ presubmits:
         imagePullPolicy: Always
         command:
         - "/main.sh"
-        args: ["gcp-guest", "us-west1-a", "deb9,el6,el7,el8", "gs://gcp-guest-package-uploads/google-compute-engine/"]
+        args: ["gcp-guest", "us-west1-a", "deb9,el7,el8", "gs://gcp-guest-package-uploads/google-compute-engine/"]
 
   GoogleCloudPlatform/guest-diskexpand:
   - name: disk-expand-presubmit-build
@@ -188,7 +188,7 @@ presubmits:
         imagePullPolicy: Always
         command:
         - "/main.sh"
-        args: ["gcp-guest", "us-west1-a", "deb10,el7", "gs://gcp-guest-package-uploads/gce-disk-expand/"]
+        args: ["gcp-guest", "us-west1-a", "deb10,el7,el8", "gs://gcp-guest-package-uploads/gce-disk-expand/"]
 
   GoogleCloudPlatform/osconfig:
   - name: osconfig-presubmit-build
@@ -210,7 +210,7 @@ presubmits:
       - image: gcr.io/gcp-guest/daisy-builder:latest
         command:
         - "/main.sh"
-        args: ["gcp-guest", "us-west1-a", "deb9,el6,el7,el8,goo"]
+        args: ["gcp-guest", "us-west1-a", "deb9,el7,el8,goo"]
   - name: osconfig-presubmit-gocheck
     cluster: gcp-guest
     run_if_changed: '\.go$'
@@ -357,7 +357,7 @@ presubmits:
       - image: gcr.io/gcp-guest/daisy-builder:latest
         command:
         - "/main.sh"
-        args: ["gcp-guest", "us-west1-a", "deb9,el6,el7,el8,goo"]
+        args: ["gcp-guest", "us-west1-a", "deb9,el7,el8,goo"]
 
   GoogleCloudPlatform/guest-logging-go:
   - name: guest-logging-presubmit-gocheck
@@ -428,7 +428,7 @@ presubmits:
       - image: gcr.io/gcp-guest/daisy-builder:latest
         command:
         - "/main.sh"
-        args: ["gcp-guest", "us-west1-a", "deb9,deb10,el6,el7,el8"]
+        args: ["gcp-guest", "us-west1-a", "deb9,deb10,el7,el8"]
   - name: oslogin-presubmit-selinux-module
     cluster: gcp-guest
     run_if_changed: "policy/"
