@@ -60,6 +60,21 @@ metadata:
   # namespace: not-namespaced, delete pods in other namespaces
 rules:
   - apiGroups:
+    - coordination.k8s.io
+    resources:
+    - leases
+    resourceNames:
+    - prow-sinker-leaderlock
+    verbs:
+    - get
+    - update
+  - apiGroups:
+    - coordination.k8s.io
+    resources:
+    - leases
+    verbs:
+    - create
+  - apiGroups:
       - ""
     resources:
       - pods
