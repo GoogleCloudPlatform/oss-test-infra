@@ -47,6 +47,6 @@
     boskosResourcetypes: [],
 
     // How long we go during work hours without seeing a webhook before alerting.
-    webhookMissingAlertInterval: '30m',
+    webhookMissingAlertInterval: '60m',
   },
 }
