@@ -274,7 +274,7 @@ periodics:
       - name: GH_REPO
         value: oss-test-infra
       - name: PROW_CONTROLLER_MANAGER_FILE
-        value: prow/oss/cluster/controller-manager.yaml
+        value: prow/oss/cluster/prow-controller-manager.yaml
       - name: COMPONENT_FILE_DIR
         value: prow/oss/cluster
       - name: CONFIG_PATH
