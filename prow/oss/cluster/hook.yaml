@@ -25,7 +25,7 @@ spec:
       terminationGracePeriodSeconds: 180
       containers:
       - name: hook
-        image: gcr.io/k8s-prow/hook:v20201112-00537d1bb4
+        image: gcr.io/k8s-prow/hook:v20201106-ea76c130fa
         imagePullPolicy: Always
         args:
         - --kubeconfig=/etc/kubeconfig/config-20201002
