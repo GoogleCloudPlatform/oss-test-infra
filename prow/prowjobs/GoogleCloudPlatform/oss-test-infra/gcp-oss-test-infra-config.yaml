@@ -33,8 +33,7 @@ presubmits:
             - yamllint
             - -c
             - common/config/.yamllint.conf
-            - config/jobs
-            - config/prow/cluster
+            - .
   - name: pull-test-infra-go-test
     branches:
       - master
