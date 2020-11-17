@@ -103,6 +103,7 @@ plugins:
   - override
   - owners-label
   - project
+  - retitle
   - shrug
   - size
   - skip
