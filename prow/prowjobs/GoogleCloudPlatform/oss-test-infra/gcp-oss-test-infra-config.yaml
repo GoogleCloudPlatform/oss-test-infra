@@ -27,7 +27,7 @@ presubmits:
     always_run: false
     spec:
       containers:
-        - image: quay.io/kubermatic/yamllint:0.1
+        - image: cytopia/yamllint
           imagePullPolicy: Always
           command:
             - yamllint
