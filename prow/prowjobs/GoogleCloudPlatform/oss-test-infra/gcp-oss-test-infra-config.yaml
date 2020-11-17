@@ -20,6 +20,21 @@ presubmits:
             # Details: https://github.com/GoogleCloudPlatform/oss-test-infra/pull/131#discussion_r334208082
             - --exclude-warning=mismatched-tide
             - --exclude-warning=non-decorated-jobs
+  - name: pull-lint-validator
+    branches:
+      - master
+    decorate: true
+    always_run: false
+    spec:
+      containers:
+        - image: quay.io/kubermatic/yamllint:0.1
+          imagePullPolicy: Always
+          command:
+            - yamllint
+            - -c
+            - common/config/.yamllint.conf
+            - config/jobs
+            - config/prow/cluster
   - name: pull-test-infra-go-test
     branches:
       - master

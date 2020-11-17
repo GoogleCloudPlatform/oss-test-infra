@@ -96,8 +96,6 @@ postsubmits:
         - "/main.sh"
         args: ["gcp-guest", "us-west1-a", "deb9,el6,el7,el8,goo", "gs://gcp-guest-package-uploads/osconfig/"]
     max_concurrency: 10
-    branches:
-    - ^master$
   GoogleCloudPlatform/guest-oslogin:
   - name: oslogin-build
     cluster: gcp-guest
@@ -121,8 +119,6 @@ postsubmits:
         - "/main.sh"
         args: ["gcp-guest", "us-west1-a", "deb9,deb10,el6,el7,el8", "gs://gcp-guest-package-uploads/oslogin/"]
     max_concurrency: 10
-    branches:
-    - ^master$
   GoogleCloudPlatform/guest-agent:
   - name: guest-agent-build
     cluster: gcp-guest
@@ -146,8 +142,6 @@ postsubmits:
         - "/main.sh"
         args: ["gcp-guest", "us-west1-a", "deb9,el6,el7,el8,goo", "gs://gcp-guest-package-uploads/guest-agent/"]
     max_concurrency: 10
-    branches:
-    - ^master$
 
 presubmits:
   GoogleCloudPlatform/guest-configs:

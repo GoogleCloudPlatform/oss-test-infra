@@ -17,7 +17,7 @@ kind: ServiceAccount
 metadata:
   annotations:
     iam.gke.io/gcp-service-account: oss-prow@oss-prow.iam.gserviceaccount.com
-  name:  grandmatriarch
+  name: grandmatriarch
   namespace: default
 ---
 kind: Role

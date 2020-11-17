@@ -65,7 +65,7 @@ rules:
     resources:
     - leases
     resourceNames:
-    - prow-sinker-leaderlock
+    - prow-controller-manager-leader-lock
     verbs:
     - get
     - update
@@ -75,33 +75,33 @@ rules:
     - leases
     verbs:
     - create
-- apiGroups:
-  - ""
-  resources:
-  - configmaps
-  resourceNames:
-  - prow-controller-manager-leader-lock
-  verbs:
-  - get
-  - update
-- apiGroups:
-  - ""
-  resources:
-  - configmaps
-  - events
-  verbs:
-  - create
-- apiGroups:
-  - prow.k8s.io
-  resources:
-  - prowjobs
-  verbs:
-  - get
-  - update
-  - list
-  - watch
-  - update
-  - patch
+  - apiGroups:
+    - ""
+    resources:
+    - configmaps
+    resourceNames:
+    - prow-controller-manager-leader-lock
+    verbs:
+    - get
+    - update
+  - apiGroups:
+    - ""
+    resources:
+    - configmaps
+    - events
+    verbs:
+    - create
+  - apiGroups:
+    - prow.k8s.io
+    resources:
+    - prowjobs
+    verbs:
+    - get
+    - update
+    - list
+    - watch
+    - update
+    - patch
 ---
 kind: Role
 apiVersion: rbac.authorization.k8s.io/v1beta1
