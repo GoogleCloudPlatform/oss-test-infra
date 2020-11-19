@@ -78,7 +78,7 @@ periodics:
       base_ref: main
     annotations:
       testgrid-dashboards: googleoss-en-server
-      testgrid-tab-name: terrafrom-smoke
+      testgrid-tab-name: terraform-smoke
       testgrid-alert-email: en-server-prow-test-alert@google.com
       testgrid-num-failures-to-alert: '1'
     labels:
