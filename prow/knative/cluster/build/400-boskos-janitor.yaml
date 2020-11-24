@@ -13,7 +13,7 @@
 # limitations under the License.
 
 # Janitor
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: boskos-janitor
@@ -22,6 +22,9 @@ metadata:
   namespace: test-pods
 spec:
   replicas: 6  # Number of distributed janitor instances; k8s has ~1/16 as many projects
+  selector:
+    matchLabels:
+      app: boskos-janitor
   template:
     metadata:
       labels:
