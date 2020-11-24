@@ -20,6 +20,10 @@ presubmits:
           value: /etc/gcs-access-service-account/service-account.json
         - name: GOOGLE_CLOUD_BUCKET
           value: apollo-server-prow-test-bucket
+        - name: CI_POSTGRES_IMAGE
+          value: "us-docker.pkg.dev/apollo-verification-us/mirrors/postgres:13-alpine"
+        - name: CI_REDIS_IMAGE
+          value: "us-docker.pkg.dev/apollo-verification-us/mirrors/redis:6-alpine"
         volumeMounts:
         - name: gcs-access-service-account
           mountPath: /etc/gcs-access-service-account
@@ -53,6 +57,10 @@ presubmits:
           value: "on"
         - name: GOOGLE_APPLICATION_CREDENTIALS
           value: /etc/e2e-test-service-account/service-account.json
+        - name: CI_POSTGRES_IMAGE
+          value: "us-docker.pkg.dev/apollo-verification-us/mirrors/postgres:13-alpine"
+        - name: CI_REDIS_IMAGE
+          value: "us-docker.pkg.dev/apollo-verification-us/mirrors/redis:6-alpine"
         volumeMounts:
         - name: e2e-test-service-account
           mountPath: /etc/e2e-test-service-account
@@ -96,6 +104,10 @@ periodics:
           value: "on"
         - name: GOOGLE_APPLICATION_CREDENTIALS
           value: /etc/e2e-test-service-account/service-account.json
+        - name: CI_POSTGRES_IMAGE
+          value: "us-docker.pkg.dev/apollo-verification-us/mirrors/postgres:13-alpine"
+        - name: CI_REDIS_IMAGE
+          value: "us-docker.pkg.dev/apollo-verification-us/mirrors/redis:6-alpine"
         volumeMounts:
         - name: e2e-test-service-account
           mountPath: /etc/e2e-test-service-account
@@ -138,6 +150,10 @@ periodics:
           value: "on"
         - name: GOOGLE_APPLICATION_CREDENTIALS
           value: /etc/e2e-test-service-account/service-account.json
+        - name: CI_POSTGRES_IMAGE
+          value: "us-docker.pkg.dev/apollo-verification-us/mirrors/postgres:13-alpine"
+        - name: CI_REDIS_IMAGE
+          value: "us-docker.pkg.dev/apollo-verification-us/mirrors/redis:6-alpine"
         volumeMounts:
         - name: e2e-test-service-account
           mountPath: /etc/e2e-test-service-account
@@ -179,6 +195,10 @@ periodics:
           value: "on"
         - name: GOOGLE_APPLICATION_CREDENTIALS
           value: /etc/mako-access-service-account/service-account.json
+        - name: CI_POSTGRES_IMAGE
+          value: "us-docker.pkg.dev/apollo-verification-us/mirrors/postgres:13-alpine"
+        - name: CI_REDIS_IMAGE
+          value: "us-docker.pkg.dev/apollo-verification-us/mirrors/redis:6-alpine"
         volumeMounts:
         - name: mako-access-service-account
           mountPath: /etc/mako-access-service-account
