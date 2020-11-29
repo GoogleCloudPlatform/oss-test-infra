@@ -27,7 +27,7 @@ presubmits:
               name: twilio
               key: authToken
         - name: CI_POSTGRES_IMAGE
-          value: "us-docker.pkg.dev/apollo-verification-us/mirrors/postgres:12-alpine"
+          value: "us-docker.pkg.dev/apollo-verification-us/mirrors/postgres:13-alpine"
         - name: CI_REDIS_IMAGE
           value: "us-docker.pkg.dev/apollo-verification-us/mirrors/redis:6-alpine"
         securityContext:
@@ -57,7 +57,7 @@ presubmits:
         - name: GOOGLE_APPLICATION_CREDENTIALS
           value: /etc/e2e-test-service-account/service-account.json
         - name: CI_POSTGRES_IMAGE
-          value: "us-docker.pkg.dev/apollo-verification-us/mirrors/postgres:12-alpine"
+          value: "us-docker.pkg.dev/apollo-verification-us/mirrors/postgres:13-alpine"
         - name: CI_REDIS_IMAGE
           value: "us-docker.pkg.dev/apollo-verification-us/mirrors/redis:6-alpine"
         volumeMounts:
@@ -101,7 +101,7 @@ periodics:
         - name: GOOGLE_APPLICATION_CREDENTIALS
           value: /etc/e2e-test-service-account/service-account.json
         - name: CI_POSTGRES_IMAGE
-          value: "us-docker.pkg.dev/apollo-verification-us/mirrors/postgres:12-alpine"
+          value: "us-docker.pkg.dev/apollo-verification-us/mirrors/postgres:13-alpine"
         - name: CI_REDIS_IMAGE
           value: "us-docker.pkg.dev/apollo-verification-us/mirrors/redis:6-alpine"
         volumeMounts:
@@ -147,7 +147,7 @@ periodics:
         - name: GOOGLE_APPLICATION_CREDENTIALS
           value: /etc/e2e-test-service-account/service-account.json
         - name: CI_POSTGRES_IMAGE
-          value: "us-docker.pkg.dev/apollo-verification-us/mirrors/postgres:12-alpine"
+          value: "us-docker.pkg.dev/apollo-verification-us/mirrors/postgres:13-alpine"
         - name: CI_REDIS_IMAGE
           value: "us-docker.pkg.dev/apollo-verification-us/mirrors/redis:6-alpine"
         volumeMounts:
