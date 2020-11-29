@@ -73,50 +73,6 @@ presubmits:
           secretName: e2e-test-service-account
 periodics:
   - cron: "0 1/2 * * *"  # Run every 2 hours starting 01:00
-    name: ci-en-verification-server-release-unit
-    cluster: build-apollo-server
-    decorate: true
-    extra_refs:
-    - org: google
-      repo: exposure-notifications-verification-server
-      base_ref: main
-    annotations:
-      testgrid-dashboards: googleoss-en-server
-      testgrid-tab-name: verification-server-continuous
-    labels:
-      preset-dind-enabled: "true"
-    spec:
-      containers:
-      - image: gcr.io/cloud-devrel-public-resources/exposure-notifications/presubmit-test
-        command:
-        - /bin/runner.sh
-        args:
-        - ./scripts/presubmit.sh
-        env:
-        - name: GO111MODULE
-          value: "on"
-        - name: TWILIO_ACCOUNT_SID
-          valueFrom:
-            secretKeyRef:
-              name: twilio
-              key: accountSid
-        - name: TWILIO_AUTH_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: twilio
-              key: authToken
-        - name: CI_POSTGRES_IMAGE
-          value: "us-docker.pkg.dev/apollo-verification-us/mirrors/postgres:12-alpine"
-        - name: CI_REDIS_IMAGE
-          value: "us-docker.pkg.dev/apollo-verification-us/mirrors/redis:6-alpine"
-        securityContext:
-          # We run docker-in-docker which requires privileged mode
-          privileged: true
-        resources:
-          requests:
-            cpu: 30
-            memory: '16Gi'
-  - cron: "0 1/2 * * *"  # Run every 2 hours starting 01:00
     name: ci-en-verification-server-terraform-smoke
     cluster: build-apollo-server
     decorate: true

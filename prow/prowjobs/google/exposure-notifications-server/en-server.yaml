@@ -68,47 +68,6 @@ presubmits:
         secret:
           secretName: e2e-test-service-account
 periodics:
-  - cron: "0 1/2 * * *"  # Run every 2 hours starting 01:00
-    name: ci-en-server-release-unit
-    cluster: build-apollo-server
-    decorate: true
-    extra_refs:
-    - org: google
-      repo: exposure-notifications-server
-      base_ref: main
-    annotations:
-      testgrid-dashboards: googleoss-en-server
-      testgrid-tab-name: key-server-continuous
-    labels:
-      preset-dind-enabled: "true"
-    spec:
-      containers:
-      - image: gcr.io/cloud-devrel-public-resources/exposure-notifications/presubmit-test
-        command:
-        - /bin/runner.sh
-        args:
-        - ./scripts/presubmit.sh
-        env:
-        - name: GO111MODULE
-          value: "on"
-        - name: GOOGLE_APPLICATION_CREDENTIALS
-          value: /etc/gcs-access-service-account/service-account.json
-        - name: GOOGLE_CLOUD_BUCKET
-          value: apollo-server-prow-test-bucket
-        volumeMounts:
-        - name: gcs-access-service-account
-          mountPath: /etc/gcs-access-service-account
-        securityContext:
-          # We run docker-in-docker which requires privileged mode
-          privileged: true
-        resources:
-          requests:
-            cpu: 30
-            memory: '16Gi'
-      volumes:
-      - name: gcs-access-service-account
-        secret:
-          secretName: gcs-access-service-account
   - cron: "0 0/2 * * *"  # Run every 2 hours starting 00:00
     name: ci-en-server-terraform-smoke
     cluster: build-apollo-server
