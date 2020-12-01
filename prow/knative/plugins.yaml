@@ -198,13 +198,25 @@ external_plugins:
     events:
       - issue_comment
       - pull_request
+  - name: cherrypicker
+    events:
+      - issue_comment
+      - pull_request
   knative-sandbox:
   - name: needs-rebase
     events:
       - issue_comment
       - pull_request
+  - name: cherrypicker
+    events:
+      - issue_comment
+      - pull_request
   google/knative-gcp:
   - name: needs-rebase
+    events:
+      - issue_comment
+      - pull_request
+  - name: cherrypicker
     events:
       - issue_comment
       - pull_request
