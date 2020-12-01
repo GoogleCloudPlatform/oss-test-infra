@@ -101,6 +101,8 @@ postsubmits:
     annotations:
       testgrid-dashboards: googleoss-test-infra
       testgrid-tab-name: prow-deploy
+      testgrid-alert-email: k8s-infra-oncall@google.com
+      testgrid-num-failures-to-alert: '1'
     spec:
       serviceAccountName: prow-deployer
       containers:
@@ -122,6 +124,8 @@ postsubmits:
     annotations:
       testgrid-dashboards: googleoss-test-infra
       testgrid-tab-name: knative-prow-deploy
+      testgrid-alert-email: k8s-infra-oncall@google.com
+      testgrid-num-failures-to-alert: '1'
     spec:
       serviceAccountName: prow-deployer
       containers:
@@ -143,6 +147,8 @@ postsubmits:
     annotations:
       testgrid-dashboards: googleoss-test-infra
       testgrid-tab-name: testgrid-upload
+      testgrid-alert-email: k8s-infra-oncall@google.com
+      testgrid-num-failures-to-alert: '1'
     spec:
       containers:
       - image: gcr.io/k8s-prow/transfigure
@@ -169,6 +175,8 @@ postsubmits:
     annotations:
       testgrid-dashboards: googleoss-test-infra
       testgrid-tab-name: hmacs-reconciliation
+      testgrid-alert-email: k8s-infra-oncall@google.com
+      testgrid-num-failures-to-alert: '1'
     branches:
     - master
     spec:
@@ -269,6 +277,8 @@ periodics:
   annotations:
     testgrid-dashboards: googleoss-test-infra
     testgrid-tab-name: autobump-prow
+    testgrid-alert-email: k8s-infra-oncall@google.com
+    testgrid-num-failures-to-alert: '1'
   spec:
     containers:
     - image: gcr.io/k8s-prow/autobump:v20201123-dbc92a6558
@@ -312,6 +322,8 @@ periodics:
   annotations:
     testgrid-dashboards: googleoss-test-infra
     testgrid-tab-name: autobump-knative-prow
+    testgrid-alert-email: k8s-infra-oncall@google.com
+    testgrid-num-failures-to-alert: '1'
   spec:
     containers:
     - image: gcr.io/k8s-prow/autobump:v20201123-dbc92a6558
