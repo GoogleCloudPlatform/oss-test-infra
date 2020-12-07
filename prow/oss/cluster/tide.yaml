@@ -19,7 +19,7 @@ spec:
       serviceAccountName: tide
       containers:
       - name: tide
-        image: gcr.io/k8s-prow/tide:v20201202-2a5710e4ad
+        image: gcr.io/k8s-prow/tide:v20201204-d90be1ef6b
         args:
         - --config-path=/etc/config/config.yaml
         - --job-config-path=/etc/job-config
