@@ -354,24 +354,3 @@ periodics:
     - name: github
       secret:
         secretName: oauth-token
-- interval: 5m
-  name: ci-google-oss-test-infra-resultstore-upload
-  annotations:
-    testgrid-dashboards: googleoss-test-infra
-    testgrid-tab-name: resultstore
-    description: transfer finished results into resultstore
-  cluster: test-infra-trusted
-  decorate: true
-  spec:
-    serviceAccountName: resultstore
-    containers:
-    - image: gcr.io/k8s-testimages/resultstore:v20200316-54260945b
-      command:
-      - /app/experiment/resultstore/app.binary
-      args:
-      - --bucket=gs://oss-prow # Must be able to write to bucket
-      - --config=gs://k8s-testgrid/config
-      - --gcs-auth # resultstore@oss-prow.iam.gserviceaccount.com
-      - --latest=5
-      - --timeout=10m
-      - --upload=oss-prow # Must be able to upload results into this project
