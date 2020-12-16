@@ -354,3 +354,27 @@ periodics:
     - name: github
       secret:
         secretName: oauth-token
+# ci-oss-test-infra-heartbeat is used for prometheus, alert(s) will be sent
+# if this job hadn't been succeeded for some time
+- cron: "*/3 * * * *" # Every 3 minutes
+  name: ci-oss-test-infra-heartbeat
+  decorate: true
+  cluster: test-infra-trusted
+  extra_refs:
+  - org: GoogleCloudPlatform
+    repo: oss-test-infra
+    base_ref: master
+  annotations:
+    testgrid-dashboards: googleoss-test-infra
+    testgrid-tab-name: oss-prow-heartbeat
+  spec:
+    containers:
+    - image: gcr.io/k8s-testimages/gcloud-bazel:v20200520-v0.4-30-g9d6313a
+      command:
+      - "echo"
+      args:
+      - "Everything is fine!"
+      resources:
+        requests:
+          cpu: 100m
+          memory: 1Gi
