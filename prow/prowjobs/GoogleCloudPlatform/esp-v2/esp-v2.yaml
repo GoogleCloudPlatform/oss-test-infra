@@ -10,7 +10,7 @@ presubmits:
       description: "Generates docker images to deploy in e2e tests."
     spec:
       containers:
-      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20201013-v2.16.0-82-g80da50a-master
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20201230-v2.20.0-26-ge16dc8bc-master
         command:
         - ./prow/gcpproxy-build.sh
         env:
@@ -35,7 +35,7 @@ presubmits:
       description: "Runs all unit and integration tests."
     spec:
       containers:
-      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20201013-v2.16.0-82-g80da50a-master
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20201230-v2.20.0-26-ge16dc8bc-master
         command:
         - ./prow/gcpproxy-presubmit.sh
         env:
@@ -60,7 +60,7 @@ presubmits:
       description: "Runs all integration tests with latest envoy and old configmanager for api backward compatibility"
     spec:
       containers:
-      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20201013-v2.16.0-82-g80da50a-master
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20201230-v2.20.0-26-ge16dc8bc-master
         command:
         - ./prow/gcpproxy-api-regression.sh
         env:
@@ -85,7 +85,7 @@ presubmits:
       description: "Runs all unit and integration tests with ASan."
     spec:
       containers:
-      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20201013-v2.16.0-82-g80da50a-master
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20201230-v2.20.0-26-ge16dc8bc-master
         command:
         - ./prow/presubmit-asan.sh
         env:
@@ -110,7 +110,7 @@ presubmits:
       description: "Runs all unit and integration tests with TSan."
     spec:
       containers:
-      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20201013-v2.16.0-82-g80da50a-master
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20201230-v2.20.0-26-ge16dc8bc-master
         command:
         - ./prow/presubmit-tsan.sh
         env:
@@ -455,7 +455,7 @@ presubmits:
       description: "Runs e2e tests for Cloud Run."
     spec:
       containers:
-      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20201013-v2.16.0-82-g80da50a-master
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20201230-v2.20.0-26-ge16dc8bc-master
         command:
         - ./prow/gcpproxy-e2e.sh
         env:
@@ -482,7 +482,7 @@ presubmits:
       description: "Runs e2e tests for Cloud Functions."
     spec:
       containers:
-      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20201013-v2.16.0-82-g80da50a-master
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20201230-v2.20.0-26-ge16dc8bc-master
         command:
         - ./prow/gcpproxy-e2e.sh
         env:
@@ -509,7 +509,7 @@ presubmits:
       description: "Runs e2e tests for App Engine."
     spec:
       containers:
-      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20201013-v2.16.0-82-g80da50a-master
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20201230-v2.20.0-26-ge16dc8bc-master
         command:
         - ./prow/gcpproxy-e2e.sh
         env:
@@ -536,7 +536,7 @@ presubmits:
       description: "Runs e2e tests for Cloud Run."
     spec:
       containers:
-      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20201013-v2.16.0-82-g80da50a-master
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20201230-v2.20.0-26-ge16dc8bc-master
         command:
         - ./prow/gcpproxy-e2e.sh
         env:
@@ -563,7 +563,7 @@ presubmits:
       description: "Runs e2e test for gcloud_build_image script."
     spec:
       containers:
-      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20201013-v2.16.0-82-g80da50a-master
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20201230-v2.20.0-26-ge16dc8bc-master
         command:
         - ./prow/e2e-gcloud-build-image.sh
         env:
@@ -594,7 +594,7 @@ periodics:
         base_ref: master
     spec:
       containers:
-        - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20201013-v2.16.0-82-g80da50a-master
+        - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20201230-v2.20.0-26-ge16dc8bc-master
           command:
             - ./prow/continuous-build.sh
           env:
@@ -623,7 +623,7 @@ periodics:
         base_ref: master
     spec:
       containers:
-        - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20201013-v2.16.0-82-g80da50a-master
+        - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20201230-v2.20.0-26-ge16dc8bc-master
           command:
             - ./prow/gcpproxy-presubmit.sh
           env:
@@ -652,7 +652,7 @@ periodics:
         base_ref: master
     spec:
       containers:
-        - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20201013-v2.16.0-82-g80da50a-master
+        - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20201230-v2.20.0-26-ge16dc8bc-master
           command:
             - ./prow/presubmit-asan.sh
           env:
@@ -681,7 +681,7 @@ periodics:
         base_ref: master
     spec:
       containers:
-        - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20201013-v2.16.0-82-g80da50a-master
+        - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20201230-v2.20.0-26-ge16dc8bc-master
           command:
             - ./prow/presubmit-tsan.sh
           env:
@@ -1061,7 +1061,7 @@ periodics:
         base_ref: master
     spec:
       containers:
-        - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20201013-v2.16.0-82-g80da50a-master
+        - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20201230-v2.20.0-26-ge16dc8bc-master
           command:
             - ./prow/e2e-cloud-run-cloud-run-http-bookstore.sh
           env:
@@ -1092,7 +1092,7 @@ periodics:
         base_ref: master
     spec:
       containers:
-        - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20201013-v2.16.0-82-g80da50a-master
+        - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20201230-v2.20.0-26-ge16dc8bc-master
           command:
             - ./prow/e2e-cloud-run-cloud-function-http-bookstore.sh
           env:
@@ -1123,7 +1123,7 @@ periodics:
       base_ref: master
     spec:
       containers:
-      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20201013-v2.16.0-82-g80da50a-master
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20201230-v2.20.0-26-ge16dc8bc-master
         command:
         - ./prow/e2e-cloud-run-app-engine-http-bookstore.sh
         env:
@@ -1154,7 +1154,7 @@ periodics:
         base_ref: master
     spec:
       containers:
-        - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20201013-v2.16.0-82-g80da50a-master
+        - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20201230-v2.20.0-26-ge16dc8bc-master
           command:
             - ./prow/e2e-cloud-run-cloud-run-grpc-echo.sh
           env:
@@ -1183,7 +1183,7 @@ periodics:
       base_ref: master
     spec:
       containers:
-      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20201013-v2.16.0-82-g80da50a-master
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20201230-v2.20.0-26-ge16dc8bc-master
         command:
         - ./prow/e2e-gcloud-build-image.sh
         env:
@@ -1253,7 +1253,7 @@ periodics:
         base_ref: master
     spec:
       containers:
-        - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20201013-v2.16.0-82-g80da50a-master
+        - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20201230-v2.20.0-26-ge16dc8bc-master
           command:
             - ./prow/janitor.sh
           env:
