@@ -352,7 +352,7 @@ periodics:
     testgrid-num-failures-to-alert: '3'
   spec:
     containers:
-    - image: 
+    - image: gcr.io/k8s-testimages/generic_autobump:v20210106-34a4396
       command:
       - /generic_autobump
       args:
