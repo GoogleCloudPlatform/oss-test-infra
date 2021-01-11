@@ -137,7 +137,79 @@ plugins:
   - blunderbuss
   - lifecycle
   - override
-  
+
+  kubeflow/arena:
+  - trigger
+
+  kubeflow/batch-predict:
+  - trigger
+
+  kubeflow/caffe2-operator:
+  - trigger
+
+  kubeflow/chainer-operator:
+  - trigger
+
+  kubeflow/common:
+  - trigger
+
+  kubeflow/community-infra:
+  - trigger
+
+  kubeflow/examples:
+  - trigger
+
+  kubeflow/experimental-seldon:
+  - trigger
+
+  kubeflow/fairing:
+  - trigger
+
+  kubeflow/gcp-blueprints:
+  - trigger
+
+  kubeflow/internal-acls:
+  - trigger
+
+  kubeflow/kfp-tekton:
+  - trigger
+
+  kubeflow/kfp-tekton-backend:
+  - trigger
+
+  kubeflow/kubebench:
+  - trigger
+
+  kubeflow/kubeflow:
+  - trigger
+
+  kubeflow/metadata:
+  - trigger
+
+  kubeflow/mpi-operator:
+  - trigger
+
+  kubeflow/mxnet-operator:
+  - trigger
+
+  kubeflow/pipelines:
+  - trigger
+
+  kubeflow/reporting:
+  - trigger
+
+  kubeflow/testing:
+  - trigger
+
+  kubeflow/tf-operator:
+  - trigger
+
+  kubeflow/website:
+  - trigger
+
+  kubeflow/xgboost-operator:
+  - trigger
+
   # This is a gerrit repo so this config doesn't do anything. It is included
   # to satisfy the checkconfig tool which expects all repos that configure
   # jobs to enable the trigger plugin if a plugins.yaml is specified.
