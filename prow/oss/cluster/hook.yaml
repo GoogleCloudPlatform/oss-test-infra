@@ -28,13 +28,16 @@ spec:
         image: gcr.io/k8s-prow/hook:v20210111-f6f01a1373
         imagePullPolicy: Always
         args:
-        - --kubeconfig=/etc/kubeconfig/config-20201002
         - --config-path=/etc/config/config.yaml
         - --job-config-path=/etc/job-config
         - --dry-run=false
         - --github-token-path=/etc/github/oauth
         - --github-endpoint=http://ghproxy
         - --github-endpoint=https://api.github.com
+        env:
+        # Use KUBECONFIG envvar rather than --kubeconfig flag in order to provide multiple configs to merge.
+        - name: KUBECONFIG
+          value: "/etc/kubeconfig/config-20201002:/etc/build-kubeflow/kubeconfig"
         ports:
         - name: http
           containerPort: 8888
@@ -57,6 +60,9 @@ spec:
         - name: kubeconfig
           mountPath: /etc/kubeconfig
           readOnly: true
+        - name: build-kubeflow
+          mountPath: /etc/build-kubeflow
+          readOnly: true
       volumes:
       - name: hmac
         secret:
@@ -77,6 +83,10 @@ spec:
         secret:
           defaultMode: 420
           secretName: kubeconfig
+      - name: build-kubeflow
+        secret:
+          defaultMode: 420
+          secretName: kubeconfig-build-kubeflow
 ---
 apiVersion: v1
 kind: Service

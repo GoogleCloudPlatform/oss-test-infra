@@ -21,10 +21,13 @@ spec:
       - name: sinker
         image: gcr.io/k8s-prow/sinker:v20210111-f6f01a1373
         args:
-        - --kubeconfig=/etc/kubeconfig/config-20201002
         - --config-path=/etc/config/config.yaml
         - --job-config-path=/etc/job-config
         - --dry-run=false
+        env:
+        # Use KUBECONFIG envvar rather than --kubeconfig flag in order to provide multiple configs to merge.
+        - name: KUBECONFIG
+          value: "/etc/kubeconfig/config-20201002:/etc/build-kubeflow/kubeconfig"
         volumeMounts:
         - name: config
           mountPath: /etc/config
@@ -34,6 +37,9 @@ spec:
           readOnly: true
         - mountPath: /etc/kubeconfig
           name: kubeconfig
+          readOnly: true
+        - name: build-kubeflow
+          mountPath: /etc/build-kubeflow
           readOnly: true
       volumes:
       - name: config
@@ -46,6 +52,10 @@ spec:
         secret:
           defaultMode: 420
           secretName: kubeconfig
+      - name: build-kubeflow
+        secret:
+          defaultMode: 420
+          secretName: kubeconfig-build-kubeflow
 ---
 apiVersion: v1
 kind: ServiceAccount
