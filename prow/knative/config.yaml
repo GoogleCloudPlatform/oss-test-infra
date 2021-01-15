@@ -143,6 +143,7 @@ tide:
     - knative/eventing-operator
     - knative/serving-operator
     - knative/observability
+    - knative-sandbox/net-contour
     labels:
     - lgtm
     - approved
@@ -173,6 +174,14 @@ tide:
     missingLabels: *knative_tide_missing_labels
     author: knative-prow-robot
     reviewApprovedRequired: false
+  - repos:
+    - knative-sandbox/net-contour
+    labels:
+    - lgtm
+    - approved
+    - "cla: yes"
+    missingLabels: *knative_tide_missing_labels
+    reviewApprovedRequired: true
   merge_method:
     knative: squash
     knative-sandbox: squash
