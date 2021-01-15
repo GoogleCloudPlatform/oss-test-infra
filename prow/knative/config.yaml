@@ -180,11 +180,7 @@ tide:
     - lgtm
     - approved
     - "cla: yes"
-    missingLabels: &knative_tide_missing_labels
-    - do-not-merge/hold
-    - do-not-merge/work-in-progress
-    - do-not-merge/invalid-owners-file
-    - needs-rebase
+    missingLabels: *knative_tide_missing_labels
     reviewApprovedRequired: true
   merge_method:
     knative: squash
