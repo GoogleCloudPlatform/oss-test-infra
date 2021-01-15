@@ -7,7 +7,7 @@ metadata:
   name: grafana
   namespace: prow-monitoring
 spec:
-  type: ClusterIP
+  type: NodePort
   sessionAffinity: ClientIP
   ports:
   - name: http
@@ -43,6 +43,7 @@ spec:
   - host: oss-prow-monitoring.knative.dev
     http:
       paths:
-      - backend:
+      - path: /monitoring
+        backend:
           serviceName: grafana
           servicePort: 80
