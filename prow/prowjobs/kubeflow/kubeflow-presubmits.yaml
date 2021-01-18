@@ -1,0 +1,15 @@
+presubmits:
+  kubeflow/pipelines:
+  - name: kubeflow-pipeline-frontend-test
+    cluster: kubeflow
+    optional: true
+    always_run: false
+    skip_report: true
+    spec:
+      containers:
+      - image: node:12
+        command:
+        - /bin/sh
+        args:
+        - -c
+        - cd ./frontend && npm run test:ci:prow
