@@ -137,7 +137,31 @@ plugins:
   - blunderbuss
   - lifecycle
   - override
-  
+
+  kubeflow/community:
+  - trigger
+
+  kubeflow/community-infra:
+  - trigger
+
+  kubeflow/gcp-blueprints:
+  - trigger
+
+  kubeflow/internal-acls:
+  - trigger
+
+  kubeflow/metadata:
+  - trigger
+
+  kubeflow/pipelines:
+  - trigger
+
+  kubeflow/testing:
+  - trigger
+
+  kubeflow/website:
+  - trigger
+
   # This is a gerrit repo so this config doesn't do anything. It is included
   # to satisfy the checkconfig tool which expects all repos that configure
   # jobs to enable the trigger plugin if a plugins.yaml is specified.
