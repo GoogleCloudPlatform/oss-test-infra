@@ -3,9 +3,6 @@ presubmits:
   - name: kubeflow-pipeline-frontend-v2
     cluster: build-kubeflow
     decorate: true
-    optional: true
-    always_run: false
-    skip_report: true
     spec:
       containers:
       - image: node:12
@@ -17,9 +14,6 @@ presubmits:
   - name: kubeflow-pipeline-backend-v2
     cluster: build-kubeflow
     decorate: true
-    optional: true
-    always_run: false
-    skip_report: true
     spec:
       containers:
       - image: l.gcr.io/google/bazel:0.24.0
@@ -28,9 +22,6 @@ presubmits:
   - name: kubeflow-pipeline-e2e-v2
     cluster: build-kubeflow
     decorate: true
-    optional: true
-    always_run: false
-    skip_report: true
     spec:
       containers:
       - image: gcr.io/k8s-testimages/kubekins-e2e:v20210113-cc576af-master
@@ -44,9 +35,6 @@ presubmits:
   - name: kubeflow-pipeline-sample-v2
     cluster: build-kubeflow
     decorate: true
-    optional: true
-    always_run: false
-    skip_report: true
     spec:
       containers:
       - image: gcr.io/k8s-testimages/kubekins-e2e:v20210113-cc576af-master
@@ -62,9 +50,7 @@ presubmits:
   - name: kubeflow-pipeline-integration-v2
     cluster: build-kubeflow
     decorate: true
-    optional: true
     always_run: false
-    skip_report: true
     spec:
       containers:
       - image: gcr.io/k8s-testimages/kubekins-e2e:v20210113-cc576af-master
@@ -82,9 +68,7 @@ presubmits:
   - name: kubeflow-pipeline-mkp-v2
     cluster: build-kubeflow
     decorate: true
-    optional: true
     always_run: false
-    skip_report: true
     spec:
       containers:
       - image: gcr.io/k8s-testimages/kubekins-e2e:v20210113-cc576af-master
@@ -93,9 +77,6 @@ presubmits:
   - name: kubeflow-pipeline-upgrade-v2
     cluster: build-kubeflow
     decorate: true
-    optional: true
-    always_run: false
-    skip_report: true
     spec:
       containers:
       - image: gcr.io/k8s-testimages/kubekins-e2e:v20210113-cc576af-master
@@ -107,9 +88,6 @@ presubmits:
 
   - name: kubeflow-pipelines-sdk-python36-v2
     decorate: true
-    optional: true
-    always_run: false
-    skip_report: true
     run_if_changed: "sdk/.*"
     spec:
       containers:
@@ -120,9 +98,6 @@ presubmits:
   - name: kubeflow-pipelines-sdk-python37-v2
     cluster: build-kubeflow
     decorate: true
-    optional: true
-    always_run: false
-    skip_report: true
     run_if_changed: "sdk/.*"
     spec:
       containers:
@@ -132,9 +107,6 @@ presubmits:
 
   - name: kubeflow-pipelines-sdk-python38-v2
     decorate: true
-    optional: true
-    always_run: false
-    skip_report: true
     run_if_changed: "sdk/.*"
     spec:
       containers:
@@ -145,9 +117,6 @@ presubmits:
   - name: kubeflow-pipelines-sdk-python39-v2
     cluster: build-kubeflow
     decorate: true
-    optional: true
-    always_run: false
-    skip_report: true
     run_if_changed: "sdk/.*"
     spec:
       containers:
@@ -157,9 +126,6 @@ presubmits:
 
   - name: kubeflow-pipelines-tfx-python36-v2
     decorate: true
-    optional: true
-    always_run: false
-    skip_report: true
     run_if_changed: "sdk/.*"
     spec:
       containers:
@@ -170,9 +136,6 @@ presubmits:
   - name: kubeflow-pipelines-component-yaml-v2
     cluster: build-kubeflow
     decorate: true
-    optional: true
-    always_run: false
-    skip_report: true
     run_if_changed: "components/.*\\.yaml"
     spec:
       containers:
@@ -183,9 +146,6 @@ presubmits:
   - name: kubeflow-pipelines-components-gcp-python27-v2
     cluster: build-kubeflow
     decorate: true
-    optional: true
-    always_run: false
-    skip_report: true
     run_if_changed: "components/gcp/container/.*"
     spec:
       containers:
@@ -196,9 +156,6 @@ presubmits:
   - name: kubeflow-pipelines-components-gcp-python37-v2
     cluster: build-kubeflow
     decorate: true
-    optional: true
-    always_run: false
-    skip_report: true
     run_if_changed: "components/gcp/container/.*"
     spec:
       containers:
@@ -206,25 +163,9 @@ presubmits:
         command:
         - ./test/presubmit-components-gcp.sh
 
-  - name: kubeflow-pipelines-component-containers-v2
-    cluster: build-kubeflow
-    decorate: true
-    optional: true
-    always_run: false
-    skip_report: true
-    run_if_changed: "components/.*"
-    spec:
-      containers:
-      - image: python:3.7
-        command:
-        - ./test/presubmit-component-containers.sh
-
   - name: kubeflow-pipelines-backend-visualization-v2
     cluster: build-kubeflow
     decorate: true
-    optional: true
-    always_run: false
-    skip_report: true
     run_if_changed: "backend/src/apiserver/visualization/.*"
     spec:
       containers:
