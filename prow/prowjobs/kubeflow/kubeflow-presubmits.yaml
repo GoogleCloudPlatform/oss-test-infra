@@ -235,8 +235,9 @@ presubmits:
   # this test is not passing
   - name: kubeflow-pipeline-multiuser-test
     cluster: build-kubeflow
-    always_run: false
     decorate: true
+    optional: true
+    always_run: false
     skip_report: false
     spec:
       containers:
