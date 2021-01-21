@@ -14,3 +14,237 @@ presubmits:
         args:
         - -c
         - cd ./frontend && npm run test:ci:prow
+  - name: kubeflow-pipeline-backend-v2-test
+    cluster: build-kubeflow
+    decorate: true
+    optional: true
+    always_run: false
+    skip_report: true
+    spec:
+      containers:
+      - image: l.gcr.io/google/bazel:0.24.0
+        command:
+        - ./test/presubmit-backend-test.sh
+  - name: kubeflow-pipeline-e2e-v2-test
+    cluster: build-kubeflow
+    decorate: true
+    optional: true
+    always_run: false
+    skip_report: true
+    spec:
+      containers:
+      - image: gcr.io/k8s-testimages/kubekins-e2e:v20210113-cc576af-master
+        command:
+        - ./test/presubmit-tests-with-pipeline-deployment.sh
+        args:
+        - --workflow_file
+        - e2e_test_gke_v2.yaml
+        - --test_result_folder
+        - e2e_test
+  - name: kubeflow-pipeline-sample-test
+    cluster: build-kubeflow
+    decorate: true
+    optional: true
+    always_run: false
+    skip_report: true
+    spec:
+      containers:
+      - image: gcr.io/k8s-testimages/kubekins-e2e:v20210113-cc576af-master
+        command:
+        - ./test/presubmit-tests-with-pipeline-deployment.sh
+        args:
+        - --workflow_file
+        - sample_test.yaml
+        - --test_result_folder
+        - sample_test
+        - --timeout
+        - "3600"
+  - name: kubeflow-pipeline-integration-test
+    cluster: build-kubeflow
+    decorate: true
+    optional: true
+    always_run: false
+    skip_report: true
+    spec:
+      containers:
+      - image: gcr.io/k8s-testimages/kubekins-e2e:v20210113-cc576af-master
+        command:
+        - ./test/presubmit-tests-with-pipeline-deployment.sh
+        args:
+        - --workflow_file
+        - sample_test.yaml
+        - --test_result_folder
+        - sample_test
+        - --timeout
+        - "3600"
+        - --is_integration_test
+        - "true"
+  - name: kubeflow-pipeline-mkp-test
+    cluster: build-kubeflow
+    decorate: true
+    optional: true
+    always_run: false
+    skip_report: true
+    spec:
+      containers:
+      - image: gcr.io/k8s-testimages/kubekins-e2e:v20210113-cc576af-master
+        command:
+        - ./test/presubmit-tests-mkp.sh
+  - name: kubeflow-pipeline-upgrade-test
+    cluster: build-kubeflow
+    decorate: true
+    optional: true
+    always_run: false
+    skip_report: true
+    spec:
+      containers:
+      - image: gcr.io/k8s-testimages/kubekins-e2e:v20210113-cc576af-master
+        command:
+        - ./test/upgrade-tests.sh
+        args:
+        - --test_result_folder
+        - upgrade_test
+
+  - name: kubeflow-pipelines-sdk-python36
+    decorate: true
+    optional: true
+    always_run: false
+    skip_report: true
+    run_if_changed: "sdk/.*"
+    spec:
+      containers:
+      - image: python:3.6
+        command:
+        - ./test/presubmit-tests-sdk.sh
+
+  - name: kubeflow-pipelines-sdk-python37
+    cluster: build-kubeflow
+    decorate: true
+    optional: true
+    always_run: false
+    skip_report: true
+    run_if_changed: "sdk/.*"
+    spec:
+      containers:
+      - image: python:3.7
+        command:
+        - ./test/presubmit-tests-sdk.sh
+
+  - name: kubeflow-pipelines-sdk-python38
+    decorate: true
+    optional: true
+    always_run: false
+    skip_report: true
+    run_if_changed: "sdk/.*"
+    spec:
+      containers:
+      - image: python:3.8
+        command:
+        - ./test/presubmit-tests-sdk.sh
+
+  - name: kubeflow-pipelines-sdk-python39
+    cluster: build-kubeflow
+    decorate: true
+    optional: true
+    always_run: false
+    skip_report: true
+    run_if_changed: "sdk/.*"
+    spec:
+      containers:
+      - image: python:3.9
+        command:
+        - ./test/presubmit-tests-sdk.sh
+
+  - name: kubeflow-pipelines-tfx-python36
+    decorate: true
+    optional: true
+    always_run: false
+    skip_report: true
+    run_if_changed: "sdk/.*"
+    spec:
+      containers:
+      - image: python:3.6
+        command:
+        - ./test/presubmit-tests-tfx.sh
+
+  - name: kubeflow-pipelines-component-yaml
+    cluster: build-kubeflow
+    decorate: true
+    optional: true
+    always_run: false
+    skip_report: true
+    run_if_changed: "components/.*\\.yaml"
+    spec:
+      containers:
+      - image: python:3.6
+        command:
+        - ./test/presubmit-component-yaml.sh
+
+  - name: kubeflow-pipelines-components-gcp-python27
+    cluster: build-kubeflow
+    decorate: true
+    optional: true
+    always_run: false
+    skip_report: true
+    run_if_changed: "components/gcp/container/.*"
+    spec:
+      containers:
+      - image: python:2.7
+        command:
+        - ./test/presubmit-components-gcp.sh
+
+  - name: kubeflow-pipelines-components-gcp-python37
+    cluster: build-kubeflow
+    decorate: true
+    optional: true
+    always_run: false
+    skip_report: true
+    run_if_changed: "components/gcp/container/.*"
+    spec:
+      containers:
+      - image: python:3.7
+        command:
+        - ./test/presubmit-components-gcp.sh
+
+  - name: kubeflow-pipelines-component-containers
+    cluster: build-kubeflow
+    decorate: true
+    optional: true
+    always_run: false
+    skip_report: true
+    run_if_changed: "components/.*"
+    spec:
+      containers:
+      - image: python:3.7
+        command:
+        - ./test/presubmit-component-containers.sh
+
+  - name: kubeflow-pipelines-backend-visualization
+    cluster: build-kubeflow
+    decorate: true
+    optional: true
+    always_run: false
+    skip_report: true
+    run_if_changed: "backend/src/apiserver/visualization/.*"
+    spec:
+      containers:
+      - image: python:3.6
+        command:
+        - ./test/presubmit-backend-visualization.sh
+
+  # this test is not passing
+  - name: kubeflow-pipeline-multiuser-test
+    cluster: build-kubeflow
+    always_run: false
+    decorate: true
+    skip_report: false
+    spec:
+      containers:
+      - image: gcr.io/k8s-testimages/kubekins-e2e:v20210113-cc576af-master
+        command:
+        - ./test/multiuser-tests.sh
+        args:
+        - --workflow_file
+        - multiuser_test.yaml
+        - --test_result_folder
+        - multiuser_test
