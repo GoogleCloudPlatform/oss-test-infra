@@ -1,6 +1,6 @@
 presubmits:
   kubeflow/pipelines:
-  - name: kubeflow-pipeline-frontend-v2-test
+  - name: kubeflow-pipeline-frontend-v2
     cluster: build-kubeflow
     decorate: true
     optional: true
@@ -14,7 +14,7 @@ presubmits:
         args:
         - -c
         - cd ./frontend && npm run test:ci:prow
-  - name: kubeflow-pipeline-backend-v2-test
+  - name: kubeflow-pipeline-backend-v2
     cluster: build-kubeflow
     decorate: true
     optional: true
@@ -25,7 +25,7 @@ presubmits:
       - image: l.gcr.io/google/bazel:0.24.0
         command:
         - ./test/presubmit-backend-test.sh
-  - name: kubeflow-pipeline-e2e-v2-test
+  - name: kubeflow-pipeline-e2e-v2
     cluster: build-kubeflow
     decorate: true
     optional: true
@@ -41,7 +41,7 @@ presubmits:
         - e2e_test_gke_v2.yaml
         - --test_result_folder
         - e2e_test
-  - name: kubeflow-pipeline-sample-test
+  - name: kubeflow-pipeline-sample-v2
     cluster: build-kubeflow
     decorate: true
     optional: true
@@ -59,7 +59,7 @@ presubmits:
         - sample_test
         - --timeout
         - "3600"
-  - name: kubeflow-pipeline-integration-test
+  - name: kubeflow-pipeline-integration-v2
     cluster: build-kubeflow
     decorate: true
     optional: true
@@ -79,7 +79,7 @@ presubmits:
         - "3600"
         - --is_integration_test
         - "true"
-  - name: kubeflow-pipeline-mkp-test
+  - name: kubeflow-pipeline-mkp-v2
     cluster: build-kubeflow
     decorate: true
     optional: true
@@ -90,7 +90,7 @@ presubmits:
       - image: gcr.io/k8s-testimages/kubekins-e2e:v20210113-cc576af-master
         command:
         - ./test/presubmit-tests-mkp.sh
-  - name: kubeflow-pipeline-upgrade-test
+  - name: kubeflow-pipeline-upgrade-v2
     cluster: build-kubeflow
     decorate: true
     optional: true
@@ -105,7 +105,7 @@ presubmits:
         - --test_result_folder
         - upgrade_test
 
-  - name: kubeflow-pipelines-sdk-python36
+  - name: kubeflow-pipelines-sdk-python36-v2
     decorate: true
     optional: true
     always_run: false
@@ -117,7 +117,7 @@ presubmits:
         command:
         - ./test/presubmit-tests-sdk.sh
 
-  - name: kubeflow-pipelines-sdk-python37
+  - name: kubeflow-pipelines-sdk-python37-v2
     cluster: build-kubeflow
     decorate: true
     optional: true
@@ -130,7 +130,7 @@ presubmits:
         command:
         - ./test/presubmit-tests-sdk.sh
 
-  - name: kubeflow-pipelines-sdk-python38
+  - name: kubeflow-pipelines-sdk-python38-v2
     decorate: true
     optional: true
     always_run: false
@@ -142,7 +142,7 @@ presubmits:
         command:
         - ./test/presubmit-tests-sdk.sh
 
-  - name: kubeflow-pipelines-sdk-python39
+  - name: kubeflow-pipelines-sdk-python39-v2
     cluster: build-kubeflow
     decorate: true
     optional: true
@@ -155,7 +155,7 @@ presubmits:
         command:
         - ./test/presubmit-tests-sdk.sh
 
-  - name: kubeflow-pipelines-tfx-python36
+  - name: kubeflow-pipelines-tfx-python36-v2
     decorate: true
     optional: true
     always_run: false
@@ -167,7 +167,7 @@ presubmits:
         command:
         - ./test/presubmit-tests-tfx.sh
 
-  - name: kubeflow-pipelines-component-yaml
+  - name: kubeflow-pipelines-component-yaml-v2
     cluster: build-kubeflow
     decorate: true
     optional: true
@@ -180,7 +180,7 @@ presubmits:
         command:
         - ./test/presubmit-component-yaml.sh
 
-  - name: kubeflow-pipelines-components-gcp-python27
+  - name: kubeflow-pipelines-components-gcp-python27-v2
     cluster: build-kubeflow
     decorate: true
     optional: true
@@ -193,7 +193,7 @@ presubmits:
         command:
         - ./test/presubmit-components-gcp.sh
 
-  - name: kubeflow-pipelines-components-gcp-python37
+  - name: kubeflow-pipelines-components-gcp-python37-v2
     cluster: build-kubeflow
     decorate: true
     optional: true
@@ -206,7 +206,7 @@ presubmits:
         command:
         - ./test/presubmit-components-gcp.sh
 
-  - name: kubeflow-pipelines-component-containers
+  - name: kubeflow-pipelines-component-containers-v2
     cluster: build-kubeflow
     decorate: true
     optional: true
@@ -219,7 +219,7 @@ presubmits:
         command:
         - ./test/presubmit-component-containers.sh
 
-  - name: kubeflow-pipelines-backend-visualization
+  - name: kubeflow-pipelines-backend-visualization-v2
     cluster: build-kubeflow
     decorate: true
     optional: true
@@ -233,7 +233,7 @@ presubmits:
         - ./test/presubmit-backend-visualization.sh
 
   # this test is not passing
-  - name: kubeflow-pipeline-multiuser-test
+  - name: kubeflow-pipeline-multiuser-v2
     cluster: build-kubeflow
     decorate: true
     optional: true
