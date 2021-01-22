@@ -17,7 +17,8 @@ periodics:
         imagePullPolicy: Always
         command:
           - "./test/kfp-functional-test/kfp-functional-test.sh"
-  # annotations:
+  annotations:
+    testgrid-create-test-group: "false"
   #   testgrid-dashboards: sig-big-data
   #   description: Periodic job to run kfp functional test
   #   testgrid-alert-email: kubeflow-pipelines+test@google.com
@@ -44,6 +45,7 @@ periodics:
             value: kubeflow
           - name: BRANCH_NAME
             value: master
-  # annotations:
+  annotations:
+    testgrid-create-test-group: "false"
   #   testgrid-dashboards: sig-big-data
   #   description: Periodic job to cleanup ml-pipeline-test GCP project
