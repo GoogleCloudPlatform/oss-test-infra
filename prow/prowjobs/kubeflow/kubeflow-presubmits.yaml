@@ -1,6 +1,7 @@
 presubmits:
   kubeflow/pipelines:
   - name: kubeflow-pipeline-frontend-test
+    always_run: true
     cluster: build-kubeflow
     decorate: true
     spec:
@@ -12,6 +13,7 @@ presubmits:
         - -c
         - cd ./frontend && npm run test:ci:prow
   - name: kubeflow-pipeline-backend-test
+    always_run: true
     cluster: build-kubeflow
     decorate: true
     spec:
@@ -20,6 +22,7 @@ presubmits:
         command:
         - ./test/presubmit-backend-test.sh
   - name: kubeflow-pipeline-e2e-test
+    always_run: true
     cluster: build-kubeflow
     decorate: true
     spec:
@@ -33,6 +36,7 @@ presubmits:
         - --test_result_folder
         - e2e_test
   - name: kubeflow-pipeline-sample-test
+    always_run: true
     cluster: build-kubeflow
     decorate: true
     spec:
@@ -48,9 +52,9 @@ presubmits:
         - --timeout
         - "3600"
   - name: kubeflow-pipeline-integration-test
+    always_run: false
     cluster: build-kubeflow
     decorate: true
-    always_run: false
     spec:
       containers:
       - image: gcr.io/k8s-testimages/kubekins-e2e:v20210113-cc576af-master
@@ -66,15 +70,16 @@ presubmits:
         - --is_integration_test
         - "true"
   - name: kubeflow-pipeline-mkp-test
+    always_run: false
     cluster: build-kubeflow
     decorate: true
-    always_run: false
     spec:
       containers:
       - image: gcr.io/k8s-testimages/kubekins-e2e:v20210113-cc576af-master
         command:
         - ./test/presubmit-tests-mkp.sh
   - name: kubeflow-pipeline-upgrade-test
+    always_run: true
     cluster: build-kubeflow
     decorate: true
     spec:
@@ -87,6 +92,7 @@ presubmits:
         - upgrade_test
 
   - name: kubeflow-pipelines-sdk-python36
+    cluster: build-kubeflow
     decorate: true
     run_if_changed: "sdk/.*"
     spec:
@@ -106,6 +112,7 @@ presubmits:
         - ./test/presubmit-tests-sdk.sh
 
   - name: kubeflow-pipelines-sdk-python38
+    cluster: build-kubeflow
     decorate: true
     run_if_changed: "sdk/.*"
     spec:
@@ -125,6 +132,7 @@ presubmits:
         - ./test/presubmit-tests-sdk.sh
 
   - name: kubeflow-pipelines-tfx-python36
+    cluster: build-kubeflow
     decorate: true
     run_if_changed: "sdk/.*"
     spec:
@@ -174,19 +182,19 @@ presubmits:
         - ./test/presubmit-backend-visualization.sh
 
   # this test is not passing
-  - name: kubeflow-pipeline-multiuser-test
-    cluster: build-kubeflow
-    decorate: true
-    optional: true
-    always_run: false
-    skip_report: false
-    spec:
-      containers:
-      - image: gcr.io/k8s-testimages/kubekins-e2e:v20210113-cc576af-master
-        command:
-        - ./test/multiuser-tests.sh
-        args:
-        - --workflow_file
-        - multiuser_test.yaml
-        - --test_result_folder
-        - multiuser_test
+  # - name: kubeflow-pipeline-multiuser-test
+  #   cluster: build-kubeflow
+  #   decorate: true
+  #   optional: true
+  #   always_run: false
+  #   skip_report: false
+  #   spec:
+  #     containers:
+  #     - image: gcr.io/k8s-testimages/kubekins-e2e:v20210113-cc576af-master
+  #       command:
+  #       - ./test/multiuser-tests.sh
+  #       args:
+  #       - --workflow_file
+  #       - multiuser_test.yaml
+  #       - --test_result_folder
+  #       - multiuser_test
