@@ -25,8 +25,8 @@ apply: apply-components
 	$(MAKE) -C ./mixins apply
 	# Make sure keeping @ so that the token is not surfaced on command line.
 	# Makefile execute each line in separate sub-shell, so all commands have to be on the same line
-	@email="$(shell gcloud secrets versions access latest --secret prometheus-alerter-email-address --project ${PROJECT})"; \
-		token="$(shell gcloud secrets versions access latest --secret prometheus-alerter-app-password --project ${PROJECT})"; \
+	@email="$(shell gcloud beta secrets versions access latest --secret prometheus-alerter-email-address --project ${PROJECT})"; \
+		token="$(shell gcloud beta secrets versions access latest --secret prometheus-alerter-app-password --project ${PROJECT})"; \
 		cat ./secrets/alertmanager-prow_secret.yaml | sed s/{{\ smtp_app_username\ }}/$${email}/g | \
         sed s/{{\ smtp_app_password\ }}/$${token}/g | \
 		kubectl apply -f -
