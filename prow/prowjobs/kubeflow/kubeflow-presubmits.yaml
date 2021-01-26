@@ -1,6 +1,6 @@
 presubmits:
   kubeflow/pipelines:
-  - name: kubeflow-pipeline-frontend
+  - name: kubeflow-pipeline-frontend-test
     cluster: build-kubeflow
     decorate: true
     spec:
@@ -11,7 +11,7 @@ presubmits:
         args:
         - -c
         - cd ./frontend && npm run test:ci:prow
-  - name: kubeflow-pipeline-backend
+  - name: kubeflow-pipeline-backend-test
     cluster: build-kubeflow
     decorate: true
     spec:
@@ -19,7 +19,7 @@ presubmits:
       - image: l.gcr.io/google/bazel:0.24.0
         command:
         - ./test/presubmit-backend-test.sh
-  - name: kubeflow-pipeline-e2e
+  - name: kubeflow-pipeline-e2e-test
     cluster: build-kubeflow
     decorate: true
     spec:
@@ -32,7 +32,7 @@ presubmits:
         - e2e_test_gke_v2.yaml
         - --test_result_folder
         - e2e_test
-  - name: kubeflow-pipeline-sample
+  - name: kubeflow-pipeline-sample-test
     cluster: build-kubeflow
     decorate: true
     spec:
@@ -47,7 +47,7 @@ presubmits:
         - sample_test
         - --timeout
         - "3600"
-  - name: kubeflow-pipeline-integration
+  - name: kubeflow-pipeline-integration-test
     cluster: build-kubeflow
     decorate: true
     always_run: false
@@ -65,7 +65,7 @@ presubmits:
         - "3600"
         - --is_integration_test
         - "true"
-  - name: kubeflow-pipeline-mkp
+  - name: kubeflow-pipeline-mkp-test
     cluster: build-kubeflow
     decorate: true
     always_run: false
@@ -74,7 +74,7 @@ presubmits:
       - image: gcr.io/k8s-testimages/kubekins-e2e:v20210113-cc576af-master
         command:
         - ./test/presubmit-tests-mkp.sh
-  - name: kubeflow-pipeline-upgrade
+  - name: kubeflow-pipeline-upgrade-test
     cluster: build-kubeflow
     decorate: true
     spec:
@@ -174,7 +174,7 @@ presubmits:
         - ./test/presubmit-backend-visualization.sh
 
   # this test is not passing
-  - name: kubeflow-pipeline-multiuser
+  - name: kubeflow-pipeline-multiuser-test
     cluster: build-kubeflow
     decorate: true
     optional: true
