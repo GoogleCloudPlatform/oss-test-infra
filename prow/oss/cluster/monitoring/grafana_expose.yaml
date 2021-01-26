@@ -22,7 +22,7 @@ spec:
 apiVersion: networking.gke.io/v1beta1
 kind: ManagedCertificate
 metadata:
-  name: oss-prow-knative-dev
+  name: oss-prow-monitoring-knative-dev
   namespace: prow-monitoring
 spec:
   domains:
@@ -35,15 +35,16 @@ metadata:
   namespace: prow-monitoring
   annotations:
     kubernetes.io/ingress.global-static-ip-name: oss-prow-monitoring-ip
-    kubernetes.io/ingress.class: "gce"
     kubernetes.io/tls-acme: "true"
-    networking.gke.io/managed-certificates: oss-prow-knative-dev
+    certmanager.k8s.io/cluster-issuer: letsencrypt-prod
+    certmanager.k8s.io/acme-http01-edit-in-place: "true"
+    kubernetes.io/ingress.class: "gce"
+    networking.gke.io/managed-certificates: oss-prow-monitoring-knative-dev
 spec:
   rules:
   - host: oss-prow-monitoring.knative.dev
     http:
       paths:
-      - path: /monitoring
-        backend:
+      - backend:
           serviceName: grafana
           servicePort: 80
