@@ -217,6 +217,7 @@ postsubmits:
     cluster: test-infra-trusted
     branches:
     - ^master$
+    run_if_changed: '^([^c]|c[^l]|cl[^u]|clu[^s]|clus[^t]|clust[^e]|cluste[^r]).*$' # Anything outside cluster
     decorate: true
     annotations:
       testgrid-dashboards: googleoss-test-infra
