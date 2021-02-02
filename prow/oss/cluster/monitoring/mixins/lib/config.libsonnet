@@ -1,25 +1,10 @@
-{
-  _config+:: {
-    // Grafana dashboard IDs are necessary for stable links for dashboards
-    grafanaDashboardIDs: {
-      'ghproxy.json': 'd72fe8d0400b2912e319b1e95d0ab1b3',
-      'slo.json': 'ea313af4b7904c7c983d20d9572235a5',
-    },
-    // Component name constants
-    components: {
-      // Values should be lowercase for use with prometheus 'job' label.
-      crier: 'crier',
-      deck: 'deck',
-      ghproxy: 'ghproxy',
-      hook: 'hook',
-      horologium: 'horologium',
-      monitoring: 'monitoring', // Aggregate of prometheus, alertmanager, and grafana.
-      plank: 'plank', // Mutually exclusive with prowControllerManager
-      prowControllerManager: 'prow-controller-manager',
-      sinker: 'sinker',
-      tide: 'tide',
-    },
-    local comps = self.components,
+local util = import 'config_util.libsonnet';
+
+//
+// Edit configuration in this object.
+//
+local config = {
+  local comps = util.consts.components,
 
     // SLO compliance tracking config
     slo: {
@@ -50,6 +35,11 @@
     webhookMissingAlertInterval: '60m',
 
     // How many days prow hasn't been bumped.
-    prowImageStaleByDays: 14,
-  },
+  prowImageStaleByDays: {daysStale: 14, eventDuration: '24h'},
+};
+
+// Generate the real config by adding in constant fields and defaulting where needed.
+{
+  _config+:: util.defaultConfig(config),
+  _util+:: util,
 }
