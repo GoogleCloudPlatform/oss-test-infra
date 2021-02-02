@@ -6,15 +6,23 @@ local util = import 'config_util.libsonnet';
 local config = {
   local comps = util.consts.components,
 
-    // SLO compliance tracking config
-    slo: {
-      components: [
-        comps.deck,
-        comps.hook,
-        comps.plank,
-        comps.sinker,
-        comps.tide,
-        comps.monitoring,
+  // Instance specifics
+  instance: {
+    name: "OSS Prow",
+    botName: "google-oss-robot",
+    url: "https://oss-prow.knative.dev",
+    monitoringURL: "https://oss-prow-monitoring.knative.dev",
+  },
+
+  // SLO compliance tracking config
+  slo: {
+    components: [
+      comps.deck,
+      comps.hook,
+      comps.plank,
+      comps.sinker,
+      comps.tide,
+      comps.monitoring,
       ],
     },
 
