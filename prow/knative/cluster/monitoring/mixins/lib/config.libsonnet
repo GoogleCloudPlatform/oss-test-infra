@@ -1,57 +1,58 @@
-{
-  _config+:: {
-    // Grafana dashboard IDs are necessary for stable links for dashboards
-    grafanaDashboardIDs: {
-      'boskos-http.json': 'eec46c579cbf4a518e5bbcbbf4913de9',
-      'ghproxy.json': 'd72fe8d0400b2912e319b1e95d0ab1b3',
-      'slo.json': 'ea313af4b7904c7c983d20d9572235a5',
-    },
-    // Component name constants
-    components: {
-      // Values should be lowercase for use with prometheus 'job' label.
-      crier: 'crier',
-      deck: 'deck',
-      ghproxy: 'ghproxy',
-      hook: 'hook',
-      horologium: 'horologium',
-      monitoring: 'monitoring', // Aggregate of prometheus, alertmanager, and grafana.
-      plank: 'plank', // Mutually exclusive with prowControllerManager
-      prowControllerManager: 'prow-controller-manager',
-      sinker: 'sinker',
-      tide: 'tide',
-    },
-    local comps = self.components,
+local util = import 'config_util.libsonnet';
 
-    // SLO compliance tracking config
-    slo: {
-      components: [
-        comps.deck,
-        comps.hook,
-        comps.plank,
-        comps.sinker,
-        comps.tide,
-        comps.monitoring,
-      ],
-    },
+//
+// Edit configuration in this object.
+//
+local config = {
+  local comps = util.consts.components,
 
-    // Tide pools that are important enough to have their own graphs on the dashboard.
-    tideDashboardExplicitPools: [],
-
-    // Additional scraping endpoints
-    probeTargets: [
-    # ATTENTION: Keep this in sync with the list in ../../additional-scrape-configs_secret.yaml
-      {url: 'https://prow.knative.dev', labels: {slo: comps.deck}},
-    ],
-
-    // Boskos endpoints to be monitored
-    boskosResourcetypes: [
-      {instance: "35.184.198.223:9090", type: "gke-project", friendly: "GKE projects"},
-    ],
-
-    // How long we go during work hours without seeing a webhook before alerting.
-    webhookMissingAlertInterval: '30m',
-
-    // How many days prow hasn't been bumped.
-    prowImageStaleByDays: 14,
+  // Instance specifics
+  instance: {
+    name: "Knative Prow",
+    botName: "knative-prow-robot",
+    url: "https://prow.knative.dev",
   },
+
+  // SLO compliance tracking config
+  slo: {
+    components: [
+      comps.deck,
+      comps.hook,
+      comps.plank,
+      comps.sinker,
+      comps.tide,
+      comps.monitoring,
+    ],
+  },
+
+  // Heartbeat jobs
+  heartbeatJobs: [
+    {name: 'ci-knative-heartbeat', interval: '5m', alertInterval: '20m'},
+  ],
+
+  // Tide pools that are important enough to have their own graphs on the dashboard.
+  tideDashboardExplicitPools: [],
+
+  // Additional scraping endpoints
+  probeTargets: [
+  # ATTENTION: Keep this in sync with the list in ../../additional-scrape-configs_secret.yaml
+    {url: 'https://prow.knative.dev', labels: {slo: comps.deck}},
+  ],
+
+  // Boskos endpoints to be monitored
+  boskosResourcetypes: [
+    {instance: "35.184.198.223:9090", type: "gke-project", friendly: "GKE projects"},
+  ],
+
+  // How long we go during work hours without seeing a webhook before alerting.
+  webhookMissingAlertInterval: '60m',
+
+  // How many days prow hasn't been bumped.
+  prowImageStaleByDays: {daysStale: 14, eventDuration: '24h'},
+};
+
+// Generate the real config by adding in constant fields and defaulting where needed.
+{
+  _config+:: util.defaultConfig(config),
+  _util+:: util,
 }
