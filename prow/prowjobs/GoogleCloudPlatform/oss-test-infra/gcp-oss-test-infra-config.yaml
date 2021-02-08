@@ -7,7 +7,7 @@ presubmits:
     always_run: true
     spec:
       containers:
-        - image: gcr.io/k8s-prow/checkconfig:v20210201-6494714d87
+        - image: gcr.io/k8s-prow/checkconfig:v20210206-3c06bdc6cf
           imagePullPolicy: Always
           command:
             - /checkconfig
@@ -75,7 +75,7 @@ presubmits:
       base_ref: master
     spec:
       containers:
-        - image: gcr.io/k8s-prow/checkconfig:v20210201-6494714d87
+        - image: gcr.io/k8s-prow/checkconfig:v20210206-3c06bdc6cf
           imagePullPolicy: Always
           command:
             - /checkconfig
@@ -181,7 +181,7 @@ postsubmits:
     - master
     spec:
       containers:
-      - image: gcr.io/k8s-prow/hmac:v20210201-6494714d87
+      - image: gcr.io/k8s-prow/hmac:v20210206-3c06bdc6cf
         command:
         - /hmac
         args:
@@ -314,7 +314,7 @@ periodics:
     testgrid-num-failures-to-alert: '3'
   spec:
     containers:
-    - image: gcr.io/k8s-prow/autobump:v20210201-6494714d87
+    - image: gcr.io/k8s-prow/autobump:v20210206-3c06bdc6cf
       command:
       - /autobump.sh
       args:
@@ -393,7 +393,7 @@ periodics:
     testgrid-num-failures-to-alert: '3'
   spec:
     containers:
-    - image: gcr.io/k8s-prow/autobump:v20210201-6494714d87
+    - image: gcr.io/k8s-prow/autobump:v20210206-3c06bdc6cf
       command:
       - /autobump.sh
       args:
