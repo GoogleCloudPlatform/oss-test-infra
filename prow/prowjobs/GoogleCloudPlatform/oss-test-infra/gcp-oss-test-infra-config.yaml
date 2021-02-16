@@ -83,7 +83,8 @@ presubmits:
             - --config-path=./prow/knative/config.yaml
             - --job-config-path=../../knative/test-infra/config/prod/prow/jobs
             - --plugin-config=prow/knative/plugins.yaml
-            - --strict
+            # TODO: re-enable strict once we have completed our experimentation with CODEOWNERS/net-contour
+            # - --strict
             # This warning can forbid valid (and convenient) config. Exclude it.
             # Details: https://github.com/GoogleCloudPlatform/oss-test-infra/pull/131#discussion_r334208082
             - --exclude-warning=mismatched-tide
