@@ -89,6 +89,8 @@ presubmits:
             - --exclude-warning=mismatched-tide
             - --exclude-warning=non-decorated-jobs
             - --exclude-warning=long-job-names
+            # TODO: Re-enable these once we're done experimenting with CODEOWNERS in net-contour.
+            - --exclude-warning=mismatched-tide-lenient
 
 postsubmits:
   GoogleCloudPlatform/oss-test-infra:
