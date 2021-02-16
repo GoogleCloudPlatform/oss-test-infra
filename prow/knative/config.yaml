@@ -177,8 +177,6 @@ tide:
   - repos:
     - knative-sandbox/net-contour
     labels:
-    - lgtm
-    - approved
     - "cla: yes"
     missingLabels: *knative_tide_missing_labels
     reviewApprovedRequired: true
