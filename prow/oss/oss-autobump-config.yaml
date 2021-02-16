@@ -1,0 +1,23 @@
+---
+gitHubLogin: "google-oss-robot"
+gitHubToken: "/etc/github-token/oauth"
+onCallAddress: "https://storage.googleapis.com/kubernetes-jenkins/oncall.json"
+skipPullRequest: false
+gitHubOrg: "GoogleCloudPlatform"
+gitHubRepo: "oss-test-infra"
+remoteName: "oss-test-infra"
+headBranchName: "autobump-oss-prow"
+upstreamURLBase: "https://raw.githubusercontent.com/kubernetes/test-infra/master"
+includedConfigPaths:
+  - "prow/oss/cluster"
+  - "prow/prowjobs"
+targetVersion: "upstream"
+extraFiles:
+  - "prow/oss/config.yaml"
+prefixes: 
+  - name: "oss-prow"
+    prefix: "gcr.io/k8s-prow/"
+    repo: "https://github.com/kubernetes/test-infra"
+    refConfigFile: "config/prow/cluster/deck_deployment.yaml"
+    summarise: false
+    consistentImages: true
