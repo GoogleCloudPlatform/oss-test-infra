@@ -19,7 +19,7 @@ approve:
   - "knative-sandbox"
   - "google/knative-gcp"
   - "knative-prow-robot/test-infra"
-  require_self_approval: false
+  require_self_approval: true
   ignore_review_state: false
 
 # Settings for the "lgtm" plugin.
@@ -102,7 +102,6 @@ plugins:
   knative:
   - approve
   - assign
-  - blunderbuss
   - buildifier
   - cat
   - dog
@@ -129,7 +128,6 @@ plugins:
   knative-sandbox:
   - approve
   - assign
-  - blunderbuss
   - buildifier
   - cat
   - dog
