@@ -2,7 +2,6 @@ presubmits:
   kubeflow/gcp-blueprints:
   - name: kubeflow-gcp-blueprints-presubmit
     cluster: build-kubeflow
-    decorate: true
     optional: true    # Not required for merging
     always_run: false # Run for every PR, or only when requested.
     skip_report: true # No report on github

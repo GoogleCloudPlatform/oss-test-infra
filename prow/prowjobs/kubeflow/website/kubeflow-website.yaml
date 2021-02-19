@@ -3,7 +3,6 @@ presubmits:
   # TODO(Bobgy): figure out whether this is useful
   - name: kubeflow-website-link-check
     cluster: build-kubeflow
-    decorate: true
     optional: true
     spec:
       containers:
