@@ -1,0 +1,11 @@
+presubmits:
+  kubeflow/website:
+  # TODO(Bobgy): figure out whether this is useful
+  - name: kubeflow-website-link-check
+    cluster: build-kubeflow
+    decorate: true
+    optional: true
+    spec:
+      containers:
+      - image: praqma/linkchecker:v9.3.1-154-g22449abb-10
+        imagePullPolicy: Always

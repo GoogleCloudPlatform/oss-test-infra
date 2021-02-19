@@ -1,0 +1,72 @@
+presubmits:
+  kubeflow/gcp-blueprints:
+  - name: kubeflow-gcp-blueprints-presubmit
+    cluster: build-kubeflow
+    decorate: true
+    optional: true    # Not required for merging
+    always_run: false # Run for every PR, or only when requested.
+    skip_report: true # No report on github
+    spec:
+      containers:
+      - image: gcr.io/kubeflow-ci/test-worker:latest
+        imagePullPolicy: Always
+
+postsubmits:
+  kubeflow/gcp-blueprints:
+  - name: kubeflow-gcp-blueprints-postsubmit
+    cluster: build-kubeflow
+    labels:
+      preset-service-account: "true"
+    spec:
+      containers:
+      - image: gcr.io/kubeflow-ci/test-worker:latest
+        imagePullPolicy: Always
+
+    annotations:
+      testgrid-dashboards: sig-big-data
+      description: Postsubmit tests for kubeflow/gcp-blueprints.
+
+# TODO(Bobgy): re-enable periodic tests.
+# periodics:
+# - name: kubeflow-gcp-blueprints-periodic-master
+#   cluster: build-kubeflow
+#   interval: 20m
+#   spec:
+#     containers:
+#     - image: gcr.io/kubeflow-ci/test-worker:latest
+#       imagePullPolicy: Always
+#       env:
+#       - name: REPO_OWNER
+#         value: kubeflow
+#       - name: REPO_NAME
+#         value: gcp-blueprints
+#       - name: BRANCH_NAME
+#         value: master
+#   annotations:
+#     testgrid-create-test-group: "false"
+#     # testgrid-dashboards: sig-big-data
+#     # description: Periodic testing of Kubeflow gcp blueprints on the latest master branch.
+#     # # TODO: use a public email group
+#     # testgrid-alert-email: kubeflow-engineering@google.com
+#     # testgrid-num-failures-to-alert: "3"
+# - name: kubeflow-gcp-blueprints-periodic-1-1
+#   cluster: build-kubeflow
+#   interval: 20m
+#   spec:
+#     containers:
+#     - image: gcr.io/kubeflow-ci/test-worker:latest
+#       imagePullPolicy: Always
+#       env:
+#       - name: REPO_OWNER
+#         value: kubeflow
+#       - name: REPO_NAME
+#         value: gcp-blueprints
+#       - name: BRANCH_NAME
+#         value: v1.1-branch
+#   annotations:
+#     testgrid-create-test-group: "false"
+#     # testgrid-dashboards: sig-big-data
+#     # description: Periodic testing of Kubeflow gcp blueprints on the 1.1 branch.
+#     # # TODO: use a public email group
+#     # testgrid-alert-email: kubeflow-engineering@google.com
+#     # testgrid-num-failures-to-alert: "3"
