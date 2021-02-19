@@ -22,8 +22,9 @@ postsubmits:
         imagePullPolicy: Always
 
     annotations:
-      testgrid-dashboards: sig-big-data
-      description: Postsubmit tests for kubeflow/gcp-blueprints.
+      testgrid-create-test-group: "false"
+      # testgrid-dashboards: sig-big-data
+      # description: Postsubmit tests for kubeflow/gcp-blueprints.
 
 # TODO(Bobgy): re-enable periodic tests.
 # periodics:
