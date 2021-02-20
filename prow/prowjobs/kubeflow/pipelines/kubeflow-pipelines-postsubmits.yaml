@@ -54,7 +54,7 @@ postsubmits:
         - --test_result_folder
         - sample_test
         - --timeout
-        - "3600"
+        - "7200"
         - --is_integration_test
         - "true"
     annotations:
