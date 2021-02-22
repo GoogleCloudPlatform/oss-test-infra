@@ -320,7 +320,7 @@ periodics:
       command:
       - /generic_autobump
       args:
-      - --config=prow/knative/knative-autobump-config.yaml
+      - --config=prow/oss/oss-autobump-config.yaml
       volumeMounts:
       - name: github
         mountPath: /etc/github-token
