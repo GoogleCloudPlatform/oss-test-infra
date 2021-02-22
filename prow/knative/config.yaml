@@ -143,7 +143,12 @@ tide:
     - knative/eventing-operator
     - knative/serving-operator
     - knative/observability
+    - knative-sandbox/net-certmanager
     - knative-sandbox/net-contour
+    - knative-sandbox/net-http01
+    - knative-sandbox/net-ingressv2
+    - knative-sandbox/net-istio
+    - knative-sandbox/net-kourier
     labels:
     - lgtm
     - approved
@@ -175,7 +180,12 @@ tide:
     author: knative-prow-robot
     reviewApprovedRequired: false
   - repos:
+    - knative-sandbox/net-certmanager
     - knative-sandbox/net-contour
+    - knative-sandbox/net-http01
+    - knative-sandbox/net-ingressv2
+    - knative-sandbox/net-istio
+    - knative-sandbox/net-kourier
     labels:
     - "cla: yes"
     missingLabels: *knative_tide_missing_labels
