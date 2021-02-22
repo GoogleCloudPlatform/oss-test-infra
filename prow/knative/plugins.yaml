@@ -26,12 +26,20 @@ approve:
 lgtm:
 - repos:
   # For now only start with knative-sandbox/net-contour
+  - knative-sandbox/.github
+  - knative-sandbox/downstream-test-go
+  - knative-sandbox/integration
+  - knative-sandbox/knobots
+  - knative-sandbox/kperf
   - knative-sandbox/net-certmanager
   - knative-sandbox/net-contour
   - knative-sandbox/net-http01
   - knative-sandbox/net-ingressv2
   - knative-sandbox/net-istio
   - knative-sandbox/net-kourier
+  - knative-sandbox/sample-controller
+  - knative-sandbox/sample-source
+  - knative-sandbox/reconciler-test
 #  - "knative"
 #  - "knative-sandbox"
 #  - "google/knative-gcp"

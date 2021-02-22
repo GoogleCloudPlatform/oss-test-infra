@@ -143,12 +143,20 @@ tide:
     - knative/eventing-operator
     - knative/serving-operator
     - knative/observability
+    - knative-sandbox/.github
+    - knative-sandbox/downstream-test-go
+    - knative-sandbox/integration
+    - knative-sandbox/knobots
+    - knative-sandbox/kperf
     - knative-sandbox/net-certmanager
     - knative-sandbox/net-contour
     - knative-sandbox/net-http01
     - knative-sandbox/net-ingressv2
     - knative-sandbox/net-istio
     - knative-sandbox/net-kourier
+    - knative-sandbox/sample-controller
+    - knative-sandbox/sample-source
+    - knative-sandbox/reconciler-test
     labels:
     - lgtm
     - approved
@@ -180,12 +188,20 @@ tide:
     author: knative-prow-robot
     reviewApprovedRequired: false
   - repos:
+    - knative-sandbox/.github
+    - knative-sandbox/downstream-test-go
+    - knative-sandbox/integration
+    - knative-sandbox/knobots
+    - knative-sandbox/kperf
     - knative-sandbox/net-certmanager
     - knative-sandbox/net-contour
     - knative-sandbox/net-http01
     - knative-sandbox/net-ingressv2
     - knative-sandbox/net-istio
     - knative-sandbox/net-kourier
+    - knative-sandbox/sample-controller
+    - knative-sandbox/sample-source
+    - knative-sandbox/reconciler-test
     labels:
     - "cla: yes"
     missingLabels: *knative_tide_missing_labels
