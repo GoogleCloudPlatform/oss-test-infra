@@ -12,6 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+triggers:
+- repos:
+  - kubeflow
+  join_org_url: "https://www.kubeflow.org/docs/about/contributing/"
+
 config_updater:
   maps:
     prow/oss/config.yaml:
@@ -138,41 +143,7 @@ plugins:
   - lifecycle
   - override
 
-  # TODO(Bobgy): enable these after all tests are migrated.
-  # kubeflow:
-  # - approve   # Enable /approve and /assign commands.
-  # - assign
-  # - blunderbuss
-  # - golint
-  # - help
-  # - hold
-  # - label
-  # - lgtm
-  # - lifecycle   # Lets PRs & issues be flagged as stale
-  # - override
-  # - project # Lets issues be tagged into projects
-  # - size
-  # - skip  # Allows cleaning up stale commit statuses
-  # - verify-owners   # Validates OWNERS file changes in PRs.
-  # - wip   # Applies a label to PRs with wip in the title to block merge
-
-  kubeflow/community:
-  - trigger
-
-  kubeflow/community-infra:
-  - trigger
-
-  kubeflow/gcp-blueprints:
-  - trigger
-
-  kubeflow/internal-acls:
-  - trigger
-
-  kubeflow/metadata:
-  - trigger
-
-  kubeflow/pipelines:
-  - trigger
+  kubeflow:
   - approve   # Enable /approve and /assign commands.
   - assign
   - blunderbuss
@@ -189,7 +160,19 @@ plugins:
   - verify-owners   # Validates OWNERS file changes in PRs.
   - wip   # Applies a label to PRs with wip in the title to block merge
 
-  kubeflow/testing:
+  kubeflow/community:
+  - trigger
+
+  kubeflow/community-infra:
+  - trigger
+
+  kubeflow/gcp-blueprints:
+  - trigger
+
+  kubeflow/internal-acls:
+  - trigger
+
+  kubeflow/pipelines:
   - trigger
 
   kubeflow/website:
