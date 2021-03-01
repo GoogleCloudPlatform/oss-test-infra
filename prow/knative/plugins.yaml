@@ -16,6 +16,7 @@
 approve:
 - repos:
   - "knative"
+  # TODO(mattmoor): Should we disable this for sandbox?
   - "knative-sandbox"
   - "google/knative-gcp"
   - "knative-prow-robot/test-infra"
@@ -25,10 +26,8 @@ approve:
 # Settings for the "lgtm" plugin.
 lgtm:
 - repos:
-  # For now only start with knative-sandbox/net-contour
-  - "knative-sandbox/net-contour"
+   - "knative-sandbox"
 #  - "knative"
-#  - "knative-sandbox"
 #  - "google/knative-gcp"
   review_acts_as_lgtm: true
 

@@ -1,0 +1,28 @@
+presubmits:
+  kubeflow/testing:
+  - name: kubeflow-testing-presubmit
+    cluster: build-kubeflow
+    optional: true    # Not required for merging
+    always_run: false # Run for every PR, or only when requested.
+    skip_report: true # No report on github
+    spec:
+      containers:
+      - image: gcr.io/kubeflow-ci/test-worker:latest
+        imagePullPolicy: Always
+
+postsubmits:
+  kubeflow/testing:
+  - name: kubeflow-testing-postsubmit
+    cluster: build-kubeflow
+    optional: true    # Not required for merging
+    always_run: false # Run for every PR, or only when requested.
+    skip_report: true # No report on github
+    spec:
+      containers:
+      - image: gcr.io/kubeflow-ci/test-worker:latest
+        imagePullPolicy: Always
+
+    annotations:
+      testgrid-create-test-group: "false"
+      # testgrid-dashboards: sig-big-data
+      # description: Postsubmit kubeflow/testing.
