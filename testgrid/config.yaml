@@ -18,4 +18,5 @@ dashboard_groups:
     - googleoss-en-server
   - name: kubeflow
     dashboard_names:
-    - kubeflow
+    - kubeflow-pipelines
+    - kubeflow-gcp-blueprints
