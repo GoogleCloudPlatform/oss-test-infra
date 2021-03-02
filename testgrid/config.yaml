@@ -17,7 +17,7 @@ dashboard_groups:
     - googleoss-esp-v2-presubmit
     - googleoss-esp-v2-periodic
     - googleoss-en-server
-  - name: kubeflow
+  - name: googleoss-kubeflow
     dashboard_names:
     - kubeflow-pipelines
     - kubeflow-gcp-blueprints
