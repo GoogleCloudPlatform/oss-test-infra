@@ -49,8 +49,8 @@ tide:
     - do-not-merge/hold
     - do-not-merge/invalid-owners-file
     - do-not-merge/work-in-progress
-  - repos: # TODO(Bobgy): change repos to orgs to enable for the whole kubeflow org.
-    - kubeflow/pipelines
+  - orgs:
+    - kubeflow
     labels:
     - lgtm
     - approved
