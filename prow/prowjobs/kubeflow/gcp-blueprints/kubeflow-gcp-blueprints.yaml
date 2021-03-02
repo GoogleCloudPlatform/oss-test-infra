@@ -20,7 +20,7 @@ postsubmits:
         imagePullPolicy: Always
 
     annotations:
-      testgrid-dashboards: kubeflow-gcp-blueprints
+      testgrid-dashboards: googleoss-kubeflow-gcp-blueprints
       description: Postsubmit tests for kubeflow/gcp-blueprints.
 
 # TODO(Bobgy): re-enable periodic tests.

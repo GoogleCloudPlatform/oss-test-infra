@@ -33,7 +33,7 @@ postsubmits:
         - --timeout
         - "7200"
     annotations:
-      testgrid-dashboards: kubeflow-pipelines
+      testgrid-dashboards: googleoss-kubeflow-pipelines
       testgrid-alert-email: kubeflow-pipelines+test@google.com
       testgrid-num-failures-to-alert: "5"
       description: Postsubmit component tests for kubeflow/pipeline.
@@ -57,7 +57,7 @@ postsubmits:
         - --is_integration_test
         - "true"
     annotations:
-      testgrid-dashboards: kubeflow-pipelines
+      testgrid-dashboards: googleoss-kubeflow-pipelines
       description: Postsubmit integration tests for kubeflow/pipeline.
       testgrid-alert-email: kubeflow-pipelines+test@google.com
       testgrid-num-failures-to-alert: "5"
@@ -81,7 +81,7 @@ postsubmits:
         - --timeout
         - "7200"
     annotations:
-      testgrid-dashboards: kubeflow-pipelines
+      testgrid-dashboards: googleoss-kubeflow-pipelines
       description: Postsubmit tests for kubeflow/pipeline.
       testgrid-alert-email: kubeflow-pipelines+test@google.com
       testgrid-num-failures-to-alert: "5"
