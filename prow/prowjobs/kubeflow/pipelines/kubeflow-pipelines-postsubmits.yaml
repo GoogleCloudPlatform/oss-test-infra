@@ -33,11 +33,10 @@ postsubmits:
         - --timeout
         - "7200"
     annotations:
-      testgrid-create-test-group: "false"
-    #   testgrid-dashboards: sig-big-data
-    #   testgrid-alert-email: kubeflow-pipelines+test@google.com
-    #   testgrid-num-failures-to-alert: "5"
-    #   description: Postsubmit component tests for kubeflow/pipeline.
+      testgrid-dashboards: googleoss-kubeflow-pipelines
+      testgrid-alert-email: kubeflow-pipelines+test@google.com
+      testgrid-num-failures-to-alert: "5"
+      description: Postsubmit component tests for kubeflow/pipeline.
   - name: kubeflow-pipeline-postsubmit-integration-test
     cluster: build-kubeflow
     branches:
@@ -58,11 +57,10 @@ postsubmits:
         - --is_integration_test
         - "true"
     annotations:
-      testgrid-create-test-group: "false"
-    #   testgrid-dashboards: sig-big-data
-    #   description: Postsubmit integration tests for kubeflow/pipeline.
-    #   testgrid-alert-email: kubeflow-pipelines+test@google.com
-    #   testgrid-num-failures-to-alert: "5"
+      testgrid-dashboards: googleoss-kubeflow-pipelines
+      description: Postsubmit integration tests for kubeflow/pipeline.
+      testgrid-alert-email: kubeflow-pipelines+test@google.com
+      testgrid-num-failures-to-alert: "5"
   - name: kubeflow-pipeline-postsubmit-mkp-e2e-test
     cluster: build-kubeflow
     branches:
@@ -83,8 +81,7 @@ postsubmits:
         - --timeout
         - "7200"
     annotations:
-      testgrid-create-test-group: "false"
-    #   testgrid-dashboards: sig-big-data
-    #   description: Postsubmit tests for kubeflow/pipeline.
-    #   testgrid-alert-email: kubeflow-pipelines+test@google.com
-    #   testgrid-num-failures-to-alert: "5"
+      testgrid-dashboards: googleoss-kubeflow-pipelines
+      description: Postsubmit tests for kubeflow/pipeline.
+      testgrid-alert-email: kubeflow-pipelines+test@google.com
+      testgrid-num-failures-to-alert: "5"

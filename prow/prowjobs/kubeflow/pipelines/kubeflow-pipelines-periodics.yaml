@@ -18,11 +18,10 @@ periodics:
         command:
           - "./test/kfp-functional-test/kfp-functional-test.sh"
   annotations:
-    testgrid-create-test-group: "false"
-  #   testgrid-dashboards: sig-big-data
-  #   description: Periodic job to run kfp functional test
-  #   testgrid-alert-email: kubeflow-pipelines+test@google.com
-  #   testgrid-num-failures-to-alert: "5"
+    testgrid-dashboards: googleoss-kubeflow-pipelines
+    description: Periodic job to run kfp functional test
+    testgrid-alert-email: kubeflow-pipelines+test@google.com
+    testgrid-num-failures-to-alert: "5"
 - name: kubeflow-pipelines-periodic-project-cleanup
   cluster: build-kubeflow
   interval: 1h
@@ -46,6 +45,7 @@ periodics:
           - name: BRANCH_NAME
             value: master
   annotations:
-    testgrid-create-test-group: "false"
-  #   testgrid-dashboards: sig-big-data
-  #   description: Periodic job to cleanup ml-pipeline-test GCP project
+    testgrid-dashboards: googleoss-kubeflow-pipelines
+    description: Periodic job to cleanup ml-pipeline-test GCP project
+    testgrid-alert-email: kubeflow-pipelines+test@google.com
+    testgrid-num-failures-to-alert: "5"

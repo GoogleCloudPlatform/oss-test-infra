@@ -14,17 +14,14 @@ postsubmits:
   kubeflow/gcp-blueprints:
   - name: kubeflow-gcp-blueprints-postsubmit
     cluster: build-kubeflow
-    labels:
-      preset-service-account: "true"
     spec:
       containers:
       - image: gcr.io/kubeflow-ci/test-worker:latest
         imagePullPolicy: Always
 
     annotations:
-      testgrid-create-test-group: "false"
-      # testgrid-dashboards: sig-big-data
-      # description: Postsubmit tests for kubeflow/gcp-blueprints.
+      testgrid-dashboards: googleoss-kubeflow-gcp-blueprints
+      description: Postsubmit tests for kubeflow/gcp-blueprints.
 
 # TODO(Bobgy): re-enable periodic tests.
 # periodics:
