@@ -101,6 +101,8 @@ managed_webhooks:
       token_created_after: 2020-10-13T00:10:00Z
     kubeflow:
       token_created_after: 2020-12-06T00:10:00Z
+    GoogleCloudPlatform/artifact-registry-apt-transport:
+      token_created_after: 2021-03-04T00:10:00Z
 #    [org_name]/[repo_name]:
 #      token_created_after: 2020-08-18T00:10:00Z
 
