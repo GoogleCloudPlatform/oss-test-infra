@@ -70,7 +70,7 @@ presubmits:
         - --is_integration_test
         - "true"
   - name: kubeflow-pipeline-mkp-test
-    always_run: false
+    run_if_changed: "manifests/gcp_marketplace/.*"
     cluster: build-kubeflow
     decorate: true
     spec:
