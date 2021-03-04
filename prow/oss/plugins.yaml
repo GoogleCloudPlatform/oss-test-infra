@@ -77,6 +77,8 @@ plugins:
   - blunderbuss
   GoogleCloudPlatform/osconfig:
   - blunderbuss
+  GoogleCloudPlatform/artifact-registry-apt-transport:
+  - blunderbuss
   GoogleCloudPlatform/guest-configs:
   - blunderbuss
   GoogleCloudPlatform/guest-diskexpand:
