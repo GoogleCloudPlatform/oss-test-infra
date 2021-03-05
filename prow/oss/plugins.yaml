@@ -79,6 +79,8 @@ plugins:
   - blunderbuss
   GoogleCloudPlatform/artifact-registry-apt-transport:
   - blunderbuss
+  GoogleCloudPlatform/artifact-registry-yum-plugin:
+  - blunderbuss
   GoogleCloudPlatform/guest-configs:
   - blunderbuss
   GoogleCloudPlatform/guest-diskexpand:
