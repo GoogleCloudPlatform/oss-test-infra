@@ -22,6 +22,7 @@ tide:
     GoogleCloudPlatform/guest-test-infra: squash
     GoogleCloudPlatform/osconfig: squash
     GoogleCloudPlatform/artifact-registry-apt-transport: squash
+    GoogleCloudPlatform/artifact-registry-yum-plugin: squash
     google/exposure-notifications-server: squash
     google/exposure-notifications-verification-server: squash
     kubeflow: squash
@@ -39,6 +40,7 @@ tide:
     - GoogleCloudPlatform/guest-test-infra
     - GoogleCloudPlatform/osconfig
     - GoogleCloudPlatform/artifact-registry-apt-transport
+    - GoogleCloudPlatform/artifact-registry-yum-plugin
     - GoogleCloudPlatform/oss-test-infra
     - GoogleCloudPlatform/testgrid
     - google/exposure-notifications-server
@@ -102,6 +104,8 @@ managed_webhooks:
     kubeflow:
       token_created_after: 2020-12-06T00:10:00Z
     GoogleCloudPlatform/artifact-registry-apt-transport:
+      token_created_after: 2021-03-04T00:10:00Z
+    GoogleCloudPlatform/artifact-registry-yum-plugin:
       token_created_after: 2021-03-04T00:10:00Z
 #    [org_name]/[repo_name]:
 #      token_created_after: 2020-08-18T00:10:00Z
