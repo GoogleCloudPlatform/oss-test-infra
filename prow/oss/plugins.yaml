@@ -41,6 +41,7 @@ approve:
   - GoogleCloudPlatform
   - google
   - googleforgames
+  - grpc-ecosystem
   require_self_approval: false
 
 blunderbuss:
@@ -51,6 +52,7 @@ lgtm:
   - GoogleCloudPlatform
   - google
   - googleforgames
+  - grpc-ecosystem
   review_acts_as_lgtm: true
 
 plugins:
@@ -188,3 +190,20 @@ plugins:
   # https://github.com/kubernetes/test-infra/issues/14743
   https://kunit-review.googlesource.com/linux:
   - trigger
+
+  grpc-ecosystem/grpc-httpjson-transcoding:
+  - approve
+  - assign
+  - cat
+  - dog
+  - golint
+  - hold
+  - label
+  - lgtm
+  - owners-label
+  - pony
+  - shrug
+  - size
+  - trigger
+  - verify-owners
+  - yuks
