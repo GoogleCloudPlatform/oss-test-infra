@@ -7,7 +7,7 @@ presubmits:
     always_run: true
     spec:
       containers:
-        - image: gcr.io/k8s-prow/checkconfig:v20210301-5e63448d42
+        - image: gcr.io/k8s-prow/checkconfig:v20210305-64a6d4d83a
           imagePullPolicy: Always
           command:
             - /checkconfig
@@ -75,7 +75,7 @@ presubmits:
       base_ref: master
     spec:
       containers:
-        - image: gcr.io/k8s-prow/checkconfig:v20210301-5e63448d42
+        - image: gcr.io/k8s-prow/checkconfig:v20210305-64a6d4d83a
           imagePullPolicy: Always
           command:
             - /checkconfig
@@ -183,7 +183,7 @@ postsubmits:
     - master
     spec:
       containers:
-      - image: gcr.io/k8s-prow/hmac:v20210301-5e63448d42
+      - image: gcr.io/k8s-prow/hmac:v20210305-64a6d4d83a
         command:
         - /hmac
         args:
