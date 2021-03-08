@@ -67,12 +67,12 @@ presubmits:
   - name: pull-knative-prow-config-validate
     run_if_changed: '^prow/knative/(config|plugins)\.yaml$'
     branches:
-      - master
+    - master
     decorate: true
     extra_refs:
     - org: knative
       repo: test-infra
-      base_ref: master
+      base_ref: main
     spec:
       containers:
         - image: gcr.io/k8s-prow/checkconfig:v20210305-64a6d4d83a
