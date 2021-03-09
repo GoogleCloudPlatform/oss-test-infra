@@ -1,7 +1,7 @@
 presubmits:
   kubeflow/pipelines:
   - name: kubeflow-pipeline-frontend-test
-    always_run: true
+    run_if_changed: "^frontend/.*$"
     cluster: build-kubeflow
     decorate: true
     spec:
@@ -13,12 +13,12 @@ presubmits:
         - -c
         - cd ./frontend && npm run test:ci:prow
   - name: kubeflow-pipeline-backend-test
-    always_run: true
+    run_if_changed: "^(backend/.*)|(test/presubmit-backend-test.sh)$"
     cluster: build-kubeflow
     decorate: true
     spec:
       containers:
-      - image: l.gcr.io/google/bazel:0.24.0
+      - image: l.gcr.io/google/bazel:0.24.0 # TODO(Bobgy): update to use golang image instead.
         command:
         - ./test/presubmit-backend-test.sh
   - name: kubeflow-pipeline-e2e-test
@@ -70,7 +70,7 @@ presubmits:
         - --is_integration_test
         - "true"
   - name: kubeflow-pipeline-mkp-test
-    run_if_changed: "manifests/gcp_marketplace/.*"
+    run_if_changed: "^(manifests/gcp_marketplace/.*)|(test/presubmit-tests-mkp.sh)$"
     cluster: build-kubeflow
     decorate: true
     spec:
@@ -94,7 +94,7 @@ presubmits:
   - name: kubeflow-pipelines-sdk-python36
     cluster: build-kubeflow
     decorate: true
-    run_if_changed: "sdk/.*"
+    run_if_changed: "^(sdk/.*)|(test/presubmit-tests-sdk.sh)$"
     spec:
       containers:
       - image: python:3.6
@@ -104,7 +104,7 @@ presubmits:
   - name: kubeflow-pipelines-sdk-python37
     cluster: build-kubeflow
     decorate: true
-    run_if_changed: "sdk/.*"
+    run_if_changed: "^(sdk/.*)|(test/presubmit-tests-sdk.sh)$"
     spec:
       containers:
       - image: python:3.7
@@ -114,7 +114,7 @@ presubmits:
   - name: kubeflow-pipelines-sdk-python38
     cluster: build-kubeflow
     decorate: true
-    run_if_changed: "sdk/.*"
+    run_if_changed: "^(sdk/.*)|(test/presubmit-tests-sdk.sh)$"
     spec:
       containers:
       - image: python:3.8
@@ -124,7 +124,7 @@ presubmits:
   - name: kubeflow-pipelines-sdk-python39
     cluster: build-kubeflow
     decorate: true
-    run_if_changed: "sdk/.*"
+    run_if_changed: "^(sdk/.*)|(test/presubmit-tests-sdk.sh)$"
     spec:
       containers:
       - image: python:3.9
@@ -134,7 +134,7 @@ presubmits:
   - name: kubeflow-pipelines-tfx-python36
     cluster: build-kubeflow
     decorate: true
-    run_if_changed: "sdk/.*"
+    run_if_changed: "^(sdk/.*)|(test/presubmit-tests-tfx.sh)$"
     spec:
       containers:
       - image: python:3.6
@@ -144,7 +144,7 @@ presubmits:
   - name: kubeflow-pipelines-component-yaml
     cluster: build-kubeflow
     decorate: true
-    run_if_changed: "components/.*\\.yaml"
+    run_if_changed: "^(components/.*\\.yaml)|(test/presubmit-component-yaml.sh)$"
     spec:
       containers:
       - image: python:3.6
@@ -154,7 +154,7 @@ presubmits:
   - name: kubeflow-pipelines-components-gcp-python27
     cluster: build-kubeflow
     decorate: true
-    run_if_changed: "components/gcp/container/.*"
+    run_if_changed: "^(components/gcp/container/.*)|(test/presubmit-components-gcp.sh)$"
     spec:
       containers:
       - image: python:2.7
@@ -164,7 +164,7 @@ presubmits:
   - name: kubeflow-pipelines-components-gcp-python37
     cluster: build-kubeflow
     decorate: true
-    run_if_changed: "components/gcp/container/.*"
+    run_if_changed: "^(components/gcp/container/.*)|(test/presubmit-components-gcp.sh)$"
     spec:
       containers:
       - image: python:3.7
@@ -174,7 +174,7 @@ presubmits:
   - name: kubeflow-pipelines-backend-visualization
     cluster: build-kubeflow
     decorate: true
-    run_if_changed: "backend/src/apiserver/visualization/.*"
+    run_if_changed: "^(backend/src/apiserver/visualization/.*)|(test/presubmit-backend-visualization.sh)$"
     spec:
       containers:
       - image: python:3.6
