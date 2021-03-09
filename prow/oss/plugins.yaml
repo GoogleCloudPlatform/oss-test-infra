@@ -139,16 +139,6 @@ plugins:
   - wip
   - yuks
 
-  google/exposure-notifications-server:
-  - blunderbuss
-  - lifecycle
-  - override
-
-  google/exposure-notifications-verification-server:
-  - blunderbuss
-  - lifecycle
-  - override
-
   kubeflow:
   - approve   # Enable /approve and /assign commands.
   - assign

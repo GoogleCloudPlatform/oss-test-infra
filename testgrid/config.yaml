@@ -5,7 +5,6 @@ dashboards:
 - name: googleoss-test-infra
 - name: googleoss-esp-v2-presubmit
 - name: googleoss-esp-v2-periodic
-- name: googleoss-en-server
 - name: googleoss-kubeflow-pipelines
 - name: googleoss-kubeflow-gcp-blueprints
 - name: googleoss-grpc-transcoder
@@ -17,7 +16,6 @@ dashboard_groups:
     - googleoss-test-infra
     - googleoss-esp-v2-presubmit
     - googleoss-esp-v2-periodic
-    - googleoss-en-server
     - googleoss-grpc-transcoder
   - name: googleoss-kubeflow
     dashboard_names:
