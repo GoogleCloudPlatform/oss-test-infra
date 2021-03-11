@@ -282,7 +282,7 @@ postsubmits:
       containers:
       - image: gcr.io/k8s-prow/generic-autobumper:v20210310-a49501d5de
         command:
-        - /generic_autobump
+        - /app/prow/cmd/generic-autobumper/app.binary
         args:
         - --config=cluster/testgrid-prod-autobump-config.yaml
         volumeMounts:
@@ -318,7 +318,7 @@ periodics:
     containers:
     - image: gcr.io/k8s-prow/generic-autobumper:v20210310-a49501d5de
       command:
-      - /generic_autobump
+      - /app/prow/cmd/generic-autobumper/app.binary
       args:
       - --config=prow/oss/oss-autobump-config.yaml
       volumeMounts:
@@ -352,7 +352,7 @@ periodics:
     containers:
     - image: gcr.io/k8s-prow/generic-autobumper:v20210310-a49501d5de
       command:
-      - /generic_autobump
+      - /app/prow/cmd/generic-autobumper/app.binary
       args:
       - --config=cluster/testgrid-canary-autobump-config.yaml
       volumeMounts:
@@ -386,7 +386,7 @@ periodics:
     containers:
     - image: gcr.io/k8s-prow/generic-autobumper:v20210310-a49501d5de
       command:
-      - /generic_autobump
+      - /app/prow/cmd/generic-autobumper/app.binary
       args:
       - --config=prow/knative/knative-autobump-config.yaml
       volumeMounts:
