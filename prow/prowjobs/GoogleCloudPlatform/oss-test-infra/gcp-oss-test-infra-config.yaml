@@ -280,7 +280,7 @@ postsubmits:
       testgrid-num-failures-to-alert: '3'
     spec:
       containers:
-      - image: gcr.io/k8s-testimages/generic_autobump:v20210126-f503f3e
+      - image: gcr.io/k8s-prow/generic-autobumper:v20210310-a49501d5de
         command:
         - /generic_autobump
         args:
@@ -316,7 +316,7 @@ periodics:
     testgrid-num-failures-to-alert: '3'
   spec:
     containers:
-    - image: gcr.io/k8s-testimages/generic_autobump:v20210126-f503f3e
+    - image: gcr.io/k8s-prow/generic-autobumper:v20210310-a49501d5de
       command:
       - /generic_autobump
       args:
@@ -350,7 +350,7 @@ periodics:
     testgrid-num-failures-to-alert: '3'
   spec:
     containers:
-    - image: gcr.io/k8s-testimages/generic_autobump:v20210126-f503f3e
+    - image: gcr.io/k8s-prow/generic-autobumper:v20210310-a49501d5de
       command:
       - /generic_autobump
       args:
@@ -384,7 +384,7 @@ periodics:
     testgrid-num-failures-to-alert: '3'
   spec:
     containers:
-    - image: gcr.io/k8s-testimages/generic_autobump:v20210126-f503f3e
+    - image: gcr.io/k8s-prow/generic-autobumper:v20210310-a49501d5de
       command:
       - /generic_autobump
       args:
