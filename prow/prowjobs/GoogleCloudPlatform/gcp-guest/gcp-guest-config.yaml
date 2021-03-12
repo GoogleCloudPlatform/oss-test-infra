@@ -193,6 +193,7 @@ presubmits:
   GoogleCloudPlatform/artifact-registry-yum-plugin:
   - name: yum-plugin-presubmit-build
     cluster: gcp-guest
+    run_if_changed: "packaging/"
     extra_refs:
     - org: GoogleCloudPlatform
       repo: guest-test-infra
@@ -215,6 +216,7 @@ presubmits:
   GoogleCloudPlatform/artifact-registry-apt-transport:
   - name: apt-transport-presubmit-build
     cluster: gcp-guest
+    run_if_changed: "packaging/"
     extra_refs:
     - org: GoogleCloudPlatform
       repo: guest-test-infra
