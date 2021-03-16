@@ -20,7 +20,7 @@ periodics:
   cron: '0 0,12 * * *' # Run every 12 hours, starting at midnight.
   decorate: true
   annotations:
-    testgrid-dashboards:  googleoss-http-pattern-matcher
+    testgrid-dashboards: googleoss-http-pattern-matcher
     testgrid-tab-name: periodic
     description: "Runs all unit tests on the master branch continuously."
   extra_refs:
