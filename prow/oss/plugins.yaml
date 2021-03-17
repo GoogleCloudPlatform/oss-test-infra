@@ -43,6 +43,9 @@ approve:
   - googleforgames
   - grpc-ecosystem
   require_self_approval: false
+- repos:
+  - kubeflow/pipelines
+  require_self_approval: true
 
 blunderbuss:
   use_status_availability: true
