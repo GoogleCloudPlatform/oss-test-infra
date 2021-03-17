@@ -1,0 +1,34 @@
+presubmits:
+  google/http_pattern_matcher:
+  - name: http-pattern-matcher-presubmit
+    cluster: espv2
+    always_run: true
+    decorate: true
+    annotations:
+      testgrid-dashboards: googleoss-http-pattern-matcher
+      testgrid-tab-name: presubmit
+      description: "Runs all unit tests per PR."
+    spec:
+      containers:
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20201230-v2.20.0-26-ge16dc8bc-master
+        command:
+        - ./script/ci.sh
+
+periodics:
+- name: http-pattern-matcher-periodic
+  cluster: espv2
+  cron: '0 0,12 * * *' # Run every 12 hours, starting at midnight.
+  decorate: true
+  annotations:
+    testgrid-dashboards: googleoss-http-pattern-matcher
+    testgrid-tab-name: periodic
+    description: "Runs all unit tests on the master branch continuously."
+  extra_refs:
+  - org: google
+    repo: http_pattern_matcher
+    base_ref: master
+  spec:
+    containers:
+    - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20201230-v2.20.0-26-ge16dc8bc-master
+      command:
+      - ./script/ci.sh
