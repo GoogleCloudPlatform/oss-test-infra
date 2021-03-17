@@ -18,4 +18,4 @@ Here lives the OSS [prow](https://github.com/kubernetes/test-infra/tree/master/p
 
 Prow deck: https://oss-prow.knative.dev/
 
-Please follow https://github.com/kubernetes/test-infra/blob/master/prow/jobs.md#how-to-configure-new-jobs for how to configure prowjobs in [config.yaml](./prow/oss/config.yaml).
+Please follow [onboarding.md](./prow/oss/onboarding.md) to onboard and https://github.com/kubernetes/test-infra/blob/master/prow/jobs.md#how-to-configure-new-jobs for how to configure prowjobs in [config.yaml](./prow/oss/config.yaml).

@@ -1,5 +1,9 @@
 See [upstream prow](https://github.com/kubernetes/test-infra/tree/master/prow) documentation for more detailed and generic information about what prow is and how it works.
 
+## Onboarding
+
+If you are onboarding your GitHub organization or repository to be served by the OSS Prow instance, please see the [onboarding guide](./onboarding.md).
+
 ## Upgrading Prow
 
 Please check recent [prow announcements](https://github.com/kubernetes/test-infra/tree/master/prow#announcements) before updating, if you are not already familiar with them.
