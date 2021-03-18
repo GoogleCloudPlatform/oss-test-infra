@@ -46,6 +46,7 @@ spec:
         - --rerun-creates-job
         - --config-path=/etc/config/config.yaml
         - --job-config-path=/etc/job-config
+        - --plugin-config=/etc/plugins/plugins.yaml
         - --kubeconfig=/etc/kubeconfig/config
         - --oauth-url=/github-login
         - --cookie-secret=/etc/cookie/secret
@@ -62,6 +63,9 @@ spec:
           readOnly: true
         - name: job-config
           mountPath: /etc/job-config
+          readOnly: true
+        - name: plugins
+          mountPath: /etc/plugins
           readOnly: true
         - name: oauth-config
           mountPath: /etc/github
@@ -95,6 +99,9 @@ spec:
       - name: job-config
         configMap:
           name: job-config
+      - name: plugins
+        configMap:
+          name: plugins
       - name: oauth-config
         secret:
           secretName: github-oauth-config-secret
