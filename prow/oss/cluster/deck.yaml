@@ -39,6 +39,7 @@ spec:
         - --github-endpoint=http://ghproxy
         - --github-endpoint=https://api.github.com
         - --cookie-secret=/etc/cookie/secret
+        - --plugin-config=/etc/plugins/plugins.yaml
         env:
         # Use KUBECONFIG envvar rather than --kubeconfig flag in order to provide multiple configs to merge.
         - name: KUBECONFIG
@@ -62,6 +63,9 @@ spec:
         - name: job-config
           mountPath: /etc/job-config
           readOnly: true
+        - name: plugins
+          mountPath: /etc/plugins
+          readOnly: true
         - mountPath: /etc/kubeconfig
           name: kubeconfig
           readOnly: true
@@ -84,6 +88,9 @@ spec:
       - name: job-config
         configMap:
           name: job-config
+      - name: plugins
+        configMap:
+          name: plugins
       - name: kubeconfig
         secret:
           defaultMode: 420
