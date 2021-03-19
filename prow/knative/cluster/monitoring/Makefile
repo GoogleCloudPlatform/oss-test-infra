@@ -19,6 +19,7 @@ ZONE          ?= us-central1-f
 CLUSTER       ?= prow
 
 apply-components: get-cluster-credentials
+	kubectl apply -f ./prometheus-operator-crds
 	kubectl apply -f .
 
 apply: apply-components
