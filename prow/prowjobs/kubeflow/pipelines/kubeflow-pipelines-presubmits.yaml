@@ -181,12 +181,10 @@ presubmits:
         command:
         - ./test/presubmit-backend-visualization.sh
   
-  - name: kubeflow-pipelines-v2-samples
+  - name: kubeflow-pipelines-samples-v2
     cluster: build-kubeflow
     decorate: true
-    always_run: false
-    # TODO(Bobgy): change always_run to run_if_changed after verifying the test
-    # run_if_changed: "^(sdk/python/.*)|(v2/.*)$"
+    run_if_changed: "^(sdk/python/.*)|(v2/.*)$"
     spec:
       containers:
       - image: python:3.7
