@@ -1,0 +1,11 @@
+presubmits:
+  # https://github.com/kubeflow/internal-acls
+  kubeflow/internal-acls:
+  - name: kubeflow-internal-acls-github-org
+    cluster: build-kubeflow
+    run_if_changed: "^github-orgs/.*$"
+    spec:
+      containers:
+      - image: python:3.7
+        command:
+        - ./github-orgs/presubmit.sh
