@@ -190,6 +190,16 @@ presubmits:
       - image: python:3.7
         command:
         - ./v2/test/presubmit.sh
+  
+  - name: kubeflow-pipelines-manifests
+    cluster: build-kubeflow
+    decorate: true
+    run_if_changed: "^manifests/kustomize/.*$"
+    spec:
+      containers:
+      - image: gcr.io/google.com/cloudsdktool/cloud-sdk:latest
+        command:
+        - ./manifests/kustomize/hack/presubmit.sh
 
   # this test is not passing
   # - name: kubeflow-pipeline-multiuser-test
