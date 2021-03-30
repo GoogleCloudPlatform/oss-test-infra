@@ -3,6 +3,7 @@ presubmits:
   kubeflow/internal-acls:
   - name: kubeflow-internal-acls-github-org
     cluster: build-kubeflow
+    decorate: true
     run_if_changed: "^github-orgs/.*$"
     spec:
       containers:
