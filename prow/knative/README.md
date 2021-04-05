@@ -20,3 +20,10 @@ Manual deployments are defined as in [Makefile](./Makefile), specifically:
 
 - `make -C prow/knative deploy`: deploys all yamls under [cluster](./cluster)
 - `make -C prow/knative deploy-build`: deploys all yamls under [cluster/build](./cluster/build)
+
+## Prow Secrets
+
+Some of the prow secrets are managed by kubernetes external secrets, which
+allows prow cluster creating secrets based on values from google secret manager
+(Not necessarily the same GCP project where prow is located). See more detailed
+instruction at [Prow Secret](https://github.com/kubernetes/test-infra/blob/master/prow/prow_secrets.md).

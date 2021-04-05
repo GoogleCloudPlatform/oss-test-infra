@@ -11,4 +11,5 @@
 (import 'tide_alerts.libsonnet') +
 (import 'prober_alerts.libsonnet') +
 (import 'plank_alerts.libsonnet') +
-(import 'slo_recordrules.libsonnet')
+(import 'slo_recordrules.libsonnet') +
+(import 'external_secret_alerts.libsonnet')
