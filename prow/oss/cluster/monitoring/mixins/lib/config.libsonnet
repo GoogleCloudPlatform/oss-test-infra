@@ -44,6 +44,8 @@ local config = {
 
     // How many days prow hasn't been bumped.
   prowImageStaleByDays: {daysStale: 14, eventDuration: '24h'},
+
+  kubernetesExternalSecretServiceAccount: "kubernetes-external-secrets-sa@oss-prow.iam.gserviceaccount.com",
 };
 
 // Generate the real config by adding in constant fields and defaulting where needed.
