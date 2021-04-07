@@ -473,6 +473,20 @@ presubmits:
         - prowtest
 
   GoogleCloudPlatform/guest-test-infra:
+  - name: infra-presubmit-fly-validate-pipelines
+    cluster: gcp-guest
+    run_if_changed: 'concourse/pipelines'
+    trigger: "(?m)^/fly-validate$"
+    rerun_command: "/fly-validate"
+    context: prow/presubmit/fly-validate-pipelines
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/fly-validate-pipelines:latest
+        imagePullPolicy: Always
+        command:
+        - "/main.sh"
+        args: ["concourse/pipelines"]
   - name: infra-presubmit-gocheck
     cluster: gcp-guest
     run_if_changed: '\.go$'
