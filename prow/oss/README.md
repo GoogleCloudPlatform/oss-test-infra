@@ -91,3 +91,10 @@ mkpj --job=FOO > ~/foo.yaml # and answer interactive questions
 # Contact #oncall to ensure you are approved to do the following:
 kubectl --context=oss-prow create -f ~/foo.yaml
 ```
+
+## Prow Secrets
+
+Some of the prow secrets are managed by kubernetes external secrets, which
+allows prow cluster creating secrets based on values from google secret manager
+(Not necessarily the same GCP project where prow is located). See more detailed
+instruction at [Prow Secret](https://github.com/kubernetes/test-infra/blob/master/prow/prow_secrets.md).
