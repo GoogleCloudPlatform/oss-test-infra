@@ -194,7 +194,7 @@ presubmits:
   - name: kubeflow-pipelines-samples-v2
     cluster: build-kubeflow
     decorate: true
-    run_if_changed: "^(sdk/python/.*)|(v2/.*)$"
+    run_if_changed: "^(sdk/python/.*)|(samples/.*)|(v2/.*)$"
     spec:
       containers:
       - image: python:3.7
