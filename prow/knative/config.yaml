@@ -168,9 +168,9 @@ tide:
     - "knative/test-infra"
     labels:
     - "cla: yes"
-    - auto-merge
+    - "skip-review"
     missingLabels: *knative_tide_missing_labels
-    author: knative-prow-robot
+    author: knative-prow-updater-robot
     reviewApprovedRequired: false
   - orgs:
     - "knative-sandbox"
