@@ -7,7 +7,7 @@ presubmits:
     always_run: true
     spec:
       containers:
-        - image: gcr.io/k8s-prow/checkconfig:v20210412-ed35ec0cee
+        - image: gcr.io/k8s-prow/checkconfig:v20210419-ac42fc915b
           imagePullPolicy: Always
           command:
             - /checkconfig
@@ -75,7 +75,7 @@ presubmits:
       base_ref: main
     spec:
       containers:
-        - image: gcr.io/k8s-prow/checkconfig:v20210412-ed35ec0cee
+        - image: gcr.io/k8s-prow/checkconfig:v20210419-ac42fc915b
           imagePullPolicy: Always
           command:
             - /checkconfig
@@ -183,7 +183,7 @@ postsubmits:
     - master
     spec:
       containers:
-      - image: gcr.io/k8s-prow/hmac:v20210412-ed35ec0cee
+      - image: gcr.io/k8s-prow/hmac:v20210419-ac42fc915b
         command:
         - /hmac
         args:
@@ -280,7 +280,7 @@ postsubmits:
       testgrid-num-failures-to-alert: '3'
     spec:
       containers:
-      - image: gcr.io/k8s-prow/generic-autobumper:v20210412-ed35ec0cee
+      - image: gcr.io/k8s-prow/generic-autobumper:v20210419-ac42fc915b
         command:
         - /app/prow/cmd/generic-autobumper/app.binary
         args:
@@ -316,7 +316,7 @@ periodics:
     testgrid-num-failures-to-alert: '3'
   spec:
     containers:
-    - image: gcr.io/k8s-prow/generic-autobumper:v20210412-ed35ec0cee
+    - image: gcr.io/k8s-prow/generic-autobumper:v20210419-ac42fc915b
       command:
       - /app/prow/cmd/generic-autobumper/app.binary
       args:
@@ -350,7 +350,7 @@ periodics:
     testgrid-num-failures-to-alert: '3'
   spec:
     containers:
-    - image: gcr.io/k8s-prow/generic-autobumper:v20210412-ed35ec0cee
+    - image: gcr.io/k8s-prow/generic-autobumper:v20210419-ac42fc915b
       command:
       - /app/prow/cmd/generic-autobumper/app.binary
       args:
@@ -384,7 +384,7 @@ periodics:
     testgrid-num-failures-to-alert: '3'
   spec:
     containers:
-    - image: gcr.io/k8s-prow/generic-autobumper:v20210412-ed35ec0cee
+    - image: gcr.io/k8s-prow/generic-autobumper:v20210419-ac42fc915b
       command:
       - /app/prow/cmd/generic-autobumper/app.binary
       args:
