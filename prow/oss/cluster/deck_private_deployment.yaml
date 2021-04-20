@@ -1,0 +1,208 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deck-private
+  labels:
+    app: deck-private
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: deck-private
+  template:
+    metadata:
+      labels:
+        app: deck-private
+    spec:
+      serviceAccountName: deck-private
+      terminationGracePeriodSeconds: 30
+      containers:
+      - name: deck-private
+        image: gcr.io/k8s-prow/deck:v20210419-8262f2d0c6
+        ports:
+        - name: http
+          containerPort: 8080
+        args:
+        - --config-path=/etc/config/config.yaml
+        - --hook-url=http://hook:8888/plugin-help
+        - --job-config-path=/etc/job-config
+        - --redirect-http-to=oss-prow-private.knative.dev
+        - --kubeconfig=/etc/kubeconfig/config
+        - --spyglass=true
+        - --hidden-only=true
+        - --rerun-creates-job
+        - --oauth-url=/github-login
+        - --github-token-path=/etc/github/oauth
+        - --github-oauth-config-file=/etc/githuboauth/secret
+        - --github-endpoint=http://ghproxy
+        - --github-endpoint=https://api.github.com
+        - --cookie-secret=/etc/cookie/secret
+        - --plugin-config=/etc/plugins/plugins.yaml
+        volumeMounts:
+        - name: oauth-config
+          mountPath: /etc/githuboauth
+          readOnly: true
+        - name: cookie-secret
+          mountPath: /etc/cookie
+          readOnly: true
+        - name: oauth-token
+          mountPath: /etc/github
+          readOnly: true
+        - name: config
+          mountPath: /etc/config
+          readOnly: true
+        - name: job-config
+          mountPath: /etc/job-config
+          readOnly: true
+        - mountPath: /etc/kubeconfig
+          name: kubeconfig
+          readOnly: true
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8081
+          initialDelaySeconds: 3
+          periodSeconds: 3
+        readinessProbe:
+          httpGet:
+            path: /healthz/ready
+            port: 8081
+          initialDelaySeconds: 10
+          periodSeconds: 3
+          timeoutSeconds: 600
+      - name: oauth2-proxy
+        image: quay.io/pusher/oauth2_proxy:v5.0.0
+        ports:
+        - containerPort: 4180
+          protocol: TCP
+        args:
+        - --provider=github
+        - --github-org=fejtaverse
+        - --http-address=0.0.0.0:4180
+        - --upstream=http://localhost:8080
+        - --cookie-domain=oss-prow-private.knative.dev
+        - --cookie-name=oss-prow-private-knative-dev-oauth2-proxy
+        - --cookie-samesite=none
+        - --email-domain=*
+        livenessProbe:
+          httpGet:
+            path: /ping
+            port: 4180
+          initialDelaySeconds: 3
+          periodSeconds: 3
+        readinessProbe:
+          httpGet:
+            path: /ping
+            port: 4180
+          initialDelaySeconds: 3
+          periodSeconds: 3
+        env:
+        - name: OAUTH2_PROXY_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: private-deck-oauth2
+              key: clientID
+        - name: OAUTH2_PROXY_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: private-deck-oauth2
+              key: clientSecret
+        - name: OAUTH2_PROXY_COOKIE_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: private-deck-oauth2
+              key: cookieSecret
+      volumes:
+      - name: oauth-config
+        secret:
+          secretName: private-deck-oauth2-config
+      - name: oauth-token
+        secret:
+          secretName: oauth-token
+      - name: cookie-secret
+        secret:
+          secretName: cookie
+      - name: config
+        configMap:
+          name: config
+      - name: job-config
+        configMap:
+          name: job-config
+      - name: kubeconfig
+        secret:
+          defaultMode: 420
+          secretName: kubeconfig
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: deck-private
+spec:
+  selector:
+    app: deck-private
+  ports:
+  - port: 80
+    targetPort: 4180
+  type: NodePort
+---
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  namespace: default
+  name: deck-private
+  annotations:
+    "iam.gke.io/gcp-service-account": "oss-prow-private-deck@oss-prow.iam.gserviceaccount.com"
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  namespace: default
+  name: deck-private
+rules:
+- apiGroups:
+  - prow.k8s.io
+  resources:
+  - prowjobs
+  verbs:
+  - get
+  - list
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  namespace: test-pods
+  name: deck-private
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - pods/log
+  verbs:
+  - get
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  namespace: default
+  name: deck-private
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: deck-private
+subjects:
+- kind: ServiceAccount
+  name: deck-private
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  namespace: test-pods
+  name: deck-private
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: deck-private
+subjects:
+- kind: ServiceAccount
+  name: deck-private
+  namespace: default
