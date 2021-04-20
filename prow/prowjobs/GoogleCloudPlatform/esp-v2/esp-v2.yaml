@@ -163,7 +163,7 @@ presubmits:
       - args:
         - --cluster=
         - --deployment=gke
-        - --extract=release/stable
+        - --extract=gke-channel-regular
         - --gcp-project=cloudesf-testing
         - --gcp-zone=us-west1-b
         - --gcp-network=default
@@ -222,7 +222,7 @@ presubmits:
       - args:
         - --cluster=
         - --deployment=gke
-        - --extract=release/stable
+        - --extract=gke-channel-regular
         - --gcp-project=cloudesf-testing
         - --gcp-zone=us-west1-b
         - --gcp-network=default
@@ -281,7 +281,7 @@ presubmits:
       - args:
         - --cluster=
         - --deployment=gke
-        - --extract=release/stable
+        - --extract=gke-channel-regular
         - --gcp-project=cloudesf-testing
         - --gcp-zone=us-west1-b
         - --gcp-network=default
@@ -340,7 +340,7 @@ presubmits:
       - args:
         - --cluster=
         - --deployment=gke
-        - --extract=release/stable
+        - --extract=gke-channel-regular
         - --gcp-project=cloudesf-testing
         - --gcp-zone=us-west1-b
         - --gcp-network=default
@@ -412,7 +412,7 @@ presubmits:
         - --test-cmd=../prow/gcpproxy-e2e.sh
         - --test-cmd-name=gcpproxy_e2e
         - --timeout=80m
-        - --extract=release/stable
+        - --extract=gke-channel-regular
         # docker-in-docker needs privileged mode
         securityContext:
           privileged: true
@@ -744,7 +744,7 @@ periodics:
         - args:
             - --cluster=
             - --deployment=gke
-            - --extract=release/stable
+            - --extract=gke-channel-regular
             - --gcp-project=cloudesf-testing
             - --gcp-zone=us-west1-c
             - --gcp-network=default
@@ -808,7 +808,7 @@ periodics:
       - args:
         - --cluster=
         - --deployment=gke
-        - --extract=release/stable
+        - --extract=gke-channel-regular
         - --gcp-project=cloudesf-testing
         - --gcp-zone=us-west1-c
         - --gcp-network=default
@@ -872,7 +872,7 @@ periodics:
         - args:
             - --cluster=
             - --deployment=gke
-            - --extract=release/stable
+            - --extract=gke-channel-regular
             - --gcp-project=cloudesf-testing
             - --gcp-zone=us-west1-c
             - --gcp-network=default
@@ -936,7 +936,7 @@ periodics:
         - args:
             - --cluster=
             - --deployment=gke
-            - --extract=release/stable
+            - --extract=gke-channel-regular
             - --gcp-project=cloudesf-testing
             - --gcp-zone=us-west1-c
             - --gcp-network=default
@@ -1012,7 +1012,7 @@ periodics:
             - --test-cmd=../prow/e2e-anthos-cloud-run-anthos-cloud-run-http-bookstore.sh
             - --test-cmd-name=gcpproxy_e2e
             - --timeout=300m
-            - --extract=release/stable
+            - --extract=gke-channel-regular
           # docker-in-docker needs privileged mode
           securityContext:
             privileged: true
