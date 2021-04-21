@@ -64,10 +64,11 @@ tide:
 plank:
   job_url_prefix_config:
     '*': https://oss-prow.knative.dev/view/
+    'fejtaverse': https://oss-prow-private.knative.dev/view/
   pod_pending_timeout: 15m
   pod_unscheduled_timeout: 1m
-  default_decoration_configs:
-    '*':
+  default_decoration_config_entries:
+  - config:
       timeout: 7200000000000 # 2h
       grace_period: 15000000000 # 15s
       utility_images:
@@ -79,6 +80,14 @@ plank:
         bucket: "oss-prow"
         path_strategy: "explicit"
       gcs_credentials_secret: "service-account" # TODO(fejta): remove https://github.com/GoogleCloudPlatform/oss-test-infra/issues/202
+  - cluster: place-holder # Private orgs. TODO: create a build cluster
+    config:
+      gcs_configuration:
+        bucket: "oss-prow-private"
+      gcs_credentials_secret: "" # Use workload identity
+      default_service_account_name: "prowjob-default-sa" # SA in build cluster
+      # ssh_key_secrets:
+      # - ssh-key-secret
 
 sinker:
   resync_period: 1m
