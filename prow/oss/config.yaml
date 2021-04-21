@@ -193,6 +193,13 @@ deck:
   additional_allowed_buckets:
     - compute-image-tools-test
 
+in_repo_config:
+  enabled:
+    chaotoppicks: true
+
+  allowed_clusters:
+    "chaotoppicks": ["build"]
+
 presets:
 # docker-in-docker preset
 #
