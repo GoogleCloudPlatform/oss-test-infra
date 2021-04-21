@@ -183,7 +183,7 @@ postsubmits:
     - master
     spec:
       containers:
-      - image: gcr.io/k8s-prow/hmac:v20210419-8262f2d0c6
+      - image: gcr.io/k8s-prow/hmac:v20210421-4bb9fe3155
         command:
         - /hmac
         args:
