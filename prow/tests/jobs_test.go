@@ -37,7 +37,7 @@ var c *config.Config
 func TestMain(m *testing.M) {
 	flag.Parse()
 
-	cfg, err := config.Load(*configPath, *jobConfigPath)
+	cfg, err := config.Load(*configPath, *jobConfigPath, nil, "")
 	if err != nil {
 		fmt.Printf("Could not load config: %v\n", err)
 		os.Exit(1)
@@ -52,19 +52,23 @@ func TestTrustedJobs(t *testing.T) {
 	trustedPath := path.Join(*jobConfigPath, "GoogleCloudPlatform", "oss-test-infra", "gcp-oss-test-infra-config.yaml")
 
 	// Presubmits may not use trusted clusters.
-	for _, pre := range c.AllPresubmits(nil) {
-		if pre.Cluster == trusted {
-			t.Errorf("%s: presubmits cannot use trusted clusters", pre.Name)
+	for _, pres := range c.PresubmitsStatic {
+		for _, pre := range pres {
+			if pre.Cluster == trusted {
+				t.Errorf("%s: presubmits cannot use trusted clusters", pre.Name)
+			}
 		}
 	}
 
 	// Trusted postsubmits must be defined in trustedPath
-	for _, post := range c.AllPostsubmits(nil) {
-		if post.Cluster != trusted {
-			continue
-		}
-		if post.SourcePath != trustedPath {
-			t.Errorf("%s defined in %s may not run in trusted cluster", post.Name, post.SourcePath)
+	for _, posts := range c.PostsubmitsStatic {
+		for _, post := range posts {
+			if post.Cluster != trusted {
+				continue
+			}
+			if post.SourcePath != trustedPath {
+				t.Errorf("%s defined in %s may not run in trusted cluster", post.Name, post.SourcePath)
+			}
 		}
 	}
 
@@ -88,12 +92,17 @@ func TestKnativeCluster(t *testing.T) {
 			t.Errorf("%s: cannot use knative cluster", jobName)
 		}
 	}
-	for _, pre := range c.AllPresubmits(nil) {
-		verifyFunc(t, pre.Name, pre.Cluster)
+
+	for _, pres := range c.PresubmitsStatic {
+		for _, pre := range pres {
+			verifyFunc(t, pre.Name, pre.Cluster)
+		}
 	}
 
-	for _, post := range c.AllPostsubmits(nil) {
-		verifyFunc(t, post.Name, post.Cluster)
+	for _, posts := range c.PostsubmitsStatic {
+		for _, post := range posts {
+			verifyFunc(t, post.Name, post.Cluster)
+		}
 	}
 
 	for _, per := range c.AllPeriodics() {
