@@ -167,7 +167,7 @@ deck:
       github_orgs:
       - GoogleCloudPlatform
   additional_allowed_buckets:
-    - compute-image-tools
+    - compute-image-tools-test
 
 presets:
 # docker-in-docker preset
