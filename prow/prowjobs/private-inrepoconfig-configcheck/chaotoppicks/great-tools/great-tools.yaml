@@ -1,6 +1,7 @@
 presubmits:
   chaotoppicks/great-tools:
-  - name: pull-chaotoppicks-greate-tools-validate-prow-yaml
+  - name: pull-chaotoppicks-great-tools-validate-prow-yaml
+    cluster: build-looker-private
     always_run: true
     decorate: true
     extra_refs:

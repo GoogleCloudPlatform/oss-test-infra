@@ -1,6 +1,7 @@
 presubmits:
   chaotoppicks/great-private-tools:
-  - name: pull-chaotoppicks-greate-private-tools-validate-prow-yaml
+  - name: pull-chaotoppicks-great-private-tools-validate-prow-yaml
+    cluster: build-looker-private
     always_run: true
     decorate: true
     extra_refs:
@@ -16,3 +17,15 @@ presubmits:
         - --plugin-config=../oss-test-infra/prow/oss/plugins.yaml
         - --config-path=../oss-test-infra/prow/oss/config.yaml
         - --prow-yaml-repo-name=$(REPO_OWNER)/$(REPO_NAME)
+        volumeMounts:
+        - mountPath: /root/.ssh
+          name: ssh
+          readOnly: true
+      volumes:
+      - name: ssh
+        secret:
+          secretName: github-ssh-key-secret
+          items:
+          - key: secret
+            path: id_rsa
+            mode: 0600
