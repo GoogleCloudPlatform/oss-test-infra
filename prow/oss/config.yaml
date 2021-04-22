@@ -114,6 +114,8 @@ managed_webhooks:
       token_created_after: 2021-03-04T00:10:00Z
     GoogleCloudPlatform/artifact-registry-yum-plugin:
       token_created_after: 2021-03-04T00:10:00Z
+    GoogleCloudPlatform/testgrid:
+      token_created_after: 2021-04-21T00:10:00Z
     google/http_pattern_matcher:
       token_created_after: 2021-03-15T00:10:00Z
     chaotoppicks: # Temporarily added for experimenting inrepoconfig
