@@ -28,7 +28,6 @@ spec:
         - --hook-url=http://hook:8888/plugin-help
         - --job-config-path=/etc/job-config
         - --redirect-http-to=oss-prow-private.knative.dev
-        - --kubeconfig=/etc/kubeconfig/config
         - --spyglass=true
         - --hidden-only=true
         - --rerun-creates-job
@@ -39,6 +38,10 @@ spec:
         - --github-endpoint=https://api.github.com
         - --cookie-secret=/etc/cookie/secret
         - --plugin-config=/etc/plugins/plugins.yaml
+        env:
+        # Use KUBECONFIG envvar rather than --kubeconfig flag in order to provide multiple configs to merge.
+        - name: KUBECONFIG
+          value: "/etc/kubeconfig/config-20201002:/etc/build-kubeflow/kubeconfig"
         volumeMounts:
         - name: oauth-config
           mountPath: /etc/githuboauth
