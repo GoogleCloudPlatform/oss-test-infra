@@ -134,8 +134,6 @@ managed_webhooks:
       token_created_after: 2021-04-22T00:10:00Z
     GoogleCloudPlatform/guest-test-infra:
       token_created_after: 2021-04-22T00:10:00Z
-    GoogleCloudPlatform/k8s-cloud-provider:
-      token_created_after: 2021-04-22T00:10:00Z
     GoogleCloudPlatform/osconfig:
       token_created_after: 2021-04-22T00:10:00Z
     GoogleCloudPlatform/oss-test-infra:
