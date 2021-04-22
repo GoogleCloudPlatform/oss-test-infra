@@ -110,12 +110,36 @@ managed_webhooks:
       token_created_after: 2021-04-19T00:10:00Z
     google/http_pattern_matcher:
       token_created_after: 2021-03-15T00:10:00Z
+    googleforgames/agones:
+      token_created_after: 2021-04-22T00:10:00Z
+    grpc-ecosystem/grpc-httpjson-transcoding:
+      token_created_after: 2021-04-22T00:10:00Z
     GoogleCloudPlatform/artifact-registry-apt-transport:
       token_created_after: 2021-03-04T00:10:00Z
     GoogleCloudPlatform/artifact-registry-yum-plugin:
       token_created_after: 2021-03-04T00:10:00Z
+    GoogleCloudPlatform/compute-image-tools:
+      token_created_after: 2021-04-22T00:10:00Z
     GoogleCloudPlatform/esp-v2:
       token_created_after: 2021-04-21T00:10:00Z
+    GoogleCloudPlatform/guest-agent:
+      token_created_after: 2021-04-22T00:10:00Z
+    GoogleCloudPlatform/guest-configs:
+      token_created_after: 2021-04-22T00:10:00Z
+    GoogleCloudPlatform/guest-diskexpand:
+      token_created_after: 2021-04-22T00:10:00Z
+    GoogleCloudPlatform/guest-logging-go:
+      token_created_after: 2021-04-22T00:10:00Z
+    GoogleCloudPlatform/guest-oslogin:
+      token_created_after: 2021-04-22T00:10:00Z
+    GoogleCloudPlatform/guest-test-infra:
+      token_created_after: 2021-04-22T00:10:00Z
+    GoogleCloudPlatform/k8s-cloud-provider:
+      token_created_after: 2021-04-22T00:10:00Z
+    GoogleCloudPlatform/osconfig:
+      token_created_after: 2021-04-22T00:10:00Z
+    GoogleCloudPlatform/oss-test-infra:
+      token_created_after: 2021-04-22T00:10:00Z
     GoogleCloudPlatform/secrets-store-csi-driver-provider-gcp:
       token_created_after: 2020-10-13T00:10:00Z
     GoogleCloudPlatform/testgrid:
