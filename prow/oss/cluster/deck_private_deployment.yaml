@@ -161,7 +161,7 @@ spec:
   ports:
   - port: 80
     targetPort: 4180
-  type: ClusterIP
+  type: NodePort
 ---
 kind: ServiceAccount
 apiVersion: v1
