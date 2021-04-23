@@ -16,7 +16,10 @@ export PROW_INSTANCE_NAME="${PROW_INSTANCE_NAME:-oss-prow}"
 export GCS_BUCKET="${GCS_BUCKET:-${PROW_INSTANCE_NAME}}"
 export ADMIN_IAM_MEMBER="${ADMIN_IAM_MEMBER:-group:mdb.cloud-kubernetes-engprod-oncall@google.com}"
 
+export PROW_SECRET_ACCESSOR_SA="kubernetes-external-secrets-sa@oss-prow.iam.gserviceaccount.com"
+export PROW_DEPLOYMENT_DIR="./prow/oss/cluster" # From root of repo
 
+export GITHUB_CLONE_URI="git@github.com:GoogleCloudPlatform/oss-test-infra.git"
 
 # Specific to the build cluster
 export TEAM="${TEAM:-}"
