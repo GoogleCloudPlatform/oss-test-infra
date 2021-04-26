@@ -102,8 +102,6 @@ log_level: debug
 managed_webhooks:
   # Will accept invitations from org/repo listed under here
   auto_accept_invitation: true
-  # This has to be true if any of the managed repo/org is using the legacy global token that is manually created.
-  respect_legacy_global_token: true
   # Config for orgs and repos that have been onboarded to this Prow instance.
   org_repo_config:
     chaotoppicks: # Temporarily added for experimenting inrepoconfig
