@@ -93,7 +93,7 @@ spec:
         - --cookie-domain=oss-prow-private.knative.dev
         - --cookie-name=oss-prow-private-knative-dev-oauth2-proxy
         - --cookie-samesite=none
-        - --cookie-expire="23h"
+        - --cookie-expire=23h
         - --email-domain=*
         livenessProbe:
           httpGet:
