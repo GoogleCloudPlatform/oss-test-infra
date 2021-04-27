@@ -223,3 +223,21 @@ plugins:
     - trigger
     - verify-owners
     - yuks
+
+  chaotoppicks:
+    plugins:
+    - approve
+    - assign
+    - cat
+    - dog
+    - golint
+    - hold
+    - label
+    - lgtm
+    - owners-label
+    - pony
+    - shrug
+    - size
+    - trigger
+    - verify-owners
+    - yuks

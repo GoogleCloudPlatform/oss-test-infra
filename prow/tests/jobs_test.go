@@ -21,8 +21,10 @@ import (
 	"fmt"
 	"os"
 	"path"
+	"strings"
 	"testing"
 
+	v1 "k8s.io/api/core/v1"
 	"k8s.io/test-infra/prow/config"
 )
 
@@ -80,6 +82,47 @@ func TestTrustedJobs(t *testing.T) {
 		if per.SourcePath != trustedPath {
 			t.Errorf("%s defined in %s may not run in trusted cluster", per.Name, per.SourcePath)
 		}
+	}
+}
+
+func TestPrivateJobs(t *testing.T) {
+	const (
+		private           = "private"
+		checkconfigPrefix = "gcr.io/k8s-prow/checkconfig:"
+	)
+	trustedPath := path.Join(*jobConfigPath, "private-inrepoconfig-configcheck")
+
+	errorIfNotPermitted := func(t *testing.T, name, cluster string, spec *v1.PodSpec) {
+		if strings.Contains(cluster, private) && (len(spec.Containers) != 1 || !strings.HasPrefix(spec.Containers[0].Image, "gcr.io/k8s-prow/checkconfig:")) {
+			t.Errorf("%s: cannot use private cluster %s", name, cluster)
+		}
+	}
+	errIfNotTrustedPath := func(t *testing.T, cluster, p string) {
+		if strings.Contains(cluster, private) && !strings.HasPrefix(p, trustedPath+"/") {
+			t.Errorf("%s: cannot be outside of %s", p, trustedPath)
+		}
+	}
+
+	// Presubmits may not use trusted clusters.
+	for _, pres := range c.PresubmitsStatic {
+		for _, pre := range pres {
+			errorIfNotPermitted(t, pre.Name, pre.Cluster, pre.Spec)
+			errIfNotTrustedPath(t, pre.Cluster, pre.SourcePath)
+		}
+	}
+
+	// Trusted postsubmits must be defined in trustedPath
+	for _, posts := range c.PostsubmitsStatic {
+		for _, post := range posts {
+			errorIfNotPermitted(t, post.Name, post.Cluster, post.Spec)
+			errIfNotTrustedPath(t, post.Cluster, post.SourcePath)
+		}
+	}
+
+	// Trusted periodics must be defined in trustedPath
+	for _, per := range c.AllPeriodics() {
+		errorIfNotPermitted(t, per.Name, per.Cluster, per.Spec)
+		errIfNotTrustedPath(t, per.Cluster, per.SourcePath)
 	}
 }
 

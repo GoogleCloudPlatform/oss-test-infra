@@ -14,6 +14,7 @@
 
 tide:
   merge_method:
+    chaotoppicks: squash
     GoogleCloudPlatform/guest-agent: squash
     GoogleCloudPlatform/guest-configs: squash
     GoogleCloudPlatform/guest-diskexpand: squash
@@ -50,6 +51,7 @@ tide:
     - do-not-merge/invalid-owners-file
     - do-not-merge/work-in-progress
   - orgs:
+    - chaotoppicks
     - kubeflow
     labels:
     - lgtm
@@ -64,7 +66,7 @@ tide:
 plank:
   job_url_prefix_config:
     '*': https://oss-prow.knative.dev/view/
-    'fejtaverse': https://oss-prow-private.knative.dev/view/
+    'chaotoppics': https://oss-prow-private.knative.dev/view/
   pod_pending_timeout: 15m
   pod_unscheduled_timeout: 1m
   default_decoration_config_entries:
@@ -80,10 +82,10 @@ plank:
         bucket: "oss-prow"
         path_strategy: "explicit"
       gcs_credentials_secret: "service-account" # TODO(fejta): remove https://github.com/GoogleCloudPlatform/oss-test-infra/issues/202
-  - cluster: place-holder # Private orgs. TODO: create a build cluster
+  - cluster: build-looker-private # Private orgs. TODO: create a build cluster
     config:
       gcs_configuration:
-        bucket: "oss-prow-private"
+        bucket: "build-looker-private-gcs"
       gcs_credentials_secret: "" # Use workload identity
       default_service_account_name: "prowjob-default-sa" # SA in build cluster
       # ssh_key_secrets:
@@ -160,6 +162,14 @@ branch-protection:
       - "^revert-" # don't protect revert branches
       - "^dependabot/" # don't protect branches created by dependabot
       - "-patch-" # don't protect branches created by editing on GitHub UI
+    chaotoppicks:
+      protect: true
+      required_status_checks:
+        contexts:
+        - cla/google
+      exclude:
+      - "^revert-" # don't protect revert branches
+      - "-patch-" # don't protect branches created by editing on GitHub UI
 
 deck:
   spyglass:
@@ -192,6 +202,15 @@ deck:
       - GoogleCloudPlatform
   additional_allowed_buckets:
     - compute-image-tools-test
+  hidden_repos:
+  - chaotoppicks
+
+in_repo_config:
+  enabled:
+    chaotoppicks: true
+
+  allowed_clusters:
+    "chaotoppicks": ["build-looker-private"]
 
 presets:
 # docker-in-docker preset
