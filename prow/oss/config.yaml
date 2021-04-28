@@ -208,6 +208,10 @@ in_repo_config:
     chaotoppicks: true
 
   allowed_clusters:
+    # TODO(chaodaiG): drop this once
+    # https://github.com/kubernetes/test-infra/pull/21993 is deployed in OSS
+    # prow
+    "*": ["non-exist-cluster-since-global-cluster-is-disabled"]
     "chaotoppicks": ["build-looker-private"]
 
 presets:
