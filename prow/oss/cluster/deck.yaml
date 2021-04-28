@@ -136,7 +136,7 @@ roleRef:
   name: "deck"
 subjects:
 - kind: ServiceAccount
-  name: "deck"
+  name: "deck-public"
   namespace: "default"
 - kind: ServiceAccount
   name: "deck"
