@@ -85,7 +85,7 @@ plank:
   - cluster: build-looker-private # Private orgs. TODO: create a build cluster
     config:
       gcs_configuration:
-        bucket: "build-looker-private-gcs"
+        bucket: "looker-private"
       gcs_credentials_secret: "" # Use workload identity
       default_service_account_name: "prowjob-default-sa" # SA in build cluster
       # ssh_key_secrets:
