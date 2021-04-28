@@ -1,7 +1,7 @@
 presubmits:
   chaotoppicks/great-tools:
   - name: pull-chaotoppicks-great-tools-validate-prow-yaml
-    cluster: build-looker-private
+    cluster: build
     always_run: true
     decorate: true
     extra_refs:
@@ -14,6 +14,6 @@ presubmits:
         command:
         - /app/prow/cmd/checkconfig/app.binary
         args:
-        - --plugin-config=../oss-test-infra/prow/oss/plugins.yaml
-        - --config-path=../oss-test-infra/prow/oss/config.yaml
+        - --plugin-config=../../GoogleCloudPlatform/oss-test-infra/prow/oss/plugins.yaml
+        - --config-path=../../GoogleCloudPlatform/oss-test-infra/prow/oss/config.yaml
         - --prow-yaml-repo-name=$(REPO_OWNER)/$(REPO_NAME)
