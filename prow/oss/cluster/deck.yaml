@@ -150,6 +150,14 @@ metadata:
   annotations:
     "iam.gke.io/gcp-service-account": "oss-prow@oss-prow.iam.gserviceaccount.com"
 ---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: deck-public
+  namespace: default
+  annotations:
+    "iam.gke.io/gcp-service-account": "oss-prow-public-deck@oss-prow.iam.gserviceaccount.com"
+---
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
