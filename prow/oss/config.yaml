@@ -88,8 +88,8 @@ plank:
         bucket: "looker-private"
       gcs_credentials_secret: "" # Use workload identity
       default_service_account_name: "prowjob-default-sa" # SA in build cluster
-      # ssh_key_secrets:
-      # - ssh-key-secret
+      ssh_key_secrets:
+      - chaotoppics-ssh-key-secret
 
 sinker:
   resync_period: 1m
