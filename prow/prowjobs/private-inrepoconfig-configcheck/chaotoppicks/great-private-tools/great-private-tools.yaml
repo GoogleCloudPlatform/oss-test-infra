@@ -1,6 +1,7 @@
 presubmits:
   chaotoppicks/great-private-tools:
   - name: pull-chaotoppicks-great-private-tools-validate-prow-yaml
+    clone_uri: git@github.com:chaotoppicks/great-private-tools.git
     cluster: build-looker-private
     always_run: true
     decorate: true
@@ -14,18 +15,6 @@ presubmits:
         command:
         - /app/prow/cmd/checkconfig/app.binary
         args:
-        - --plugin-config=../oss-test-infra/prow/oss/plugins.yaml
-        - --config-path=../oss-test-infra/prow/oss/config.yaml
+        - --plugin-config=../../GoogleCloudPlatform/oss-test-infra/prow/oss/plugins.yaml
+        - --config-path=../../GoogleCloudPlatform/oss-test-infra/prow/oss/config.yaml
         - --prow-yaml-repo-name=$(REPO_OWNER)/$(REPO_NAME)
-        volumeMounts:
-        - mountPath: /root/.ssh
-          name: ssh
-          readOnly: true
-      volumes:
-      - name: ssh
-        secret:
-          secretName: github-ssh-key-secret
-          items:
-          - key: secret
-            path: id_rsa
-            mode: 0600
