@@ -26,6 +26,7 @@ spec:
         args:
         - --config-path=/etc/config/config.yaml
         - --hook-url=http://hook:8888/plugin-help
+        - --tide-url=http://tide/
         - --job-config-path=/etc/job-config
         - --redirect-http-to=oss-prow-private.knative.dev
         - --spyglass=true
