@@ -67,6 +67,7 @@ plank:
   job_url_prefix_config:
     '*': https://oss-prow.knative.dev/view/
     'chaotoppicks': https://oss-prow-private.knative.dev/view/
+    'looker': https://oss-prow-private.knative.dev/view/
   pod_pending_timeout: 15m
   pod_unscheduled_timeout: 1m
   default_decoration_config_entries:
@@ -82,7 +83,7 @@ plank:
         bucket: "oss-prow"
         path_strategy: "explicit"
       gcs_credentials_secret: "service-account" # TODO(fejta): remove https://github.com/GoogleCloudPlatform/oss-test-infra/issues/202
-  - cluster: build-looker-private # Private orgs. TODO: create a build cluster
+  - cluster: build-looker-private
     config:
       gcs_configuration:
         bucket: "looker-private"
@@ -90,6 +91,7 @@ plank:
       default_service_account_name: "prowjob-default-sa" # SA in build cluster
       ssh_key_secrets:
       - chaotoppics-ssh-key-secret
+      - looker-ssh-deploy-key
 
 sinker:
   resync_period: 1m
@@ -146,6 +148,8 @@ managed_webhooks:
       token_created_after: 2021-04-21T00:10:00Z
     kubeflow:
       token_created_after: 2020-12-06T00:10:00Z
+    looker:
+      token_created_after: 2021-04-28T00:10:00Z
 #    [org_name]/[repo_name]:
 #      token_created_after: 2020-08-18T00:10:00Z
 
@@ -202,13 +206,16 @@ deck:
     - compute-image-tools-test
   hidden_repos:
   - chaotoppicks
+  - looker
 
 in_repo_config:
   enabled:
     chaotoppicks: true
+    looker: true
 
   allowed_clusters:
     "chaotoppicks": ["build-looker-private"]
+    "looker": ["build-looker-private"]
 
 presets:
 # docker-in-docker preset
