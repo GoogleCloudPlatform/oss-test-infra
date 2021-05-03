@@ -91,7 +91,8 @@ spec:
           protocol: TCP
         args:
         - --provider=github
-        - --github-org=chaotoppicks
+        - --github-org=looker
+        - --github-team=eng
         - --http-address=0.0.0.0:4180
         - --upstream=http://localhost:8080
         - --cookie-domain=oss-prow-private.knative.dev
