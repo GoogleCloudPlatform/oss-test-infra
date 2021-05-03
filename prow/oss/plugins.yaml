@@ -241,3 +241,23 @@ plugins:
     - trigger
     - verify-owners
     - yuks
+
+  looker:
+    plugins:
+    - assign
+    - cat
+    - dog
+    - golint
+    - help
+    - hold
+    - label
+    - lgtm
+    - override
+    - owners-label
+    - pony
+    - shrug
+    - skip
+    - trigger
+    - verify-owners
+    - wip
+    - yuks
