@@ -170,6 +170,37 @@ postsubmits:
       - name: github
         secret:
           secretName: oauth-token
+  - name: post-oss-test-infra-create-testgrid-config
+    branches:
+    - ^master$
+    max_concurrency: 1
+    labels:
+      preset-bazel-scratch-dir: "true"
+    run_if_changed: '^(prow/prowjobs/.*\.yaml)|(testgrid/config\.yaml)$'
+    decorate: true
+    annotations:
+      testgrid-dashboards: googleoss-test-infra
+      testgrid-tab-name: testgrid-gcs-upload
+      # testgrid-alert-email: k8s-infra-oncall@google.com #TODO(chases2): Email only after confirmed to be working
+      testgrid-num-failures-to-alert: '1'
+    spec:
+      serviceAccountName: testgrid-config-updater
+      containers:
+      - image: gcr.io/k8s-prow/configurator:v20210503-ee6348061c
+        command:
+        - /app/testgrid/cmd/configurator/app.binary
+        args:
+        - --yaml=testgrid/config.yaml
+        - --default=testgrid/default.yaml
+        - --prow-config=prow/oss/config.yaml
+        - --prow-job-config=prow/prowjobs
+        - --output=gs://oss-prow-own-testgrid/config
+        - --update-description
+        - --oneshot
+        - --world-readable
+        resources:
+          requests:
+            memory: "1Gi"
   - name: post-oss-test-infra-reconcile-hmacs
     cluster: test-infra-trusted
     run_if_changed: 'prow/oss/config.yaml'
