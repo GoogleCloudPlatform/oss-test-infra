@@ -45,6 +45,7 @@ tide:
     - GoogleCloudPlatform/artifact-registry-yum-plugin
     - GoogleCloudPlatform/oss-test-infra
     - GoogleCloudPlatform/testgrid
+    - GoogleCloudPlatform/k8s-cloud-provider
     labels:
     - lgtm
     - approved
