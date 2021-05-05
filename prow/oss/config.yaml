@@ -28,7 +28,10 @@ tide:
   merge_commit_template:
     kubeflow:
       title: "{{ .Title }} (#{{ .Number }})"
-  target_url: https://oss-prow.knative.dev/tide
+  target_urls:
+    "*": https://oss-prow.knative.dev/tide
+    "chaotoppicks": https://oss-prow-private.knative.dev/tide
+    "looker/helltool": https://oss-prow-private.knative.dev/tide
   queries:
   - repos:
     - GoogleCloudPlatform/guest-agent
