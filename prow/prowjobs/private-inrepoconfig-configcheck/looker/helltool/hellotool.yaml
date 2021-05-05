@@ -3,7 +3,7 @@ presubmits:
   - name: pull-looker-helltool-validate-prow-yaml
     clone_uri: git@github.com:looker/helltool.git
     cluster: build-looker-private
-    always_run: true
+    run_if_changed: ^\.prow\.yaml$
     decorate: true
     extra_refs:
     - org: GoogleCloudPlatform
