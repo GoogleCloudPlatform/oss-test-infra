@@ -220,7 +220,7 @@ in_repo_config:
     # https://github.com/kubernetes/test-infra/pull/21993 is deployed in OSS
     # prow
     "*": ["non-exist-cluster-since-global-cluster-is-disabled"]
-    "chaotoppicks": ["build-looker-private"]
+    "chaotoppicks/great-private-tools": ["build-looker-private"]
     "looker/helltool": ["build-looker-private"]
 
 presets:
