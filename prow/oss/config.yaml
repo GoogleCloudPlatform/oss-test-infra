@@ -210,7 +210,7 @@ deck:
 in_repo_config:
   enabled:
     chaotoppicks: true
-    looker: true
+    looker/helltool: true
 
   allowed_clusters:
     # TODO(chaodaiG): drop this once
@@ -218,7 +218,7 @@ in_repo_config:
     # prow
     "*": ["non-exist-cluster-since-global-cluster-is-disabled"]
     "chaotoppicks": ["build-looker-private"]
-    "looker": ["build-looker-private"]
+    "looker/helltool": ["build-looker-private"]
 
 presets:
 # docker-in-docker preset
