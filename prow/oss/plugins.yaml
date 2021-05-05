@@ -256,7 +256,6 @@ plugins:
     - owners-label
     - pony
     - shrug
-    - size
     - skip
     - trigger
     - verify-owners
