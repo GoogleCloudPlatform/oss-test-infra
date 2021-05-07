@@ -177,6 +177,7 @@ branch-protection:
       - "-patch-" # don't protect branches created by editing on GitHub UI
 
 deck:
+  google_analytics: G-NQ9CERRMYD
   spyglass:
     size_limit: 500000000 # 500MB
     gcs_browser_prefix: https://pantheon.corp.google.com/storage/browser/ # TODO(fejta): something publicly accessible
