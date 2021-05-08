@@ -50,6 +50,7 @@ slack_reporter_configs:
     report_template: "Job `{{.Spec.Job}}` ended with state *{{.Status.State}}*: <{{.Status.URL}}|View logs>"
 
 deck:
+  google_analytics: G-Z5SCKHSFYJ
   spyglass:
     size_limit: 500000000 # 500MB
     gcs_browser_prefix: https://console.cloud.google.com/storage/browser/
