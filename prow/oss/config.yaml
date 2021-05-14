@@ -14,7 +14,6 @@
 
 tide:
   merge_method:
-    chaotoppicks: squash
     GoogleCloudPlatform/guest-agent: squash
     GoogleCloudPlatform/guest-configs: squash
     GoogleCloudPlatform/guest-diskexpand: squash
@@ -30,7 +29,6 @@ tide:
       title: "{{ .Title }} (#{{ .Number }})"
   target_urls:
     "*": https://oss-prow.knative.dev/tide
-    "chaotoppicks": https://oss-prow-private.knative.dev/tide
     "looker/helltool": https://oss-prow-private.knative.dev/tide
   queries:
   - repos:
@@ -55,7 +53,6 @@ tide:
     - do-not-merge/invalid-owners-file
     - do-not-merge/work-in-progress
   - orgs:
-    - chaotoppicks
     - kubeflow
     labels:
     - lgtm
@@ -70,7 +67,6 @@ tide:
 plank:
   job_url_prefix_config:
     '*': https://oss-prow.knative.dev/view/
-    'chaotoppicks': https://oss-prow-private.knative.dev/view/
     'looker': https://oss-prow-private.knative.dev/view/
   pod_pending_timeout: 15m
   pod_unscheduled_timeout: 1m
@@ -111,8 +107,6 @@ managed_webhooks:
   auto_accept_invitation: true
   # Config for orgs and repos that have been onboarded to this Prow instance.
   org_repo_config:
-    chaotoppicks: # Temporarily added for experimenting inrepoconfig
-      token_created_after: 2021-04-19T00:10:00Z
     google/http_pattern_matcher:
       token_created_after: 2021-03-15T00:10:00Z
     googleforgames/agones:
@@ -167,14 +161,6 @@ branch-protection:
       - "^revert-" # don't protect revert branches
       - "^dependabot/" # don't protect branches created by dependabot
       - "-patch-" # don't protect branches created by editing on GitHub UI
-    chaotoppicks:
-      protect: true
-      required_status_checks:
-        contexts:
-        - cla/google
-      exclude:
-      - "^revert-" # don't protect revert branches
-      - "-patch-" # don't protect branches created by editing on GitHub UI
 
 deck:
   google_analytics: G-NQ9CERRMYD
@@ -209,20 +195,14 @@ deck:
   additional_allowed_buckets:
     - compute-image-tools-test
   hidden_repos:
-  - chaotoppicks
   - looker
 
 in_repo_config:
   enabled:
-    chaotoppicks: true
     looker/helltool: true
 
   allowed_clusters:
-    # TODO(chaodaiG): drop this once
-    # https://github.com/kubernetes/test-infra/pull/21993 is deployed in OSS
-    # prow
-    "*": ["non-exist-cluster-since-global-cluster-is-disabled"]
-    "chaotoppicks/great-private-tools": ["build-looker-private"]
+    "*": []
     "looker/helltool": ["build-looker-private"]
 
 presets:
