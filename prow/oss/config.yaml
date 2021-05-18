@@ -119,6 +119,8 @@ managed_webhooks:
       token_created_after: 2021-03-04T00:10:00Z
     GoogleCloudPlatform/compute-image-tools:
       token_created_after: 2021-04-22T00:10:00Z
+    GoogleCloudPlatform/elcarro-oracle-operator:
+      token_created_after: 2021-05-01T00:10:00Z
     GoogleCloudPlatform/esp-v2:
       token_created_after: 2021-04-21T00:10:00Z
     GoogleCloudPlatform/guest-agent:
