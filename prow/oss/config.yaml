@@ -63,6 +63,16 @@ tide:
     - do-not-merge/invalid-owners-file
     - do-not-merge/work-in-progress
     - needs-rebase
+  - author: google-oss-robot
+    labels: # google-oss-robot should only create autobump PR with this label
+    - skip-review
+    missingLabels:
+    - do-not-merge
+    - do-not-merge/hold
+    - do-not-merge/invalid-owners-file
+    - do-not-merge/work-in-progress
+    repos:
+    - GoogleCloudPlatform/oss-test-infra
 
 plank:
   job_url_prefix_config:
