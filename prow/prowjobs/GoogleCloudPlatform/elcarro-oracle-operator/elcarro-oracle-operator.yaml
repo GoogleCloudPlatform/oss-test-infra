@@ -12,9 +12,7 @@ presubmits:
         args:
         - -C
         - oracle
-        - operator-checks
-        securityContext:
-          privileged: true
+        - operator-oss-presubmit
         resources:
           requests:
             memory: "2.0Gi"
