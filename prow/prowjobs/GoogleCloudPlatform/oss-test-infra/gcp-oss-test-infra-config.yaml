@@ -195,6 +195,7 @@ postsubmits:
         - --prow-config=prow/oss/config.yaml
         - --prow-job-config=prow/prowjobs
         - --output=gs://oss-prow-own-testgrid/config
+        - --prowjob-url-prefix=https://github.com/GoogleCloudPlatform/oss-test-infra/tree/master/prow/prowjobs/
         - --update-description
         - --oneshot
         - --world-readable
