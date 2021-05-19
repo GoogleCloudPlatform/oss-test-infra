@@ -1,7 +1,7 @@
 presubmits:
   GoogleCloudPlatform/elcarro-oracle-operator:
   - name: operator-oss-presubmit
-    cluster: build-graybox
+    cluster: oss-prow-build-elcarro
     always_run: true
     decorate: true
     spec:
