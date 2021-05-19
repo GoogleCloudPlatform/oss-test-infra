@@ -1,0 +1,19 @@
+presubmits:
+  GoogleCloudPlatform/elcarro-oracle-operator:
+  - name: operator-oss-presubmit
+    cluster: build-graybox
+    always_run: true
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/k8s-testimages/kubekins-e2e:latest-master
+        command:
+        - make
+        args:
+        - -C
+        - oracle
+        - operator-oss-presubmit
+        resources:
+          requests:
+            memory: "2.0Gi"
+            cpu: "3.0"
