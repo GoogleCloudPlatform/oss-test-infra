@@ -44,7 +44,16 @@ approve:
   - grpc-ecosystem
   require_self_approval: false
 - repos:
+  - kubeflow/caffe2-operator
+  - kubeflow/chainer-operator
+  - kubeflow/common
+  - kubeflow/fate-operator
+  - kubeflow/mpi-operator
+  - kubeflow/mxnet-operator
   - kubeflow/pipelines
+  - kubeflow/pytorch-operator
+  - kubeflow/tf-operator
+  - kubeflow/xgboost-operator
   require_self_approval: true
 
 blunderbuss:
