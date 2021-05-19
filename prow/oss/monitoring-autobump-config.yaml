@@ -1,0 +1,8 @@
+---
+gitHubLogin: "google-oss-robot"
+gitHubToken: "/etc/github-token/oauth"
+skipPullRequest: false
+gitHubOrg: "GoogleCloudPlatform"
+gitHubRepo: "oss-test-infra"
+remoteName: "oss-test-infra"
+headBranchName: "autobump-monitoring-oss-prow"
