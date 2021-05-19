@@ -104,7 +104,7 @@ plank:
   - cluster: build-elcarro
     config:
       gcs_configuration:
-        bucket: "oss-prow"
+        bucket: "oss-prow-elcarro"
       default_service_account_name: "prowjob-default-sa" # Use workload identity
       gcs_credentials_secret: ""                         # rather than service account key secret
 
