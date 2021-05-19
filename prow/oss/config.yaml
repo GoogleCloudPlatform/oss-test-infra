@@ -101,6 +101,12 @@ plank:
       default_service_account_name: "prowjob-default-sa" # SA in build cluster
       ssh_key_secrets:
       - looker-ssh-deploy-key
+  - cluster: build-elcarro
+    config:
+      gcs_configuration:
+        bucket: "oss-prow"
+      default_service_account_name: "prowjob-default-sa" # Use workload identity
+      gcs_credentials_secret: ""                         # rather than service account key secret
 
 sinker:
   resync_period: 1m
