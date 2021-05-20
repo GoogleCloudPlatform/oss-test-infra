@@ -6,6 +6,12 @@ If you are onboarding your GitHub organization or repository to be served by the
 
 ## Upgrading Prow
 
+*Note*: oss prow is now automatically updated on a daily basis, see [Autobump
+PRs](https://github.com/GoogleCloudPlatform/oss-test-infra/search?q=author%3Agoogle-oss-robot+is%3Apr+sort%3Aupdated+head%3Aautobump-oss-prow&type=Issues)
+for ongoing/histories. This is configured as
+[`ci-oss-test-infra-autobump-prow`](https://github.com/GoogleCloudPlatform/oss-test-infra/blob/49cc9a1bff81427ea8f10b9625269be7a9cf3ae0/prow/prowjobs/GoogleCloudPlatform/oss-test-infra/gcp-oss-test-infra-config.yaml#L335)
+job.
+
 Please check recent [prow announcements](https://github.com/kubernetes/test-infra/tree/master/prow#announcements) before updating, if you are not already familiar with them.
 
 ```shell
