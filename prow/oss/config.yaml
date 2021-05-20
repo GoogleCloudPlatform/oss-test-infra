@@ -79,7 +79,7 @@ plank:
     '*': https://oss-prow.knative.dev/view/
     'looker': https://oss-prow-private.knative.dev/view/
   pod_pending_timeout: 15m
-  pod_unscheduled_timeout: 1m
+  pod_unscheduled_timeout: 5m
   default_decoration_config_entries:
   - config:
       timeout: 7200000000000 # 2h
