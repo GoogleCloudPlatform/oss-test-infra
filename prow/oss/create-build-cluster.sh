@@ -13,11 +13,10 @@ set -o pipefail
 
 # Specific to Prow instance, don't change these.
 export PROW_INSTANCE_NAME="${PROW_INSTANCE_NAME:-oss-prow}"
-export GCS_BUCKET="${GCS_BUCKET:-${PROW_INSTANCE_NAME}}"
 export ADMIN_IAM_MEMBER="${ADMIN_IAM_MEMBER:-group:mdb.cloud-kubernetes-engprod-oncall@google.com}"
-
 export PROW_SECRET_ACCESSOR_SA="kubernetes-external-secrets-sa@oss-prow.iam.gserviceaccount.com"
 export PROW_DEPLOYMENT_DIR="./prow/oss/cluster" # From root of repo
+export CONTROL_PLANE_SA="oss-prow-public-deck@oss-prow.iam.gserviceaccount.com,oss-prow@oss-prow.iam.gserviceaccount.com"
 
 export GITHUB_CLONE_URI="git@github.com:GoogleCloudPlatform/oss-test-infra.git"
 
@@ -26,6 +25,7 @@ export TEAM="${TEAM:-}"
 export PROJECT="${PROJECT:-${PROW_INSTANCE_NAME}-build-${TEAM}}"
 export ZONE="${ZONE:-us-west1-b}"
 export CLUSTER="${CLUSTER:-${PROJECT}}"
+export GCS_BUCKET="${GCS_BUCKET:-gs://${PROJECT}}"
 
 # Only needed for creating cluster
 export MACHINE="${MACHINE:-n1-standard-8}"
