@@ -7,7 +7,7 @@ presubmits:
     always_run: true
     spec:
       containers:
-        - image: gcr.io/k8s-prow/checkconfig:v20210521-0570b0687e
+        - image: gcr.io/k8s-prow/checkconfig:v20210521-0713522bd8
           imagePullPolicy: Always
           command:
             - /checkconfig
@@ -75,7 +75,7 @@ presubmits:
       base_ref: main
     spec:
       containers:
-        - image: gcr.io/k8s-prow/checkconfig:v20210521-0570b0687e
+        - image: gcr.io/k8s-prow/checkconfig:v20210521-0713522bd8
           imagePullPolicy: Always
           command:
             - /checkconfig
@@ -186,7 +186,7 @@ postsubmits:
     spec:
       serviceAccountName: testgrid-config-updater
       containers:
-      - image: gcr.io/k8s-prow/configurator:v20210521-0570b0687e
+      - image: gcr.io/k8s-prow/configurator:v20210521-0713522bd8
         command:
         - /app/testgrid/cmd/configurator/app.binary
         args:
@@ -214,7 +214,7 @@ postsubmits:
     - master
     spec:
       containers:
-      - image: gcr.io/k8s-prow/hmac:v20210521-0570b0687e
+      - image: gcr.io/k8s-prow/hmac:v20210521-0713522bd8
         command:
         - /hmac
         args:
@@ -311,7 +311,7 @@ postsubmits:
       testgrid-num-failures-to-alert: '3'
     spec:
       containers:
-      - image: gcr.io/k8s-prow/generic-autobumper:v20210521-0570b0687e
+      - image: gcr.io/k8s-prow/generic-autobumper:v20210521-0713522bd8
         command:
         - /app/prow/cmd/generic-autobumper/app.binary
         args:
@@ -347,7 +347,7 @@ periodics:
     testgrid-num-failures-to-alert: '3'
   spec:
     containers:
-    - image: gcr.io/k8s-prow/generic-autobumper:v20210521-0570b0687e
+    - image: gcr.io/k8s-prow/generic-autobumper:v20210521-0713522bd8
       command:
       - /app/prow/cmd/generic-autobumper/app.binary
       args:
@@ -381,7 +381,7 @@ periodics:
     testgrid-num-failures-to-alert: '1'
   spec:
     containers:
-    - image: gcr.io/k8s-prow/generic-autobumper:v20210521-0570b0687e
+    - image: gcr.io/k8s-prow/generic-autobumper:v20210521-0713522bd8
       command:
       - /app/prow/cmd/generic-autobumper/app.binary
       args:
@@ -416,7 +416,7 @@ periodics:
     testgrid-num-failures-to-alert: '3'
   spec:
     containers:
-    - image: gcr.io/k8s-prow/generic-autobumper:v20210521-0570b0687e
+    - image: gcr.io/k8s-prow/generic-autobumper:v20210521-0713522bd8
       command:
       - /app/prow/cmd/generic-autobumper/app.binary
       args:
@@ -450,7 +450,7 @@ periodics:
     testgrid-num-failures-to-alert: '3'
   spec:
     containers:
-    - image: gcr.io/k8s-prow/generic-autobumper:v20210521-0570b0687e
+    - image: gcr.io/k8s-prow/generic-autobumper:v20210521-0713522bd8
       command:
       - /app/prow/cmd/generic-autobumper/app.binary
       args:
