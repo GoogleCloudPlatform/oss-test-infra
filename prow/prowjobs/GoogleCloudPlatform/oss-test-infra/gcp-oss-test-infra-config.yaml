@@ -171,6 +171,7 @@ postsubmits:
         secret:
           secretName: oauth-token
   - name: post-oss-test-infra-create-testgrid-config
+    cluster: test-infra-trusted
     branches:
     - ^master$
     max_concurrency: 1
