@@ -137,6 +137,7 @@ tide:
   queries:
   - orgs:
     - "knative"
+    - "knative-sandbox"
     excludedRepos:
     - knative/build
     - knative/build-templates
@@ -159,11 +160,7 @@ tide:
     - lgtm
     - approved
     - "cla: yes"
-    missingLabels: &knative_tide_missing_labels
-    - do-not-merge/hold
-    - do-not-merge/work-in-progress
-    - do-not-merge/invalid-owners-file
-    - needs-rebase
+    missingLabels: *knative_tide_missing_labels
   - repos:
     # Allow PRs for test-infra to be automatically merged without manual approval
     - "knative/test-infra"
@@ -173,12 +170,6 @@ tide:
     missingLabels: *knative_tide_missing_labels
     author: knative-prow-updater-robot
     reviewApprovedRequired: false
-  - orgs:
-    - "knative-sandbox"
-    labels:
-    - "cla: yes"
-    missingLabels: *knative_tide_missing_labels
-    reviewApprovedRequired: true
   merge_method:
     knative: squash
     knative-sandbox: squash

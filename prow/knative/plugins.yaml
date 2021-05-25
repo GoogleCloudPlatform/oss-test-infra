@@ -16,19 +16,17 @@
 approve:
 - repos:
   - "knative"
-  # TODO(mattmoor): Should we disable this for sandbox?
   - "knative-sandbox"
   - "google/knative-gcp"
   - "knative-prow-robot/test-infra"
-  require_self_approval: true
   ignore_review_state: false
 
 # Settings for the "lgtm" plugin.
 lgtm:
 - repos:
-   - "knative-sandbox"
-#  - "knative"
-#  - "google/knative-gcp"
+  - "knative-sandbox"
+  - "knative"
+  - "google/knative-gcp"
   review_acts_as_lgtm: true
 
 # Settings for the "heart" plugin.
