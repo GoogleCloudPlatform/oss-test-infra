@@ -199,7 +199,6 @@ postsubmits:
         - --prowjob-url-prefix=https://github.com/GoogleCloudPlatform/oss-test-infra/tree/master/prow/prowjobs/
         - --update-description
         - --oneshot
-        - --world-readable
         resources:
           requests:
             memory: "1Gi"
