@@ -48,6 +48,7 @@ approve:
   - kubeflow/chainer-operator
   - kubeflow/common
   - kubeflow/fate-operator
+  - kubeflow/kubeflow
   - kubeflow/mpi-operator
   - kubeflow/mxnet-operator
   - kubeflow/pipelines
@@ -166,7 +167,7 @@ plugins:
     - yuks
 
   kubeflow:
-    plugins:  
+    plugins:
     - approve   # Enable /approve and /assign commands.
     - assign
     - blunderbuss
