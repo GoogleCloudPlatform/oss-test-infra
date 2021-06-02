@@ -206,6 +206,10 @@ deck:
           name: podinfo
         required_files:
           - podinfo.json
+      - lens:
+          name: html
+        required_files:
+          - ^artifacts/.*\.html$
   rerun_auth_configs:
     '*':
       github_orgs:
