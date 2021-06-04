@@ -1,5 +1,4 @@
 approvers:
-- BenTheElder
 - chaodaiG
 - chases2
 - cjwagner
@@ -9,3 +8,5 @@ approvers:
 - michelle192837
 - mpherman2
 - spiffxp
+emeritus_approvers:
+- BenTheElder
