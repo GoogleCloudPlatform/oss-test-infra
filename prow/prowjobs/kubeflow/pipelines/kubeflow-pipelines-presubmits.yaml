@@ -211,7 +211,6 @@ presubmits:
           command:
             - ./v2/test/presubmit-v2-tests.sh
 
-
   - name: kubeflow-pipelines-manifests
     cluster: build-kubeflow
     decorate: true
