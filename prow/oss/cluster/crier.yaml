@@ -65,7 +65,7 @@ spec:
           readOnly: true
         - name: knative-slack-token
           mountPath: etc/knative-slack-token
-          readonly: true
+          readOnly: true
       volumes:
       - name: build-elcarro
         secret:
