@@ -27,7 +27,6 @@ spec:
         - --cookiefile=/etc/cookies/cookies
         - --gerrit-projects=https://kunit-review.googlesource.com=linux
         - --gerrit-workers=1
-        - --additional-slack-token-files=knative=/etc/knative-slack-token/token
         - --github-endpoint=http://ghproxy
         - --github-endpoint=https://api.github.com
         - --github-token-path=/etc/github/oauth
@@ -63,9 +62,6 @@ spec:
         - name: oauth
           mountPath: /etc/github
           readOnly: true
-        - name: knative-slack-token
-          mountPath: etc/knative-slack-token
-          readonly: true
       volumes:
       - name: build-elcarro
         secret:
@@ -96,9 +92,6 @@ spec:
       - name: oauth
         secret:
           secretName: oauth-token
-      - name: knative-slack-token
-        secret:
-          secretName: knative-slack-token
 ---
 kind: ServiceAccount
 apiVersion: v1
