@@ -204,7 +204,7 @@ presubmits:
   - name: kubeflow-pipelines-v2-test
     cluster: build-kubeflow
     decorate: true
-    run_if_changed: "^(v2/.*)|(v2/test/presubmit-v2-tests.sh)$"
+    run_if_changed: "^v2/.*$"
     spec:
       containers:
         - image: gcr.io/google.com/cloudsdktool/cloud-sdk:latest
