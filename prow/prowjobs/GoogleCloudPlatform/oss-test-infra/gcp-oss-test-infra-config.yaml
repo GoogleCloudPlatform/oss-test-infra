@@ -344,7 +344,7 @@ periodics:
       secret:
         secretName: google-oss-robot-ssh-keys
         defaultMode: 0400
-- cron: "05 17 * * 1-5"  # Bump with label `skip-review`. Run at 10:05 PST (17:05 UTC) Mon-Fri
+- cron: "30 18 * * 1-5"  # Bump with label `skip-review`. Run at 11:30 PST (18:30 UTC) Mon-Fri
   name: ci-oss-test-infra-autobump-prow-for-auto-deploy
   cluster: test-infra-trusted
   decorate: true
