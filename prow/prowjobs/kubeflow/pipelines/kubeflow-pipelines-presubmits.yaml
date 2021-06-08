@@ -200,7 +200,17 @@ presubmits:
       - image: python:3.7
         command:
         - ./v2/test/presubmit.sh
-  
+
+  - name: kubeflow-pipelines-v2-go-test
+    cluster: build-kubeflow
+    decorate: true
+    run_if_changed: "^v2/.*$"
+    spec:
+      containers:
+        - image: gcr.io/google.com/cloudsdktool/cloud-sdk:latest
+          command:
+            - ./v2/test/presubmit-v2-go-test.sh
+
   - name: kubeflow-pipelines-manifests
     cluster: build-kubeflow
     decorate: true
