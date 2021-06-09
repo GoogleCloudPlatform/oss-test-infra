@@ -165,6 +165,8 @@ managed_webhooks:
       token_created_after: 2020-12-06T00:10:00Z
     looker:
       token_created_after: 2021-04-28T00:10:00Z
+    GoogleCloudPlatform/blueprints:
+      token_created_after: 2021-04-28T00:10:00Z
 #    [org_name]/[repo_name]:
 #      token_created_after: 2020-08-18T00:10:00Z
 
