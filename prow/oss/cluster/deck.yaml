@@ -43,11 +43,14 @@ spec:
         env:
         # Use KUBECONFIG envvar rather than --kubeconfig flag in order to provide multiple configs to merge.
         - name: KUBECONFIG
-          value: "/etc/kubeconfig/config-20201002:/etc/build-elcarro/kubeconfig:/etc/build-looker-private/kubeconfig:/etc/build-kubeflow/kubeconfig"
+          value: "/etc/kubeconfig/config-20201002:/etc/build-blueprints/kubeconfig:/etc/build-elcarro/kubeconfig:/etc/build-looker-private/kubeconfig:/etc/build-kubeflow/kubeconfig"
         ports:
         - name: http
           containerPort: 8080
         volumeMounts:
+        - mountPath: /etc/build-blueprints
+          name: build-blueprints
+          readOnly: true
         - mountPath: /etc/build-elcarro
           name: build-elcarro
           readOnly: true
@@ -92,6 +95,10 @@ spec:
           periodSeconds: 3
           timeoutSeconds: 600
       volumes:
+      - name: build-blueprints
+        secret:
+          defaultMode: 420
+          secretName: kubeconfig-build-blueprints
       - name: build-elcarro
         secret:
           defaultMode: 420
