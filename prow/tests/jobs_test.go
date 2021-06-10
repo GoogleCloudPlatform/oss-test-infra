@@ -85,6 +85,36 @@ func TestTrustedJobs(t *testing.T) {
 	}
 }
 
+func TestAllJobs(t *testing.T) {
+	trustedPath := path.Join(*jobConfigPath, "private-inrepoconfig-configcheck")
+	var repos []string
+	// Presubmits may not be triggered on hidden repos.
+	for repo, jobs := range c.PresubmitsStatic {
+		for _, job := range jobs {
+			if !strings.HasPrefix(job.SourcePath, trustedPath+"/") {
+				repos = append(repos, repo)
+				break
+			}
+		}
+	}
+	for repo, jobs := range c.PostsubmitsStatic {
+		for _, job := range jobs {
+			if !strings.HasPrefix(job.SourcePath, trustedPath+"/") {
+				repos = append(repos, repo)
+				break
+			}
+		}
+	}
+
+	for _, repo := range repos {
+		for _, hiddenRepo := range c.Deck.HiddenRepos {
+			if hiddenRepo == repo || strings.HasPrefix(repo, strings.TrimRight(hiddenRepo, "/")+"/") {
+				t.Errorf("%q: presubmits are not allowed on hidden repos %q", repo, hiddenRepo)
+			}
+		}
+	}
+}
+
 func TestPrivateJobs(t *testing.T) {
 	const (
 		private           = "private"
