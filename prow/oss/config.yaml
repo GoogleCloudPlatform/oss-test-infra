@@ -23,6 +23,7 @@ tide:
     GoogleCloudPlatform/osconfig: squash
     GoogleCloudPlatform/artifact-registry-apt-transport: squash
     GoogleCloudPlatform/artifact-registry-yum-plugin: squash
+    GoogleCloudPlatform/blueprints: squash
     kubeflow: squash
   merge_commit_template:
     kubeflow:
@@ -165,6 +166,8 @@ managed_webhooks:
       token_created_after: 2020-12-06T00:10:00Z
     looker:
       token_created_after: 2021-04-28T00:10:00Z
+    GoogleCloudPlatform/blueprints:
+      token_created_after: 2021-04-28T00:10:00Z
 #    [org_name]/[repo_name]:
 #      token_created_after: 2020-08-18T00:10:00Z
 
@@ -222,10 +225,12 @@ deck:
 in_repo_config:
   enabled:
     looker/helltool: true
+    GoogleCloudPlatform/blueprints: true
 
   allowed_clusters:
     "*": []
     "looker/helltool": ["build-looker-private"]
+    "GoogleCloudPlatform/blueprints": ["build-blueprints"]
 
 presets:
 # docker-in-docker preset
