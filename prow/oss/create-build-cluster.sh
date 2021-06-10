@@ -28,6 +28,7 @@ export CLUSTER="${CLUSTER:-${PROJECT}}"
 export GCS_BUCKET="${GCS_BUCKET:-gs://${PROJECT}}"
 
 # Only needed for creating cluster
+export GITHUB_FORK_URI="${GITHUB_FORK_URI:-}"  # Set this to the URI of your personal fork of this repo. Similar to GITHUB_CLONE_URI.
 export MACHINE="${MACHINE:-n1-standard-8}"
 export NODECOUNT="${NODECOUNT:-5}"
 export DISKSIZE="${DISKSIZE:-100GB}"
