@@ -1,0 +1,19 @@
+presubmits:
+  GoogleCloudPlatform/blueprints:
+  - name: pull-blueprints-validate-prow-yaml
+    cluster: build-blueprints
+    run_if_changed: ^\.prow(/|\.yaml$)
+    decorate: true
+    extra_refs:
+    - org: GoogleCloudPlatform
+      repo: oss-test-infra
+      base_ref: master
+    spec:
+      containers:
+      - image: gcr.io/k8s-prow/checkconfig:v20210609-88674ef045
+        command:
+        - /app/prow/cmd/checkconfig/app.binary
+        args:
+        - --plugin-config=../../GoogleCloudPlatform/oss-test-infra/prow/oss/plugins.yaml
+        - --config-path=../../GoogleCloudPlatform/oss-test-infra/prow/oss/config.yaml
+        - --prow-yaml-repo-name=$(REPO_OWNER)/$(REPO_NAME)
