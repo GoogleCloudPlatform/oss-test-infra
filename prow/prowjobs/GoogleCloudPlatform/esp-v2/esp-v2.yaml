@@ -610,7 +610,7 @@ postsubmits:
 periodics:
   - name: ESPv2-continuous-build
     cluster: espv2
-    cron: '*/30 * * * *' # Run every half hour
+    cron: '0 0,12 * * *' # Run every 12 hours, starting at midnight.
     decorate: true
     annotations:
       testgrid-dashboards: googleoss-esp-v2-periodic
