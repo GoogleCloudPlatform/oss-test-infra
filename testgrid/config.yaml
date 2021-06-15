@@ -4,6 +4,7 @@ dashboards:
 - name: googleoss-gcp-guest
 - name: googleoss-test-infra
 - name: googleoss-esp-v2-presubmit
+- name: googleoss-esp-v2-postsubmit
 - name: googleoss-esp-v2-periodic
 - name: googleoss-kubeflow-pipelines
 - name: googleoss-kubeflow-gcp-blueprints
