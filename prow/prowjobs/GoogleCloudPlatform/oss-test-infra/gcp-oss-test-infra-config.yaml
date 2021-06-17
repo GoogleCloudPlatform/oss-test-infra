@@ -488,6 +488,42 @@ periodics:
       secret:
         secretName: google-oss-robot-ssh-keys
         defaultMode: 0400
+- cron: "30 19 * * 1-5"  # Bump with label `skip-review`. Run at 12:30PM PST (19:30 UTC) Mon-Fri
+  name: ci-oss-test-infra-autobump-knative-prow-for-auto-deploy
+  cluster: test-infra-trusted
+  decorate: true
+  extra_refs:
+  - org: GoogleCloudPlatform
+    repo: oss-test-infra
+    base_ref: master
+  annotations:
+    testgrid-dashboards: googleoss-test-infra
+    testgrid-tab-name: autobump-knative-prow-for-auto-deploy
+    testgrid-alert-email: k8s-infra-oncall@google.com
+    testgrid-num-failures-to-alert: '1'
+  spec:
+    containers:
+    - image: gcr.io/k8s-prow/generic-autobumper:v20210615-cf184f2204
+      command:
+      - /app/prow/cmd/generic-autobumper/app.binary
+      args:
+      - --config=prow/knative/knative-autobump-config.yaml
+      - --labels-override=skip-review # This label is used by tide for identifying trusted PR
+      - --skip-if-no-oncall # Only apply `skip-review` label when oncall is active
+      volumeMounts:
+      - name: github
+        mountPath: /etc/github-token
+        readOnly: true
+      - name: ssh
+        mountPath: /root/.ssh
+    volumes:
+    - name: github
+      secret:
+        secretName: oauth-token
+    - name: ssh
+      secret:
+        secretName: google-oss-robot-ssh-keys
+        defaultMode: 0400
 # ci-oss-test-infra-heartbeat is used for prometheus, alert(s) will be sent
 # if this job hadn't been succeeded for some time
 - cron: "*/3 * * * *" # Every 3 minutes
