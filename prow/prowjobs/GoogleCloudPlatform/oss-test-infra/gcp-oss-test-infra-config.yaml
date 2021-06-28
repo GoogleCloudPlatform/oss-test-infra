@@ -354,7 +354,7 @@ periodics:
       secret:
         secretName: google-oss-robot-ssh-keys
         defaultMode: 0400
-- cron: "05 17 * * 1-5"  # Bump with label `skip-review`. Run at 10:05 PST (17:05 UTC) Mon-Fri
+- cron: "01 18 * * 1-5"  # Bump with label `skip-review`. Run at 11:01 PST (18:01 UTC) Mon-Fri
   name: ci-oss-test-infra-autobump-prow-for-auto-deploy
   cluster: test-infra-trusted
   decorate: true
@@ -375,6 +375,7 @@ periodics:
       args:
       - --config=prow/oss/oss-autobump-config.yaml
       - --labels-override=skip-review # This label is used by tide for identifying trusted PR
+      - --skip-if-no-oncall # Only apply `skip-review` label when oncall is active
       volumeMounts:
       - name: github
         mountPath: /etc/github-token
