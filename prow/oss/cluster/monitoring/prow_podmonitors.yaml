@@ -151,23 +151,3 @@ spec:
   selector:
     matchLabels:
       app: crier
----
-apiVersion: monitoring.gke.io/v1alpha1
-kind: PodMonitor
-metadata:
-  labels:
-    app.kubernetes.io/name: kubernetes-external-secrets
-    app: kubernetes-external-secrets
-  name: kubernetes-external-secrets
-  namespace: prow-monitoring
-spec:
-  podMetricsEndpoints:
-  - interval: 30s
-    port: prometheus
-    scheme: http
-  namespaceSelector:
-    matchNames:
-    - default
-  selector:
-    matchLabels:
-      app.kubernetes.io/name: kubernetes-external-secrets
