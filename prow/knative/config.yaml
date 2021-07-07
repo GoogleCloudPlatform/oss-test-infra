@@ -186,3 +186,45 @@ tide:
   context_options:
     # Treat unknown contexts as optional
     skip-unknown-contexts: true
+
+# Configure GitHub branch protection rules according to the specified policy.
+branch-protection:
+  # Allows a child to disable all protection even if the branch has inherited protection options from a parent.
+  allow_disabled_policies: true
+  orgs:
+    knative-sandbox:
+      # Protect all branches in knative-sandbox
+      protect: true
+      required_status_checks:
+        contexts:
+        - cla/google
+        - tide
+      exclude:
+      - "^dependabot/" # don't protect branches created by dependabot
+      # Enforce all configured restrictions above for administrators.
+      enforce_admins: true
+
+    knative:
+      # Protect all branches in knative
+      protect: true
+      required_status_checks:
+        contexts:
+        - cla/google
+        - tide
+      # Enforce all configured restrictions above for administrators.
+      enforce_admins: true
+      repos:
+        .github:
+          protect: false
+
+    google:
+      repos:
+        # Protect all branches in google/knative-gcp
+        knative-gcp:
+          protect: true
+          required_status_checks:
+            contexts:
+            - cla/google
+            - tide
+          # Enforce all configured restrictions above for administrators.
+          enforce_admins: true
