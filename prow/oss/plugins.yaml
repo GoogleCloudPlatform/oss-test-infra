@@ -67,6 +67,11 @@ lgtm:
   - googleforgames
   - grpc-ecosystem
   review_acts_as_lgtm: true
+- repos:
+  - GoogleCloudPlatform/testgrid
+  - GoogleCloudPlatform/oss-test-infra
+  review_acts_as_lgtm: true
+  trusted_team_for_sticky_lgtm: googlers
 
 plugins:
   GoogleCloudPlatform:
