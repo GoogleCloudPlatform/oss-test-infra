@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sub
+  namespace: default
+  labels:
+    app: sub
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sub
+  template:
+    metadata:
+      labels:
+        app: sub
+    spec:
+      terminationGracePeriodSeconds: 120
+      serviceAccountName: sub
+      containers:
+      - name: sub
+        image: gcr.io/k8s-prow/sub:v20210707-32dc49e04b
+        args:
+        - --config-path=/etc/config/config.yaml
+        - --job-config-path=/etc/job-config
+        - --grace-period=110s
+        - --dry-run=false
+        ports:
+        - name: http
+          containerPort: 80
+        volumeMounts:
+        - name: config
+          mountPath: /etc/config
+          readOnly: true
+        - name: job-config
+          mountPath: /etc/job-config
+          readOnly: true
+      volumes:
+      - name: config
+        configMap:
+          name: config
+      - name: job-config
+        configMap:
+          name: job-config
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: sub
+  namespace: default
+  annotations:
+    iam.gke.io/gcp-service-account: prow-pubsub@oss-prow.iam.gserviceaccount.com
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sub
+  namespace: default
+spec:
+  selector:
+    app: sub
+  ports:
+  - port: 80
+    targetPort: 80
+  type: NodePort
