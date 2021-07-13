@@ -262,3 +262,7 @@ presets:
   volumeMounts:
   - name: docker-graph
     mountPath: /docker-graph
+
+pubsub_subscriptions:
+  "prow-build-looker-github":
+  - "projects/prow-build-looker-github/subscriptions/prow-test-sub"
