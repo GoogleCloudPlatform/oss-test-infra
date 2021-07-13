@@ -262,3 +262,10 @@ presets:
   volumeMounts:
   - name: docker-graph
     mountPath: /docker-graph
+
+pubsub_triggers:
+  - allowed_clusters:
+      - "build-looker-private"
+    project: 'prow-build-looker-github'
+    topics:
+      - "prow-test"
