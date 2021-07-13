@@ -263,6 +263,9 @@ presets:
   - name: docker-graph
     mountPath: /docker-graph
 
-pubsub_subscriptions:
-  "prow-build-looker-github":
-  - "projects/prow-build-looker-github/subscriptions/prow-test-sub"
+pubsub_triggers:
+  - allowed_clusters:
+      - "prow-build-looker-github"
+    project: 'prow-build-looker-github'
+    topics:
+      - "prow-test"
