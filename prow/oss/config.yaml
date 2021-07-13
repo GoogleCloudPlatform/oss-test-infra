@@ -265,7 +265,7 @@ presets:
 
 pubsub_triggers:
   - allowed_clusters:
-      - "prow-build-looker-github"
+      - "build-looker-private"
     project: 'prow-build-looker-github'
     topics:
       - "prow-test"
