@@ -24,6 +24,7 @@ spec:
         - --config-path=/etc/config/config.yaml
         - --job-config-path=/etc/job-config
         - --grace-period=110s
+        - --github-token-path=/etc/github/oauth
         - --dry-run=false
         ports:
         - name: http
@@ -35,6 +36,9 @@ spec:
         - name: job-config
           mountPath: /etc/job-config
           readOnly: true
+        - name: oauth
+          mountPath: /etc/github
+          readOnly: true
       volumes:
       - name: config
         configMap:
@@ -42,6 +46,9 @@ spec:
       - name: job-config
         configMap:
           name: job-config
+      - name: oauth
+        secret:
+          secretName: oauth-token
 ---
 apiVersion: v1
 kind: ServiceAccount
