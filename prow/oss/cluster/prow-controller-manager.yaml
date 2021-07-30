@@ -87,6 +87,8 @@ kind: ServiceAccount
 metadata:
   namespace: default
   name: "prow-controller-manager"
+  annotations:
+    "iam.gke.io/gcp-service-account": "oss-prow@oss-prow.iam.gserviceaccount.com"
 ---
 kind: Role
 apiVersion: rbac.authorization.k8s.io/v1beta1
