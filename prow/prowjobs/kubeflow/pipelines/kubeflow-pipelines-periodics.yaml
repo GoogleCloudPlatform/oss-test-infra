@@ -33,7 +33,7 @@ periodics:
     workdir: true
   spec:
     containers:
-      - image: gcr.io/k8s-testimages/kubekins-e2e:v20210113-cc576af-master
+      - image: docker.io/library/golang:1.16.6-alpine
         imagePullPolicy: Always
         command:
         - "./test/tools/project-cleaner/project_cleaner.sh"
