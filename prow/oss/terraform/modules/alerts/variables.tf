@@ -12,27 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Store terraform states in GCS
-terraform {
-    backend "gcs" {
-        bucket = "oss-prow-terraform"
-    }
+variable "project" {
+  type = string
 }
 
-module "dashboards" {
-    source = "./modules/dashboards"
-
-    project = "oss-prow"
+variable "heartbeat_job" {
+  type = map
+  default = {
+    job_name = ""
+    interval = ""
+    alert_interval = ""
+  }
 }
 
-module "alert" {
-    source = "./modules/alerts"
-
-    project = "oss-prow"
-    heartbeat_job = {
-        job_name = "ci-oss-test-infra-heartbeat"
-        interval = "300s"
-        alert_interval = "1200s"
-    }
-    notification_channel_id = "14031735832803168422"
+variable "notification_channel_id" {
+  type = string
 }

@@ -17,3 +17,4 @@ pod.yaml
 *.tfvars
 *.terraform/
 prow/oss/terraform/state.tf
+*.terraform.lock.hcl
