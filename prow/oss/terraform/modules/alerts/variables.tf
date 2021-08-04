@@ -28,3 +28,10 @@ variable "heartbeat_job" {
 variable "notification_channel_id" {
   type = string
 }
+
+variable "prow_components" {
+  type = map
+  default = {
+    "svc_not_exist" = {"namespace": "default"}
+  }
+}
