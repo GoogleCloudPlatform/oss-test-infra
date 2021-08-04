@@ -81,6 +81,7 @@ plank:
     'looker': https://oss-prow-private.knative.dev/view/
   pod_pending_timeout: 15m
   pod_unscheduled_timeout: 5m
+  build_cluster_status_file: 'gs://oss-prow/oss-prow-build-clusters-statuses.json'
   default_decoration_config_entries:
   - config:
       timeout: 7200000000000 # 2h
