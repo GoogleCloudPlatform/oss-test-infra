@@ -227,6 +227,7 @@ deck:
       - GoogleCloudPlatform
   additional_allowed_buckets:
     - compute-image-tools-test
+    - gcp-guest-testgrid
   hidden_repos:
   - looker
 
