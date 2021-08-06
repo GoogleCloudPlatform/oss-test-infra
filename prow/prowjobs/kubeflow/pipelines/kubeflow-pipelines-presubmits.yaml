@@ -22,7 +22,7 @@ presubmits:
         command:
         - ./test/presubmit-backend-test.sh
   - name: kubeflow-pipeline-e2e-test
-    run_if_changed: "^(backend/.*)|(test/.*)|(manifests/kustomize/.*)|(proxy/.*)$"
+    run_if_changed: "^(backend/.*)|(proxy/.*)|(test/.*)|(manifests/kustomize/.*)$"
     cluster: build-kubeflow
     decorate: true
     spec:
@@ -36,7 +36,7 @@ presubmits:
         - --test_result_folder
         - e2e_test
   - name: kubeflow-pipeline-sample-test
-    run_if_changed: "^(test/.*)|(manifests/kustomize/.*)|(samples/core/.*)$"
+    run_if_changed: "^(samples/core/.*)|(test/.*)|(manifests/kustomize/.*)$"
     cluster: build-kubeflow
     decorate: true
     spec:
@@ -79,7 +79,7 @@ presubmits:
         command:
         - ./test/presubmit-tests-mkp.sh
   - name: kubeflow-pipeline-upgrade-test
-    run_if_changed: "^(manifests/kustomize/.*)|(test/upgrade.*)|(backend/.*)$"
+    run_if_changed: "^(backend/.*)|(manifests/kustomize/.*)|(test/upgrade.*)$"
     cluster: build-kubeflow
     decorate: true
     spec:
