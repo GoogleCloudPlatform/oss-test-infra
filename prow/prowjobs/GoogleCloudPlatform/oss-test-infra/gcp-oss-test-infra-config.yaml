@@ -247,7 +247,7 @@ postsubmits:
     spec:
       serviceAccountName: testgrid-pusher
       containers:
-      - image: gcr.io/k8s-testimages/bazelbuild:v20200609-e7bfd25-test-infra
+      - image: gcr.io/k8s-testimages/bazelbuild:v20210806-7bef894-testgrid
         command:
         - ./images/push.sh
   - name: post-testgrid-deploy-prod
