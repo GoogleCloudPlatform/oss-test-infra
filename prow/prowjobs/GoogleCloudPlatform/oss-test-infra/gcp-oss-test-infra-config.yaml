@@ -262,7 +262,7 @@ postsubmits:
     spec:
       serviceAccountName: testgrid-deployer
       containers:
-      - image: gcr.io/k8s-testimages/gcloud-bazel:v20200520-v0.4-30-g9d6313a
+      - image: gcr.io/k8s-testgrid/gcloud-bazel:v20210806-v0.6-37-g8086289
         command:
         - ./cluster/deploy.sh
         args:
@@ -280,7 +280,7 @@ postsubmits:
     spec:
       serviceAccountName: testgrid-deployer
       containers:
-      - image: gcr.io/k8s-testimages/gcloud-bazel:v20200520-v0.4-30-g9d6313a
+      - image: gcr.io/k8s-testgrid/gcloud-bazel:v20210806-v0.6-37-g8086289
         command:
         - ./cluster/deploy.sh
         args:
