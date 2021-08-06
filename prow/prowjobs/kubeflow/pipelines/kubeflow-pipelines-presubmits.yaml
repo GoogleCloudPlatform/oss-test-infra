@@ -79,7 +79,7 @@ presubmits:
         command:
         - ./test/presubmit-tests-mkp.sh
   - name: kubeflow-pipeline-upgrade-test
-    always_run: true
+    run_if_changed: "^(manifests/kustomize/.*)|(test/upgrade.*)|(backend/.*)$"
     cluster: build-kubeflow
     decorate: true
     spec:
