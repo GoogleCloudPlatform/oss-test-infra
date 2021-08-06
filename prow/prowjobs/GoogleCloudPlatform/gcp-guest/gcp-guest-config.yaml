@@ -529,3 +529,23 @@ presubmits:
         command:
         - "/go/main.sh"
 
+periodics:
+- name: cit-periodics
+  cluster: gcp-guest
+  decorate: true
+  annotations:
+    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-tab-name: cit-periodics
+  labels:
+    preset-daisy: "true"
+  interval: 1h
+  spec:
+    containers:
+    - image: gcr.io/gcp-guest/cloud-image-tests:latest
+      imagePullPolicy: Always
+      command:
+      - "/manager"
+      args:
+      - "-project=gcp-guest"
+      - "-zone=us-west1-a"
+      - "-images=debian-9,debian-10,centos-7,centos-8"
