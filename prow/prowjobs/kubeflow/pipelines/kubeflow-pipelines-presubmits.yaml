@@ -22,7 +22,7 @@ presubmits:
         command:
         - ./test/presubmit-backend-test.sh
   - name: kubeflow-pipeline-e2e-test
-    always_run: true
+    run_if_changed: "^(backend/.*)|(test/.*)|(manifests/.*)|(proxy/.*)$"
     cluster: build-kubeflow
     decorate: true
     spec:
@@ -36,7 +36,7 @@ presubmits:
         - --test_result_folder
         - e2e_test
   - name: kubeflow-pipeline-sample-test
-    always_run: true
+    run_if_changed: "^(test/.*)|(manifests/.*)|(samples/core/.*)$"
     cluster: build-kubeflow
     decorate: true
     spec:
