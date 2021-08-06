@@ -2,11 +2,11 @@ approvers:
 - chaodaiG
 - chases2
 - cjwagner
-- clarketm
-- e-blackwelder
+# e-blackwelder
 - fejta
 - michelle192837
 - mpherman2
-- spiffxp
 emeritus_approvers:
 - BenTheElder
+- clarketm
+- spiffxp
