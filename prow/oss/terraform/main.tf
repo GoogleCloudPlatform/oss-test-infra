@@ -35,4 +35,11 @@ module "alert" {
         alert_interval = "1200s"
     }
     notification_channel_id = "14031735832803168422"
+    prow_components = {
+        "deck" = {"namespace": "default"}
+        "hook" = {"namespace": "default"}
+        "prow-controller-manager" = {"namespace": "default"}
+        "sinker" = {"namespace": "default"}
+        "tide" = {"namespace": "default"}
+    }
 }
