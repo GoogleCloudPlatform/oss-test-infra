@@ -115,13 +115,20 @@ resource "google_monitoring_alert_policy" "heartbeat-job-stale" {
   conditions {
     display_name = "heartbeat-job-stale"
 
-    condition_absent {
-      filter   = "metric.type=\"workload.googleapis.com/prowjob_state_transitions\" resource.type=\"k8s_container\" metric.label.\"job_name\"=\"${var.heartbeat_job.job_name}\" metric.label.\"state\"=\"success\""
+    condition_monitoring_query_language {
       duration = "${var.heartbeat_job.alert_interval}"
-
-      aggregations { # required
-        alignment_period     = "${var.heartbeat_job.interval}"
-        per_series_aligner   = "ALIGN_RATE"
+      query    = <<-EOT
+      fetch k8s_container
+      | metric 'workload.googleapis.com/prowjob_state_transitions'
+      | filter
+          (metric.job_name == '${var.heartbeat_job.job_name}'
+          && metric.state == 'success')
+      | align delta(${var.heartbeat_job.interval})
+      | every ${var.heartbeat_job.interval}
+      | condition val() < 1
+      EOT
+      trigger {
+        count = 1
       }
     }
   }
