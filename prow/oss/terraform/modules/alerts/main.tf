@@ -48,7 +48,8 @@ resource "google_monitoring_alert_policy" "predicted-gh-rate-limit-exhaustion" {
       | outer_join 0
       | sub # Result is the expected remaining tokens at the end of the rate limit reset window.
       | every 1m
-      | filter val() < 250
+      | condition val() < 250
+      | window 1m
       EOT
       trigger {
         count = 1
