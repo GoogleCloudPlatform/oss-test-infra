@@ -98,6 +98,22 @@ presubmits:
             - --exclude-warning=long-job-names
             # TODO: Re-enable these once we're done experimenting with CODEOWNERS in net-contour.
             - --exclude-warning=mismatched-tide-lenient
+  - name: pull-oss-test-infra-oss-terraform-validate
+    run_if_changed: '^prow/oss/terraform/'
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/k8s-testimages/gcloud-terraform:v20210810-2149cda
+        command:
+        - make
+        args:
+        - -C
+        - prow/oss/terraform
+        - validate
+        resources:
+          requests:
+            cpu: 100m
+            memory: 1Gi
 
 postsubmits:
   GoogleCloudPlatform/oss-test-infra:
