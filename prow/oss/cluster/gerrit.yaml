@@ -26,7 +26,7 @@ spec:
         - --job-config-path=/etc/job-config
         - --cookiefile=/etc/cookies/cookies
         - --gerrit-projects=https://kunit-review.googlesource.com=linux
-        - --gerrit-projects=https://linux-review.googlesource.com=linux
+        - --gerrit-projects=https://linux-review.googlesource.com=linux/kernel/git/torvalds/linux
         - --last-sync-fallback=gs://oss-prow/last-gerrit-sync
         volumeMounts:
         - name: config

@@ -1,5 +1,5 @@
 presubmits:
-  https://linux-review.googlesource.com/linux:
+  https://linux-review.googlesource.com/linux/kernel/git/torvalds/linux:
   - name: linux-kernel-mailing-list-presubmit
     branches:
     - master
