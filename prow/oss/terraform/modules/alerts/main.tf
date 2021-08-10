@@ -133,3 +133,36 @@ resource "google_monitoring_alert_policy" "heartbeat-job-stale" {
   # gcloud beta monitoring channels list --project=oss-prow
   notification_channels = ["projects/${var.project}/notificationChannels/${var.notification_channel_id}"]
 }
+
+resource "google_monitoring_alert_policy" "probers" {
+  project = var.project
+
+  display_name = "HostDown"
+  combiner     = "OR"
+  conditions {
+    display_name = "Host is unreachable"
+    condition_monitoring_query_language {
+      duration = "120s"
+      query    = <<-EOT
+      fetch uptime_url
+      | metric 'monitoring.googleapis.com/uptime_check/check_passed'
+      | align next_older(1m)
+      | every 1m
+      | group_by [resource.host],
+          [value_check_passed_not_count_true: count_true(not(value.check_passed))]
+      | condition val() > 1 '1'
+      EOT
+      trigger {
+        count = 1
+      }
+    }
+  }
+
+  documentation {
+    content   = "Host Down"
+    mime_type = "text/markdown"
+  }
+
+  # gcloud beta monitoring channels list --project=oss-prow
+  notification_channels = ["projects/${var.project}/notificationChannels/${var.notification_channel_id}"]
+}

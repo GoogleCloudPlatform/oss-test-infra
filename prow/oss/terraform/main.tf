@@ -42,4 +42,7 @@ module "alert" {
         "sinker" = {"namespace": "default"}
         "tide" = {"namespace": "default"}
     }
+    blackbox_probers = [
+        "oss-prow.knative.dev"
+    ]
 }
