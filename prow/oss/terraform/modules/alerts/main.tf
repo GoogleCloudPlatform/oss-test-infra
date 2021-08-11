@@ -123,9 +123,10 @@ resource "google_monitoring_alert_policy" "heartbeat-job-stale" {
       | filter
           (metric.job_name == '${var.heartbeat_job.job_name}'
           && metric.state == 'success')
-      | align delta(${var.heartbeat_job.interval})
+      | sum # Combining values reported by all prow-controller-manager pods
+      | align delta_gauge(${var.heartbeat_job.interval})
       | every ${var.heartbeat_job.interval}
-      | condition val() < 1
+      | condition val() == 0
       EOT
       trigger {
         count = 1
