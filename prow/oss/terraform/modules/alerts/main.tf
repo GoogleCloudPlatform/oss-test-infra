@@ -209,9 +209,47 @@ resource "google_monitoring_alert_policy" "probers" {
       }
     }
   }
+    
+  documentation {
+      content   = "Host Down"
+      mime_type = "text/markdown"
+  }
+
+  # gcloud beta monitoring channels list --project=oss-prow
+  notification_channels = ["projects/${var.project}/notificationChannels/${var.notification_channel_id}"]
+}
+
+
+resource "google_monitoring_alert_policy" "webhook-missing" {
+  project      = var.project
+  display_name = "webhook-missing"
+  combiner     = "OR" # required
+
+  conditions {
+    display_name = "webhook-missing"
+
+    condition_monitoring_query_language {
+      duration = "1200s"
+      query    = <<-EOT
+      fetch k8s_container
+      | metric 'workload.googleapis.com/prow_webhook_counter'
+      | sum
+      | align delta_gauge()
+      | every 1m
+      | value add [hour: end().timestamp_to_string("%H", "America/Los_Angeles").string_to_int64]
+      | value add [day_of_week: end().timestamp_to_string("%u", "America/Los_Angeles").string_to_int64]
+      | value add [is_weekend: if(day_of_week >= 6, 1, 0)]
+      | value add [is_business_hour: if((hour >= 9) && (hour < 17), 1, 0)]
+      | condition val(0) == 0 && is_business_hour * (1-is_weekend) == 1
+      EOT
+      trigger {
+        count = 1
+      }
+    }
+  }
 
   documentation {
-    content   = "Host Down"
+    content   = "Webhook missing for 20 minutes."
     mime_type = "text/markdown"
   }
 
