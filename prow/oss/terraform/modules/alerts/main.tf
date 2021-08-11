@@ -12,6 +12,49 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+locals {
+  sinker_monitoring_resources = {
+    pods: "sinker_pods_removed"
+    prowjobs: "sinker_prow_jobs_cleaned"
+  }
+}
+
+resource "google_monitoring_alert_policy" "sinker-alerts" {
+  project      = var.project
+  for_each      = local.sinker_monitoring_resources
+  display_name = "sinker-not-deleting-${each.key}"
+  combiner     = "OR" # required
+
+  conditions {
+    display_name = "Sinker not deleting ${each.key}"
+
+    condition_monitoring_query_language {
+      duration = "300s"
+      query    = <<-EOT
+      fetch k8s_container
+      | metric 'workload.googleapis.com/${each.value}'
+      | group_by 1h, [value_sinker_removed_sum: sum(value.${each.value})]
+      | every 1h
+      | group_by [],
+          [value_sinker_removed_sum_aggregate:
+            aggregate(value_sinker_removed_sum)]
+      | condition val() < 1
+      EOT
+      trigger {
+        count = 1
+      }
+    }
+  }
+
+  documentation {
+    content   = "Sinker not deleting any ${each.key} in an hour."
+    mime_type = "text/markdown"
+  }
+
+  # gcloud beta monitoring channels list --project=oss-prow
+  notification_channels = ["projects/${var.project}/notificationChannels/${var.notification_channel_id}"]
+}
+
 resource "google_monitoring_alert_policy" "predicted-gh-rate-limit-exhaustion" {
   project      = var.project
   display_name = "predicted-gh-rate-limit-exhaustion"
