@@ -12,31 +12,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-variable "project" {
-  type = string
-}
+resource "google_monitoring_uptime_check_config" "https" {
+  project = var.project
 
-variable "heartbeat_job" {
-  type = map
-  default = {
-    job_name = ""
-    interval = ""
-    alert_interval = ""
+  for_each = var.blackbox_probers
+
+  display_name = each.key
+  timeout      = "10s"
+  period       = "60s"
+
+  http_check {
+    port         = "443"
+    use_ssl = true
+    validate_ssl = true
   }
-}
 
-variable "notification_channel_id" {
-  type = string
-}
-
-variable "prow_components" {
-  type = map
-  default = {
-    "svc_not_exist" = {"namespace": "default"}
+  monitored_resource {
+    type = "uptime_url"
+    labels = {
+      host       = each.key
+    }
   }
-}
-
-variable "blackbox_probers" {
-  type = set(string)
-  default = []
 }
