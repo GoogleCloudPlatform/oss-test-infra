@@ -36,3 +36,38 @@ This is done once before initial provisioning of monitoring and alerting stacks.
     ```text
     $ terraform apply
     ```
+
+### Boskos Alerts
+
+#### Prerequisite
+
+Existing notification channel is required for setting this up. Select by:
+```
+gcloud alpha monitoring channels list --project=<YOUR-PROJECT>
+```
+
+If not exist, you can go to `https://pantheon.corp.google.com/monitoring/alerting/notifications?project=<YOUR-PROJECT>` and create one.
+
+#### Boskos Alerts for Your Project
+
+Boskos alerts are for user projects, the easiest way to use it is by creating a `main.tf` file in your source repo:
+
+```
+module "boskos-alert" {
+    source = "git::ssh://git@github.com/GoogleCloudPlatform/oss-test-infra.git//prow/oss/terraform/modules/alerts/boskos?ref=<COMMIT_SHA>"
+
+    project = "<YOUR_PROJECT>"
+    notification_channel_id = "<NOTIFICATION_CHANNEL_ID>"
+}
+```
+
+Applying this will create alerts for all boskos resources managed under `<YOUR_PROJECT>`.
+
+Alternatively, it's possible to define an allowed_list for selected boskos resources:
+```
+module "boskos-alert" {
+    # Same as above
+
+    allowed_list = ["resource-a", "resource-b"]
+}
+```
