@@ -33,11 +33,8 @@ resource "google_monitoring_alert_policy" "sinker-alerts" {
       query    = <<-EOT
       fetch k8s_container
       | metric 'workload.googleapis.com/${each.value}'
-      | group_by 1h, [value_sinker_removed_sum: sum(value.${each.value})]
+      | group_by [], 1h, [value_sinker_removed_sum: sum(value.${each.value})]
       | every 1h
-      | group_by [],
-          [value_sinker_removed_sum_aggregate:
-            aggregate(value_sinker_removed_sum)]
       | condition val() < 1
       EOT
       trigger {
@@ -234,7 +231,7 @@ resource "google_monitoring_alert_policy" "webhook-missing" {
       fetch k8s_container
       | metric 'workload.googleapis.com/prow_webhook_counter'
       | sum
-      | align delta_gauge()
+      | align delta_gauge(1m)
       | every 1m
       | value add [hour: end().timestamp_to_string("%H", "America/Los_Angeles").string_to_int64]
       | value add [day_of_week: end().timestamp_to_string("%u", "America/Los_Angeles").string_to_int64]
