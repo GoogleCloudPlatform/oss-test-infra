@@ -77,7 +77,7 @@ tide:
 
 plank:
   job_url_prefix_config:
-    '*': https://oss-prow.knative.dev/view/
+    '*': https://oss-prow.knative.dev/view/ 
     'looker': https://oss-prow-private.knative.dev/view/
   pod_pending_timeout: 15m
   pod_unscheduled_timeout: 5m
