@@ -7,7 +7,7 @@ metadata:
   labels:
     app: hook
 spec:
-  replicas: 2
+  replicas: 6
   selector:
     matchLabels:
       app: hook
@@ -74,6 +74,10 @@ spec:
         - name: build-kubeflow
           mountPath: /etc/build-kubeflow
           readOnly: true
+        resources:
+          requests: # peak usage sampled by most recent usages of hook
+            memory: "4Gi"
+            cpu: "2"
       volumes:
       - name: build-blueprints
         secret:
