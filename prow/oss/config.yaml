@@ -95,6 +95,10 @@ plank:
         bucket: "oss-prow"
         path_strategy: "explicit"
       gcs_credentials_secret: "service-account" # TODO(fejta): remove https://github.com/GoogleCloudPlatform/oss-test-infra/issues/202
+  - cluster: default
+    config:
+      gcs_credentials_secret: "" # Use workload identity
+      default_service_account_name: "prowjob-default-sa" # SA in build cluster
   - cluster: build-looker-private
     config:
       gcs_configuration:
