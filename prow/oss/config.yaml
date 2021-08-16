@@ -130,6 +130,16 @@ prowjob_namespace: default
 pod_namespace: test-pods
 log_level: debug
 
+prowjob_default_entries:
+  - cluster: "build-looker-private"
+    repo: "*"
+    config: 
+        tenant_id: 'looker'
+  - cluster: '*'
+    repo: 'looker'
+    config:
+      tenant_id: 'looker'
+
 managed_webhooks:
   # Will accept invitations from org/repo listed under here
   auto_accept_invitation: true
