@@ -26,6 +26,7 @@ spec:
         - --config-path=/etc/config/config.yaml
         - --cookiefile=/etc/cookies/cookies
         - --gerrit-projects=https://kunit-review.googlesource.com=linux
+        - --gerrit-projects=https://linux-review.googlesource.com=linux/kernel/git/torvalds/linux
         - --gerrit-workers=1
         - --additional-slack-token-files=knative=/etc/knative-slack-token/token
         - --github-endpoint=http://ghproxy
