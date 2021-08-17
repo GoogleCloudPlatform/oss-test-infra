@@ -14,6 +14,7 @@
 
 resource "google_monitoring_uptime_check_config" "https" {
   project = var.project
+  selected_regions = []
 
   for_each = var.blackbox_probers
 
@@ -30,6 +31,7 @@ resource "google_monitoring_uptime_check_config" "https" {
   monitored_resource {
     type = "uptime_url"
     labels = {
+      project_id = var.project
       host       = each.key
     }
   }
