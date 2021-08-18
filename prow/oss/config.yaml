@@ -99,6 +99,10 @@ plank:
     config:
       gcs_credentials_secret: "" # Use workload identity
       default_service_account_name: "prowjob-default-sa" # SA in build cluster
+  - cluster: test-infra-trusted
+    config:
+      gcs_credentials_secret: "" # Use workload identity
+      default_service_account_name: "prowjob-default-sa" # SA in build cluster
   - cluster: build-looker-private
     config:
       gcs_configuration:
