@@ -107,6 +107,14 @@ plank:
       default_service_account_name: "prowjob-default-sa" # SA in build cluster
       ssh_key_secrets:
       - looker-ssh-deploy-key
+  - cluster: build-looker-int-test
+    config:
+      gcs_configuration:
+        bucket: "looker-private"
+      gcs_credentials_secret: "" # Use workload identity
+      default_service_account_name: "prowjob-default-sa" # SA in build cluster
+      ssh_key_secrets:
+      - looker-ssh-deploy-key
   - cluster: build-elcarro
     config:
       gcs_configuration:
@@ -131,10 +139,14 @@ pod_namespace: test-pods
 log_level: debug
 
 prowjob_default_entries:
+  - cluster: "build-looker-int-test"
+    repo: "*"
+    config:
+      tenant_id: 'looker'
   - cluster: "build-looker-private"
     repo: "*"
-    config: 
-        tenant_id: 'looker'
+    config:
+      tenant_id: 'looker'
   - cluster: '*'
     repo: 'looker'
     config:
@@ -252,7 +264,7 @@ in_repo_config:
 
   allowed_clusters:
     "*": []
-    "looker/helltool": ["build-looker-private"]
+    "looker/helltool": ["build-looker-private", "build-looker-int-test"]
     "GoogleCloudPlatform/blueprints": ["build-blueprints"]
 
 presets:
@@ -282,6 +294,7 @@ presets:
 pubsub_triggers:
   - allowed_clusters:
       - "build-looker-private"
+      - "build-looker-int-test"
     project: 'prow-build-looker-github'
     topics:
       - "prow-test"
