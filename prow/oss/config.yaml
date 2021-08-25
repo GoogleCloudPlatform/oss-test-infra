@@ -131,6 +131,13 @@ plank:
         bucket: "blueprints-prow"
       default_service_account_name: "prowjob-default-sa" # Use workload identity
       gcs_credentials_secret: ""                         # rather than service account key secret
+  - cluster: gcp-guest
+    config:
+      gcs_configuration:
+        bucket: "oss-prow"
+      default_service_account_name: "prowjob-default-sa" # Use workload identity
+      gcs_credentials_secret: ""                         # rather than service account key secret
+
 
 sinker:
   resync_period: 1m
