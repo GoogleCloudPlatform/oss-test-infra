@@ -39,6 +39,14 @@ spec:
         - name: oauth
           mountPath: /etc/github
           readOnly: true
+        resources:
+          # The node has 7.91CPU in total, set requests and limits,
+          # so that only 2 sub pods are on the same node, and they
+          # don't use more than that
+          requests:
+            cpu: 3
+          limits:
+            cpu: 3
       volumes:
       - name: config
         configMap:
