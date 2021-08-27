@@ -29,6 +29,7 @@ spec:
         - --gerrit-projects=https://linux-review.googlesource.com=linux/kernel/git/torvalds/linux
         - --gerrit-workers=1
         - --additional-slack-token-files=knative=/etc/knative-slack-token/token
+        - --pubsub-workers=1
         - --github-endpoint=http://ghproxy
         - --github-endpoint=https://api.github.com
         - --github-token-path=/etc/github/oauth
