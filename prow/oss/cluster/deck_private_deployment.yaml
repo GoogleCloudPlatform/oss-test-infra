@@ -35,7 +35,7 @@ spec:
         - --job-config-path=/etc/job-config
         - --redirect-http-to=oss-prow-private.knative.dev
         - --spyglass=true
-        - --tenant-id=looker
+        - --hidden-only=true
         - --rerun-creates-job
         - --oauth-url=/github-login
         - --github-token-path=/etc/github/oauth
