@@ -57,7 +57,7 @@ metadata:
   namespace: test-pods
 ---
 kind: RoleBinding
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: "test-pods-default"
   namespace: test-pods
@@ -71,7 +71,7 @@ subjects:
   namespace: test-pods
 ---
 kind: Role
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: "test-pods-default"
   namespace: test-pods
