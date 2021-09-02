@@ -275,7 +275,7 @@ in_repo_config:
 
   allowed_clusters:
     "*": []
-    "looker/helltool": ["build-looker-private", "build-looker-int-test"]
+    "looker/helltool": ["build-looker-private", "build-looker-int-test", "build-looker-16", "build-looker-32"]
     "GoogleCloudPlatform/blueprints": ["build-blueprints"]
 
 presets:
@@ -306,6 +306,8 @@ pubsub_triggers:
   - allowed_clusters:
       - "build-looker-private"
       - "build-looker-int-test"
+      - "build-looker-16"
+      - "build-looker-32"
     project: 'prow-build-looker-github'
     topics:
       - "prow-test"
