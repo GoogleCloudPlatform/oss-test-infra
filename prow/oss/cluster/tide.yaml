@@ -82,7 +82,7 @@ metadata:
     "iam.gke.io/gcp-service-account": "oss-prow@oss-prow.iam.gserviceaccount.com"
 ---
 kind: Role
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: tide
   namespace: default
@@ -96,7 +96,7 @@ rules:
       - list
 ---
 kind: RoleBinding
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: tide
   namespace: default
