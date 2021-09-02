@@ -176,7 +176,7 @@ spec:
   type: NodePort
 ---
 kind: ClusterRoleBinding
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: deck
   namespace: default
@@ -201,7 +201,7 @@ metadata:
     "iam.gke.io/gcp-service-account": "oss-prow-public-deck@oss-prow.iam.gserviceaccount.com"
 ---
 kind: ClusterRole
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: deck
   # namespace: not-namespaced, must get pods in other namespaces
@@ -224,7 +224,7 @@ rules:
       - create
 ---
 kind: ClusterRole
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: deck-oauth
   # namespace: not-namespaced, are we sure?
@@ -243,7 +243,7 @@ rules:
     - create
 ---
 kind: ClusterRoleBinding
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: deck-oauth
   namespace: default

@@ -80,7 +80,7 @@ spec:
   type: NodePort
 ---
 kind: Role
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: "sub"
 rules:
@@ -95,7 +95,7 @@ rules:
       - update
 ---
 kind: RoleBinding
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: "sub"
 roleRef:
