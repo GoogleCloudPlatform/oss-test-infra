@@ -1,15 +1,15 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: deck-private
+  name: deck-blueprints
   namespace: default
   labels:
-    app: deck-private
+    app: deck-blueprints
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: deck-private
+      app: deck-blueprints
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -18,24 +18,20 @@ spec:
   template:
     metadata:
       labels:
-        app: deck-private
+        app: deck-blueprints
     spec:
-      serviceAccountName: deck-private
+      serviceAccountName: deck-blueprints
       terminationGracePeriodSeconds: 30
       containers:
-      - name: deck-private
+      - name: deck-blueprints
         image: gcr.io/k8s-prow/deck:v20210909-6c59eee681
-        ports:
-        - name: http
-          containerPort: 8080
         args:
         - --config-path=/etc/config/config.yaml
         - --hook-url=http://hook:8888/plugin-help
         - --tide-url=http://tide/
         - --job-config-path=/etc/job-config
-        - --redirect-http-to=oss-prow-private.knative.dev
         - --spyglass=true
-        - --tenant-id=looker
+        - --tenant-id=blueprints
         - --rerun-creates-job
         - --oauth-url=/github-login
         - --github-token-path=/etc/github/oauth
@@ -47,22 +43,18 @@ spec:
         env:
         # Use KUBECONFIG envvar rather than --kubeconfig flag in order to provide multiple configs to merge.
         - name: KUBECONFIG
-          value: "/etc/kubeconfig/config-20201002:/etc/build-looker-32/kubeconfig:/etc/build-looker-16/kubeconfig:/etc/build-looker-int-test/kubeconfig:/etc/build-elcarro/kubeconfig:/etc/build-looker-private/kubeconfig:/etc/build-kubeflow/kubeconfig"
+          value: "/etc/kubeconfig/config-20201002:/etc/build-blueprints/kubeconfig:/etc/build-elcarro/kubeconfig:/etc/build-kubeflow/kubeconfig"
+        ports:
+        - name: http
+          containerPort: 8080
+        - name: metrics
+          containerPort: 9090
         volumeMounts:
-        - mountPath: /etc/build-looker-32
-          name: build-looker-32
-          readOnly: true
-        - mountPath: /etc/build-looker-16
-          name: build-looker-16
-          readOnly: true
-        - mountPath: /etc/build-looker-int-test
-          name: build-looker-int-test
+        - mountPath: /etc/build-blueprints
+          name: build-blueprints
           readOnly: true
         - mountPath: /etc/build-elcarro
           name: build-elcarro
-          readOnly: true
-        - mountPath: /etc/build-looker-private
-          name: build-looker-private
           readOnly: true
         - name: oauth-config
           mountPath: /etc/githuboauth
@@ -108,12 +100,12 @@ spec:
           protocol: TCP
         args:
         - --provider=github
-        - --github-org=looker
-        - --github-team=eng
+        - --github-org=GoogleCloudPlatform
+        - --github-team=blueprint-solutions
         - --http-address=0.0.0.0:4180
         - --upstream=http://localhost:8080
-        - --cookie-domain=oss-prow-private.knative.dev
-        - --cookie-name=oss-prow-private-knative-dev-oauth2-proxy
+        - --cookie-domain=prow.infra.cft.dev
+        - --cookie-name=prow-infra-cft-dev-oauth2-proxy
         - --cookie-samesite=none
         - --cookie-expire=23h
         - --email-domain=*
@@ -146,26 +138,14 @@ spec:
               name: private-deck-oauth2
               key: cookieSecret
       volumes:
-      - name: build-looker-32
+      - name: build-blueprints
         secret:
           defaultMode: 420
-          secretName: kubeconfig-build-looker-32
-      - name: build-looker-16
-        secret:
-          defaultMode: 420
-          secretName: kubeconfig-build-looker-16
-      - name: build-looker-int-test
-        secret:
-          defaultMode: 420
-          secretName: kubeconfig-build-looker-int-test
+          secretName: kubeconfig-build-blueprints
       - name: build-elcarro
         secret:
           defaultMode: 420
           secretName: kubeconfig-build-elcarro
-      - name: build-looker-private
-        secret:
-          defaultMode: 420
-          secretName: kubeconfig-build-looker-private
       - name: oauth-config
         secret:
           secretName: private-deck-oauth2-config
@@ -196,11 +176,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: deck-private
+  name: deck-blueprints
   namespace: default
 spec:
   selector:
-    app: deck-private
+    app: deck-blueprints
   ports:
   - port: 80
     targetPort: 4180
@@ -210,15 +190,15 @@ kind: ServiceAccount
 apiVersion: v1
 metadata:
   namespace: default
-  name: deck-private
+  name: deck-blueprints
   annotations:
-    "iam.gke.io/gcp-service-account": "oss-prow-private-deck@oss-prow.iam.gserviceaccount.com"
+    "iam.gke.io/gcp-service-account": "oss-prow-blueprints-deck@oss-prow.iam.gserviceaccount.com"
 ---
 kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   namespace: default
-  name: deck-private
+  name: deck-blueprints
 rules:
 - apiGroups:
   - prow.k8s.io
@@ -234,7 +214,7 @@ kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   namespace: test-pods
-  name: deck-private
+  name: deck-blueprints
 rules:
 - apiGroups:
   - ""
@@ -247,26 +227,26 @@ kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   namespace: default
-  name: deck-private
+  name: deck-blueprints
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: deck-private
+  name: deck-blueprints
 subjects:
 - kind: ServiceAccount
-  name: deck-private
+  name: deck-blueprints
   namespace: default
 ---
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   namespace: test-pods
-  name: deck-private
+  name: deck-blueprints
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: deck-private
+  name: deck-blueprints
 subjects:
 - kind: ServiceAccount
-  name: deck-private
+  name: deck-blueprints
   namespace: default

@@ -85,6 +85,15 @@ spec:
   domains:
   - oss-prow.knative.dev
 ---
+apiVersion: networking.gke.io/v1beta1
+kind: ManagedCertificate
+metadata:
+  name: oss-prow-blueprints-deck
+  namespace: default
+spec:
+  domains:
+  - prow.infra.cft.dev
+---
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
@@ -94,7 +103,7 @@ metadata:
     kubernetes.io/ingress.global-static-ip-name: "oss-prow"
     kubernetes.io/ingress.class: "gce"
     kubernetes.io/tls-acme: "true"
-    networking.gke.io/managed-certificates: oss-prow-knative-dev,oss-prow-private-knative-dev
+    networking.gke.io/managed-certificates: oss-prow-knative-dev,oss-prow-private-knative-dev #,oss-prow-blueprints-deck
 spec:
   rules:
   - host: oss-prow.knative.dev
@@ -115,4 +124,11 @@ spec:
         backend:
           serviceName: deck-private
           servicePort: 80
+  # - host: prow.infra.cft.dev
+  #   http:
+  #     paths:
+  #     - path: /*
+  #       backend:
+  #         serviceName: deck-blueprints
+  #         servicePort: 80
 ---

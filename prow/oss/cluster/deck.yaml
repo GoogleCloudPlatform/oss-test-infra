@@ -43,30 +43,18 @@ spec:
         env:
         # Use KUBECONFIG envvar rather than --kubeconfig flag in order to provide multiple configs to merge.
         - name: KUBECONFIG
-          value: "/etc/kubeconfig/config-20201002:/etc/build-looker-32/kubeconfig:/etc/build-looker-16/kubeconfig:/etc/build-looker-int-test/kubeconfig:/etc/build-blueprints/kubeconfig:/etc/build-elcarro/kubeconfig:/etc/build-looker-private/kubeconfig:/etc/build-kubeflow/kubeconfig"
+          value: "/etc/kubeconfig/config-20201002:/etc/build-blueprints/kubeconfig:/etc/build-elcarro/kubeconfig:/etc/build-kubeflow/kubeconfig"
         ports:
         - name: http
           containerPort: 8080
         - name: metrics
           containerPort: 9090
         volumeMounts:
-        - mountPath: /etc/build-looker-32
-          name: build-looker-32
-          readOnly: true
-        - mountPath: /etc/build-looker-16
-          name: build-looker-16
-          readOnly: true
-        - mountPath: /etc/build-looker-int-test
-          name: build-looker-int-test
-          readOnly: true
         - mountPath: /etc/build-blueprints
           name: build-blueprints
           readOnly: true
         - mountPath: /etc/build-elcarro
           name: build-elcarro
-          readOnly: true
-        - mountPath: /etc/build-looker-private
-          name: build-looker-private
           readOnly: true
         - name: oauth-config
           mountPath: /etc/githuboauth
@@ -106,18 +94,6 @@ spec:
           periodSeconds: 3
           timeoutSeconds: 600
       volumes:
-      - name: build-looker-32
-        secret:
-          defaultMode: 420
-          secretName: kubeconfig-build-looker-32
-      - name: build-looker-16
-        secret:
-          defaultMode: 420
-          secretName: kubeconfig-build-looker-16
-      - name: build-looker-int-test
-        secret:
-          defaultMode: 420
-          secretName: kubeconfig-build-looker-int-test
       - name: build-blueprints
         secret:
           defaultMode: 420
@@ -126,10 +102,6 @@ spec:
         secret:
           defaultMode: 420
           secretName: kubeconfig-build-elcarro
-      - name: build-looker-private
-        secret:
-          defaultMode: 420
-          secretName: kubeconfig-build-looker-private
       - name: oauth-config
         secret:
           secretName: github-oauth-config-20200326-oss-prow-knative-dev
