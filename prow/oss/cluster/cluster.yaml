@@ -103,7 +103,7 @@ metadata:
     kubernetes.io/ingress.global-static-ip-name: "oss-prow"
     kubernetes.io/ingress.class: "gce"
     kubernetes.io/tls-acme: "true"
-    networking.gke.io/managed-certificates: oss-prow-knative-dev,oss-prow-private-knative-dev,oss-prow-blueprints-deck
+    networking.gke.io/managed-certificates: oss-prow-knative-dev,oss-prow-private-knative-dev
 spec:
   rules:
   - host: oss-prow.knative.dev
@@ -124,6 +124,19 @@ spec:
         backend:
           serviceName: deck-private
           servicePort: 80
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: deck-blueprints
+  namespace: default
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: "oss-prow"
+    kubernetes.io/ingress.class: "gce"
+    kubernetes.io/tls-acme: "true"
+    networking.gke.io/managed-certificates: oss-prow-blueprints-deck
+spec:
+  rules:
   - host: prow.infra.cft.dev
     http:
       paths:
@@ -131,4 +144,3 @@ spec:
         backend:
           serviceName: deck-blueprints
           servicePort: 80
----
