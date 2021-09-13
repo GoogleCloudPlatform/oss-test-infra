@@ -131,7 +131,7 @@ metadata:
   name: deck-blueprints
   namespace: default
   annotations:
-    kubernetes.io/ingress.global-static-ip-name: "oss-prow"
+    kubernetes.io/ingress.global-static-ip-name: "deck-blueprints"
     kubernetes.io/ingress.class: "gce"
     kubernetes.io/tls-acme: "true"
     networking.gke.io/managed-certificates: oss-prow-blueprints-deck
