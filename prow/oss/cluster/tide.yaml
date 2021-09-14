@@ -54,21 +54,6 @@ spec:
       - name: job-config
         configMap:
           name: job-config
-      resources:
-        # Tide does inrepoconfig prowjob lookup, which is very
-        # disk and cpu intensive. This is even worse when there
-        # is a spike of PRs going on.
-        # The node has 7.91CPU in total, set requests and limits,
-        # so that tide uses a single node.
-        requests:
-          cpu: 7
-      tolerations:
-      - key: "highcpu"
-        operator: "Equal"
-        value: "true"
-        effect: "NoSchedule"
-      nodeSelector:
-        highcpu: "true"
 ---
 apiVersion: v1
 kind: Service
