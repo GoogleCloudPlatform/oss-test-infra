@@ -30,6 +30,7 @@ spec:
         - --hook-url=http://hook:8888/plugin-help
         - --tide-url=http://tide/
         - --job-config-path=/etc/job-config
+        - --redirect-http-to=prow.infra.cft.dev
         - --spyglass=true
         - --tenant-id=blueprints
         - --rerun-creates-job
