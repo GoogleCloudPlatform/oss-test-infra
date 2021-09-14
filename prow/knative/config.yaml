@@ -121,7 +121,6 @@ deck:
   rerun_auth_configs:
     '*':
       github_team_ids:
-        - 3012514 # Knative Milestone Maintainers
         - 3996822 # Knative Release Team
         - 3288907 # Knative TOC
 
