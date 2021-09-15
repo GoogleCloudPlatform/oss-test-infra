@@ -302,6 +302,12 @@ in_repo_config:
     "looker/helltool": ["build-looker-private", "build-looker-int-test", "build-looker-16", "build-looker-32"]
     "GoogleCloudPlatform/blueprints": ["build-blueprints"]
 
+# settings for github reporter from crier
+github_reporter:
+  # no_comment_repos opt out of prow robot comments on job failures, the statuses of prow jobs are still reported on PRs
+  no_comment_repos:
+  - looker/helltool
+
 presets:
 # docker-in-docker preset
 #
