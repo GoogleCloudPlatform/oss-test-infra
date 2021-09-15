@@ -34,7 +34,9 @@ module "alert" {
         interval = "300s"
         alert_interval = "1200s"
     }
-    notification_channel_id = "14031735832803168422"
+    # gcloud alpha monitoring channels list --project=oss-prow
+    # grep displayName: prow-alert-pioneer
+    notification_channel_id = "13760821420809417519"
     prow_components = {
         "deck" = {"namespace": "default"}
         "hook" = {"namespace": "default"}
