@@ -47,7 +47,7 @@ spec:
       volumes:
       - name: oauth
         secret:
-          secretName: oauth-token
+          secretName: oauth-token-2
       - name: config
         configMap:
           name: config
