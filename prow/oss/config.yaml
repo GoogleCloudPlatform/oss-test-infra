@@ -186,6 +186,14 @@ prowjob_default_entries:
     repo: 'looker'
     config:
       tenant_id: 'looker'
+  - cluster: '*'
+    repo: 'GoogleCloudPlatform/blueprints'
+    config:
+      tenant_id: 'blueprints'
+  - cluster: 'build-blueprints'
+    repo: '*'
+    config:
+      tenant_id: 'blueprints'
 
 managed_webhooks:
   # Will accept invitations from org/repo listed under here
