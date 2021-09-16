@@ -171,7 +171,7 @@ spec:
           secretName: private-deck-oauth2-config
       - name: oauth-token
         secret:
-          secretName: oauth-token
+          secretName: oauth-token-2
       - name: cookie-secret
         secret:
           secretName: cookie

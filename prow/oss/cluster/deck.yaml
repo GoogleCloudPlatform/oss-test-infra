@@ -107,7 +107,7 @@ spec:
           secretName: github-oauth-config-20200326-oss-prow-knative-dev
       - name: oauth-token
         secret:
-          secretName: oauth-token
+          secretName: oauth-token-2
       - name: cookie-secret
         secret:
           secretName: cookie

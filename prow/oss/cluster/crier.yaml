@@ -128,7 +128,7 @@ spec:
           secretName: kubeconfig-build-kubeflow
       - name: oauth
         secret:
-          secretName: oauth-token
+          secretName: oauth-token-2
       - name: knative-slack-token
         secret:
           secretName: knative-slack-token

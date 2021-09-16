@@ -56,7 +56,7 @@ spec:
           name: job-config
       - name: oauth
         secret:
-          secretName: oauth-token
+          secretName: oauth-token-2
 ---
 apiVersion: v1
 kind: ServiceAccount
