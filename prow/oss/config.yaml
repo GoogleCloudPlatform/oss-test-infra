@@ -31,6 +31,7 @@ tide:
   target_urls:
     "*": https://oss-prow.knative.dev/tide
     "looker/helltool": https://oss-prow-private.knative.dev/tide
+    "GoogleCloudPlatform/blueprints": https://prow.infra.cft.dev/tide
   queries:
   - repos:
     - GoogleCloudPlatform/guest-agent
@@ -79,6 +80,7 @@ plank:
   job_url_prefix_config:
     '*': https://oss-prow.knative.dev/view/
     'looker': https://oss-prow-private.knative.dev/view/
+    "GoogleCloudPlatform/blueprints": https://prow.infra.cft.dev/view/
   pod_pending_timeout: 15m
   pod_unscheduled_timeout: 5m
   build_cluster_status_file: 'gs://oss-prow/oss-prow-build-clusters-statuses.json'
