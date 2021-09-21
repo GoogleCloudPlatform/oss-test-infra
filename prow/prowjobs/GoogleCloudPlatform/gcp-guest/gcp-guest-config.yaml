@@ -227,7 +227,7 @@ presubmits:
       - image: gcr.io/gcp-guest/daisy-builder:latest
         command:
         - "/main.sh"
-        args: ["gcp-guest", "us-west1-a", "deb9,el7,el8,goo"]
+        args: ["gcp-guest", "us-west1-a", "deb10,el7,el8,goo"]
   - name: osconfig-presubmit-gocheck
     cluster: gcp-guest
     run_if_changed: '\.go$'
