@@ -314,9 +314,8 @@ in_repo_config:
 
 # settings for github reporter from crier
 github_reporter:
-  # summary_comment_repos is a list of orgs and org/repos for which failure report
-  # comments is only sent when all jobs from current PR are finished.
-  summary_comment_repos:
+  # no_comment_repos opt out of prow robot comments on job failures, the statuses of prow jobs are still reported on PRs
+  no_comment_repos:
   - looker/helltool
 
 presets:
