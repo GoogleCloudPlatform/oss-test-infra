@@ -247,7 +247,7 @@ postsubmits:
       - name: oauth
         secret:
           defaultMode: 420
-          secretName: oauth-token
+          secretName: oauth-token-2
 
   GoogleCloudPlatform/testgrid:
   - name: push-testgrid-images
@@ -329,7 +329,7 @@ postsubmits:
       volumes:
       - name: github
         secret:
-          secretName: oauth-token
+          secretName: oauth-token-2
       - name: ssh
         secret:
           secretName: google-oss-robot-ssh-keys
@@ -365,7 +365,7 @@ periodics:
     volumes:
     - name: github
       secret:
-        secretName: oauth-token
+        secretName: oauth-token-2
     - name: ssh
       secret:
         secretName: google-oss-robot-ssh-keys
@@ -401,7 +401,7 @@ periodics:
     volumes:
     - name: github
       secret:
-        secretName: oauth-token
+        secretName: oauth-token-2
     - name: ssh
       secret:
         secretName: google-oss-robot-ssh-keys
@@ -435,7 +435,7 @@ periodics:
     volumes:
     - name: github
       secret:
-        secretName: oauth-token
+        secretName: oauth-token-2
     - name: ssh
       secret:
         secretName: google-oss-robot-ssh-keys
@@ -469,7 +469,7 @@ periodics:
     volumes:
     - name: github
       secret:
-        secretName: oauth-token
+        secretName: oauth-token-2
     - name: ssh
       secret:
         secretName: google-oss-robot-ssh-keys
@@ -505,7 +505,7 @@ periodics:
     volumes:
     - name: github
       secret:
-        secretName: oauth-token
+        secretName: oauth-token-2
     - name: ssh
       secret:
         secretName: google-oss-robot-ssh-keys
