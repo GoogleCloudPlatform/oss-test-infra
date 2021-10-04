@@ -131,13 +131,13 @@ presubmits:
         command:
         - ./test/presubmit-tests-sdk.sh
 
-  - name: kubeflow-pipelines-tfx-python36
+  - name: kubeflow-pipelines-tfx-python37
     cluster: build-kubeflow
     decorate: true
     run_if_changed: "^(sdk/.*)|(test/presubmit-tests-tfx.sh)$"
     spec:
       containers:
-      - image: python:3.6
+      - image: python:3.7
         command:
         - ./test/presubmit-tests-tfx.sh
 
