@@ -85,7 +85,7 @@ plank:
   pod_unscheduled_timeout: 5m
   build_cluster_status_file: 'gs://oss-prow/oss-prow-build-clusters-statuses.json'
   report_templates:
-    "looker/helltool": "View Performance Test Results Here:\n  FrontEnd Tests: https://meta.looker.com/dashboards/8194?My%20Commit={{with index .Spec.Refs.Pulls 0}}\n  Backend Tests: https://meta.looker.com/dashboards/8195?My%20Commit={{with index .Spec.Refs.Pulls 0}}"
+    "looker/helltool": "View Performance Test Results Here:\n  FrontEnd Tests: https://meta.looker.com/dashboards/8194?My%20Commit={{with index .Spec.Refs.Pulls 0}}{{.SHA}}{{end}}\n  Backend Tests: https://meta.looker.com/dashboards/8195?My%20Commit={{with index .Spec.Refs.Pulls 0}}{{.SHA}}{{end}}"
   default_decoration_config_entries:
   - config:
       timeout: 7200000000000 # 2h
