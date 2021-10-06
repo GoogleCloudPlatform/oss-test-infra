@@ -548,4 +548,5 @@ periodics:
       args:
       - "-project=gcp-guest"
       - "-zone=us-west1-a"
-      - "-images=debian-9,debian-10,centos-7,centos-8"
+      - "-images=debian-9,debian-10,debian-11,centos-7,centos-8,rhel-7,rhel-8,almalinux-8"
+      - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
