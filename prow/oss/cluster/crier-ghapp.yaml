@@ -2,19 +2,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: crier
+  name: crier-ghapp
   namespace: default
   labels:
-    app: crier
+    app: crier-ghapp
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: crier
+      app: crier-ghapp
   template:
     metadata:
       labels:
-        app: crier
+        app: crier-ghapp
     spec:
       serviceAccountName: crier
       terminationGracePeriodSeconds: 30
@@ -32,7 +32,9 @@ spec:
         - --pubsub-workers=1
         - --github-endpoint=http://ghproxy
         - --github-endpoint=https://api.github.com
-        - --github-token-path=/etc/github/oauth
+        - --github-app-id=$(GITHUB_APP_ID)
+        - --github-app-private-key-path=/etc/github/cert
+        - --github-enabled-org=repo-does-not-exist
         - --github-workers=6
         - --job-config-path=/etc/job-config
         - --kubernetes-blob-storage-workers=1
@@ -40,6 +42,11 @@ spec:
         # Use KUBECONFIG envvar rather than --kubeconfig flag in order to provide multiple configs to merge.
         - name: KUBECONFIG
           value: "/etc/kubeconfig/config-20201002:/etc/build-looker-32/kubeconfig:/etc/build-looker-16/kubeconfig:/etc/build-looker-int-test/kubeconfig:/etc/build-blueprints/kubeconfig:/etc/build-elcarro/kubeconfig:/etc/build-looker-private/kubeconfig:/etc/build-kubeflow/kubeconfig"
+        - name: GITHUB_APP_ID
+          valueFrom:
+            secretKeyRef:
+              name: ghapp-token
+              key: appid
         ports:
         - name: metrics
           containerPort: 9090
@@ -77,7 +84,7 @@ spec:
         - name: build-kubeflow
           mountPath: /etc/build-kubeflow
           readOnly: true
-        - name: oauth
+        - name: ghapp-token
           mountPath: /etc/github
           readOnly: true
         - name: knative-slack-token
@@ -126,75 +133,23 @@ spec:
         secret:
           defaultMode: 420
           secretName: kubeconfig-build-kubeflow
-      - name: oauth
+      - name: ghapp-token
         secret:
-          secretName: oauth-token-2
+          secretName: ghapp-token
       - name: knative-slack-token
         secret:
           secretName: knative-slack-token
----
-kind: ServiceAccount
-apiVersion: v1
-metadata:
-  name: crier
-  namespace: default
-  annotations:
-    "iam.gke.io/gcp-service-account": "oss-prow@oss-prow.iam.gserviceaccount.com"
----
-kind: ClusterRole
-apiVersion: rbac.authorization.k8s.io/v1
-metadata:
-  name: crier
-  # namespace: not-namespaced, todo: fix (prowjobs live in one namespace)
-rules:
-- apiGroups:
-    - "prow.k8s.io"
-  resources:
-    - "prowjobs"
-  verbs:
-    - "get"
-    - "watch"
-    - "list"
-    - "patch"
-- apiGroups:
-    - ""
-  resources:
-    - "pods"
-    - "events"
-  verbs:
-    - "get"
-    - "list"
-- apiGroups:
-    - ""
-  resources:
-    - "pods"
-  verbs:
-    - "patch"
----
-kind: ClusterRoleBinding
-apiVersion: rbac.authorization.k8s.io/v1
-metadata:
-  name: crier
-  namespace: default
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: "crier"
-subjects:
-- kind: ServiceAccount
-  name: "crier"
-  namespace: "default"
 ---
 apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: crier
+    app: crier-ghapp
   namespace: default
-  name: crier
+  name: crier-ghapp
 spec:
   ports:
   - name: metrics
     port: 9090
   selector:
-    app: crier
+    app: crier-ghapp

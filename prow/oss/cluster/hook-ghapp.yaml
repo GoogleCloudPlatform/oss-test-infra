@@ -2,15 +2,15 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hook
+  name: hook-ghapp
   namespace: default
   labels:
-    app: hook
+    app: hook-ghapp
 spec:
   replicas: 6
   selector:
     matchLabels:
-      app: hook
+      app: hook-ghapp
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -19,7 +19,7 @@ spec:
   template:
     metadata:
       labels:
-        app: hook
+        app: hook-ghapp
     spec:
       serviceAccountName: hook
       terminationGracePeriodSeconds: 180
@@ -31,13 +31,20 @@ spec:
         - --config-path=/etc/config/config.yaml
         - --job-config-path=/etc/job-config
         - --dry-run=false
-        - --github-token-path=/etc/github/oauth
         - --github-endpoint=http://ghproxy
         - --github-endpoint=https://api.github.com
+        - --github-app-id=$(GITHUB_APP_ID)
+        - --github-app-private-key-path=/etc/github/cert
+        - --github-enabled-org=repo-does-not-exist
         env:
         # Use KUBECONFIG envvar rather than --kubeconfig flag in order to provide multiple configs to merge.
         - name: KUBECONFIG
           value: "/etc/kubeconfig/config-20201002:/etc/build-looker-32/kubeconfig:/etc/build-looker-16/kubeconfig:/etc/build-looker-int-test/kubeconfig:/etc/build-blueprints/kubeconfig:/etc/build-elcarro/kubeconfig:/etc/build-looker-private/kubeconfig:/etc/build-kubeflow/kubeconfig"
+        - name: GITHUB_APP_ID
+          valueFrom:
+            secretKeyRef:
+              name: ghapp-token
+              key: appid
         ports:
         - name: http
           containerPort: 8888
@@ -65,7 +72,7 @@ spec:
         - name: hmac
           mountPath: /etc/webhook
           readOnly: true
-        - name: oauth
+        - name: ghapp-token
           mountPath: /etc/github
           readOnly: true
         - name: config
@@ -127,10 +134,10 @@ spec:
           secretName: kubeconfig-build-looker-private
       - name: hmac
         secret:
-          secretName: hmac-token
-      - name: oauth
+          secretName: ghapp-hmac-token
+      - name: ghapp-token
         secret:
-          secretName: oauth-token-2
+          secretName: ghapp-token
       - name: config
         configMap:
           name: config
@@ -153,58 +160,15 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: hook
-  name: hook
+    app: hook-ghapp
+  name: hook-ghapp
   namespace: default
 spec:
   selector:
-    app: hook
+    app: hook-ghapp
   ports:
   - name: main
     port: 8888
   - name: metrics
     port: 9090
   type: NodePort
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: hook
-  namespace: default
----
-kind: Role
-apiVersion: rbac.authorization.k8s.io/v1
-metadata:
-  name: hook
-  namespace: default
-rules:
-  - apiGroups:
-      - "prow.k8s.io"
-    resources:
-      - prowjobs
-    verbs:
-      - create
-      - get
-      - list
-      - update
-  - apiGroups:
-      - ""
-    resources:
-      - configmaps
-    verbs:
-      - create
-      - get
-      - update
----
-kind: RoleBinding
-apiVersion: rbac.authorization.k8s.io/v1
-metadata:
-  name: hook
-  namespace: default
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: "hook"
-subjects:
-- kind: ServiceAccount
-  name: "hook"
