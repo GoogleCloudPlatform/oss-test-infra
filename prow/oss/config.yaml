@@ -248,6 +248,8 @@ managed_webhooks:
       token_created_after: 2021-04-28T00:10:00Z
     GoogleCloudPlatform/blueprints:
       token_created_after: 2021-04-28T00:10:00Z
+    chaotoppicks:
+      token_created_after: 2021-10-05T00:10:00Z
 #    [org_name]/[repo_name]:
 #      token_created_after: 2020-08-18T00:10:00Z
 
@@ -308,11 +310,13 @@ in_repo_config:
   enabled:
     looker/helltool: true
     GoogleCloudPlatform/blueprints: true
+    chaotoppicks: true
 
   allowed_clusters:
     "*": []
     "looker/helltool": ["build-looker-private", "build-looker-int-test", "build-looker-16", "build-looker-32"]
     "GoogleCloudPlatform/blueprints": ["build-blueprints"]
+    "chaotoppicks": ["default"] # For experimenting purpose, will remove once done with experiments
 
 # settings for github reporter from crier
 github_reporter:

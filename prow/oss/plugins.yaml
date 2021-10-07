@@ -42,6 +42,7 @@ approve:
   - google
   - googleforgames
   - grpc-ecosystem
+  - chaotoppicks
   require_self_approval: false
 - repos:
   - kubeflow/caffe2-operator
@@ -66,6 +67,7 @@ lgtm:
   - google
   - googleforgames
   - grpc-ecosystem
+  - chaotoppicks
   review_acts_as_lgtm: true
 - repos:
   - GoogleCloudPlatform/testgrid
@@ -265,4 +267,22 @@ plugins:
     - trigger
     - verify-owners
     - wip
+    - yuks
+
+  chaotoppicks:
+    plugins:
+    - approve
+    - assign
+    - cat
+    - dog
+    - golint
+    - hold
+    - label
+    - lgtm
+    - owners-label
+    - pony
+    - shrug
+    - size
+    - trigger
+    - verify-owners
     - yuks
