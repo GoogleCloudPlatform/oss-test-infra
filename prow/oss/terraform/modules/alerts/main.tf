@@ -75,9 +75,9 @@ resource "google_monitoring_alert_policy" "predicted-gh-rate-limit-exhaustion" {
           | {
               metric 'workload.googleapis.com/github_token_usage'
               | value 5000 - val()
-              | align rate(1m) # Align rate over 1m and filter before actual 10m aggregation to drop counter resets in gauge.
+              | align rate(1m) # Align rate over 1m and filter before actual 15m aggregation to drop counter resets in gauge.
               | filter val() > 0
-              | align mean_aligner(10m)
+              | align mean_aligner(15m)
               ;
               metric 'workload.googleapis.com/github_token_reset'
               | value val() / (1000000000)
