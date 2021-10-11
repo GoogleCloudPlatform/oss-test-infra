@@ -104,33 +104,27 @@ metadata:
     kubernetes.io/ingress.class: "gce"
     kubernetes.io/tls-acme: "true"
     networking.gke.io/managed-certificates: oss-prow-knative-dev,oss-prow-private-knative-dev
-    # Rewrite path so that certain parts of the path can be picked.
-    # Doc: https://github.com/kubernetes/ingress-nginx/blob/master/docs/examples/rewrite/README.md#rewrite-target
-    nginx.ingress.kubernetes.io/rewrite-target: $1
 spec:
   rules:
   - host: oss-prow.knative.dev
     http:
       paths:
-      - path: (/*)
+      - path: /*
         backend:
           serviceName: deck
           servicePort: 80
-      - path: (/hook)
+      - path: /hook
         backend:
           serviceName: hook
           servicePort: 8888
-      # `/ghapp-hook/hook` is the webhook endpoint exclusively for repos onboarding by installing GitHub app,
-      # hook expects path with prefix of `/hook`, have to strip off `/ghapp-hook`.
-      # Naming it `ghapp-hook` instead of `hook-ghapp` to avoid potential collision with ingress rule above that matches `/hook`.
-      - path: /ghapp-hook(/hook)
+      - path: /ghapp-hook
         backend:
           serviceName: hook-ghapp
           servicePort: 8888
   - host: oss-prow-private.knative.dev
     http:
       paths:
-      - path: (/*)
+      - path: /*
         backend:
           serviceName: deck-private
           servicePort: 80
