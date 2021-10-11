@@ -128,6 +128,32 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
+  name: hook-ghapp-ing
+  namespace: default
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: "oss-prow"
+    kubernetes.io/ingress.class: "gce"
+    kubernetes.io/tls-acme: "true"
+    networking.gke.io/managed-certificates: oss-prow-knative-dev
+    # Rewrite path to strip /fakeghserver from path to match in cluster traffic.
+    # Doc: https://github.com/kubernetes/ingress-nginx/blob/master/docs/examples/rewrite/README.md#rewrite-target
+    nginx.ingress.kubernetes.io/rewrite-target: $1
+spec:
+  rules:
+  - host: oss-prow.knative.dev
+    http:
+      paths:
+      # `/ghapp-hook/hook` is the webhook endpoint exclusively for repos onboarding by installing GitHub app,
+      # hook expects path with prefix of `/hook`, have to strip off `/ghapp-hook`.
+      # Naming it `ghapp-hook` instead of `hook-ghapp` to avoid potential collision with ingress rule above that matches `/hook`.
+      - path: /ghapp-hook(/hook.*)
+        backend:
+          serviceName: hook-ghapp
+          servicePort: 8888
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
   name: deck-blueprints
   namespace: default
   annotations:

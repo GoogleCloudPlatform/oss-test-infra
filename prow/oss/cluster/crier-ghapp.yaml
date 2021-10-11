@@ -1,0 +1,155 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crier-ghapp
+  namespace: default
+  labels:
+    app: crier-ghapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: crier-ghapp
+  template:
+    metadata:
+      labels:
+        app: crier-ghapp
+    spec:
+      serviceAccountName: crier
+      terminationGracePeriodSeconds: 30
+      containers:
+      - name: crier
+        image: gcr.io/k8s-prow/crier:v20211005-887a381aed
+        args:
+        - --blob-storage-workers=1
+        - --config-path=/etc/config/config.yaml
+        - --cookiefile=/etc/cookies/cookies
+        - --gerrit-projects=https://kunit-review.googlesource.com=linux
+        - --gerrit-projects=https://linux-review.googlesource.com=linux/kernel/git/torvalds/linux
+        - --gerrit-workers=1
+        - --additional-slack-token-files=knative=/etc/knative-slack-token/token
+        - --pubsub-workers=1
+        - --github-endpoint=http://ghproxy
+        - --github-endpoint=https://api.github.com
+        - --github-app-id=$(GITHUB_APP_ID)
+        - --github-app-private-key-path=/etc/github/cert
+        - --github-enabled-org=repo-does-not-exist
+        - --github-workers=6
+        - --job-config-path=/etc/job-config
+        - --kubernetes-blob-storage-workers=1
+        env:
+        # Use KUBECONFIG envvar rather than --kubeconfig flag in order to provide multiple configs to merge.
+        - name: KUBECONFIG
+          value: "/etc/kubeconfig/config-20201002:/etc/build-looker-32/kubeconfig:/etc/build-looker-16/kubeconfig:/etc/build-looker-int-test/kubeconfig:/etc/build-blueprints/kubeconfig:/etc/build-elcarro/kubeconfig:/etc/build-looker-private/kubeconfig:/etc/build-kubeflow/kubeconfig"
+        - name: GITHUB_APP_ID
+          valueFrom:
+            secretKeyRef:
+              name: ghapp-token
+              key: appid
+        ports:
+        - name: metrics
+          containerPort: 9090
+        volumeMounts:
+        - mountPath: /etc/build-looker-32
+          name: build-looker-32
+          readOnly: true
+        - mountPath: /etc/build-looker-16
+          name: build-looker-16
+          readOnly: true
+        - mountPath: /etc/build-looker-int-test
+          name: build-looker-int-test
+          readOnly: true
+        - mountPath: /etc/build-blueprints
+          name: build-blueprints
+          readOnly: true
+        - mountPath: /etc/build-elcarro
+          name: build-elcarro
+          readOnly: true
+        - mountPath: /etc/build-looker-private
+          name: build-looker-private
+          readOnly: true
+        - name: cookies
+          mountPath: /etc/cookies
+          readOnly: true
+        - name: config
+          mountPath: /etc/config
+          readOnly: true
+        - name: job-config
+          mountPath: /etc/job-config
+          readOnly: true
+        - name: kubeconfig
+          mountPath: /etc/kubeconfig
+          readOnly: true
+        - name: build-kubeflow
+          mountPath: /etc/build-kubeflow
+          readOnly: true
+        - name: ghapp-token
+          mountPath: /etc/github
+          readOnly: true
+        - name: knative-slack-token
+          mountPath: etc/knative-slack-token
+          readOnly: true
+      volumes:
+      - name: build-looker-32
+        secret:
+          defaultMode: 420
+          secretName: kubeconfig-build-looker-32
+      - name: build-looker-16
+        secret:
+          defaultMode: 420
+          secretName: kubeconfig-build-looker-16
+      - name: build-looker-int-test
+        secret:
+          defaultMode: 420
+          secretName: kubeconfig-build-looker-int-test
+      - name: build-blueprints
+        secret:
+          defaultMode: 420
+          secretName: kubeconfig-build-blueprints
+      - name: build-elcarro
+        secret:
+          defaultMode: 420
+          secretName: kubeconfig-build-elcarro
+      - name: build-looker-private
+        secret:
+          defaultMode: 420
+          secretName: kubeconfig-build-looker-private
+      - name: cookies
+        secret:
+          defaultMode: 420
+          secretName: http-cookiefile
+      - name: config
+        configMap:
+          name: config
+      - name: job-config
+        configMap:
+          name: job-config
+      - name: kubeconfig
+        secret:
+          defaultMode: 420
+          secretName: kubeconfig
+      - name: build-kubeflow
+        secret:
+          defaultMode: 420
+          secretName: kubeconfig-build-kubeflow
+      - name: ghapp-token
+        secret:
+          secretName: ghapp-token
+      - name: knative-slack-token
+        secret:
+          secretName: knative-slack-token
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: crier-ghapp
+  namespace: default
+  name: crier-ghapp
+spec:
+  ports:
+  - name: metrics
+    port: 9090
+  selector:
+    app: crier-ghapp
