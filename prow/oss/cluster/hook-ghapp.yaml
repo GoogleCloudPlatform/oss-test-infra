@@ -36,6 +36,7 @@ spec:
         - --github-app-id=$(GITHUB_APP_ID)
         - --github-app-private-key-path=/etc/github/cert
         - --github-enabled-org=repo-does-not-exist
+        - --github-enabled-org=chaotoppicks
         env:
         # Use KUBECONFIG envvar rather than --kubeconfig flag in order to provide multiple configs to merge.
         - name: KUBECONFIG
