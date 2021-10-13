@@ -250,6 +250,8 @@ managed_webhooks:
       token_created_after: 2021-04-28T00:10:00Z
     chaotoppicks:
       token_created_after: 2021-10-05T00:10:00Z
+    jcnars/bms-toolkit:
+      token_created_after: 2021-10-11T00:10:00Z
 #    [org_name]/[repo_name]:
 #      token_created_after: 2020-08-18T00:10:00Z
 
