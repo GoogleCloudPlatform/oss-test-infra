@@ -1,8 +1,8 @@
 presubmits:
-  jcnars/bms-toolkit:
+  google/bms-toolkit:
   - name: testjob
     cluster: build-bms-oracle-team
-    always_run: true
+    always_run: false
     decorate: true
     spec:
       containers:
