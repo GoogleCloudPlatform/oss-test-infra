@@ -157,6 +157,12 @@ plank:
         bucket: "oss-prow"
       default_service_account_name: "prowjob-default-sa" # Use workload identity
       gcs_credentials_secret: ""                         # rather than service account key secret
+  - cluster: build-bms-oracle-team
+    config:
+      gcs_configuration:
+        bucket: "bmaas-testing-prow-poc"
+      default_service_account_name: "prowjob-default-sa" # Use workload identity
+      gcs_credentials_secret: ""                         # rather than service account key secret
 
 
 sinker:
@@ -250,6 +256,8 @@ managed_webhooks:
       token_created_after: 2021-04-28T00:10:00Z
     chaotoppicks:
       token_created_after: 2021-10-05T00:10:00Z
+    google/bms-toolkit:
+      token_created_after: 2021-10-11T00:10:00Z      
 #    [org_name]/[repo_name]:
 #      token_created_after: 2020-08-18T00:10:00Z
 
