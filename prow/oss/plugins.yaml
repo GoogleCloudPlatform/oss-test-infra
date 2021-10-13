@@ -68,6 +68,7 @@ lgtm:
   - googleforgames
   - grpc-ecosystem
   - chaotoppicks
+  - jcnars
   review_acts_as_lgtm: true
 - repos:
   - GoogleCloudPlatform/testgrid
@@ -270,6 +271,24 @@ plugins:
     - yuks
 
   chaotoppicks:
+    plugins:
+    - approve
+    - assign
+    - cat
+    - dog
+    - golint
+    - hold
+    - label
+    - lgtm
+    - owners-label
+    - pony
+    - shrug
+    - size
+    - trigger
+    - verify-owners
+    - yuks
+
+  jcnars/bms-toolkit:
     plugins:
     - approve
     - assign
