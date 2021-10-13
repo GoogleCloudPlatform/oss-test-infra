@@ -14,37 +14,47 @@
 
 # Store terraform states in GCS
 terraform {
-    backend "gcs" {
-        bucket = "oss-prow-terraform"
-    }
+  backend "gcs" {
+    bucket = "prow-metrics-terraform"
+  }
 }
 
 module "dashboards" {
-    source = "./modules/dashboards"
+  source = "./modules/dashboards"
 
-    project = "oss-prow"
+  project = "prow-metrics"
 }
 
 module "alert" {
-    source = "./modules/alerts"
+  source = "./modules/alerts"
 
-    project = "oss-prow"
-    heartbeat_job = {
-        job_name = "ci-oss-test-infra-heartbeat"
-        interval = "300s"
-        alert_interval = "1200s"
+  project = "prow-metrics"
+  heartbeat_jobs = [{
+    job_name       = "ci-oss-test-infra-heartbeat"
+    interval       = "300s"
+    alert_interval = "1200s"
+  }]
+  # gcloud alpha monitoring channels list --project=oss-prow
+  # grep displayName: prow-alert-pioneer
+  notification_channel_id = "13760821420809417519"
+  prow_instances = {
+    oss-prow = {
+      deck : { namespace : "default" }
+      hook : { namespace : "default" }
+      prow-controller-manager : { namespace : "default" }
+      sinker : { namespace : "default" }
+      tide : { namespace : "default" }
     }
-    # gcloud alpha monitoring channels list --project=oss-prow
-    # grep displayName: prow-alert-pioneer
-    notification_channel_id = "13760821420809417519"
-    prow_components = {
-        "deck" = {"namespace": "default"}
-        "hook" = {"namespace": "default"}
-        "prow-controller-manager" = {"namespace": "default"}
-        "sinker" = {"namespace": "default"}
-        "tide" = {"namespace": "default"}
-    }
-    blackbox_probers = [
-        "oss-prow.knative.dev"
-    ]
+  }
+  blackbox_probers = [
+    "oss-prow.knative.dev"
+  ]
+  bot_token_hashes = [
+    "5514c8081c74362c58993e5de935cb92e38cc9397e57a72883c1878cfcdd4b38" // google-oss-robot
+    // Ignore k8s-ci-robot until we resolve the token remaining inaccuracies.
+    // "6624f39f2213835d6c820aff41666853557f99155d23cc52cd9171bcbed3dccc" // k8s-ci-robot
+  ]
+  no_webhook_alert_minutes = {
+    "oss-prow" = 20
+  }
 }

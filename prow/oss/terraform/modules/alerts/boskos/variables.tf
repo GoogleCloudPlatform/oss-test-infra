@@ -21,6 +21,6 @@ variable "notification_channel_id" {
 }
 
 variable "allowed_list" {
-  type = set(string)
+  type    = set(string)
   default = []
 }
