@@ -1,8 +1,7 @@
 
 ## Set up build cluster
 
-Create a Build cluster to host your prow jobs using [`create_build_cluster.sh`],
-this step requires coordination with [Test Infra oncall].
+Create a Build cluster to host your prow jobs using [`create_build_cluster.sh`].
 
 It isn't necessary to use a separate build cluster for every individual repo,
 but each team should use their own cluster for workload/billing isolation and
@@ -10,24 +9,7 @@ management.
 
 ## Config permission for prow
 
-1.  Invite [`google-oss-robot`] to your github org/repo, and make it an admin.
-1.  Create a pullrequest as in [webhook example pr] and assign to [Test Infra oncall]:
-
-    ```yaml
-    < prow/oss/config.yaml >
-    managed_webhooks:
-        respect_legacy_global_token: true
-        org_repo_config:
-            <org>/<repo>:
-                token_create_after: 2020-11-04T00:10:00Z # Any date as long as it's not in the future.
-    ```
-
-1.  After the pullrequest merged, make sure latest
-    [post-oss-test-infra-reconcile-hmacs] succeeded. Notify [Test Infra oncall] if it
-    failed.
-
-After succession of the steps above, oss-prow will start to receive webhooks
-from your org/repo, but won't take any actions yet.
+Install prow GitHub app at https://github.com/apps/google-oss-prow/installations/new. Once the installation is completed, the org/repo will start sending webhook to prow, but nothing will happen until after following steps.
 
 ## Config prow to act on webhooks from github
 
