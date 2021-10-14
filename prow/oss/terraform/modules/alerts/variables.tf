@@ -16,27 +16,33 @@ variable "project" {
   type = string
 }
 
-variable "heartbeat_job" {
-  type = map
-  default = {
-    job_name = ""
-    interval = ""
-    alert_interval = ""
-  }
+variable "heartbeat_jobs" {
+  // TODO(cjwagner): add object() specifications to type.
+  type    = list(any)
+  default = []
 }
 
 variable "notification_channel_id" {
   type = string
 }
 
-variable "prow_components" {
-  type = map
+variable "prow_instances" {
+  type = map(any)
   default = {
-    "svc_not_exist" = {"namespace": "default"}
+    "svc_not_exist" = { "namespace" : "default" }
   }
 }
 
 variable "blackbox_probers" {
-  type = set(string)
+  type    = set(string)
   default = []
+}
+
+variable "bot_token_hashes" {
+  type = list(string)
+}
+
+variable "no_webhook_alert_minutes" {
+  type    = map(number)
+  default = {}
 }

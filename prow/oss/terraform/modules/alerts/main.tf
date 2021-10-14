@@ -14,14 +14,28 @@
 
 locals {
   sinker_monitoring_resources = {
-    pods: "sinker_pods_removed"
-    prowjobs: "sinker_prow_jobs_cleaned"
+    pods : "sinker_pods_removed"
+    prowjobs : "sinker_prow_jobs_cleaned"
+  }
+  // Flatten var.prow_instances into a map.
+  // https://www.terraform.io/docs/language/functions/flatten.html#flattening-nested-structures-for-for_each
+  project_indexed_components = { for elem in
+    flatten([
+      for project, components in var.prow_instances : [
+        for component, details in components : {
+          project   = project,
+          component = component,
+          namespace = details.namespace
+        }
+      ]
+    ]) :
+    "${elem.project}/${elem.component}" => elem
   }
 }
 
 resource "google_monitoring_alert_policy" "sinker-alerts" {
   project      = var.project
-  for_each      = local.sinker_monitoring_resources
+  for_each     = local.sinker_monitoring_resources
   display_name = "sinker-not-deleting-${each.key}"
   combiner     = "OR" # required
 
@@ -33,7 +47,7 @@ resource "google_monitoring_alert_policy" "sinker-alerts" {
       query    = <<-EOT
       fetch k8s_container
       | metric 'workload.googleapis.com/${each.value}'
-      | group_by [], 1h, [value_sinker_removed_sum: sum(value.${each.value})]
+      | group_by [resource.project_id], 1h, [value_sinker_removed_sum: sum(value.${each.value})]
       | every 1h
       | condition val() < 1
       EOT
@@ -88,6 +102,7 @@ resource "google_monitoring_alert_policy" "predicted-gh-rate-limit-exhaustion" {
       | outer_join 0
       | sub # Result is the expected remaining tokens at the end of the rate limit reset window.
       | every 1m
+      | filter metric.token_hash ~= "${join("|", var.bot_token_hashes)}"
       | condition val() < 250
       | window 1m
       EOT
@@ -107,7 +122,7 @@ resource "google_monitoring_alert_policy" "predicted-gh-rate-limit-exhaustion" {
 }
 
 resource "google_monitoring_alert_policy" "pod-crashlooping" {
-  for_each     = var.prow_components
+  for_each     = local.project_indexed_components
   project      = var.project
   display_name = "pod-crashlooping-${each.key}"
   combiner     = "OR" # required
@@ -125,7 +140,7 @@ resource "google_monitoring_alert_policy" "pod-crashlooping" {
       fetch k8s_container
       | metric 'kubernetes.io/container/restart_count'
       | filter
-          (resource.container_name == '${each.key}' && resource.namespace_name == '${each.value.namespace}')
+          (resource.project_id == '${each.value.project}' && resource.container_name == '${each.value.component}' && resource.namespace_name == '${each.value.namespace}')
       | align delta(6m)
       | every 6m
       | group_by [], [value_restart_count_aggregate: aggregate(value.restart_count)]
@@ -148,24 +163,25 @@ resource "google_monitoring_alert_policy" "pod-crashlooping" {
 
 
 resource "google_monitoring_alert_policy" "heartbeat-job-stale" {
+  for_each     = { for job in var.heartbeat_jobs : job.job_name => job }
   project      = var.project
-  display_name = "heartbeat-job-stale"
+  display_name = "heartbeat-job-stale/${each.key}"
   combiner     = "OR" # required
 
   conditions {
-    display_name = "heartbeat-job-stale"
+    display_name = "heartbeat-job-stale/${each.key}"
 
     condition_monitoring_query_language {
-      duration = "${var.heartbeat_job.alert_interval}"
+      duration = each.value.alert_interval
       query    = <<-EOT
       fetch k8s_container
       | metric 'workload.googleapis.com/prowjob_state_transitions'
       | filter
-          (metric.job_name == '${var.heartbeat_job.job_name}'
+          (metric.job_name == '${each.value.job_name}'
           && metric.state == 'success')
       | sum # Combining values reported by all prow-controller-manager pods
-      | align delta_gauge(${var.heartbeat_job.interval})
-      | every ${var.heartbeat_job.interval}
+      | align delta_gauge(${each.value.interval})
+      | every ${each.value.interval}
       | condition val() == 0
       EOT
       trigger {
@@ -175,7 +191,7 @@ resource "google_monitoring_alert_policy" "heartbeat-job-stale" {
   }
 
   documentation {
-    content   = " The heartbeat job `${var.heartbeat_job.job_name}` has not had a successful run in the past ${var.heartbeat_job.alert_interval} (should run every ${var.heartbeat_job.interval})."
+    content   = " The heartbeat job `${each.value.job_name}` has not had a successful run in the past ${each.value.alert_interval} (should run every ${each.value.interval})."
     mime_type = "text/markdown"
   }
 
@@ -206,10 +222,10 @@ resource "google_monitoring_alert_policy" "probers" {
       }
     }
   }
-    
+
   documentation {
-      content   = "Host Down"
-      mime_type = "text/markdown"
+    content   = "Host Down"
+    mime_type = "text/markdown"
   }
 
   # gcloud beta monitoring channels list --project=oss-prow
@@ -218,15 +234,16 @@ resource "google_monitoring_alert_policy" "probers" {
 
 
 resource "google_monitoring_alert_policy" "webhook-missing" {
+  for_each     = var.no_webhook_alert_minutes
   project      = var.project
-  display_name = "webhook-missing"
+  display_name = "webhook-missing/${each.key}"
   combiner     = "OR" # required
 
   conditions {
-    display_name = "webhook-missing"
+    display_name = "webhook-missing/${each.key}"
 
     condition_monitoring_query_language {
-      duration = "1200s"
+      duration = "${each.value * 60}s"
       query    = <<-EOT
       fetch k8s_container
       | metric 'workload.googleapis.com/prow_webhook_counter'
@@ -246,7 +263,7 @@ resource "google_monitoring_alert_policy" "webhook-missing" {
   }
 
   documentation {
-    content   = "Webhook missing for 20 minutes."
+    content   = "${each.key} has received no webhooks for ${each.value} minutes during work hours."
     mime_type = "text/markdown"
   }
 

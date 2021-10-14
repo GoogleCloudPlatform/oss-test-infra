@@ -57,7 +57,7 @@ resource "google_monitoring_alert_policy" "boskos-alerts" {
 # Enabled only when allowed_list is not empty, not enabled by default
 resource "google_monitoring_alert_policy" "boskos-alerts-selected" {
   project      = var.project
-  for_each      = var.allowed_list
+  for_each     = var.allowed_list
   display_name = "boskos-alerts-selected-${each.key}"
   combiner     = "OR" # required
 

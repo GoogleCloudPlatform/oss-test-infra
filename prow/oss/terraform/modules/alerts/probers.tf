@@ -13,7 +13,7 @@
 # limitations under the License.
 
 resource "google_monitoring_uptime_check_config" "https" {
-  project = var.project
+  project          = var.project
   selected_regions = []
 
   for_each = var.blackbox_probers
@@ -24,7 +24,7 @@ resource "google_monitoring_uptime_check_config" "https" {
 
   http_check {
     port         = "443"
-    use_ssl = true
+    use_ssl      = true
     validate_ssl = true
   }
 
