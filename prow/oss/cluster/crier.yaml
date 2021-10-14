@@ -20,7 +20,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
       - name: crier
-        image: gcr.io/k8s-prow/crier:v20211008-562307626f
+        image: gcr.io/k8s-prow/crier:v20211013-a7344144f0
         args:
         - --blob-storage-workers=1
         - --config-path=/etc/config/config.yaml
@@ -35,17 +35,21 @@ spec:
         - --github-token-path=/etc/github/oauth
         - --github-disabled-org=chaotoppicks
         - --github-disabled-org=looker
+        - --github-disabled-repo=GoogleCloudPlatform/oss-test-infra
         - --github-workers=6
         - --job-config-path=/etc/job-config
         - --kubernetes-blob-storage-workers=1
         env:
         # Use KUBECONFIG envvar rather than --kubeconfig flag in order to provide multiple configs to merge.
         - name: KUBECONFIG
-          value: "/etc/kubeconfig/config-20201002:/etc/build-looker-32/kubeconfig:/etc/build-looker-16/kubeconfig:/etc/build-looker-int-test/kubeconfig:/etc/build-blueprints/kubeconfig:/etc/build-elcarro/kubeconfig:/etc/build-looker-private/kubeconfig:/etc/build-kubeflow/kubeconfig"
+          value: "/etc/kubeconfig/config-20201002:/etc/build-bms-oracle-team/kubeconfig:/etc/build-looker-32/kubeconfig:/etc/build-looker-16/kubeconfig:/etc/build-looker-int-test/kubeconfig:/etc/build-blueprints/kubeconfig:/etc/build-elcarro/kubeconfig:/etc/build-looker-private/kubeconfig:/etc/build-kubeflow/kubeconfig"
         ports:
         - name: metrics
           containerPort: 9090
         volumeMounts:
+        - mountPath: /etc/build-bms-oracle-team
+          name: build-bms-oracle-team
+          readOnly: true
         - mountPath: /etc/build-looker-32
           name: build-looker-32
           readOnly: true
@@ -86,6 +90,10 @@ spec:
           mountPath: etc/knative-slack-token
           readOnly: true
       volumes:
+      - name: build-bms-oracle-team
+        secret:
+          defaultMode: 420
+          secretName: kubeconfig-build-bms-oracle-team
       - name: build-looker-32
         secret:
           defaultMode: 420

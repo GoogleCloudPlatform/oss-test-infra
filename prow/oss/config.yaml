@@ -91,10 +91,10 @@ plank:
       timeout: 7200000000000 # 2h
       grace_period: 15000000000 # 15s
       utility_images:
-        clonerefs: "gcr.io/k8s-prow/clonerefs:v20211008-562307626f"
-        initupload: "gcr.io/k8s-prow/initupload:v20211008-562307626f"
-        entrypoint: "gcr.io/k8s-prow/entrypoint:v20211008-562307626f"
-        sidecar: "gcr.io/k8s-prow/sidecar:v20211008-562307626f"
+        clonerefs: "gcr.io/k8s-prow/clonerefs:v20211013-a7344144f0"
+        initupload: "gcr.io/k8s-prow/initupload:v20211013-a7344144f0"
+        entrypoint: "gcr.io/k8s-prow/entrypoint:v20211013-a7344144f0"
+        sidecar: "gcr.io/k8s-prow/sidecar:v20211013-a7344144f0"
       gcs_configuration:
         bucket: "oss-prow"
         path_strategy: "explicit"
@@ -155,6 +155,12 @@ plank:
     config:
       gcs_configuration:
         bucket: "oss-prow"
+      default_service_account_name: "prowjob-default-sa" # Use workload identity
+      gcs_credentials_secret: ""                         # rather than service account key secret
+  - cluster: build-bms-oracle-team
+    config:
+      gcs_configuration:
+        bucket: "bmaas-testing-prow-poc"
       default_service_account_name: "prowjob-default-sa" # Use workload identity
       gcs_credentials_secret: ""                         # rather than service account key secret
 
@@ -250,6 +256,8 @@ managed_webhooks:
       token_created_after: 2021-04-28T00:10:00Z
     chaotoppicks:
       token_created_after: 2021-10-05T00:10:00Z
+    google/bms-toolkit:
+      token_created_after: 2021-10-11T00:10:00Z      
 #    [org_name]/[repo_name]:
 #      token_created_after: 2020-08-18T00:10:00Z
 
