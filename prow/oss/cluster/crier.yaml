@@ -35,7 +35,7 @@ spec:
         - --github-token-path=/etc/github/oauth
         - --github-disabled-org=chaotoppicks
         - --github-disabled-org=looker
-        - --github-disabled-repo=GoogleCloudPlatform/oss-test-infra
+        - --github-disabled-org=GoogleCloudPlatform/oss-test-infra
         - --github-workers=6
         - --job-config-path=/etc/job-config
         - --kubernetes-blob-storage-workers=1
