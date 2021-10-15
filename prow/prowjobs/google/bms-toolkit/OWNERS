@@ -1,0 +1,6 @@
+# See the OWNERS docs at https://go.k8s.io/owners
+# Adding OWNERS so BMS Oracle team can change the tests run
+
+approvers:
+- jcnars
+# - mfielding will be added once he joins GoogleCloudPlatform org
