@@ -25,26 +25,43 @@ import (
 	"testing"
 
 	v1 "k8s.io/api/core/v1"
+	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/test-infra/prow/config"
+	pluginflagutil "k8s.io/test-infra/prow/flagutil/plugins"
+	"k8s.io/test-infra/prow/plugins"
 )
 
+// Loaded at init time. Testing package will call flag.Parse for us.
 var (
 	configPath    = flag.String("config", "../oss/config.yaml", "Path to prow config")
 	jobConfigPath = flag.String("job-config", "../prowjobs/", "Path to prow job config")
+	pluginFlags   pluginflagutil.PluginOptions
 )
 
+func init() {
+	pluginFlags.PluginConfigPathDefault = "../oss/plugins.yaml"
+	pluginFlags.AddFlags(flag.CommandLine)
+}
+
 // Loaded at TestMain.
-var c *config.Config
+var (
+	c  *config.Config
+	pc *plugins.Configuration
+)
 
 func TestMain(m *testing.M) {
-	flag.Parse()
-
 	cfg, err := config.Load(*configPath, *jobConfigPath, nil, "")
 	if err != nil {
 		fmt.Printf("Could not load config: %v\n", err)
 		os.Exit(1)
 	}
 	c = cfg
+	pluginAgent, err := pluginFlags.PluginAgent()
+	if err != nil {
+		fmt.Printf("Could not plugin config: %v\n", err)
+		os.Exit(1)
+	}
+	pc = pluginAgent.Config()
 
 	os.Exit(m.Run())
 }
@@ -159,8 +176,7 @@ func TestPrivateJobs(t *testing.T) {
 // Knative cluster is not meant to run any prow job from this repo
 func TestKnativeCluster(t *testing.T) {
 	const protected = "knative-prow-trusted"
-	var verifyFunc func(t *testing.T, jobName, cluster string)
-	verifyFunc = func(t *testing.T, jobName, cluster string) {
+	verifyFunc := func(t *testing.T, jobName, cluster string) {
 		if cluster == protected {
 			t.Errorf("%s: cannot use knative cluster", jobName)
 		}
@@ -180,5 +196,44 @@ func TestKnativeCluster(t *testing.T) {
 
 	for _, per := range c.AllPeriodics() {
 		verifyFunc(t, per.Name, per.Cluster)
+	}
+}
+
+// TestNoAutomaticOrExpensiveOrgWidePlugins validates that none of the
+// specified orgs have plugins enabled at the org level that either:
+//   1) Act automatically without prompting from the user (e.g. size plugin or
+//      lgtm plugin reacting to GH reviews).
+//   or
+//   2) Use API rate limit to determine if action needs to be taken.
+//
+// We want to prevent such plugins from being enabled org wide on orgs that
+// have installed the OSS Prow GitHub App where not all repos necessarily
+// wish to use Prow, for example GoogleCloudPlatform.
+// We don't want any automatic actions so that Prow doesn't interfere with
+// repos that haven't chosed to use Prow (basically we want to silently enable)
+// and we don't want to waste rate limit in such cases either.
+func TestNoAutomaticOrExpensiveOrgWidePlugins(t *testing.T) {
+	orgs := []string{"GoogleCloudPlatform"}
+	safePlugins := sets.NewString(
+		"assign",
+		"cat",
+		"dog",
+		"golint",
+		"hold",
+		"label",
+		"pony",
+		"shrug",
+		"trigger",
+		"yuks",
+		// Note that this is not necessarily a complete list, just the list of plugins that we have so far audited as safe.
+	)
+
+	for _, org := range orgs {
+		unsafe := sets.NewString(pc.Plugins[org].Plugins...).Difference(safePlugins)
+		if unsafe.Len() > 0 {
+			t.Errorf("Org %q has enabled one or more plugins that have not been audited and may either act automatically or use API rate limit to determine if an event is relevant. "+
+				"Either confirm the plugin is safe and update the test or enable the plugin at the repo level. Violating plugins: %q.",
+				org, unsafe.List())
+		}
 	}
 }
