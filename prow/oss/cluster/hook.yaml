@@ -35,6 +35,7 @@ spec:
         - --github-endpoint=http://ghproxy
         - --github-endpoint=https://api.github.com
         - --github-disabled-org=chaotoppicks
+        - --github-disabled-org=looker
         - --github-disabled-org=GoogleCloudPlatform/oss-test-infra
         env:
         # Use KUBECONFIG envvar rather than --kubeconfig flag in order to provide multiple configs to merge.

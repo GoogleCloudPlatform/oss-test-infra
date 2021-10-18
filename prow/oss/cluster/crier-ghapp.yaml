@@ -36,6 +36,7 @@ spec:
         - --github-app-private-key-path=/etc/github/cert
         - --github-enabled-org=repo-does-not-exist
         - --github-enabled-org=chaotoppicks
+        - --github-enabled-org=looker
         - --github-enabled-org=GoogleCloudPlatform/oss-test-infra
         - --github-workers=6
         - --job-config-path=/etc/job-config
