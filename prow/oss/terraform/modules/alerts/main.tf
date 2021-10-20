@@ -102,7 +102,7 @@ resource "google_monitoring_alert_policy" "predicted-gh-rate-limit-exhaustion" {
       | outer_join 0
       | sub # Result is the expected remaining tokens at the end of the rate limit reset window.
       | every 1m
-      | filter metric.token_hash ~= "${join("|", var.bot_token_hashes)}"
+      | filter metric.token_hash =~ "${join("|", var.bot_token_hashes)}"
       | condition val() < 250
       | window 1m
       EOT
