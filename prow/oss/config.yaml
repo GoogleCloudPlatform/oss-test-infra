@@ -220,6 +220,8 @@ managed_webhooks:
       token_created_after: 2021-03-04T00:10:00Z
     GoogleCloudPlatform/artifact-registry-yum-plugin:
       token_created_after: 2021-03-04T00:10:00Z
+    GoogleCloudPlatform/blueprints:
+      token_created_after: 2021-04-28T00:10:00Z
     GoogleCloudPlatform/compute-image-tools:
       token_created_after: 2021-04-22T00:10:00Z
     GoogleCloudPlatform/elcarro-oracle-operator:
@@ -251,8 +253,6 @@ managed_webhooks:
     kubeflow:
       token_created_after: 2020-12-06T00:10:00Z
     looker:
-      token_created_after: 2021-04-28T00:10:00Z
-    GoogleCloudPlatform/blueprints:
       token_created_after: 2021-04-28T00:10:00Z
     chaotoppicks:
       token_created_after: 2021-10-05T00:10:00Z

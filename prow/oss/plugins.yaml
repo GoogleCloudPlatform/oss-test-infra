@@ -78,62 +78,152 @@ lgtm:
 plugins:
   GoogleCloudPlatform:
     plugins:
-    - approve
     - assign
     - cat
     - dog
     - golint
     - hold
     - label
-    - lgtm
-    - owners-label
     - pony
     - shrug
-    - size
     - trigger
-    - verify-owners
     - yuks
 
-  GoogleCloudPlatform/guest-test-infra:
-    plugins:
-    - blunderbuss
-  GoogleCloudPlatform/guest-oslogin:
-    plugins:
-    - blunderbuss
-  GoogleCloudPlatform/osconfig:
-    plugins:
-    - blunderbuss
   GoogleCloudPlatform/artifact-registry-apt-transport:
     plugins:
+    - approve
     - blunderbuss
+    - lgtm
+    - owners-label
+    - size
+    - verify-owners
   GoogleCloudPlatform/artifact-registry-yum-plugin:
     plugins:
+    - approve
     - blunderbuss
-  GoogleCloudPlatform/guest-configs:
+    - lgtm
+    - owners-label
+    - size
+    - verify-owners
+  GoogleCloudPlatform/blueprints:
     plugins:
-    - blunderbuss
-  GoogleCloudPlatform/guest-diskexpand:
-    plugins:
-    - blunderbuss
-  GoogleCloudPlatform/guest-agent:
-    plugins:
-    - blunderbuss
+    - approve
+    - lgtm
+    - owners-label
+    - size
+    - verify-owners
   GoogleCloudPlatform/compute-image-tools:
     plugins:
+    - approve
     - blunderbuss
-
+    - lgtm
+    - owners-label
+    - size
+    - verify-owners
+  GoogleCloudPlatform/elcarro-oracle-operator:
+    plugins:
+    - approve
+    - lgtm
+    - owners-label
+    - size
+    - verify-owners
+  GoogleCloudPlatform/esp-v2:
+    plugins:
+    - approve
+    - lgtm
+    - owners-label
+    - size
+    - verify-owners
+  GoogleCloudPlatform/guest-agent:
+    plugins:
+    - approve
+    - blunderbuss
+    - lgtm
+    - owners-label
+    - size
+    - verify-owners
+  GoogleCloudPlatform/guest-configs:
+    plugins:
+    - approve
+    - blunderbuss
+    - lgtm
+    - owners-label
+    - size
+    - verify-owners
+  GoogleCloudPlatform/guest-diskexpand:
+    plugins:
+    - approve
+    - blunderbuss
+    - lgtm
+    - owners-label
+    - size
+    - verify-owners
+  GoogleCloudPlatform/guest-logging-go:
+    plugins:
+    - approve
+    - lgtm
+    - owners-label
+    - size
+    - verify-owners
+  GoogleCloudPlatform/guest-oslogin:
+    plugins:
+    - approve
+    - blunderbuss
+    - lgtm
+    - owners-label
+    - size
+    - verify-owners
+  GoogleCloudPlatform/guest-test-infra:
+    plugins:
+    - approve
+    - blunderbuss
+    - lgtm
+    - owners-label
+    - size
+    - verify-owners
+  GoogleCloudPlatform/k8s-cloud-provider:
+    plugins:
+    - approve
+    - lgtm
+    - owners-label
+    - size
+    - verify-owners
+  GoogleCloudPlatform/osconfig:
+    plugins:
+    - approve
+    - blunderbuss
+    - lgtm
+    - owners-label
+    - size
+    - verify-owners
   GoogleCloudPlatform/oss-test-infra:
     plugins:
+    - approve
     - blunderbuss
     - config-updater
     - heart
+    - lgtm
     - lifecycle
     - override
+    - owners-label
+    - size
+    - verify-owners
     - wip
-
+  GoogleCloudPlatform/secrets-store-csi-driver-provider-gcp:
+    plugins:
+    - approve
+    - lgtm
+    - owners-label
+    - size
+    - verify-owners
   GoogleCloudPlatform/testgrid:
     plugins:
+    - approve
     - blunderbuss
+    - lgtm
+    - owners-label
+    - size
+    - verify-owners
     - wip
 
   googleforgames/agones:
