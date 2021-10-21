@@ -60,8 +60,10 @@ spec:
         - --github-token-path=/etc/github/oauth
         - --dry-run=false
         ports:
-          - name: http
-            containerPort: 8888
+        - name: http
+          containerPort: 8888
+        - name: metrics
+          containerPort: 9090
         volumeMounts:
         - name: oauth
           mountPath: /etc/github

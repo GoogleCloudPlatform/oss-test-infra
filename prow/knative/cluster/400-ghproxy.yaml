@@ -59,7 +59,10 @@ spec:
             - --cache-sizeGB=99
             - --legacy-disable-disk-cache-partitions-by-auth-header=false
           ports:
-            - containerPort: 8888
+          - name: main
+            containerPort: 8888
+          - name: metrics
+            containerPort: 9090
           volumeMounts:
             - name: cache
               mountPath: /cache

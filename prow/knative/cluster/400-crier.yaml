@@ -47,6 +47,9 @@ spec:
         - --github-endpoint=https://api.github.com
         - --slack-workers=1
         - --slack-token-file=/etc/slack/token
+        ports:
+        - name: metrics
+          containerPort: 9090
         volumeMounts:
         - mountPath: /etc/kubeconfig
           name: kubeconfig
