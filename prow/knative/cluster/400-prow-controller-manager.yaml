@@ -26,6 +26,9 @@ spec:
         - --enable-controller=plank
         - --job-config-path=/etc/job-config
         - --kubeconfig=/etc/kubeconfig/config
+        ports:
+        - name: metrics
+          containerPort: 9090
         volumeMounts:
         - name: config
           mountPath: /etc/config
