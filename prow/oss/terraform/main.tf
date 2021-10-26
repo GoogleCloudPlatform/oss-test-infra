@@ -46,15 +46,21 @@ module "alert" {
   notification_channel_id = "1206225022273963240"
   prow_instances = {
     oss-prow = {
+      crier : { namespace : "default" }
       deck : { namespace : "default" }
+      ghproxy : { namespace : "default" }
       hook : { namespace : "default" }
+      horologium : { namespace : "default" }
       prow-controller-manager : { namespace : "default" }
       sinker : { namespace : "default" }
       tide : { namespace : "default" }
     }
     k8s-prow = {
+      crier : { namespace : "default" }
       deck : { namespace : "default" }
+      ghproxy : { namespace : "default" }
       hook : { namespace : "default" }
+      horologium : { namespace : "default" }
       prow-controller-manager : { namespace : "default" }
       sinker : { namespace : "default" }
       tide : { namespace : "default" }
