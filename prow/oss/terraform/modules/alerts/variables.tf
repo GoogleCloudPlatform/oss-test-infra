@@ -33,9 +33,10 @@ variable "prow_instances" {
   }
 }
 
+// blackbox_probers maps HTTPS hosts to the project they should be associated with.
 variable "blackbox_probers" {
-  type    = set(string)
-  default = []
+  type    = map(string)
+  default = {}
 }
 
 variable "bot_token_hashes" {
