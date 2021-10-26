@@ -44,13 +44,16 @@ spec:
         env:
         # Use KUBECONFIG envvar rather than --kubeconfig flag in order to provide multiple configs to merge.
         - name: KUBECONFIG
-          value: "/etc/kubeconfig/config-20201002:/etc/build-blueprints/kubeconfig:/etc/build-elcarro/kubeconfig:/etc/build-kubeflow/kubeconfig"
+          value: "/etc/kubeconfig/config-20201002:/etc/build-bms-oracle-team/kubeconfig:/etc/build-blueprints/kubeconfig:/etc/build-elcarro/kubeconfig:/etc/build-kubeflow/kubeconfig"
         ports:
         - name: http
           containerPort: 8080
         - name: metrics
           containerPort: 9090
         volumeMounts:
+        - mountPath: /etc/build-bms-oracle-team
+          name: build-bms-oracle-team
+          readOnly: true
         - mountPath: /etc/build-blueprints
           name: build-blueprints
           readOnly: true
@@ -139,6 +142,10 @@ spec:
               name: blueprints-github-oauth
               key: cookieSecret
       volumes:
+      - name: build-bms-oracle-team
+        secret:
+          defaultMode: 420
+          secretName: kubeconfig-build-bms-oracle-team
       - name: build-blueprints
         secret:
           defaultMode: 420
