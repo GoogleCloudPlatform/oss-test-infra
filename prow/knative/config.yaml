@@ -111,7 +111,7 @@ deck:
     - lens:
         name: junit
       required_files:
-      # Nested folders is a valid use case  
+      # Nested folders is a valid use case
       - artifacts(/.*/|/)junit.*\.xml
     - lens:
         name: podinfo
@@ -200,6 +200,10 @@ branch-protection:
         - tide
       exclude:
       - "^dependabot/" # don't protect branches created by dependabot
+      include:
+      - "^main$"
+      - "^master$"
+      - "^release-*"
       # Enforce all configured restrictions above for administrators.
       enforce_admins: true
 
@@ -210,6 +214,10 @@ branch-protection:
         contexts:
         - cla/google
         - tide
+      include:
+      - "^main$"
+      - "^master$"
+      - "^release-*"
       # Enforce all configured restrictions above for administrators.
       enforce_admins: true
       repos:
