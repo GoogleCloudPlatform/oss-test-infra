@@ -160,7 +160,7 @@ plank:
   - cluster: build-bms-oracle-team
     config:
       gcs_configuration:
-        bucket: "bmaas-testing-prow-poc"
+        bucket: "bmaas-testing-prow-bucket"
       default_service_account_name: "prowjob-default-sa" # Use workload identity
       gcs_credentials_secret: ""                         # rather than service account key secret
 
