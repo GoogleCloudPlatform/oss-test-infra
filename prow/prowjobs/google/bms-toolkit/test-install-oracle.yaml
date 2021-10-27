@@ -10,7 +10,7 @@ presubmits:
         command:
         - /bin/bash
         args:
-        # Add GOPATH/bin back to PATH to workaround #9469
+        # probing the pod created
         - "true && id && echo && hostname && echo && pwd && echo && ls -l && echo && whoami && echo && env && echo && df -h"          
         resources:
           requests:
