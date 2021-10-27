@@ -1,0 +1,19 @@
+presubmits:
+  google/bms-toolkit:
+  - name: bms-toolkit-install
+    cluster: build-bms-oracle-team
+    always_run: false
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/google.com/cloudsdktool/cloud-sdk:alpine
+        command:
+        - /bin/bash
+        args:
+        # Add GOPATH/bin back to PATH to workaround #9469
+        - "true && id && echo && hostname && echo && pwd && echo && ls -l && echo && whoami && echo && env && echo && df -h"          
+        resources:
+          requests:
+            memory: "2.0Gi"
+            cpu: "3.0"
+       
