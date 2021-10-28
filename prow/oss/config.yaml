@@ -312,15 +312,17 @@ deck:
 
 in_repo_config:
   enabled:
-    looker/helltool: true
-    GoogleCloudPlatform/blueprints: true
     chaotoppicks: true
+    GoogleCloudPlatform/blueprints: true
+    GoogleCloudPlatform/oss-test-infra: true
+    looker/helltool: true
 
   allowed_clusters:
     "*": []
-    "looker/helltool": ["build-looker-private", "build-looker-int-test", "build-looker-16", "build-looker-32"]
-    "GoogleCloudPlatform/blueprints": ["build-blueprints"]
     "chaotoppicks": ["default"] # For experimenting purpose, will remove once done with experiments
+    "GoogleCloudPlatform/blueprints": ["build-blueprints"]
+    "GoogleCloudPlatform/oss-test-infra": ["default"]
+    "looker/helltool": ["build-looker-private", "build-looker-int-test", "build-looker-16", "build-looker-32"]
 
 # settings for github reporter from crier
 github_reporter:
