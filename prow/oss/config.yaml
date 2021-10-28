@@ -244,16 +244,12 @@ managed_webhooks:
       token_created_after: 2021-04-22T00:10:00Z
     GoogleCloudPlatform/osconfig:
       token_created_after: 2021-04-22T00:10:00Z
-    GoogleCloudPlatform/oss-test-infra:
-      token_created_after: 2021-04-22T00:10:00Z
     GoogleCloudPlatform/secrets-store-csi-driver-provider-gcp:
       token_created_after: 2020-10-13T00:10:00Z
     GoogleCloudPlatform/testgrid:
       token_created_after: 2021-04-21T00:10:00Z
     kubeflow:
       token_created_after: 2020-12-06T00:10:00Z
-    looker:
-      token_created_after: 2021-04-28T00:10:00Z
     chaotoppicks:
       token_created_after: 2021-10-05T00:10:00Z
     google/bms-toolkit:
