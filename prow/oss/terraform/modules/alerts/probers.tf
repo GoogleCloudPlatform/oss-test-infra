@@ -32,7 +32,8 @@ resource "google_monitoring_uptime_check_config" "https" {
     type = "uptime_url"
     labels = {
       project_id = each.value
-      host       = each.key
+      host       = split("/", each.key)[0]
+      path = (length(split("/", each.key)[0]) > 1 ? trimprefix(each.key, split("/", each.key)[0]) : null)
     }
   }
 }
