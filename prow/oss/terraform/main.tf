@@ -73,9 +73,6 @@ module "alert" {
     "prow.k8s.io" : "k8s-prow",
     "testgrid.k8s.io" : "k8s-prow",
     "gubernator.k8s.io" : "k8s-prow",
-    "gubernator.k8s.io/pr/fejta" : "k8s-prow",
-    "storage.googleapis.com/k8s-gubernator/triage/index.html" : "k8s-prow",
-    "storage.googleapis.com/test-infra-oncall/oncall.html" : "k8s-prow",
   }
 
   bot_token_hashes = [
