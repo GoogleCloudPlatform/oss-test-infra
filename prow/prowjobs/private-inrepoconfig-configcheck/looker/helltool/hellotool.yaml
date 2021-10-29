@@ -17,4 +17,5 @@ presubmits:
         args:
         - --plugin-config=../../GoogleCloudPlatform/oss-test-infra/prow/oss/plugins.yaml
         - --config-path=../../GoogleCloudPlatform/oss-test-infra/prow/oss/config.yaml
+        - --job-config-path=../../GoogleCloudPlatform/oss-test-infra/prow/prowjobs
         - --prow-yaml-repo-name=$(REPO_OWNER)/$(REPO_NAME)
