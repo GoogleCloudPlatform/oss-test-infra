@@ -1,0 +1,105 @@
+presubmits:
+- name: pull-prow-config-validate
+  decorate: true
+  run_if_changed: '^prow/(oss/(config|plugins)\.yaml$|prowjobs/)'
+  spec:
+    containers:
+      - image: gcr.io/k8s-prow/checkconfig:v20211101-4a1678f936
+        imagePullPolicy: Always
+        command:
+          - /checkconfig
+        args:
+          - --config-path=./prow/oss/config.yaml
+          - --job-config-path=./prow/prowjobs
+          - --plugin-config=prow/oss/plugins.yaml
+          - --strict
+          # This warning can forbid valid (and convenient) config. Exclude it.
+          # Details: https://github.com/GoogleCloudPlatform/oss-test-infra/pull/131#discussion_r334208082
+          - --exclude-warning=mismatched-tide
+          - --exclude-warning=non-decorated-jobs
+- name: pull-lint-validator
+  decorate: true
+  always_run: true
+  spec:
+    containers:
+      - image: cytopia/yamllint
+        imagePullPolicy: Always
+        command:
+          - yamllint
+          - -c
+          - common/config/.yamllint.conf
+          - .
+- name: pull-test-infra-go-test
+  decorate: true
+  always_run: true
+  spec:
+    containers:
+      - image: golang:1.16
+        command:
+          - go
+          - test
+          - ./...
+- name: pull-oss-test-infra-check-create-testgrid-config
+  max_concurrency: 1
+  run_if_changed: '^(prow/prowjobs/.*\.yaml)|(testgrid/config\.yaml)$'
+  decorate: true
+  annotations:
+    testgrid-create-test-group: "false"
+  spec:
+    containers:
+    - image: gcr.io/k8s-prow/configurator:v20211101-4a1678f936
+      command:
+      - /app/testgrid/cmd/configurator/app.binary
+      args:
+      - --yaml=testgrid/config.yaml
+      - --default=testgrid/default.yaml
+      - --prow-config=prow/oss/config.yaml
+      - --prow-job-config=prow/prowjobs
+      - --prowjob-url-prefix=https://github.com/GoogleCloudPlatform/oss-test-infra/tree/master/prow/prowjobs/
+      - --update-description
+      - --validate-config-file
+      - --oneshot
+      resources:
+        requests:
+          memory: "1Gi"
+- name: pull-knative-prow-config-validate
+  run_if_changed: '^prow/knative/(config|plugins)\.yaml$'
+  decorate: true
+  extra_refs:
+  - org: knative
+    repo: test-infra
+    base_ref: main
+  spec:
+    containers:
+      - image: gcr.io/k8s-prow/checkconfig:v20211101-4a1678f936
+        imagePullPolicy: Always
+        command:
+          - /checkconfig
+        args:
+          - --config-path=./prow/knative/config.yaml
+          - --job-config-path=../../knative/test-infra/config/prod/prow/jobs
+          - --plugin-config=prow/knative/plugins.yaml
+          - --strict
+          # This warning can forbid valid (and convenient) config. Exclude it.
+          # Details: https://github.com/GoogleCloudPlatform/oss-test-infra/pull/131#discussion_r334208082
+          - --exclude-warning=mismatched-tide
+          - --exclude-warning=non-decorated-jobs
+          - --exclude-warning=long-job-names
+          # TODO: Re-enable these once we're done experimenting with CODEOWNERS in net-contour.
+          - --exclude-warning=mismatched-tide-lenient
+- name: pull-oss-test-infra-oss-terraform-validate
+  run_if_changed: '^prow/oss/terraform/'
+  decorate: true
+  spec:
+    containers:
+    - image: gcr.io/k8s-testimages/gcloud-terraform:v20210810-2149cda
+      command:
+      - make
+      args:
+      - -C
+      - prow/oss/terraform
+      - validate
+      resources:
+        requests:
+          cpu: 100m
+          memory: 1Gi
