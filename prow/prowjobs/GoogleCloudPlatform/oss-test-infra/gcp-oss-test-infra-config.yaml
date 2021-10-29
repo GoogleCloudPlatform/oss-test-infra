@@ -4,7 +4,7 @@ presubmits:
     branches:
       - master
     decorate: true
-    always_run: true
+    run_if_changed: '^prow/(oss/(config|plugins)\.yaml$|prowjobs/)'
     spec:
       containers:
         - image: gcr.io/k8s-prow/checkconfig:v20211101-4a1678f936
