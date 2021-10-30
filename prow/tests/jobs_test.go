@@ -68,7 +68,10 @@ func TestMain(m *testing.M) {
 
 func TestTrustedJobs(t *testing.T) {
 	const trusted = "test-infra-trusted"
-	trustedPath := path.Join(*jobConfigPath, "GoogleCloudPlatform", "oss-test-infra", "gcp-oss-test-infra-config.yaml")
+	trustedPaths := sets.NewString(
+		path.Join(*jobConfigPath, "GoogleCloudPlatform", "oss-test-infra", "gcp-oss-test-infra-config.yaml"),
+		path.Join(*jobConfigPath, "GoogleCloudPlatform", "testgrid", "testgrid-jobs.yaml"),
+	)
 
 	// Presubmits may not use trusted clusters.
 	for _, pres := range c.PresubmitsStatic {
@@ -85,7 +88,7 @@ func TestTrustedJobs(t *testing.T) {
 			if post.Cluster != trusted {
 				continue
 			}
-			if post.SourcePath != trustedPath {
+			if !trustedPaths.Has(post.SourcePath) {
 				t.Errorf("%s defined in %s may not run in trusted cluster", post.Name, post.SourcePath)
 			}
 		}
@@ -96,7 +99,7 @@ func TestTrustedJobs(t *testing.T) {
 		if per.Cluster != trusted {
 			continue
 		}
-		if per.SourcePath != trustedPath {
+		if !trustedPaths.Has(per.SourcePath) {
 			t.Errorf("%s defined in %s may not run in trusted cluster", per.Name, per.SourcePath)
 		}
 	}
