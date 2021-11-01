@@ -36,8 +36,7 @@ spec:
         - --github-endpoint=https://api.github.com
         - --github-disabled-org=chaotoppicks
         - --github-disabled-org=looker
-        - --github-disabled-repo=GoogleCloudPlatform/oss-test-infra
-        - --github-disabled-repo=GoogleCloudPlatform/testgrid
+        - --github-disabled-org=GoogleCloudPlatform
         env:
         # Use KUBECONFIG envvar rather than --kubeconfig flag in order to provide multiple configs to merge.
         - name: KUBECONFIG

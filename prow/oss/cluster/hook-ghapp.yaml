@@ -39,8 +39,7 @@ spec:
         - --github-enabled-org=repo-does-not-exist
         - --github-enabled-org=chaotoppicks
         - --github-enabled-org=looker
-        - --github-enabled-repo=GoogleCloudPlatform/oss-test-infra
-        - --github-enabled-repo=GoogleCloudPlatform/testgrid
+        - --github-enabled-org=GoogleCloudPlatform
         env:
         # Use KUBECONFIG envvar rather than --kubeconfig flag in order to provide multiple configs to merge.
         - name: KUBECONFIG
