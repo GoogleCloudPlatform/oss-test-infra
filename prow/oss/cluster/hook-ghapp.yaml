@@ -40,6 +40,7 @@ spec:
         - --github-enabled-org=chaotoppicks
         - --github-enabled-org=looker
         - --github-enabled-org=GoogleCloudPlatform
+        - --github-enabled-org=kubeflow
         env:
         # Use KUBECONFIG envvar rather than --kubeconfig flag in order to provide multiple configs to merge.
         - name: KUBECONFIG
