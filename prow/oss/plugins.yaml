@@ -209,13 +209,6 @@ plugins:
     - size
     - verify-owners
     - wip
-  GoogleCloudPlatform/secrets-store-csi-driver-provider-gcp:
-    plugins:
-    - approve
-    - lgtm
-    - owners-label
-    - size
-    - verify-owners
   GoogleCloudPlatform/testgrid:
     plugins:
     - approve
