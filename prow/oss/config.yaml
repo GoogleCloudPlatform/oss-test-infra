@@ -216,8 +216,6 @@ managed_webhooks:
       token_created_after: 2021-04-22T00:10:00Z
     grpc-ecosystem/grpc-httpjson-transcoding:
       token_created_after: 2021-04-22T00:10:00Z
-    kubeflow:
-      token_created_after: 2020-12-06T00:10:00Z
     google/bms-toolkit:
       token_created_after: 2021-10-11T00:10:00Z      
 #    [org_name]/[repo_name]:
