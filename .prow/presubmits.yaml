@@ -1,7 +1,7 @@
 presubmits:
 - name: pull-prow-config-validate
   decorate: true
-  run_if_changed: '^prow/(oss/(config|plugins)\.yaml$|prowjobs/)'
+  run_if_changed: '^prow/(oss/(config|plugins)\.yaml$|prowjobs/)|^\.prow'
   spec:
     containers:
       - image: gcr.io/k8s-prow/checkconfig:v20211101-4a1678f936
@@ -41,7 +41,7 @@ presubmits:
           - ./...
 - name: pull-oss-test-infra-check-create-testgrid-config
   max_concurrency: 1
-  run_if_changed: '^(prow/prowjobs/.*\.yaml)|(testgrid/config\.yaml)$'
+  run_if_changed: '^(\.prow.*|prow/prowjobs/.*|testgrid/config)\.yaml$'
   decorate: true
   annotations:
     testgrid-create-test-group: "false"
