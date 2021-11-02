@@ -1,5 +1,5 @@
 presubmits:
-- name: pull-prow-config-validate
+- name: pull-prow-config-validate-temp
   decorate: true
   run_if_changed: '^prow/(oss/(config|plugins)\.yaml$|prowjobs/)'
   spec:
@@ -17,7 +17,7 @@ presubmits:
           # Details: https://github.com/GoogleCloudPlatform/oss-test-infra/pull/131#discussion_r334208082
           - --exclude-warning=mismatched-tide
           - --exclude-warning=non-decorated-jobs
-- name: pull-lint-validator
+- name: pull-lint-validator-temp
   decorate: true
   always_run: true
   spec:
@@ -29,7 +29,7 @@ presubmits:
           - -c
           - common/config/.yamllint.conf
           - .
-- name: pull-test-infra-go-test
+- name: pull-test-infra-go-test-temp
   decorate: true
   always_run: true
   spec:
@@ -39,7 +39,7 @@ presubmits:
           - go
           - test
           - ./...
-- name: pull-oss-test-infra-check-create-testgrid-config
+- name: pull-oss-test-infra-check-create-testgrid-config-temp
   max_concurrency: 1
   run_if_changed: '^(prow/prowjobs/.*\.yaml)|(testgrid/config\.yaml)$'
   decorate: true
@@ -62,7 +62,7 @@ presubmits:
       resources:
         requests:
           memory: "1Gi"
-- name: pull-knative-prow-config-validate
+- name: pull-knative-prow-config-validate-temp
   run_if_changed: '^prow/knative/(config|plugins)\.yaml$'
   decorate: true
   extra_refs:
@@ -87,7 +87,7 @@ presubmits:
           - --exclude-warning=long-job-names
           # TODO: Re-enable these once we're done experimenting with CODEOWNERS in net-contour.
           - --exclude-warning=mismatched-tide-lenient
-- name: pull-oss-test-infra-oss-terraform-validate
+- name: pull-oss-test-infra-oss-terraform-validate-temp
   run_if_changed: '^prow/oss/terraform/'
   decorate: true
   spec:
