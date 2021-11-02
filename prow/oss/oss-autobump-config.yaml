@@ -11,6 +11,7 @@ upstreamURLBase: "https://raw.githubusercontent.com/kubernetes/test-infra/master
 includedConfigPaths:
   - "prow/oss/cluster"
   - "prow/prowjobs"
+  - ".prow"
 targetVersion: "upstream"
 extraFiles:
   - "prow/oss/config.yaml"
