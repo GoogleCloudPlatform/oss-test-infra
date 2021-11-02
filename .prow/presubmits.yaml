@@ -17,6 +17,8 @@ presubmits:
           # Details: https://github.com/GoogleCloudPlatform/oss-test-infra/pull/131#discussion_r334208082
           - --exclude-warning=mismatched-tide
           - --exclude-warning=non-decorated-jobs
+          - --warnings=unknown-fields-all
+          - --include-default-warnings
 - name: pull-lint-validator
   decorate: true
   always_run: true
