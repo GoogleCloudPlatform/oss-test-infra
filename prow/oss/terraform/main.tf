@@ -100,9 +100,9 @@ module "alert" {
     "testgrid.k8s.io",
     "gubernator.k8s.io",
     // knative-prow
-    "https://prow.knative.dev",
+    "prow.knative.dev",
     // istio-testing
-    "https://prow.istio.io",
+    "prow.istio.io",
   ]
 
   bot_token_hashes = [
