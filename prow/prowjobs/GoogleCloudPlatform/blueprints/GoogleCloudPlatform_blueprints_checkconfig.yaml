@@ -26,7 +26,7 @@ periodics:
   extra_refs:
   - org: GoogleCloudPlatform
     repo: blueprints
-    base_ref: master
+    base_ref: main
   - org: GoogleCloudPlatform
     repo: oss-test-infra
     base_ref: master
