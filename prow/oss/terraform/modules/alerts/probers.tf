@@ -31,7 +31,7 @@ resource "google_monitoring_uptime_check_config" "https" {
   monitored_resource {
     type = "uptime_url"
     labels = {
-      project_id = each.value
+      project_id = var.project
       host       = each.key
     }
   }
