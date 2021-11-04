@@ -11,7 +11,7 @@ presubmits:
       base_ref: master
     spec:
       containers:
-      - image: gcr.io/k8s-prow/checkconfig:v20211102-3a546255cd
+      - image: gcr.io/k8s-prow/checkconfig:v20211104-890606cd6b
         command:
         - /app/prow/cmd/checkconfig/app.binary
         args:
@@ -37,7 +37,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: gcr.io/k8s-prow/checkconfig:v20211101-4a1678f936
+    - image: gcr.io/k8s-prow/checkconfig:v20211104-890606cd6b
       command:
       - /app/prow/cmd/checkconfig/app.binary
       args:
