@@ -16,34 +16,10 @@ presubmits:
         args:
         - --plugin-config=../../GoogleCloudPlatform/oss-test-infra/prow/oss/plugins.yaml
         - --config-path=../../GoogleCloudPlatform/oss-test-infra/prow/oss/config.yaml
+        - --job-config-path=../../GoogleCloudPlatform/oss-test-infra/prow/prowjobs
         - --prow-yaml-repo-name=$(REPO_OWNER)/$(REPO_NAME)
-
-periodics:
-- name: ci-blueprints-validate-prow-yaml-canary
-  cluster: build-blueprints
-  interval: 30m
-  decorate: true
-  extra_refs:
-  - org: GoogleCloudPlatform
-    repo: blueprints
-    base_ref: main
-  - org: GoogleCloudPlatform
-    repo: oss-test-infra
-    base_ref: master
-  annotations:
-    testgrid-create-test-group: "false"
-  spec:
-    containers:
-    - image: gcr.io/k8s-prow/checkconfig:v20211104-890606cd6b
-      command:
-      - /app/prow/cmd/checkconfig/app.binary
-      args:
-      - --plugin-config=../../GoogleCloudPlatform/oss-test-infra/prow/oss/plugins.yaml
-      - --config-path=../../GoogleCloudPlatform/oss-test-infra/prow/oss/config.yaml
-      - --job-config-path=../../GoogleCloudPlatform/oss-test-infra/prow/prowjobs
-      - --prow-yaml-repo-name=GoogleCloudPlatform/blueprints
-      - --strict
-      - --exclude-warning=mismatched-tide
-      - --exclude-warning=non-decorated-jobs
-      - --warnings=unknown-fields-all
-      - --include-default-warnings
+        - --strict
+        - --exclude-warning=mismatched-tide
+        - --exclude-warning=non-decorated-jobs
+        - --warnings=unknown-fields-all
+        - --include-default-warnings
