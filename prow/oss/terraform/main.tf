@@ -67,13 +67,13 @@ module "alert" {
     }
   }
   // blackbox_probers maps HTTPS hosts to the project they should be associated with.
-  blackbox_probers = {
-    "oss-prow.knative.dev" : "oss-prow",
+  blackbox_probers = [
+    "oss-prow.knative.dev",
 
-    "prow.k8s.io" : "k8s-prow",
-    "testgrid.k8s.io" : "k8s-prow",
-    "gubernator.k8s.io" : "k8s-prow",
-  }
+    "prow.k8s.io",
+    "testgrid.k8s.io",
+    "gubernator.k8s.io",
+  ]
 
   bot_token_hashes = [
     "5514c8081c74362c58993e5de935cb92e38cc9397e57a72883c1878cfcdd4b38" // google-oss-robot

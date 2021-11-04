@@ -212,6 +212,7 @@ resource "google_monitoring_alert_policy" "probers" {
       fetch uptime_url
       | metric 'monitoring.googleapis.com/uptime_check/check_passed'
       | align next_older(1m)
+      | filter resource.project_id == '${var.project}'
       | every 1m
       | group_by [resource.host],
           [value_check_passed_not_count_true: count_true(not(value.check_passed))]
