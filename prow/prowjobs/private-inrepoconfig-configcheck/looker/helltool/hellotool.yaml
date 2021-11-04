@@ -29,6 +29,7 @@ periodics:
   - org: looker
     repo: helltool
     base_ref: master
+    clone_uri: git@github.com:looker/helltool.git
   - org: GoogleCloudPlatform
     repo: oss-test-infra
     base_ref: master
