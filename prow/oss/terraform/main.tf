@@ -39,6 +39,11 @@ module "alert" {
       job_name       = "ci-test-infra-prow-checkconfig"
       interval       = "300s"
       alert_interval = "1200s"
+    },
+    { // knative-prow
+      job_name       = "ci-knative-heartbeat"
+      interval       = "300s"
+      alert_interval = "1200s"
     }
   ]
   # gcloud alpha monitoring channels list --project=prow-metrics
@@ -65,23 +70,38 @@ module "alert" {
       sinker : { namespace : "default" }
       tide : { namespace : "default" }
     }
+    knative-prow = {
+      crier : { namespace : "default" }
+      deck : { namespace : "default" }
+      ghproxy : { namespace : "default" }
+      hook : { namespace : "default" }
+      horologium : { namespace : "default" }
+      prow-controller-manager : { namespace : "default" }
+      sinker : { namespace : "default" }
+      tide : { namespace : "default" }
+    }
   }
   // blackbox_probers maps HTTPS hosts to the project they should be associated with.
   blackbox_probers = [
+    // oss-prow
     "oss-prow.knative.dev",
-
+    // k8s-prow
     "prow.k8s.io",
     "testgrid.k8s.io",
     "gubernator.k8s.io",
+    // knative-prow
+    "https://prow.knative.dev",
   ]
 
   bot_token_hashes = [
-    "5514c8081c74362c58993e5de935cb92e38cc9397e57a72883c1878cfcdd4b38" // google-oss-robot
+    "5514c8081c74362c58993e5de935cb92e38cc9397e57a72883c1878cfcdd4b38", // google-oss-robot
+    "c7abc22fe95b5e3f849ab9fe9cd4809b5a1b950b44d0ea2bff1a5f1402d92b60", // knative-prow-robot
     // Ignore k8s-ci-robot until we resolve the token remaining inaccuracies.
-    // "6624f39f2213835d6c820aff41666853557f99155d23cc52cd9171bcbed3dccc" // k8s-ci-robot
+    // "6624f39f2213835d6c820aff41666853557f99155d23cc52cd9171bcbed3dccc", // k8s-ci-robot
   ]
   no_webhook_alert_minutes = {
     "oss-prow" = 15
     "k8s-prow" = 10
+    "knative-prow" = 60
   }
 }
