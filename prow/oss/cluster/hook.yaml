@@ -38,6 +38,7 @@ spec:
         - --github-disabled-org=looker
         - --github-disabled-org=GoogleCloudPlatform
         - --github-disabled-org=kubeflow
+        - --github-disabled-org=google
         env:
         # Use KUBECONFIG envvar rather than --kubeconfig flag in order to provide multiple configs to merge.
         - name: KUBECONFIG
