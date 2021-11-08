@@ -43,6 +43,7 @@ approve:
   - googleforgames
   - grpc-ecosystem
   - chaotoppicks
+  - bazelbuild
   require_self_approval: false
 - repos:
   - kubeflow/caffe2-operator
@@ -68,6 +69,7 @@ lgtm:
   - googleforgames
   - grpc-ecosystem
   - chaotoppicks
+  - bazelbuild
   review_acts_as_lgtm: true
 - repos:
   - GoogleCloudPlatform/testgrid
@@ -369,3 +371,23 @@ plugins:
     - trigger
     - verify-owners
     - yuks
+  
+  # Enable the following for any bazelbuild repo (rules_k8s, rules_docker) that sends prow webhooks
+  # Repos that do not send prow webhooks will see no effect.
+  bazelbuild:
+    plugins:
+    - approve  # Allow OWNERS to /approve
+    - assign  # Allow /assign and /cc
+    - blunderbuss  # Auto-assign people
+    - cat # /meow replies with cat pictures
+    - dog # /bark replies with dog pictures
+    - help  # Support /help and /good-first-issue
+    - hold  # Support /hold to delay merge
+    - lgtm  # Allow /lgtm
+    - lifecycle  # Allow /lifecycle stale
+    - override
+    - size  # Auto-label size of PR
+    - trigger  # Allow people to configure CI jobs to /test
+    - verify-owners # Validates OWNERS file changes in PRs.
+    - wip  # Auto-hold PRs with WIP in title
+    - yuks # Let prow tell a /joke
