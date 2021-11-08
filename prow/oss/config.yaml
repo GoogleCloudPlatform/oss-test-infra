@@ -212,8 +212,6 @@ managed_webhooks:
   org_repo_config:
     googleforgames/agones:
       token_created_after: 2021-04-22T00:10:00Z
-    grpc-ecosystem/grpc-httpjson-transcoding:
-      token_created_after: 2021-04-22T00:10:00Z
 #    [org_name]/[repo_name]:
 #      token_created_after: 2020-08-18T00:10:00Z
 
