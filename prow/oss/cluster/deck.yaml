@@ -43,7 +43,7 @@ spec:
         env:
         # Use KUBECONFIG envvar rather than --kubeconfig flag in order to provide multiple configs to merge.
         - name: KUBECONFIG
-          value: "/etc/kubeconfig/config-20201002:/etc/build-bms-oracle-team/kubeconfig:/etc/build-blueprints/kubeconfig:/etc/build-elcarro/kubeconfig:/etc/build-kubeflow/kubeconfig"
+          value: "/etc/kubeconfig/config-20211108:/etc/build-bms-oracle-team/kubeconfig:/etc/build-blueprints/kubeconfig:/etc/build-elcarro/kubeconfig:/etc/build-kubeflow/kubeconfig"
         ports:
         - name: http
           containerPort: 8080
