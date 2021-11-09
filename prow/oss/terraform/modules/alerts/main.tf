@@ -248,6 +248,7 @@ resource "google_monitoring_alert_policy" "webhook-missing" {
       query    = <<-EOT
       fetch k8s_container
       | metric 'workload.googleapis.com/prow_webhook_counter'
+      | filter resource.project_id == '${each.key}'
       | sum
       | align delta_gauge(1m)
       | every 1m
