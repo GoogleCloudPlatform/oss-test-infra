@@ -40,6 +40,7 @@ spec:
         - --github-enabled-org=GoogleCloudPlatform
         - --github-enabled-org=kubeflow
         - --github-enabled-org=google
+        - --github-enabled-org=googleforgames
         - --github-enabled-repo=grpc-ecosystem/grpc-httpjson-transcoding
         - --github-workers=6
         - --job-config-path=/etc/job-config
