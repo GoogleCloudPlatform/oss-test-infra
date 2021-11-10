@@ -88,49 +88,6 @@ postsubmits:
         resources:
           requests:
             memory: "1Gi"
-  - name: post-oss-test-infra-reconcile-hmacs
-    cluster: test-infra-trusted
-    run_if_changed: 'prow/oss/config.yaml'
-    decorate: true
-    annotations:
-      testgrid-dashboards: googleoss-test-infra
-      testgrid-tab-name: hmacs-reconciliation
-      testgrid-alert-email: k8s-infra-oncall@google.com
-      testgrid-num-failures-to-alert: '1'
-    branches:
-    - master
-    spec:
-      containers:
-      - image: gcr.io/k8s-prow/hmac:v20211109-c52470a888
-        command:
-        - /hmac
-        args:
-        - --config-path=prow/oss/config.yaml
-        - --hook-url=https://oss-prow.knative.dev/hook
-        - --hmac-token-secret-name=hmac-token
-        - --hmac-token-key=hmac
-        - --kubeconfig=/etc/kubeconfig/config
-        - --kubeconfig-context=prow-services
-        - --github-token-path=/etc/github/oauth
-        - --github-endpoint=http://ghproxy.default.svc.cluster.local
-        - --github-endpoint=https://api.github.com
-        - --dry-run=false
-        volumeMounts:
-        - name: kubeconfig
-          mountPath: /etc/kubeconfig
-          readOnly: true
-        - name: oauth
-          mountPath: /etc/github
-          readOnly: true
-      volumes:
-      - name: kubeconfig
-        secret:
-          defaultMode: 420
-          secretName: kubeconfig-prow-services
-      - name: oauth
-        secret:
-          defaultMode: 420
-          secretName: oauth-token-2
 
 periodics:
 - cron: "30 * * * 1-5"  # Bump don't label `skip-review`. Run at :30 past every hour Mon-Fri
