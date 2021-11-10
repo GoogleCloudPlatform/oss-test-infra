@@ -39,6 +39,7 @@ spec:
         - --github-disabled-org=GoogleCloudPlatform
         - --github-disabled-org=kubeflow
         - --github-disabled-org=google
+        - --github-disabled-org=googleforgames
         - --github-disabled-repo=grpc-ecosystem/grpc-httpjson-transcoding
         env:
         # Use KUBECONFIG envvar rather than --kubeconfig flag in order to provide multiple configs to merge.
