@@ -73,7 +73,7 @@ postsubmits:
     spec:
       serviceAccountName: testgrid-config-updater
       containers:
-      - image: gcr.io/k8s-prow/configurator:v20211104-24023f1a35
+      - image: gcr.io/k8s-prow/configurator:v20211109-c52470a888
         command:
         - /app/testgrid/cmd/configurator/app.binary
         args:
@@ -101,7 +101,7 @@ postsubmits:
     - master
     spec:
       containers:
-      - image: gcr.io/k8s-prow/hmac:v20211104-24023f1a35
+      - image: gcr.io/k8s-prow/hmac:v20211109-c52470a888
         command:
         - /hmac
         args:
@@ -148,7 +148,7 @@ periodics:
     testgrid-num-failures-to-alert: '3'
   spec:
     containers:
-    - image: gcr.io/k8s-prow/generic-autobumper:v20211104-24023f1a35
+    - image: gcr.io/k8s-prow/generic-autobumper:v20211109-c52470a888
       command:
       - /app/prow/cmd/generic-autobumper/app.binary
       args:
@@ -185,7 +185,7 @@ periodics:
     testgrid-num-failures-to-alert: '1'
   spec:
     containers:
-    - image: gcr.io/k8s-prow/generic-autobumper:v20211104-24023f1a35
+    - image: gcr.io/k8s-prow/generic-autobumper:v20211109-c52470a888
       command:
       - /app/prow/cmd/generic-autobumper/app.binary
       args:
@@ -221,7 +221,7 @@ periodics:
     testgrid-num-failures-to-alert: '3'
   spec:
     containers:
-    - image: gcr.io/k8s-prow/generic-autobumper:v20211104-24023f1a35
+    - image: gcr.io/k8s-prow/generic-autobumper:v20211109-c52470a888
       command:
       - /app/prow/cmd/generic-autobumper/app.binary
       args:
@@ -258,7 +258,7 @@ periodics:
     testgrid-num-failures-to-alert: '1'
   spec:
     containers:
-    - image: gcr.io/k8s-prow/generic-autobumper:v20211104-24023f1a35
+    - image: gcr.io/k8s-prow/generic-autobumper:v20211109-c52470a888
       command:
       - /app/prow/cmd/generic-autobumper/app.binary
       args:
