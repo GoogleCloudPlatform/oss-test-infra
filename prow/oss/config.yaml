@@ -205,16 +205,6 @@ prowjob_default_entries:
     config:
       tenant_id: 'blueprints'
 
-managed_webhooks:
-  # Will accept invitations from org/repo listed under here
-  auto_accept_invitation: true
-  # Config for orgs and repos that have been onboarded to this Prow instance.
-  org_repo_config:
-    googleforgames/agones:
-      token_created_after: 2021-04-22T00:10:00Z
-#    [org_name]/[repo_name]:
-#      token_created_after: 2020-08-18T00:10:00Z
-
 branch-protection:
   orgs:
     kubeflow:
