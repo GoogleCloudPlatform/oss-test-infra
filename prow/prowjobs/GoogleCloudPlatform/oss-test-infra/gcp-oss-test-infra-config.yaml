@@ -167,7 +167,10 @@ periodics:
       secret:
         secretName: google-oss-robot-ssh-keys
         defaultMode: 0400
-- cron: "01 18 * * 1-5"  # Bump with label `skip-review`. Run at 11:01 PST (18:01 UTC) Mon-Fri
+- cron: "01 21 * * 1-5"  # Bump with label `skip-review`. Run at 13:01 PST (21:01 UTC, fall) Mon-Fri
+  # Save for daylight saving:
+  # (Could consider not to switch, since running at 14:01 PST is an acceptable time)
+  # cron: "01 20 * * 1-5"  # Bump with label `skip-review`. Run at 13:01 PST (20:01 UTC, spring) Mon-Fri
   name: ci-oss-test-infra-autobump-prow-for-auto-deploy
   cluster: test-infra-trusted
   decorate: true
@@ -237,7 +240,10 @@ periodics:
       secret:
         secretName: google-oss-robot-ssh-keys
         defaultMode: 0400
-- cron: "30 19 * * 1-5"  # Bump with label `skip-review`. Run at 12:30PM PST (19:30 UTC) Mon-Fri
+- cron: "30 21 * * 1-5"  # Bump with label `skip-review`. Run at 13:30 PST (21:30 UTC, fall) Mon-Fri
+  # Save for daylight saving:
+  # (Could consider not to switch, since running at 14:30 PST is an acceptable time)
+  # cron: "30 20 * * 1-5"  # Bump with label `skip-review`. Run at 13:30 PST (20:30 UTC, spring) Mon-Fri
   name: ci-oss-test-infra-autobump-knative-prow-for-auto-deploy
   cluster: test-infra-trusted
   decorate: true
