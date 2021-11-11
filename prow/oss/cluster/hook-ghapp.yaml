@@ -7,7 +7,8 @@ metadata:
   labels:
     app: hook-ghapp
 spec:
-  replicas: 6
+  # # The postsubmit job doesn't delete deployment, scaling this down to 0 so that there is no duplicated deployments handling the same workloads
+  replicas: 0
   selector:
     matchLabels:
       app: hook-ghapp
