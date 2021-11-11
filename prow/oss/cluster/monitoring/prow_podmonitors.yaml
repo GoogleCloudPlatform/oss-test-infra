@@ -61,6 +61,25 @@ apiVersion: monitoring.gke.io/v1alpha1
 kind: PodMonitor
 metadata:
   labels:
+    app: hook-ghapp
+  name: hook-ghapp
+  namespace: prow-monitoring
+spec:
+  podMetricsEndpoints:
+  - interval: 30s
+    port: metrics
+    scheme: http
+  namespaceSelector:
+    matchNames:
+    - default
+  selector:
+    matchLabels:
+      app: hook-ghapp
+---
+apiVersion: monitoring.gke.io/v1alpha1
+kind: PodMonitor
+metadata:
+  labels:
     app: plank
   name: plank
   namespace: prow-monitoring
@@ -151,6 +170,25 @@ spec:
   selector:
     matchLabels:
       app: crier
+---
+apiVersion: monitoring.gke.io/v1alpha1
+kind: PodMonitor
+metadata:
+  labels:
+    app: crier-ghapp
+  name: crier-ghapp
+  namespace: prow-monitoring
+spec:
+  podMetricsEndpoints:
+  - interval: 30s
+    port: metrics
+    scheme: http
+  namespaceSelector:
+    matchNames:
+    - default
+  selector:
+    matchLabels:
+      app: crier-ghapp
 ---
 apiVersion: monitoring.gke.io/v1alpha1
 kind: PodMonitor

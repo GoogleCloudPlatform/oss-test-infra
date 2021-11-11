@@ -7,8 +7,7 @@ metadata:
   labels:
     app: crier-ghapp
 spec:
-  # The postsubmit job doesn't delete deployment, scaling this down to 0 so that there is no duplicated deployments handling the same workloads
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app: crier-ghapp
