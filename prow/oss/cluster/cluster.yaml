@@ -113,13 +113,9 @@ spec:
         backend:
           serviceName: deck
           servicePort: 80
-      - path: /hook
-        backend:
-          serviceName: hook
-          servicePort: 8888
       - path: /ghapp-hook
         backend:
-          serviceName: hook-ghapp
+          serviceName: hook
           servicePort: 8888
   - host: oss-prow-private.knative.dev
     http:
