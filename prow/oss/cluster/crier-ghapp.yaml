@@ -7,7 +7,8 @@ metadata:
   labels:
     app: crier-ghapp
 spec:
-  replicas: 1
+  # The postsubmit job doesn't delete deployment, scaling this down to 0 so that there is no duplicated deployments handling the same workloads
+  replicas: 0
   selector:
     matchLabels:
       app: crier-ghapp
@@ -20,7 +21,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
       - name: crier
-        image: gcr.io/k8s-prow/crier:v20211109-c52470a888
+        image: gcr.io/k8s-prow/crier:v20211110-57feb2cd42
         args:
         - --blob-storage-workers=1
         - --config-path=/etc/config/config.yaml

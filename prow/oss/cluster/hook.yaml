@@ -25,26 +25,26 @@ spec:
       terminationGracePeriodSeconds: 180
       containers:
       - name: hook
-        image: gcr.io/k8s-prow/hook:v20211109-c52470a888
+        image: gcr.io/k8s-prow/hook:v20211110-57feb2cd42
         imagePullPolicy: Always
         args:
+        - --webhook-path=/ghapp-hook
         - --config-path=/etc/config/config.yaml
         - --job-config-path=/etc/job-config
         - --dry-run=false
-        - --github-token-path=/etc/github/oauth
         - --github-endpoint=http://ghproxy
         - --github-endpoint=https://api.github.com
-        - --github-disabled-org=chaotoppicks
-        - --github-disabled-org=looker
-        - --github-disabled-org=GoogleCloudPlatform
-        - --github-disabled-org=kubeflow
-        - --github-disabled-org=google
-        - --github-disabled-org=googleforgames
-        - --github-disabled-repo=grpc-ecosystem/grpc-httpjson-transcoding
+        - --github-app-id=$(GITHUB_APP_ID)
+        - --github-app-private-key-path=/etc/github/cert
         env:
         # Use KUBECONFIG envvar rather than --kubeconfig flag in order to provide multiple configs to merge.
         - name: KUBECONFIG
           value: "/etc/kubeconfig/config-20211108:/etc/build-bms-oracle-team/kubeconfig:/etc/build-looker-32/kubeconfig:/etc/build-looker-16/kubeconfig:/etc/build-looker-int-test/kubeconfig:/etc/build-blueprints/kubeconfig:/etc/build-elcarro/kubeconfig:/etc/build-looker-private/kubeconfig:/etc/build-kubeflow/kubeconfig"
+        - name: GITHUB_APP_ID
+          valueFrom:
+            secretKeyRef:
+              name: ghapp-token
+              key: appid
         ports:
         - name: http
           containerPort: 8888
@@ -75,7 +75,7 @@ spec:
         - name: hmac
           mountPath: /etc/webhook
           readOnly: true
-        - name: oauth
+        - name: ghapp-token
           mountPath: /etc/github
           readOnly: true
         - name: config
@@ -141,10 +141,10 @@ spec:
           secretName: kubeconfig-build-looker-private
       - name: hmac
         secret:
-          secretName: hmac-token
-      - name: oauth
+          secretName: ghapp-hmac-token
+      - name: ghapp-token
         secret:
-          secretName: oauth-token-2
+          secretName: ghapp-token
       - name: config
         configMap:
           name: config

@@ -7,7 +7,8 @@ metadata:
   labels:
     app: hook-ghapp
 spec:
-  replicas: 6
+  # # The postsubmit job doesn't delete deployment, scaling this down to 0 so that there is no duplicated deployments handling the same workloads
+  replicas: 0
   selector:
     matchLabels:
       app: hook-ghapp
@@ -25,7 +26,7 @@ spec:
       terminationGracePeriodSeconds: 180
       containers:
       - name: hook
-        image: gcr.io/k8s-prow/hook:v20211109-c52470a888
+        image: gcr.io/k8s-prow/hook:v20211110-57feb2cd42
         imagePullPolicy: Always
         args:
         - --webhook-path=/ghapp-hook
