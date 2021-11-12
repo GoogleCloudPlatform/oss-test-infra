@@ -64,16 +64,15 @@ blunderbuss:
 lgtm:
 - repos:
   - GoogleCloudPlatform
+  - chaotoppicks
   - google
   - googleforgames
   - grpc-ecosystem
-  - chaotoppicks
   review_acts_as_lgtm: true
 - repos:
   - GoogleCloudPlatform/testgrid
-  - GoogleCloudPlatform/oss-test-infra
   review_acts_as_lgtm: true
-  trusted_team_for_sticky_lgtm: googlers
+  trusted_team_for_sticky_lgtm: testgrid-admins
 
 plugins:
   GoogleCloudPlatform:
