@@ -6,12 +6,9 @@ presubmits:
     decorate: true
     spec:
       containers:
-      - image: gcr.io/google.com/cloudsdktool/cloud-sdk:alpine
+      - image: quay.io/ansible/ansible-runner:latest
         command:
-        - /bin/bash
-        args:
-        # probing the pod created
-        - "true && id && echo && hostname && echo && pwd && echo && ls -l && echo && whoami && echo && env && echo && df -h"          
+        - ./presubmit_tests/test_pr.sh        
         resources:
           requests:
             memory: "2.0Gi"
