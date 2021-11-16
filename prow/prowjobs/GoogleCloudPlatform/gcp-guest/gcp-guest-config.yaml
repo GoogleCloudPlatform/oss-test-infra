@@ -26,54 +26,6 @@ presets:
     secret:
       secretName: github-access-token
 
-postsubmits:
-  GoogleCloudPlatform/artifact-registry-yum-plugin:
-  - name: yum-plugin-build
-    cluster: gcp-guest
-    extra_refs:
-    - org: GoogleCloudPlatform
-      repo: guest-test-infra
-      base_ref: master
-      workdir: true
-    decorate: true
-    branches:
-    - ^main$
-    annotations:
-      testgrid-dashboards: googleoss-gcp-guest
-    labels:
-      preset-daisy: "true"
-      preset-github: "true"
-    spec:
-      containers:
-      - image: gcr.io/gcp-guest/daisy-builder:latest
-        imagePullPolicy: Always
-        command:
-        - "/main.sh"
-        args: ["gcp-guest", "us-west1-a", "el7,el8", "gs://gcp-guest-package-uploads/artifact-registry-yum-plugin/"]
-  GoogleCloudPlatform/artifact-registry-apt-transport:
-  - name: apt-transport-build
-    cluster: gcp-guest
-    extra_refs:
-    - org: GoogleCloudPlatform
-      repo: guest-test-infra
-      base_ref: master
-      workdir: true
-    decorate: true
-    branches:
-    - ^main$
-    annotations:
-      testgrid-dashboards: googleoss-gcp-guest
-    labels:
-      preset-daisy: "true"
-      preset-github: "true"
-    spec:
-      containers:
-      - image: gcr.io/gcp-guest/daisy-builder:latest
-        imagePullPolicy: Always
-        command:
-        - "/main.sh"
-        args: ["gcp-guest", "us-west1-a", "deb9", "gs://gcp-guest-package-uploads/artifact-registry-apt-transport/"]
-
 presubmits:
   GoogleCloudPlatform/artifact-registry-yum-plugin:
   - name: yum-plugin-presubmit-build
