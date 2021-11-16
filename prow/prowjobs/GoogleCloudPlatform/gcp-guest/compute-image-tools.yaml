@@ -41,6 +41,24 @@ presubmits:
         command:
         - "/go/main.sh"
         args: ["cli_tools/"]
+  - name: cli-tools-presubmit-module-tests
+    cluster: gcp-guest
+    skip_report: true
+    always_run: false
+    run_if_changed: 'cli_tools/.*'
+    trigger: "(?m)^/cli-tools-module-tests$"
+    rerun_command: "/cli-tools-module-tests"
+    context: prow/presubmit/module-tests
+    decorate: true
+    labels:
+      preset-daisy: "true"
+    spec:
+      containers:
+        - image: gcr.io/gcp-guest/gotest:latest
+          imagePullPolicy: Always
+          command:
+            - "/go/main.sh"
+          args: ["cli_tools_tests/module/"]
   - name: cli-tools-presubmit-gotest
     cluster: gcp-guest
     run_if_changed: 'cli_tools/.*'
