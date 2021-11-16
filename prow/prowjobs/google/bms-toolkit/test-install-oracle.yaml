@@ -6,7 +6,7 @@ presubmits:
     decorate: true
     spec:
       containers:
-      - image: quay.io/ansible/ansible-runner:latest
+      - image: quay.io/ansible/ansible-runner:stable-2.9-latest
         command:
         - ./presubmit_tests/test_pr.sh        
         resources:
