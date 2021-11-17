@@ -1,5 +1,6 @@
 postsubmits:
   GoogleCloudPlatform/compute-image-tools:
+  # Integ tests that need credentials to create resources in a GCP project.
   - name: cli-tools-postsubmit-module-tests
     cluster: gcp-guest
     decorate: true
