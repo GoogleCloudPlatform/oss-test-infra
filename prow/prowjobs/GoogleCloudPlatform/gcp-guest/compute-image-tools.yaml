@@ -4,7 +4,7 @@ postsubmits:
     cluster: gcp-guest
     decorate: true
     annotations:
-      testgrid-dashboards: google-gce-compute-image-tools
+      testgrid-dashboards: googleoss-gcp-guest-import-export
       testgrid-tab-name: module-tests
       description: "Postsubmit tests; executes cli_tools_tests/module/"
     branches:

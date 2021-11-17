@@ -2,6 +2,7 @@
 # A prow annotation will be invalid if it references a dashboard that doesn't exist
 dashboards:
 - name: googleoss-gcp-guest
+- name: googleoss-gcp-guest-import-export
 - name: googleoss-test-infra
 - name: googleoss-esp-v2-presubmit
 - name: googleoss-esp-v2-postsubmit
@@ -15,6 +16,7 @@ dashboard_groups:
   - name: googleoss
     dashboard_names:
     - googleoss-gcp-guest
+    - googleoss-gcp-guest-import-export
     - googleoss-test-infra
     - googleoss-esp-v2-presubmit
     - googleoss-esp-v2-postsubmit
