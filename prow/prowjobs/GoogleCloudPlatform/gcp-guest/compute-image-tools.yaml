@@ -1,3 +1,31 @@
+postsubmits:
+  GoogleCloudPlatform/compute-image-tools:
+  - name: cli-tools-postsubmit-module-tests
+    cluster: gcp-guest
+    decorate: true
+    annotations:
+      testgrid-dashboards: google-gce-compute-image-tools
+      testgrid-tab-name: module-tests
+      description: "Postsubmit tests; executes cli_tools_tests/module/"
+    branches:
+      - ^master$
+    labels:
+      preset-daisy: "true"
+    spec:
+      containers:
+        - image: gcr.io/gcp-guest/gotest:latest
+          imagePullPolicy: Always
+          command:
+            - "/go/main.sh"
+          args:
+           - "cli_tools_tests/module/"
+           - "-test.timeout=30m"
+          env:
+            - name: GOOGLE_CLOUD_PROJECT
+              value: compute-image-test-pool-001
+            - name: GOOGLE_CLOUD_ZONE
+              value: us-central1-a
+
 presubmits:
   GoogleCloudPlatform/compute-image-tools:
   - name: compute-image-tools-flake8
@@ -41,52 +69,6 @@ presubmits:
         command:
         - "/go/main.sh"
         args: ["cli_tools/"]
-  - name: cli-tools-presubmit-diskinspect-module-tests
-    cluster: gcp-guest
-    skip_report: true
-    always_run: false
-    run_if_changed: 'daisy_workflows/image_import/inspection/.*|cli_tools/common/disk/.*|cli_tools_tests/module/diskinspect/.*'
-    trigger: "(?m)^/cli-tools-module-tests$"
-    rerun_command: "/cli-tools-module-tests"
-    context: prow/presubmit/cli-tools-presubmit-diskinspect-module-tests
-    decorate: true
-    labels:
-      preset-daisy: "true"
-    spec:
-      containers:
-        - image: gcr.io/gcp-guest/gotest:latest
-          imagePullPolicy: Always
-          command:
-            - "/go/main.sh"
-          args: ["cli_tools_tests/module/diskinspect/"]
-          env:
-            - name: GOOGLE_CLOUD_PROJECT
-              value: compute-image-test-pool-001
-            - name: GOOGLE_CLOUD_ZONE
-              value: us-central1-a
-  - name: cli-tools-presubmit-import-module-tests
-    cluster: gcp-guest
-    skip_report: true
-    always_run: false
-    run_if_changed: 'cli_tools/gce_vm_image_import/.*|cli_tools/common/image/.*|cli_tools_tests/module/import/.*'
-    trigger: "(?m)^/cli-tools-module-tests$"
-    rerun_command: "/cli-tools-module-tests"
-    context: prow/presubmit/cli-tools-presubmit-import-module-tests
-    decorate: true
-    labels:
-      preset-daisy: "true"
-    spec:
-      containers:
-        - image: gcr.io/gcp-guest/gotest:latest
-          imagePullPolicy: Always
-          command:
-            - "/go/main.sh"
-          args: ["cli_tools_tests/module/import/"]
-          env:
-            - name: GOOGLE_CLOUD_PROJECT
-              value: compute-image-test-pool-001
-            - name: GOOGLE_CLOUD_ZONE
-              value: us-central1-a
   - name: cli-tools-presubmit-gotest
     cluster: gcp-guest
     run_if_changed: 'cli_tools/.*'
