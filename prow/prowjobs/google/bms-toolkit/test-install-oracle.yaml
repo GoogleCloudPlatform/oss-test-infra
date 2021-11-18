@@ -5,6 +5,7 @@ presubmits:
     always_run: false
     decorate: true
     spec:
+      hostNetwork: true
       containers:
       - image: quay.io/ansible/ansible-runner:stable-2.9-latest
         command:
@@ -16,4 +17,36 @@ presubmits:
           requests:
             memory: "2.0Gi"
             cpu: "3.0"
-       
+        volumeMounts:
+        - name: all-in-one
+          mountPath: /etc/files_needed_for_tk            
+      volumes:
+      - name: all-in-one
+        projected:
+          sources:
+          - secret:
+              name: id-rsa-bms-ansible9-syd1
+              items:
+                - key: id_rsa_bms_tk_key
+                  path: id_rsa_bms_tk_key
+                  mode: 0400
+          - configMap:
+              name: nonrac-asm-syd1
+              items:
+                - key: asm_disk_config_nonrac_primary_syd1.json
+                  path: nonrac-asm.json            
+          - configMap:
+              name: nonrac-datamounts-syd1
+              items:
+                - key: data_mounts_config_nonrac_primary_syd1.json
+                  path: nonrac-datamounts.json  
+          - configMap:
+              name: nonrac-inventory-syd1
+              items:
+                - key: inventory_orcl_nonrac_primary_syd1
+                  path: nonrac-inv
+          - configMap:
+              name: google-cloud-sdk
+              items:
+                - key: google-cloud-sdk.repo
+                  path: google-cloud-sdk.repo       
