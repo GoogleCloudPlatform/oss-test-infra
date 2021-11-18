@@ -1,3 +1,32 @@
+postsubmits:
+  GoogleCloudPlatform/compute-image-tools:
+  # Integ tests that need credentials to create resources in a GCP project.
+  - name: cli-tools-postsubmit-module-tests
+    cluster: gcp-guest
+    decorate: true
+    annotations:
+      testgrid-dashboards: googleoss-gcp-guest-import-export
+      testgrid-tab-name: module-tests
+      description: "Postsubmit tests; executes cli_tools_tests/module/"
+    branches:
+      - ^master$
+    labels:
+      preset-daisy: "true"
+    spec:
+      containers:
+        - image: gcr.io/gcp-guest/gotest:latest
+          imagePullPolicy: Always
+          command:
+            - "/go/main.sh"
+          args:
+           - "cli_tools_tests/module/"
+           - "-test.timeout=30m"
+          env:
+            - name: GOOGLE_CLOUD_PROJECT
+              value: compute-image-test-pool-001
+            - name: GOOGLE_CLOUD_ZONE
+              value: us-central1-a
+
 presubmits:
   GoogleCloudPlatform/compute-image-tools:
   - name: compute-image-tools-flake8
