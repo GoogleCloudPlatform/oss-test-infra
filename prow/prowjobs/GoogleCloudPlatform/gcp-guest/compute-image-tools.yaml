@@ -14,13 +14,17 @@ postsubmits:
       preset-daisy: "true"
     spec:
       containers:
-        - image: gcr.io/gcp-guest/gotest:latest
+        - image: gcr.io/gcp-guest/cli-tools-module-tests:latest
+          # The security context is required to allow gcsfuse to create a mount.
+          securityContext:
+            privileged: true
           imagePullPolicy: Always
           command:
             - "/go/main.sh"
           args:
            - "cli_tools_tests/module/"
            - "-test.timeout=30m"
+           - "-test.parallel=8"
           env:
             - name: GOOGLE_CLOUD_PROJECT
               value: compute-image-test-pool-001
