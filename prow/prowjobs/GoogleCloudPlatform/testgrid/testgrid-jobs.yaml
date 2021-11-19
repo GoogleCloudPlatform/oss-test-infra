@@ -83,7 +83,7 @@ postsubmits:
       testgrid-num-failures-to-alert: '3'
     spec:
       containers:
-      - image: gcr.io/k8s-prow/generic-autobumper:v20211118-867d0b5797
+      - image: gcr.io/k8s-prow/generic-autobumper:v20211118-04a9593fd9
         command:
         - /app/prow/cmd/generic-autobumper/app.binary
         args:
@@ -119,7 +119,7 @@ periodics:
     testgrid-num-failures-to-alert: '3'
   spec:
     containers:
-    - image: gcr.io/k8s-prow/generic-autobumper:v20211118-867d0b5797
+    - image: gcr.io/k8s-prow/generic-autobumper:v20211118-04a9593fd9
       command:
       - /app/prow/cmd/generic-autobumper/app.binary
       args:
