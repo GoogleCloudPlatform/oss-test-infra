@@ -81,8 +81,8 @@ plank:
     '*': https://oss-prow.knative.dev/view/
     'looker': https://oss-prow-private.knative.dev/view/
     "GoogleCloudPlatform/blueprints": https://prow.infra.cft.dev/view/
-  pod_pending_timeout: 15m
-  pod_unscheduled_timeout: 5m
+  pod_pending_timeout: 30m
+  pod_unscheduled_timeout: 10m
   build_cluster_status_file: 'gs://oss-prow/oss-prow-build-clusters-statuses.json'
   report_templates:
     "looker/helltool": "View Performance Test Results Here:\n  [Frontend Tests](https://meta.looker.com/dashboards/8195?My%20Commit={{with index .Spec.Refs.Pulls 0}}{{.SHA}}{{end}})\n  [Backend Tests](https://meta.looker.com/dashboards/8194?My%20Commit={{with index .Spec.Refs.Pulls 0}}{{.SHA}}{{end}})"
