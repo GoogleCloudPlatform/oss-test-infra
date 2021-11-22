@@ -272,3 +272,35 @@ resource "google_monitoring_alert_policy" "webhook-missing" {
   # gcloud beta monitoring channels list --project=oss-prow
   notification_channels = ["projects/${var.project}/notificationChannels/${var.notification_channel_id}"]
 }
+
+resource "google_monitoring_alert_policy" "KES-Secret-Sync-Error" {
+  project      = var.project
+  display_name = "Kubernetes External Secret: Secret-Sync-Error"
+  combiner     = "OR" # required
+
+  conditions {
+    display_name = "Secret-Sync-Error"
+
+    condition_monitoring_query_language {
+      duration = "0s"
+      query    = <<-EOT
+      fetch k8s_container
+      | metric 'workload.googleapis.com/kubernetes_external_secrets_sync_calls_count'
+      | align delta(60s)
+      | filter metric.status != "success"
+      | condition val() > 1.5
+      EOT
+      trigger {
+        count = 1
+      }
+    }
+  }
+
+  documentation {
+    content   = "Kubernetes External Secrets has encountered errors while syncing."
+    mime_type = "text/markdown"
+  }
+
+  # gcloud beta monitoring channels list --project=oss-prow
+  notification_channels = ["projects/${var.project}/notificationChannels/${var.notification_channel_id}"]
+}
