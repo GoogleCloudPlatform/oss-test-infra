@@ -12,7 +12,7 @@ presubmits:
         # . represents the base directory of the cloned bms-toolkit repo, which is bms-toolkit
         # the presubmit_tests dir and test_pr.sh are non-existent at this point, 
         # but will be created in a test PR as part of testing the prowjob
-        - ./presubmit_tests/test_pr.sh        
+        - ./presubmit_tests/test-pr-poc.sh        
         resources:
           requests:
             memory: "2.0Gi"
