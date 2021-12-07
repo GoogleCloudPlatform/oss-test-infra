@@ -29,8 +29,15 @@ spec:
         - --config-path=/etc/config/config.yaml
         - --job-config-path=/etc/job-config
         - --grace-period=110s
-        - --github-token-path=/etc/github/oauth
+        - --github-app-id=$(GITHUB_APP_ID)
+        - --github-app-private-key-path=/etc/github/cert
         - --dry-run=false
+        env:
+        - name: GITHUB_APP_ID
+          valueFrom:
+            secretKeyRef:
+              name: ghapp-token
+              key: appid
         ports:
         - name: http
           containerPort: 80
@@ -43,7 +50,7 @@ spec:
         - name: job-config
           mountPath: /etc/job-config
           readOnly: true
-        - name: oauth
+        - name: ghapp-token
           mountPath: /etc/github
           readOnly: true
         resources:
@@ -61,9 +68,9 @@ spec:
       - name: job-config
         configMap:
           name: job-config
-      - name: oauth
+      - name: ghapp-token
         secret:
-          secretName: oauth-token-2
+          secretName: ghapp-token
 ---
 apiVersion: v1
 kind: ServiceAccount
