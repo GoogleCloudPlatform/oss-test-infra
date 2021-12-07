@@ -148,7 +148,6 @@ tide:
     labels:
     - lgtm
     - approved
-    - "cla: yes"
     missingLabels: &knative_tide_missing_labels
     - do-not-merge/hold
     - do-not-merge/work-in-progress
@@ -160,13 +159,11 @@ tide:
     labels:
     - lgtm
     - approved
-    - "cla: yes"
     missingLabels: *knative_tide_missing_labels
   - repos:
     # Allow PRs for test-infra to be automatically merged without manual approval
     - "knative/test-infra"
     labels:
-    - "cla: yes"
     - "skip-review"
     missingLabels: *knative_tide_missing_labels
     author: knative-prow-updater-robot
