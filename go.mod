@@ -22,11 +22,11 @@ replace (
 	k8s.io/api => k8s.io/api v0.21.3
 	k8s.io/client-go => k8s.io/client-go v0.21.1
 
-	k8s.io/test-infra => k8s.io/test-infra v0.0.0-20211014223256-1433e96a1f3d
+	k8s.io/test-infra => k8s.io/test-infra v0.0.0-20211209213704-46d865fbe139
 )
 
 require (
 	k8s.io/api v0.21.3
 	k8s.io/apimachinery v0.21.3
-	k8s.io/test-infra v0.0.0-20211014223256-1433e96a1f3d
+	k8s.io/test-infra v0.0.0-20211209213704-46d865fbe139
 )
