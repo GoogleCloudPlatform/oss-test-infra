@@ -220,7 +220,7 @@ branch-protection:
 deck:
   google_analytics: G-NQ9CERRMYD
   spyglass:
-    announcement: "Googlers: Please join <a href='https://groups.google.com/a/google.com/g/prow-announce'>the prow-announce@google.com group</a> to receive important Prow related updates. Consider adding your team as a subgroup!"
+    announcement: "<b>Googlers: Please fill out the <a href='http://go/prow-user-survey-2021-h2'>Prow User Survey (2021 H2)</a> by Friday, December 24, 2021 for a chance to win a prize!</b>"
     size_limit: 500000000 # 500MB
     gcs_browser_prefix: https://pantheon.corp.google.com/storage/browser/ # TODO(fejta): something publicly accessible
     testgrid_config: gs://k8s-testgrid/config
