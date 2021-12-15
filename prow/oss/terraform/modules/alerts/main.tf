@@ -304,3 +304,40 @@ resource "google_monitoring_alert_policy" "KES-Secret-Sync-Error" {
   # gcloud beta monitoring channels list --project=oss-prow
   notification_channels = ["projects/${var.project}/notificationChannels/${var.notification_channel_id}"]
 }
+
+resource "google_monitoring_alert_policy" "tide-controller-heartbeat" {
+  project      = var.project
+  # Mapping from controller to heartbeat alert time.
+  for_each = {"sync": "15m", "status": "30m"}
+  display_name = "tide-${each.key}-controller-heartbeat"
+  combiner     = "OR" # required
+
+  conditions {
+    display_name = "Tide ${each.key} controller heartbeat"
+
+    condition_monitoring_query_language {
+      duration = "0s"
+      query    = <<-EOT
+      fetch k8s_container
+      | metric 'workload.googleapis.com/tidesyncheartbeat'
+      | filter (metric.controller == '${each.key}')
+      | align delta(${each.value})
+      | every ${each.value}
+      | group_by [resource.project_id],
+          [value_tidesyncheartbeat_aggregate: sum(value.tidesyncheartbeat)]
+      | condition val() < 1
+      EOT
+      trigger {
+        count = 1
+      }
+    }
+  }
+
+  documentation {
+    content   = "Tide ${each.key} controller heartbeat missing for ${each.value}."
+    mime_type = "text/markdown"
+  }
+
+  # gcloud beta monitoring channels list --project=oss-prow
+  notification_channels = ["projects/${var.project}/notificationChannels/${var.notification_channel_id}"]
+}
