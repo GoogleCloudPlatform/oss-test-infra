@@ -51,24 +51,6 @@ presubmits:
         - sample_test
         - --timeout
         - "3600"
-  - name: kubeflow-pipeline-integration-test
-    always_run: false
-    cluster: build-kubeflow
-    decorate: true
-    spec:
-      containers:
-      - image: gcr.io/k8s-testimages/kubekins-e2e:v20210113-cc576af-master
-        command:
-        - ./test/presubmit-tests-with-pipeline-deployment.sh
-        args:
-        - --workflow_file
-        - sample_test.yaml
-        - --test_result_folder
-        - sample_test
-        - --timeout
-        - "3600"
-        - --is_integration_test
-        - "true"
   - name: kubeflow-pipeline-mkp-test
     run_if_changed: "^(manifests/gcp_marketplace/.*)|(test/presubmit-tests-mkp.sh)|(test/tag_for_hosted.sh)|(test/cloudbuild/mkp_verify.yaml)$"
     cluster: build-kubeflow
@@ -208,7 +190,17 @@ presubmits:
       containers:
       - image: python:3.7
         command:
-        - ./v2/test/presubmit.sh
+        - ./v2/test/sample-test.sh
+  
+  - name: kubeflow-pipelines-integration-v2
+    run_if_changed: "^(samples/core/(parameterized_tfx_oss|dataflow)/.*)$"
+    cluster: build-kubeflow
+    decorate: true
+    spec:
+      containers:
+      - image: python:3.7
+        command:
+        - ./v2/test/integration-test.sh
 
   - name: kubeflow-pipelines-v2-go-test
     cluster: build-kubeflow
