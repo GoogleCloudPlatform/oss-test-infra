@@ -1,27 +1,5 @@
 postsubmits:
   kubeflow/pipelines:
-  - name: kubeflow-pipeline-postsubmit-standalone-component-test
-    cluster: build-kubeflow
-    branches:
-    - ^master|release-.+$
-    decorate: true
-    spec:
-      containers:
-      - image: gcr.io/k8s-testimages/kubekins-e2e:v20210113-cc576af-master
-        command:
-        - ./test/postsubmit-tests-with-pipeline-deployment.sh
-        args:
-        - --workflow_file
-        - component_test.yaml
-        - --test_result_folder
-        - sample_test
-        - --timeout
-        - "7200"
-    annotations:
-      testgrid-dashboards: googleoss-kubeflow-pipelines
-      testgrid-alert-email: kubeflow-pipelines+test@google.com
-      testgrid-num-failures-to-alert: "5"
-      description: Postsubmit component tests for kubeflow/pipeline.
   - name: kubeflow-pipelines-postsubmit-integration-v2
     cluster: build-kubeflow
     branches:

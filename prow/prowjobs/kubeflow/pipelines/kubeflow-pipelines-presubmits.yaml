@@ -35,22 +35,6 @@ presubmits:
         - e2e_test_gke_v2.yaml
         - --test_result_folder
         - e2e_test
-  - name: kubeflow-pipeline-sample-test
-    run_if_changed: "^(samples/core/.*)|(manifests/kustomize/.*)|(test/.*)$"
-    cluster: build-kubeflow
-    decorate: true
-    spec:
-      containers:
-      - image: gcr.io/k8s-testimages/kubekins-e2e:v20210113-cc576af-master
-        command:
-        - ./test/presubmit-tests-with-pipeline-deployment.sh
-        args:
-        - --workflow_file
-        - sample_test.yaml
-        - --test_result_folder
-        - sample_test
-        - --timeout
-        - "3600"
   - name: kubeflow-pipeline-mkp-test
     run_if_changed: "^(manifests/gcp_marketplace/.*)|(test/presubmit-tests-mkp.sh)|(test/tag_for_hosted.sh)|(test/cloudbuild/mkp_verify.yaml)$"
     cluster: build-kubeflow
