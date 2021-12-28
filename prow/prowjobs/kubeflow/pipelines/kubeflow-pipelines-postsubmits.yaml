@@ -1,24 +1,15 @@
 postsubmits:
   kubeflow/pipelines:
-  - name: kubeflow-pipeline-postsubmit-integration-test
+  - name: kubeflow-pipelines-postsubmit-integration-v2
     cluster: build-kubeflow
     branches:
     - ^master|release-.+$
     decorate: true
     spec:
       containers:
-      - image: gcr.io/k8s-testimages/kubekins-e2e:v20210113-cc576af-master
+      - image: python:3.7
         command:
-        - ./test/postsubmit-tests-with-pipeline-deployment.sh
-        args:
-        - --workflow_file
-        - sample_test.yaml
-        - --test_result_folder
-        - sample_test
-        - --timeout
-        - "7200"
-        - --is_integration_test
-        - "true"
+        - ./v2/test/integration-test.sh
     annotations:
       testgrid-dashboards: googleoss-kubeflow-pipelines
       description: Postsubmit integration tests for kubeflow/pipeline.
