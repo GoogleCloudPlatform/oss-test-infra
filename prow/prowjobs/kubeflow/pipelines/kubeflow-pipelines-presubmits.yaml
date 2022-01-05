@@ -52,7 +52,11 @@ presubmits:
       containers:
       - image: alpine:3.15.0
         command:
-        - ./manifests/gcp_marketplace/test/presubmit.sh
+        - /bin/sh 
+        args:
+        - -c
+        - cd ./manifests/gcp_marketplace/test
+        - sh ./presubmit.sh
   - name: kubeflow-pipeline-upgrade-test
     run_if_changed: "^(backend/.*)|(manifests/kustomize/.*)|(test/upgrade.*)$"
     cluster: build-kubeflow
