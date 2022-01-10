@@ -97,8 +97,8 @@ blunderbuss:
 # Settings for the "trigger" plugin.
 triggers:
 - repos:
-  - knative:
-  - knative-sandbox:
+  - knative
+  - knative-sandbox
   trigger_github_workflows: true
 
 # Plugins enabled for each repo.
