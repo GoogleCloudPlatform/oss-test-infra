@@ -98,11 +98,8 @@ blunderbuss:
 triggers:
 - repos:
   - knative:
-    trigger_github_workflows: true
   - knative-sandbox:
-    trigger_github_workflows: true
-  - knative-prow-robot:
-    trigger_github_workflows: true
+  trigger_github_workflows: true
 
 # Plugins enabled for each repo.
 plugins:
