@@ -50,13 +50,12 @@ presubmits:
     decorate: true
     spec:
       containers:
-      - image: alpine:3.15.0
+      - image: bash:alpine3.14
         command:
-        - /bin/sh 
+        - /usr/local/bin/bash
         args:
         - -c
-        - cd ./manifests/gcp_marketplace/test
-        - sh ./presubmit.sh
+        - cd ./manifests/gcp_marketplace/test && bash ./presubmit.sh
   - name: kubeflow-pipeline-upgrade-test
     run_if_changed: "^(backend/.*)|(manifests/kustomize/.*)|(test/upgrade.*)$"
     cluster: build-kubeflow
