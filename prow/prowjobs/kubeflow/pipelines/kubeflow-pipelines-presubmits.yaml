@@ -55,8 +55,7 @@ presubmits:
         - /bin/sh 
         args:
         - -c
-        - cd ./manifests/gcp_marketplace/test
-        - sh ./presubmit.sh
+        - cd ./manifests/gcp_marketplace/test && sh ./presubmit.sh
   - name: kubeflow-pipeline-upgrade-test
     run_if_changed: "^(backend/.*)|(manifests/kustomize/.*)|(test/upgrade.*)$"
     cluster: build-kubeflow
