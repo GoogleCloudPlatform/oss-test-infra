@@ -50,12 +50,13 @@ presubmits:
     decorate: true
     spec:
       containers:
-      - image: alpine:3.15.0
+      - image: bash:alpine3.14
         command:
-        - /bin/sh 
+        - bash
         args:
-        - -c
-        - cd ./manifests/gcp_marketplace/test && sh ./presubmit.sh
+        # We cannot call the shell script directly because the shebang in script is /bin/bash,
+        # but the bash:alpine3.14 image has its bash in /usr/local/bin/bash.
+        - ./manifests/gcp_marketplace/test/presubmit.sh 
   - name: kubeflow-pipeline-upgrade-test
     run_if_changed: "^(backend/.*)|(manifests/kustomize/.*)|(test/upgrade.*)$"
     cluster: build-kubeflow
