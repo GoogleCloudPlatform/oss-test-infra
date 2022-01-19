@@ -24,7 +24,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
       - name: deck-private
-        image: gcr.io/k8s-prow/deck:v20220118-16e3d7b51a
+        image: gcr.io/k8s-prow/deck:v20220118-0ca4c6b720
         ports:
         - name: http
           containerPort: 8080
