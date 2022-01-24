@@ -9,7 +9,7 @@ postsubmits:
       containers:
       - image: python:3.7
         command:
-        - ./v2/test/integration-test.sh
+        - ./backend/src/v2/test/integration-test.sh
     annotations:
       testgrid-dashboards: googleoss-kubeflow-pipelines
       description: Postsubmit integration tests for kubeflow/pipeline.
