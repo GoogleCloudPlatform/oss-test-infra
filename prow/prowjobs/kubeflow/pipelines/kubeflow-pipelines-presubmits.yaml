@@ -18,10 +18,8 @@ presubmits:
     decorate: true
     spec:
       containers:
-      - image: golang:1.17.6-alpine3.15
+      - image: golang:1.17.6-bullseye
         command:
-        - /bin/sh
-        args:
         - ./test/presubmit-backend-test.sh
   - name: kubeflow-pipeline-e2e-test
     run_if_changed: "^(frontend/.*)|(backend/.*)|(proxy/.*)|(manifests/kustomize/.*)|(test/.*)$"
