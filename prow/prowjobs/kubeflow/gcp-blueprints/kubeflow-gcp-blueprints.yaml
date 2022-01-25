@@ -15,7 +15,7 @@ postsubmits:
   - name: kubeflow-gcp-blueprints-postsubmit
     cluster: build-kubeflow
     branches:
-    - ^master|.+-branch$
+    - ^master|.+-branch$ # in gcp-blueprints, release branch is in the format `v1.1-branch`.
     spec:
       containers:
       - image: gcr.io/kubeflow-ci/test-worker:latest
