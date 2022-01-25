@@ -32,6 +32,8 @@ update-plugins: get-cluster-credentials
 
 .PHONY: deploy
 deploy: get-cluster-credentials
+# Apply the ProwJob CRD with --server-side=true due to its size.
+	kubectl apply --server-side=true -f ./cluster/prowjob-crd/
 	kubectl apply -f ./cluster/
 	kubectl apply -f ./serviceaccounts/
 
