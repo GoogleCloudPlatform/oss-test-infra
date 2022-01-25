@@ -94,7 +94,7 @@ spec:
   domains:
   - prow.infra.cft.dev
 ---
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: deck-ing
@@ -110,22 +110,31 @@ spec:
     http:
       paths:
       - path: /*
+        pathType: ImplementationSpecific
         backend:
-          serviceName: deck
-          servicePort: 80
+          service:
+            name: deck
+            port:
+              number: 80
       - path: /ghapp-hook
+        pathType: ImplementationSpecific
         backend:
-          serviceName: hook
-          servicePort: 8888
+          service:
+            name: hook
+            port:
+              number: 8888
   - host: oss-prow-private.knative.dev
     http:
       paths:
       - path: /*
+        pathType: ImplementationSpecific
         backend:
-          serviceName: deck-private
-          servicePort: 80
+          service:
+            name: deck-private
+            port:
+              number: 80
 ---
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: deck-blueprints
@@ -141,6 +150,9 @@ spec:
     http:
       paths:
       - path: /*
+        pathType: ImplementationSpecific
         backend:
-          serviceName: deck-blueprints
-          servicePort: 80
+          service:
+            name: deck-blueprints
+            port:
+              number: 80
