@@ -18,7 +18,7 @@ presubmits:
     decorate: true
     spec:
       containers:
-      - image: l.gcr.io/google/bazel:0.24.0 # TODO(Bobgy): update to use golang image instead.
+      - image: golang:1.17.6-alpine3.15
         command:
         - ./test/presubmit-backend-test.sh
   - name: kubeflow-pipeline-e2e-test
