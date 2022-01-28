@@ -173,8 +173,7 @@ presubmits:
   - name: kubeflow-pipelines-samples-v2
     cluster: build-kubeflow
     decorate: true
-    # run_if_changed: "^(sdk/python/.*)|(samples/.*)|(backend/src/v2/.*)$"
-    always_run: false
+    run_if_changed: "^(sdk/python/.*)|(samples/.*)|(backend/src/v2/.*)$"
     spec:
       containers:
       - image: python:3.7
@@ -182,8 +181,7 @@ presubmits:
         - ./backend/src/v2/test/sample-test.sh
   
   - name: kubeflow-pipelines-integration-v2
-    # run_if_changed: "^(samples/core/(parameterized_tfx_oss|dataflow)/.*)$"
-    always_run: false
+    run_if_changed: "^(samples/core/(parameterized_tfx_oss|dataflow)/.*)$"
     cluster: build-kubeflow
     decorate: true
     spec:
@@ -195,8 +193,7 @@ presubmits:
   - name: kubeflow-pipelines-v2-go-test
     cluster: build-kubeflow
     decorate: true
-    # run_if_changed: "^backend/src/v2/.*$"
-    always_run: false
+    run_if_changed: "^backend/src/v2/.*$"
     spec:
       containers:
         - image: gcr.io/google.com/cloudsdktool/cloud-sdk:latest
