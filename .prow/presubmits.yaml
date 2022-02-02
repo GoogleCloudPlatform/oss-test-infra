@@ -79,7 +79,7 @@ presubmits:
           - /checkconfig
         args:
           - --config-path=./prow/knative/config.yaml
-          - --job-config-path=../../knative/test-infra/config/prod/prow/jobs
+          - --job-config-path=../../knative/test-infra/config/prow/jobs
           - --plugin-config=prow/knative/plugins.yaml
           - --strict
           # This warning can forbid valid (and convenient) config. Exclude it.
