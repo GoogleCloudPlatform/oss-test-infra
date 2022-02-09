@@ -111,6 +111,14 @@ plugins:
     - owners-label
     - size
     - verify-owners
+  GoogleCloudPlatform/compute-daisy:
+    plugins:
+    - approve
+    - blunderbuss
+    - lgtm
+    - owners-label
+    - size
+    - verify-owners
   GoogleCloudPlatform/compute-image-tools:
     plugins:
     - approve
