@@ -105,7 +105,7 @@ spec:
         args:
         - --provider=github
         - --github-org=GoogleCloudPlatform
-        - --github-team=blueprint-solutions
+        - --github-team=blueprint-solutions,blueprint-solutions-contrib
         - --http-address=0.0.0.0:4180
         - --upstream=http://localhost:8080
         - --cookie-domain=prow.infra.cft.dev
