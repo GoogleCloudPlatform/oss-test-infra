@@ -1,3 +1,30 @@
+periodics:
+- name: compute-daisy-e2e
+  interval: 3h
+  spec:
+    containers:
+      - image: gcr.io/compute-image-tools-test/test-runner:latest
+        args:
+          - "-out_path=/artifacts/junit.xml"
+          - "-projects=compute-image-test-pool-001"
+          - "-zone=us-central1-c"
+          - "daisy_integration_tests/daisy_e2e.test.gotmpl"
+        env:
+          - name: REPO_OWNER
+            value: GoogleCloudPlatform
+          - name: REPO_NAME
+            value: compute-daisy
+          - name: ARTIFACTS
+            value: /artifacts
+        volumeMounts:
+          - name: daisy-service-account
+            mountPath: /etc/compute-image-tools-test-service-account
+            readOnly: true
+    volumes:
+      - name: daisy-service-account
+        secret:
+          secretName: daisy-service-account
+
 presubmits:
   GoogleCloudPlatform/compute-daisy:
   - name: compute-daisy-presubmit-gocheck
