@@ -14,6 +14,7 @@
 
 tide:
   merge_method:
+    GoogleCloudPlatform/compute-daisy: squash
     GoogleCloudPlatform/guest-agent: squash
     GoogleCloudPlatform/guest-configs: squash
     GoogleCloudPlatform/guest-diskexpand: squash
@@ -34,6 +35,7 @@ tide:
     "GoogleCloudPlatform/blueprints": https://prow.infra.cft.dev/tide
   queries:
   - repos:
+    - GoogleCloudPlatform/compute-daisy
     - GoogleCloudPlatform/guest-agent
     - GoogleCloudPlatform/guest-configs
     - GoogleCloudPlatform/guest-diskexpand
