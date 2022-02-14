@@ -70,16 +70,6 @@ presubmits:
         - --test_result_folder
         - upgrade_test
 
-  - name: kubeflow-pipelines-sdk-python36
-    cluster: build-kubeflow
-    decorate: true
-    run_if_changed: "^(sdk/.*)|(test/presubmit-tests-sdk.sh)$"
-    spec:
-      containers:
-      - image: python:3.6
-        command:
-        - ./test/presubmit-tests-sdk.sh
-
   - name: kubeflow-pipelines-sdk-python37
     cluster: build-kubeflow
     decorate: true
@@ -166,7 +156,7 @@ presubmits:
     run_if_changed: "^(backend/src/apiserver/visualization/.*)|(test/presubmit-backend-visualization.sh)$"
     spec:
       containers:
-      - image: python:3.6
+      - image: python:3.8
         command:
         - ./test/presubmit-backend-visualization.sh
   
