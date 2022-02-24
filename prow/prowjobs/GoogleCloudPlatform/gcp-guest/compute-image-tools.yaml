@@ -103,49 +103,6 @@ presubmits:
         - "/go/main.sh"
         args: ["cli_tools/"]
 
-  - name: daisy-presubmit-gocheck
-    cluster: gcp-guest
-    run_if_changed: 'daisy/.*'
-    trigger: "(?m)^/gocheck-daisy$"
-    rerun_command: "/gocheck-daisy"
-    context: prow/presubmit/gocheck/daisy
-    decorate: true
-    spec:
-      containers:
-      - image: gcr.io/gcp-guest/gocheck:latest
-        imagePullPolicy: Always
-        command:
-        - "/go/main.sh"
-        args: ["daisy/"]
-  - name: daisy-presubmit-gotest
-    cluster: gcp-guest
-    run_if_changed: 'daisy/.*'
-    trigger: "(?m)^/gotest-daisy$"
-    rerun_command: "/gotest-daisy"
-    context: prow/presubmit/gotest/daisy
-    decorate: true
-    spec:
-      containers:
-      - image: gcr.io/gcp-guest/gotest:latest
-        imagePullPolicy: Always
-        command:
-        - "/go/main.sh"
-        args: ["daisy/"]
-  - name: daisy-presubmit-gobuild
-    cluster: gcp-guest
-    run_if_changed: 'daisy/.*'
-    trigger: "(?m)^/gobuild-daisy$"
-    rerun_command: "/gobuild-daisy"
-    context: prow/presubmit/gobuild/daisy
-    decorate: true
-    spec:
-      containers:
-      - image: gcr.io/gcp-guest/gobuild:latest
-        imagePullPolicy: Always
-        command:
-        - "/go/main.sh"
-        args: ["daisy/"]
-
   - name: cli-tools-common-presubmit-gocheck
     cluster: gcp-guest
     run_if_changed: 'common/.*'
