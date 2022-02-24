@@ -73,9 +73,9 @@ postsubmits:
     spec:
       serviceAccountName: testgrid-config-updater
       containers:
-      - image: gcr.io/k8s-prow/configurator:v20220221-8b6a2593f3
+      - image: gcr.io/k8s-prow/configurator:v20220223-a7c3ef700d
         command:
-        - /app/testgrid/cmd/configurator/app.binary
+        - configurator
         args:
         - --yaml=testgrid/config.yaml
         - --default=testgrid/default.yaml
@@ -106,9 +106,9 @@ periodics:
     testgrid-num-failures-to-alert: '3'
   spec:
     containers:
-    - image: gcr.io/k8s-prow/generic-autobumper:v20220221-8b6a2593f3
+    - image: gcr.io/k8s-prow/generic-autobumper:v20220223-a7c3ef700d
       command:
-      - /app/prow/cmd/generic-autobumper/app.binary
+      - generic-autobumper
       args:
       - --config=prow/oss/oss-autobump-config.yaml
       volumeMounts:
@@ -143,9 +143,9 @@ periodics:
     testgrid-num-failures-to-alert: '1'
   spec:
     containers:
-    - image: gcr.io/k8s-prow/generic-autobumper:v20220221-8b6a2593f3
+    - image: gcr.io/k8s-prow/generic-autobumper:v20220223-a7c3ef700d
       command:
-      - /app/prow/cmd/generic-autobumper/app.binary
+      - generic-autobumper
       args:
       - --config=prow/oss/oss-autobump-config.yaml
       - --labels-override=skip-review # This label is used by tide for identifying trusted PR
@@ -179,9 +179,9 @@ periodics:
     testgrid-num-failures-to-alert: '3'
   spec:
     containers:
-    - image: gcr.io/k8s-prow/generic-autobumper:v20220221-8b6a2593f3
+    - image: gcr.io/k8s-prow/generic-autobumper:v20220223-a7c3ef700d
       command:
-      - /app/prow/cmd/generic-autobumper/app.binary
+      - generic-autobumper
       args:
       - --config=prow/knative/knative-autobump-config.yaml
       volumeMounts:
@@ -216,9 +216,9 @@ periodics:
     testgrid-num-failures-to-alert: '1'
   spec:
     containers:
-    - image: gcr.io/k8s-prow/generic-autobumper:v20220221-8b6a2593f3
+    - image: gcr.io/k8s-prow/generic-autobumper:v20220223-a7c3ef700d
       command:
-      - /app/prow/cmd/generic-autobumper/app.binary
+      - generic-autobumper
       args:
       - --config=prow/knative/knative-autobump-config.yaml
       - --labels-override=skip-review # This label is used by tide for identifying trusted PR
