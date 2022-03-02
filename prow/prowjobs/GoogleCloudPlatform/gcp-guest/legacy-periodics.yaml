@@ -5,7 +5,7 @@ periodics:
   decorate: true
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
-    testgrid-tab-name: fake
+    testgrid-tab-name: cleanerupper
   interval: 24h
   agent: kubernetes
   spec:
@@ -27,6 +27,9 @@ periodics:
 - name: ci-daisy-e2e
   cluster: gcp-guest
   decorate: true
+  annotations:
+    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-tab-name: ci-daisy-e2e
   interval: 3h
   agent: kubernetes
   spec:
@@ -48,6 +51,9 @@ periodics:
 - name: ci-daisy-e2e-daily
   cluster: gcp-guest
   decorate: true
+  annotations:
+    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-tab-name: ci-daisy-e2e-daily
   interval: 24h
   agent: kubernetes
   spec:
@@ -69,6 +75,9 @@ periodics:
 - name: ci-daisy-e2e-weekly
   cluster: gcp-guest
   decorate: true
+  annotations:
+    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-tab-name: ci-daisy-e2e-weekly
   interval: 168h
   agent: kubernetes
   spec:
@@ -90,6 +99,9 @@ periodics:
 - name: ci-ovf-import-e2e-tests-daily
   cluster: gcp-guest
   decorate: true
+  annotations:
+    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-tab-name: ci-ovf-import-e2e-tests-daily
   interval: 12h
   agent: kubernetes
   spec:
@@ -111,6 +123,9 @@ periodics:
 - name: ci-ovf-export-e2e-tests-daily
   cluster: gcp-guest
   decorate: true
+  annotations:
+    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-tab-name: ci-ovf-export-e2e-tests-daily
   interval: 12h
   agent: kubernetes
   spec:
@@ -126,6 +141,9 @@ periodics:
 - name: ci-windows-upgrade-e2e-tests
   cluster: gcp-guest
   decorate: true
+  annotations:
+    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-tab-name: ci-windows-upgrade-e2e-tests
   interval: 6h
   agent: kubernetes
   spec:
@@ -141,6 +159,9 @@ periodics:
 - name: ci-images-import-export-cli-e2e-tests
   cluster: gcp-guest
   decorate: true
+  annotations:
+    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-tab-name: ci-images-import-export-cli-e2e-tests
   interval: 6h
   agent: kubernetes
   spec:
@@ -165,6 +186,9 @@ periodics:
 - name: ci-v2v-adapt-e2e
   cluster: gcp-guest
   decorate: true
+  annotations:
+    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-tab-name: ci-v2v-adapt-e2e
   interval: 12h
   agent: kubernetes
   spec:
@@ -186,6 +210,9 @@ periodics:
 - name: osconfig-head-images
   cluster: gcp-guest
   decorate: true
+  annotations:
+    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-tab-name: osconfig-head-images
   interval: 5h
   agent: kubernetes
   spec:
@@ -226,6 +253,9 @@ periodics:
 - name: osconfig-unstable
   cluster: gcp-guest
   decorate: true
+  annotations:
+    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-tab-name: osconfig-unstable
   interval: 1h
   agent: kubernetes
   spec:
@@ -268,6 +298,9 @@ periodics:
 - name: osconfig-staging
   cluster: gcp-guest
   decorate: true
+  annotations:
+    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-tab-name: osconfig-staging
   interval: 3h
   agent: kubernetes
   spec:
@@ -308,6 +341,9 @@ periodics:
 - name: osconfig-stable
   cluster: gcp-guest
   decorate: true
+  annotations:
+    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-tab-name: osconfig-stable
   interval: 5h
   agent: kubernetes
   spec:
