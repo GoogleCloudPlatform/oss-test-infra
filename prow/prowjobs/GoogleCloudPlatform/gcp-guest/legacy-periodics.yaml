@@ -3,6 +3,9 @@ periodics:
 - name: cleanerupper
   cluster: gcp-guest
   decorate: true
+  annotations:
+    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-tab-name: fake
   interval: 24h
   agent: kubernetes
   spec:
