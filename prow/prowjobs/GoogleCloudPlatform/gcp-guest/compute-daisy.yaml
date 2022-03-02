@@ -21,14 +21,6 @@ periodics:
             value: GoogleCloudPlatform
           - name: REPO_NAME
             value: compute-daisy
-        volumeMounts:
-          - name: daisy-service-account
-            mountPath: /etc/compute-image-tools-test-service-account
-            readOnly: true
-    volumes:
-      - name: daisy-service-account
-        secret:
-          secretName: daisy-service-account
 
 presubmits:
   GoogleCloudPlatform/compute-daisy:
