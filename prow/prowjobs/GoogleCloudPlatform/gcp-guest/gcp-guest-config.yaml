@@ -1,48 +1,12 @@
-presets:
-- labels:
-    preset-daisy: "true"
-  env:
-  - name: GOOGLE_APPLICATION_CREDENTIALS
-    value: /etc/daisy-service-account/creds.json
-  volumeMounts:
-  - name: daisy-service-account
-    mountPath: /etc/daisy-service-account
-    readOnly: true
-  volumes:
-  - name: daisy-service-account
-    secret:
-      secretName: daisy-service-account
-- labels:
-    preset-github: "true"
-  env:
-  - name: GITHUB_ACCESS_TOKEN
-    value: /etc/github-access-token/token.txt
-  volumeMounts:
-  - name: github-access-token
-    mountPath: /etc/github-access-token
-    readOnly: true
-  volumes:
-  - name: github-access-token
-    secret:
-      secretName: github-access-token
-
 presubmits:
   GoogleCloudPlatform/artifact-registry-yum-plugin:
   - name: yum-plugin-presubmit-build
     cluster: gcp-guest
     run_if_changed: "packaging/"
-    extra_refs:
-    - org: GoogleCloudPlatform
-      repo: guest-test-infra
-      base_ref: master
-      workdir: true
     trigger: "(?m)^/packagebuild$"
     rerun_command: "/packagebuild"
     context: prow/presubmit/packagebuild
     decorate: true
-    labels:
-      preset-daisy: "true"
-      preset-github: "true"
     spec:
       containers:
       - image: gcr.io/gcp-guest/daisy-builder:latest
@@ -54,18 +18,10 @@ presubmits:
   - name: apt-transport-presubmit-build
     cluster: gcp-guest
     run_if_changed: "packaging/"
-    extra_refs:
-    - org: GoogleCloudPlatform
-      repo: guest-test-infra
-      base_ref: master
-      workdir: true
     trigger: "(?m)^/packagebuild$"
     rerun_command: "/packagebuild"
     context: prow/presubmit/packagebuild
     decorate: true
-    labels:
-      preset-daisy: "true"
-      preset-github: "true"
     spec:
       containers:
       - image: gcr.io/gcp-guest/daisy-builder:latest
@@ -116,18 +72,10 @@ presubmits:
   GoogleCloudPlatform/guest-configs:
   - name: gce-presubmit-build
     cluster: gcp-guest
-    extra_refs:
-    - org: GoogleCloudPlatform
-      repo: guest-test-infra
-      base_ref: master
-      workdir: true
     trigger: "(?m)^/packagebuild$"
     rerun_command: "/packagebuild"
     context: prow/presubmit/packagebuild
     decorate: true
-    labels:
-      preset-daisy: "true"
-      preset-github: "true"
     spec:
       containers:
       - image: gcr.io/gcp-guest/daisy-builder:latest
@@ -139,18 +87,10 @@ presubmits:
   GoogleCloudPlatform/guest-diskexpand:
   - name: disk-expand-presubmit-build
     cluster: gcp-guest
-    extra_refs:
-    - org: GoogleCloudPlatform
-      repo: guest-test-infra
-      base_ref: master
-      workdir: true
     trigger: "(?m)^/packagebuild$"
     rerun_command: "/packagebuild"
     context: prow/presubmit/packagebuild
     decorate: true
-    labels:
-      preset-daisy: "true"
-      preset-github: "true"
     spec:
       containers:
       - image: gcr.io/gcp-guest/daisy-builder:latest
@@ -166,14 +106,7 @@ presubmits:
     trigger: "(?m)^/packagebuild$"
     rerun_command: "/packagebuild"
     context: prow/presubmit/packagebuild
-    extra_refs:
-    - org: GoogleCloudPlatform
-      repo: guest-test-infra
-      base_ref: master
-      workdir: true
     decorate: true
-    labels:
-      preset-daisy: "true"
     spec:
       containers:
       - image: gcr.io/gcp-guest/daisy-builder:latest
@@ -245,8 +178,6 @@ presubmits:
     rerun_command: "/gointeg"
     context: prow/presubmit/gointeg
     decorate: true
-    labels:
-      preset-daisy: "true"
     spec:
       containers:
       - image: gcr.io/gcp-guest/gointegtest:latest
@@ -305,14 +236,7 @@ presubmits:
     trigger: "(?m)^/packagebuild$"
     rerun_command: "/packagebuild"
     context: prow/presubmit/packagebuild
-    extra_refs:
-    - org: GoogleCloudPlatform
-      repo: guest-test-infra
-      base_ref: master
-      workdir: true
     decorate: true
-    labels:
-      preset-daisy: "true"
     spec:
       containers:
       - image: gcr.io/gcp-guest/daisy-builder:latest
@@ -368,14 +292,7 @@ presubmits:
     trigger: "(?m)^/packagebuild$"
     rerun_command: "/packagebuild"
     context: prow/presubmit/packagebuild
-    extra_refs:
-    - org: GoogleCloudPlatform
-      repo: guest-test-infra
-      base_ref: master
-      workdir: true
     decorate: true
-    labels:
-      preset-daisy: "true"
     spec:
       containers:
       - image: gcr.io/gcp-guest/daisy-builder:latest
@@ -488,8 +405,6 @@ periodics:
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: cit-periodics
-  labels:
-    preset-daisy: "true"
   interval: 1h
   spec:
     containers:
