@@ -74,8 +74,6 @@ periodics:
       env:
       - name: GOOGLE_APPLICATION_CREDENTIALS
         value: ''
-      - name: GOOGLE_APPLICATION_CREDENTIALS
-        value: ''
       - name: REPO_OWNER
         value: GoogleCloudPlatform
       - name: REPO_NAME
