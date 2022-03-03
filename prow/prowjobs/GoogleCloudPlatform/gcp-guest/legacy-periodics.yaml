@@ -46,6 +46,8 @@ periodics:
       - "-zone=us-central1-c"
       - "daisy_integration_tests/daisy_e2e.test.gotmpl"
       env:
+      - name: GOOGLE_APPLICATION_CREDENTIALS
+        value: ''
       - name: REPO_OWNER
         value: GoogleCloudPlatform
       - name: REPO_NAME
@@ -70,6 +72,8 @@ periodics:
       - "-zone=us-central1-c"
       - "daisy_integration_tests/daisy_e2e_daily.test.gotmpl"
       env:
+      - name: GOOGLE_APPLICATION_CREDENTIALS
+        value: ''
       - name: REPO_OWNER
         value: GoogleCloudPlatform
       - name: REPO_NAME
@@ -94,6 +98,8 @@ periodics:
       - "-zone=us-central1-c"
       - "daisy_integration_tests/daisy_e2e_weekly.test.gotmpl"
       env:
+      - name: GOOGLE_APPLICATION_CREDENTIALS
+        value: ''
       - name: REPO_OWNER
         value: GoogleCloudPlatform
       - name: REPO_NAME
@@ -121,6 +127,9 @@ periodics:
           instance_service_account_without_default_service_account_permission=pool-001-2-sa-2@compute-image-test-pool-001-2.iam.gserviceaccount.com,\
           project_id_without_default_service_account=compute-image-test-pool-001-1,\
           project_id_without_default_service_account_permission=compute-image-test-pool-001-2"
+      env:
+      - name: GOOGLE_APPLICATION_CREDENTIALS
+        value: ''
 - name: ci-ovf-export-e2e-tests-daily
   cluster: gcp-guest
   decorate: true
@@ -138,6 +147,9 @@ periodics:
       - "-out_dir=$(ARTIFACTS)"
       - "-test_project_id=compute-image-test-pool-001"
       - "-test_zone=us-central1-c"
+      env:
+      - name: GOOGLE_APPLICATION_CREDENTIALS
+        value: ''
 - name: ci-windows-upgrade-e2e-tests
   cluster: gcp-guest
   decorate: true
@@ -155,6 +167,9 @@ periodics:
       - "-out_dir=$(ARTIFACTS)"
       - "-test_project_id=compute-image-test-pool-001"
       - "-test_zone=us-central1-c"
+      env:
+      - name: GOOGLE_APPLICATION_CREDENTIALS
+        value: ''
 - name: ci-images-import-export-cli-e2e-tests
   cluster: gcp-guest
   decorate: true
@@ -181,6 +196,9 @@ periodics:
           compute_service_account_without_default_service_account_permission=pool-001-2-sa@compute-image-test-pool-001-2.iam.gserviceaccount.com,\
           project_id_without_default_service_account=compute-image-test-pool-001-1,\
           project_id_without_default_service_account_permission=compute-image-test-pool-001-2"
+      env:
+      - name: GOOGLE_APPLICATION_CREDENTIALS
+        value: ''
 - name: ci-v2v-adapt-e2e
   cluster: gcp-guest
   decorate: true
@@ -201,6 +219,8 @@ periodics:
       - "-zone=us-central1-c"
       - "daisy_integration_tests/v2v_adapt_e2e.test.gotmpl"
       env:
+      - name: GOOGLE_APPLICATION_CREDENTIALS
+        value: ''
       - name: REPO_OWNER
         value: GoogleCloudPlatform
       - name: REPO_NAME
@@ -247,6 +267,9 @@ periodics:
                       "asia-east1-b":5,
                       "asia-east1-c":5
                     }
+      env:
+      - name: GOOGLE_APPLICATION_CREDENTIALS
+        value: ''
 - name: osconfig-unstable
   cluster: gcp-guest
   decorate: true
@@ -291,6 +314,9 @@ periodics:
                       "asia-east1-b":15,
                       "asia-east1-c":15
                     }
+      env:
+      - name: GOOGLE_APPLICATION_CREDENTIALS
+        value: ''
 - name: osconfig-staging
   cluster: gcp-guest
   decorate: true
@@ -333,6 +359,9 @@ periodics:
                       "asia-east1-b":10,
                       "asia-east1-c":10
                     }
+      env:
+      - name: GOOGLE_APPLICATION_CREDENTIALS
+        value: ''
 - name: osconfig-stable
   cluster: gcp-guest
   decorate: true
@@ -375,3 +404,6 @@ periodics:
                       "asia-east1-b":5,
                       "asia-east1-c":5
                     }
+      env:
+      - name: GOOGLE_APPLICATION_CREDENTIALS
+        value: ''
