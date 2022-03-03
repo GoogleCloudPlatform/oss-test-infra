@@ -408,7 +408,7 @@ periodics:
   interval: 1h
   spec:
     containers:
-    - image: gcr.io/gcp-guest/cloud-image-tests:latest
+    - image: gcr.io/compute-image-tools/cloud-image-tests:latest
       imagePullPolicy: Always
       command:
       - "/manager"
