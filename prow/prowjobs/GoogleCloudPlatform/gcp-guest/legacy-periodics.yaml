@@ -375,7 +375,7 @@ periodics:
     containers:
     - image: gcr.io/compute-image-tools-test/osconfig-tests:latest
       command:
-      - "/main.sh"
+      - "/e2e_tests"
       args:
       - "-out_dir=$(ARTIFACTS)"
       - "-agent_repo=stable"
