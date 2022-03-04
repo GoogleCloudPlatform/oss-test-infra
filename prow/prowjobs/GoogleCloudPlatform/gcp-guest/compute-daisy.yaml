@@ -21,6 +21,8 @@ periodics:
             value: GoogleCloudPlatform
           - name: REPO_NAME
             value: compute-daisy
+          - name: GOOGLE_APPLICATION_CREDENTIALS
+            value: ''
 
 presubmits:
   GoogleCloudPlatform/compute-daisy:
