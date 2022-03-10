@@ -161,14 +161,6 @@ presubmits:
         imagePullPolicy: Always
         command:
         - "/go/main.sh"
-        volumeMounts:
-        - name: codecov
-          mountPath: /etc/codecov
-          readOnly: true
-      volumes:
-      - name: codecov
-        secret:
-          secretName: codecov
 
   GoogleCloudPlatform/guest-agent:
   - name: guest-agent-integ
