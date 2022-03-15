@@ -339,26 +339,6 @@ plugins:
     - verify-owners
     - yuks
 
-  looker/helltool:
-    plugins:
-    - assign
-    - cat
-    - dog
-    - golint
-    - help
-    - hold
-    - label
-    - lgtm
-    - override
-    - owners-label
-    - pony
-    - shrug
-    - skip
-    - trigger
-    - verify-owners
-    - wip
-    - yuks
-
   chaotoppicks:
     plugins:
     - approve

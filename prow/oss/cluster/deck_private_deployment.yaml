@@ -47,25 +47,13 @@ spec:
         env:
         # Use KUBECONFIG envvar rather than --kubeconfig flag in order to provide multiple configs to merge.
         - name: KUBECONFIG
-          value: "/etc/kubeconfig/config-20211108:/etc/build-bms-oracle-team/kubeconfig:/etc/build-looker-32/kubeconfig:/etc/build-looker-16/kubeconfig:/etc/build-looker-int-test/kubeconfig:/etc/build-elcarro/kubeconfig:/etc/build-looker-private/kubeconfig:/etc/build-kubeflow/kubeconfig"
+          value: "/etc/kubeconfig/config-20211108:/etc/build-bms-oracle-team/kubeconfig:/etc/build-elcarro/kubeconfig:/etc/build-kubeflow/kubeconfig"
         volumeMounts:
         - mountPath: /etc/build-bms-oracle-team
           name: build-bms-oracle-team
           readOnly: true
-        - mountPath: /etc/build-looker-32
-          name: build-looker-32
-          readOnly: true
-        - mountPath: /etc/build-looker-16
-          name: build-looker-16
-          readOnly: true
-        - mountPath: /etc/build-looker-int-test
-          name: build-looker-int-test
-          readOnly: true
         - mountPath: /etc/build-elcarro
           name: build-elcarro
-          readOnly: true
-        - mountPath: /etc/build-looker-private
-          name: build-looker-private
           readOnly: true
         - name: oauth-config
           mountPath: /etc/githuboauth
