@@ -86,7 +86,6 @@ plank:
   pod_pending_timeout: 30m
   pod_unscheduled_timeout: 10m
   build_cluster_status_file: 'gs://oss-prow/oss-prow-build-clusters-statuses.json'
-  report_templates:
   default_decoration_config_entries:
   - config:
       timeout: 7200000000000 # 2h
@@ -204,7 +203,6 @@ deck:
   additional_allowed_buckets:
     - compute-image-tools-test
     - gcp-guest-testgrid
-  hidden_repos:
 
 in_repo_config:
   enabled:
@@ -217,12 +215,6 @@ in_repo_config:
     "chaotoppicks": ["default"] # For experimenting purpose, will remove once done with experiments
     "GoogleCloudPlatform/blueprints": ["build-blueprints"]
     "GoogleCloudPlatform/oss-test-infra": ["default"]
-
-# settings for github reporter from crier
-github_reporter:
-  # summary_comment_repos is a list of orgs and org/repos for which failure report
-  # comments is only sent when all jobs from current PR are finished.
-  summary_comment_repos:
 
 presets:
 # docker-in-docker preset
@@ -247,8 +239,3 @@ presets:
   volumeMounts:
   - name: docker-graph
     mountPath: /docker-graph
-
-pubsub_triggers:
-  - allowed_clusters:
-    project:
-    topics:
