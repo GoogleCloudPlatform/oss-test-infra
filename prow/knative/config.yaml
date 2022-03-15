@@ -132,7 +132,7 @@ log_level: debug
 
 sinker:
   resync_period: 1m
-  max_prowjob_age: 24h
+  max_prowjob_age: 240h
   max_pod_age: 30m
   terminated_pod_ttl: 30m
 
