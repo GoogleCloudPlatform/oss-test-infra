@@ -11,7 +11,7 @@ periodics:
   spec:
     activeDeadlineSeconds: 1800
     containers:
-    - image: gcr.io/compute-image-tools-test/cleanerupper:latest
+    - image: gcr.io/gcp-guest/cleanerupper:latest
       command:
       - "/cleanerupper"
       args:
