@@ -72,7 +72,7 @@ lgtm:
 - repos:
   - GoogleCloudPlatform/testgrid
   review_acts_as_lgtm: true
-  trusted_team_for_sticky_lgtm: testgrid-admins
+  trusted_team_for_sticky_lgtm: 'TestGrid Admins'
 
 plugins:
   GoogleCloudPlatform:

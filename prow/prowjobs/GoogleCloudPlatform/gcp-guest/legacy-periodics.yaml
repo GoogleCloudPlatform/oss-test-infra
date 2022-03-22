@@ -58,6 +58,8 @@ periodics:
 - name: ci-daisy-e2e-daily
   cluster: gcp-guest
   decorate: true
+  decoration_config:
+    timeout: 23h
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: ci-daisy-e2e-daily
@@ -84,6 +86,8 @@ periodics:
 - name: ci-daisy-e2e-weekly
   cluster: gcp-guest
   decorate: true
+  decoration_config:
+    timeout: 23h
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: ci-daisy-e2e-weekly
@@ -136,6 +140,8 @@ periodics:
 - name: ci-ovf-export-e2e-tests-daily
   cluster: gcp-guest
   decorate: true
+  decoration_config:
+    timeout: 11h
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: ci-ovf-export-e2e-tests-daily
@@ -156,6 +162,8 @@ periodics:
 - name: ci-windows-upgrade-e2e-tests
   cluster: gcp-guest
   decorate: true
+  decoration_config:
+    timeout: 5h
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: ci-windows-upgrade-e2e-tests
@@ -176,10 +184,12 @@ periodics:
 - name: ci-images-import-export-cli-e2e-tests
   cluster: gcp-guest
   decorate: true
+  decoration_config:
+    timeout: 11h
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: ci-images-import-export-cli-e2e-tests
-  interval: 6h
+  interval: 12h
   agent: kubernetes
   spec:
     containers:
@@ -205,6 +215,8 @@ periodics:
 - name: ci-v2v-adapt-e2e
   cluster: gcp-guest
   decorate: true
+  decoration_config:
+    timeout: 11h
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: ci-v2v-adapt-e2e
