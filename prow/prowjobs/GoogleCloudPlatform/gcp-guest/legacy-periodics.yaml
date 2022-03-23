@@ -114,6 +114,8 @@ periodics:
 - name: ci-ovf-import-e2e-tests-daily
   cluster: gcp-guest
   decorate: true
+  decoration_config:
+    timeout: 11h
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: ci-ovf-import-e2e-tests-daily
@@ -212,34 +214,6 @@ periodics:
       env:
       - name: GOOGLE_APPLICATION_CREDENTIALS
         value: ''
-- name: ci-v2v-adapt-e2e
-  cluster: gcp-guest
-  decorate: true
-  decoration_config:
-    timeout: 11h
-  annotations:
-    testgrid-dashboards: googleoss-gcp-guest
-    testgrid-tab-name: ci-v2v-adapt-e2e
-  interval: 12h
-  agent: kubernetes
-  spec:
-    containers:
-    - image: gcr.io/compute-image-tools-test/test-runner:latest
-      command:
-      - "/main.sh"
-      args:
-      - "-out_path=$(ARTIFACTS)/junit.xml"
-      # One project is enough for v2v tests, no test requires a write lock.
-      - "-projects=compute-image-test-pool-001"
-      - "-zone=us-central1-c"
-      - "daisy_integration_tests/v2v_adapt_e2e.test.gotmpl"
-      env:
-      - name: GOOGLE_APPLICATION_CREDENTIALS
-        value: ''
-      - name: REPO_OWNER
-        value: GoogleCloudPlatform
-      - name: REPO_NAME
-        value: compute-image-tools
 - name: osconfig-head-images
   cluster: gcp-guest
   decorate: true
