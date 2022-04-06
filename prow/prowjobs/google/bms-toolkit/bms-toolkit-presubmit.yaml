@@ -3,6 +3,8 @@ presubmits:
   - name: bms-toolkit-install
     cluster: build-bms-oracle-team
     always_run: false
+    # Introducing max_concurrency, as noted in the design doc (internal) comment thread: https://docs.google.com/document/d/1mv2nV0Cv6EKv-ZTScv59JdyqvmNfYeMojqFJdJVhdmk/edit?pli=1&disco=AAAAUQ1gyBE
+    max_concurrency: 1
     decorate: true
     spec:
       hostNetwork: true
@@ -10,16 +12,14 @@ presubmits:
       - image: quay.io/ansible/ansible-runner:stable-2.9-latest
         command:
         # . represents the base directory of the cloned bms-toolkit repo, which is bms-toolkit
-        # the presubmit_tests dir and test_pr.sh are non-existent at this point, 
-        # but will be created in a test PR as part of testing the prowjob
-        - ./presubmit_tests/test-pr-poc.sh        
+        - ./presubmit_tests/test-pr-poc.sh
         resources:
           requests:
             memory: "2.0Gi"
             cpu: "3.0"
         volumeMounts:
         - name: all-in-one
-          mountPath: /etc/files_needed_for_tk            
+          mountPath: /etc/files_needed_for_tk
       volumes:
       - name: all-in-one
         projected:
@@ -34,12 +34,12 @@ presubmits:
               name: nonrac-asm-syd1
               items:
                 - key: asm_disk_config_nonrac_primary_syd1.json
-                  path: nonrac-asm.json            
+                  path: nonrac-asm.json
           - configMap:
               name: nonrac-datamounts-syd1
               items:
                 - key: data_mounts_config_nonrac_primary_syd1.json
-                  path: nonrac-datamounts.json  
+                  path: nonrac-datamounts.json
           - configMap:
               name: nonrac-inventory-syd1
               items:
@@ -49,4 +49,4 @@ presubmits:
               name: google-cloud-sdk
               items:
                 - key: google-cloud-sdk.repo
-                  path: google-cloud-sdk.repo       
+                  path: google-cloud-sdk.repo
