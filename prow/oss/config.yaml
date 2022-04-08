@@ -167,7 +167,12 @@ plank:
         bucket: "bmaas-testing-prow-bucket"
       default_service_account_name: "prowjob-default-sa" # Use workload identity
       gcs_credentials_secret: ""                         # rather than service account key secret
-
+  - cluster: build-compute-image-import
+    config:
+      gcs_configuration:
+        bucket: "compute-image-import-prow"
+      default_service_account_name: "prowjob-default-sa" # Use workload identity
+      gcs_credentials_secret: ""                         # rather than service account key secret
 
 sinker:
   resync_period: 1m
