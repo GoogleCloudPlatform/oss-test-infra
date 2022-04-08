@@ -47,8 +47,11 @@ spec:
         env:
         # Use KUBECONFIG envvar rather than --kubeconfig flag in order to provide multiple configs to merge.
         - name: KUBECONFIG
-          value: "/etc/kubeconfig/config-20211108:/etc/build-bms-oracle-team/kubeconfig:/etc/build-looker-32/kubeconfig:/etc/build-looker-16/kubeconfig:/etc/build-looker-int-test/kubeconfig:/etc/build-elcarro/kubeconfig:/etc/build-looker-private/kubeconfig:/etc/build-kubeflow/kubeconfig"
+          value: "/etc/kubeconfig/config-20211108:/etc/build-compute-image-import/kubeconfig:/etc/build-bms-oracle-team/kubeconfig:/etc/build-looker-32/kubeconfig:/etc/build-looker-16/kubeconfig:/etc/build-looker-int-test/kubeconfig:/etc/build-elcarro/kubeconfig:/etc/build-looker-private/kubeconfig:/etc/build-kubeflow/kubeconfig"
         volumeMounts:
+        - mountPath: /etc/build-compute-image-import
+          name: build-compute-image-import
+          readOnly: true
         - mountPath: /etc/build-bms-oracle-team
           name: build-bms-oracle-team
           readOnly: true
@@ -149,6 +152,10 @@ spec:
               name: private-deck-oauth2
               key: cookieSecret
       volumes:
+      - name: build-compute-image-import
+        secret:
+          defaultMode: 420
+          secretName: kubeconfig-build-compute-image-import
       - name: build-bms-oracle-team
         secret:
           defaultMode: 420
