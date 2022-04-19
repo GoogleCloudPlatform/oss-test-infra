@@ -209,9 +209,7 @@ postsubmits:
       testgrid-tab-name: module-tests
       description: Postsubmit tests; executes cli_tools_tests/module/
     branches:
-    - ^master$
-    labels:
-      preset-daisy: "true"
+    - ^main$
     spec:
       containers:
       - image: gcr.io/gcp-guest/cli-tools-module-tests:latest
