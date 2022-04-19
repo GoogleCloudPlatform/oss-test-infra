@@ -180,16 +180,6 @@ presubmits:
         command:
         - ./backend/src/v2/test/integration-test.sh
 
-  - name: kubeflow-pipelines-v2-go-test
-    cluster: build-kubeflow
-    decorate: true
-    run_if_changed: "^backend/src/v2/.*$"
-    spec:
-      containers:
-        - image: gcr.io/google.com/cloudsdktool/cloud-sdk:latest
-          command:
-            - ./backend/src/v2/test/presubmit-v2-go-test.sh
-
   - name: kubeflow-pipelines-manifests
     cluster: build-kubeflow
     decorate: true
