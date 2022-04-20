@@ -153,28 +153,6 @@ periodics:
       env:
       - name: GOOGLE_APPLICATION_CREDENTIALS
         value: ""
-- name: compute-image-import-windows-upgrade-e2e-tests
-  cluster: build-compute-image-import
-  decorate: true
-  decoration_config:
-    timeout: 5h
-  annotations:
-    testgrid-dashboards: googleoss-compute-image-import
-    testgrid-tab-name: ci-windows-upgrade-e2e-tests
-  interval: 6h
-  agent: kubernetes
-  spec:
-    containers:
-    - image: gcr.io/compute-image-import-test/gce-windows-upgrade-tests:latest
-      command:
-      - /gce_windows_upgrade_test_runner
-      args:
-      - -out_dir=$(ARTIFACTS)
-      - -test_project_id=compute-import-test-pool-001
-      - -test_zone=us-central1-c
-      env:
-      - name: GOOGLE_APPLICATION_CREDENTIALS
-        value: ""
 - name: compute-image-import-images-import-export-cli-e2e-tests
   cluster: build-compute-image-import
   decorate: true
