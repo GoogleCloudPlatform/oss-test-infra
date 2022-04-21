@@ -1,36 +1,3 @@
-postsubmits:
-  GoogleCloudPlatform/compute-image-tools:
-  # Integ tests that need credentials to create resources in a GCP project.
-  - name: cli-tools-postsubmit-module-tests
-    cluster: gcp-guest
-    decorate: true
-    annotations:
-      testgrid-dashboards: googleoss-gcp-guest-import-export
-      testgrid-tab-name: module-tests
-      description: "Postsubmit tests; executes cli_tools_tests/module/"
-    branches:
-      - ^master$
-    labels:
-      preset-daisy: "true"
-    spec:
-      containers:
-        - image: gcr.io/gcp-guest/cli-tools-module-tests:latest
-          # The security context is required to allow gcsfuse to create a mount.
-          securityContext:
-            privileged: true
-          imagePullPolicy: Always
-          command:
-            - "/go/main.sh"
-          args:
-           - "cli_tools_tests/module/"
-           - "-test.timeout=30m"
-           - "-test.parallel=8"
-          env:
-            - name: GOOGLE_CLOUD_PROJECT
-              value: compute-image-test-pool-001
-            - name: GOOGLE_CLOUD_ZONE
-              value: us-central1-a
-
 presubmits:
   GoogleCloudPlatform/compute-image-tools:
   - name: compute-image-tools-flake8
@@ -46,20 +13,6 @@ presubmits:
         imagePullPolicy: Always
         command:
         - "/main.sh"
-  - name: boot-inspect-pytest
-    cluster: gcp-guest
-    run_if_changed: 'daisy_workflows/image_import/inspection/.*'
-    trigger: "(?m)^/pytest-boot-inspect$"
-    rerun_command: "/pytest-boot-inspect"
-    context: prow/presubmit/pytest/boot-inspect
-    decorate: true
-    spec:
-      containers:
-        - image: gcr.io/gcp-guest/pytest:latest
-          imagePullPolicy: Always
-          command:
-            - "/main.py"
-          args: ["daisy_workflows/image_import/inspection"]
   - name: cli-tools-presubmit-gocheck
     cluster: gcp-guest
     run_if_changed: 'cli_tools/.*'
