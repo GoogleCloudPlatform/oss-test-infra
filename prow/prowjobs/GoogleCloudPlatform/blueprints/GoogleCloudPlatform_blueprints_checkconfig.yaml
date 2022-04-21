@@ -10,7 +10,7 @@ presubmits:
       base_ref: master
     spec:
       containers:
-      - image: gcr.io/k8s-prow/checkconfig:v20220419-feb40d908d
+      - image: gcr.io/k8s-prow/checkconfig:v20220421-92e6ee26d8
         command:
         - checkconfig
         args:
