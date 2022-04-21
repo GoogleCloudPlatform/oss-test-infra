@@ -3,7 +3,6 @@
 dashboards:
 - name: googleoss-gcp-guest
 - name: googleoss-compute-image-import
-- name: googleoss-gcp-guest-import-export
 - name: googleoss-test-infra
 - name: googleoss-esp-v2-presubmit
 - name: googleoss-esp-v2-postsubmit
@@ -18,7 +17,6 @@ dashboard_groups:
     dashboard_names:
     - googleoss-gcp-guest
     - googleoss-compute-image-import
-    - googleoss-gcp-guest-import-export
     - googleoss-test-infra
     - googleoss-esp-v2-presubmit
     - googleoss-esp-v2-postsubmit
