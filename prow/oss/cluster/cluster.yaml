@@ -107,7 +107,7 @@ metadata:
   name: gprow-ing
   namespace: default
   annotations:
-    kubernetes.io/ingress.global-static-ip-name: "oss-grow-dev"
+    kubernetes.io/ingress.global-static-ip-name: "oss-gprow-dev"
     kubernetes.io/ingress.class: "gce"
     kubernetes.io/tls-acme: "true"
     networking.gke.io/managed-certificates: oss-gprow-dev,oss-private-gprow-dev
