@@ -251,8 +251,14 @@ deck:
           - artifacts/junit.*\.xml
       - lens:
           name: podinfo
+          config:
+            runner_configs:
+              "test-infra-trusted":
+                pod_link_template: "https://console.cloud.google.com/kubernetes/pod/us-west1-a/prow/test-pods/{{ .Name }}/details?project=oss-prow"
         required_files:
           - podinfo.json
+        optional_files:
+          - prowjob.json
       - lens:
           name: html
         required_files:
