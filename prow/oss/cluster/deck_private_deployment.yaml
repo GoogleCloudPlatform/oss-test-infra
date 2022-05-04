@@ -33,7 +33,7 @@ spec:
         - --hook-url=http://hook:8888/plugin-help
         - --tide-url=http://tide/
         - --job-config-path=/etc/job-config
-        - --redirect-http-to=oss-prow-private.knative.dev
+        - --redirect-http-to=oss-private.gprow.dev
         - --spyglass=true
         - --tenant-id=looker
         - --rerun-creates-job
@@ -118,8 +118,8 @@ spec:
         - --github-team=eng
         - --http-address=0.0.0.0:4180
         - --upstream=http://localhost:8080
-        - --cookie-domain=oss-prow-private.knative.dev
-        - --cookie-name=oss-prow-private-knative-dev-oauth2-proxy
+        - --cookie-domain=oss-private.gprow.dev
+        - --cookie-name=oss-private-gprow-dev-oauth2-proxy
         - --cookie-samesite=none
         - --cookie-expire=23h
         - --email-domain=*

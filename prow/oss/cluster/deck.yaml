@@ -31,7 +31,7 @@ spec:
         - --spyglass=true
         - --tide-url=http://tide/
         - --hook-url=http://hook:8888/plugin-help
-        - --redirect-http-to=oss-prow.knative.dev
+        - --redirect-http-to=oss.gprow.dev
         - --rerun-creates-job
         - --oauth-url=/github-login
         - --github-token-path=/etc/github/oauth
@@ -118,7 +118,7 @@ spec:
           secretName: kubeconfig-build-elcarro
       - name: oauth-config
         secret:
-          secretName: github-oauth-config-20200326-oss-prow-knative-dev
+          secretName: github-oauth-config-oss-gprow-dev
       - name: oauth-token
         secret:
           secretName: oauth-token-2
