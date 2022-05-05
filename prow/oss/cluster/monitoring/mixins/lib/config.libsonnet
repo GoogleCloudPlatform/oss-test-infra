@@ -10,7 +10,7 @@ local config = {
   instance: {
     name: "OSS Prow",
     botName: "google-oss-robot",
-    url: "https://oss-prow.knative.dev",
+    url: "https://oss.gprow.dev",
     monitoringURL: "https://oss-prow-monitoring.knative.dev",
   },
 
@@ -32,8 +32,8 @@ local config = {
     // Additional scraping endpoints
     probeTargets: [
     # ATTENTION: Keep this in sync with the list in ../../additional-scrape-configs_secret.yaml
-      // {url: 'https://oss-prow.knative.dev/monitoring', labels: {slo: comps.monitoring}},
-      {url: 'https://oss-prow.knative.dev', labels: {slo: comps.deck}},
+      // {url: 'https://oss.gprow.dev/monitoring', labels: {slo: comps.monitoring}},
+      {url: 'https://oss.gprow.dev', labels: {slo: comps.deck}},
     ],
 
     // Boskos endpoints to be monitored

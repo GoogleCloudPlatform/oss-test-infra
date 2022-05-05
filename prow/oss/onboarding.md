@@ -23,7 +23,7 @@ Create a pullrequest, contains:
 -   Enable the `trigger` plugin to allow presubmit and postsubmit ProwJobs to be triggered.
 -   Enable other useful plugins.
 
-We have catalogs of the available [plugins](https://oss-prow.knative.dev/plugins) and [commands](https://oss-prow.knative.dev/command-help) to browse through.
+We have catalogs of the available [plugins](https://oss.gprow.dev/plugins) and [commands](https://oss.gprow.dev/command-help) to browse through.
 If not sure what setting or which plugins to use, feel free to just start with the
 same set of settings for `google/exposure-notification-server` in
 [Prow config example PR]. 
@@ -83,7 +83,7 @@ There are a few ways that you can test changes to your ProwJobs, check out
 
 ## Viewing Test Results
 
-To view all test results please navigate to https://oss-prow.knative.dev. Presubmit and postsubmit
+To view all test results please navigate to https://oss.gprow.dev. Presubmit and postsubmit
 jobs will also report to GitHub by default.
 
 [Test Infra oncall]: https://go.k8s.io/oncall

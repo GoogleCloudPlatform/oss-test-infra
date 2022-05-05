@@ -79,7 +79,7 @@ module "alert" {
   // blackbox_probers maps HTTPS hosts to the project they should be associated with.
   blackbox_probers = [
     // oss-prow
-    "oss-prow.knative.dev",
+    "oss.gprow.dev",
     // k8s-prow
     "prow.k8s.io",
     "testgrid.k8s.io",
