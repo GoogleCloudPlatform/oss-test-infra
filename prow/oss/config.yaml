@@ -31,8 +31,8 @@ tide:
     kubeflow:
       title: "{{ .Title }} (#{{ .Number }})"
   target_urls:
-    "*": https://oss-prow.knative.dev/tide
-    "looker/helltool": https://oss-prow-private.knative.dev/tide
+    "*": https://oss.gprow.dev/tide
+    "looker/helltool": https://oss-private.gprow.dev/tide
     "GoogleCloudPlatform/blueprints": https://prow.infra.cft.dev/tide
   queries:
   - repos:
@@ -82,8 +82,8 @@ tide:
 
 plank:
   job_url_prefix_config:
-    '*': https://oss-prow.knative.dev/view/
-    'looker': https://oss-prow-private.knative.dev/view/
+    '*': https://oss.gprow.dev/view/
+    'looker': https://oss-private.gprow.dev/view/
     "GoogleCloudPlatform/blueprints": https://prow.infra.cft.dev/view/
   pod_pending_timeout: 30m
   pod_unscheduled_timeout: 10m
