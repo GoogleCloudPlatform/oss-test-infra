@@ -257,6 +257,8 @@ deck:
                 pod_link_template: "https://console.cloud.google.com/kubernetes/pod/us-west1-a/prow/test-pods/{{ .Name }}/details?project=oss-prow-builds"
               "test-infra-trusted":
                 pod_link_template: "https://console.cloud.google.com/kubernetes/pod/us-west1-a/prow/test-pods/{{ .Name }}/details?project=oss-prow"
+              "kf-ci-v1":
+                pod_link_template: "https://console.cloud.google.com/kubernetes/pod/us-east1-d/kf-ci-v1/test-pods/{{ .Name }}/details?project=kubeflow-ci"
         required_files:
           - podinfo.json
         optional_files:
