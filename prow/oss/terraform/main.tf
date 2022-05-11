@@ -12,6 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# NOTE: These alerts are being developed internally and for now serve as a
+# reference. When things are stabilized, these alerts will be updated.
+
 # Store terraform states in GCS
 terraform {
   backend "gcs" {
