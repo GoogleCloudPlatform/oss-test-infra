@@ -79,7 +79,7 @@ resource "google_monitoring_alert_policy" "predicted-gh-rate-limit-exhaustion" {
       # end of the current rate limit reset window based on rate of consumption
       # over the last 10 minutes. The alert fires if we predict that we will
       # come within 250 tokens of the limit (which is 5% of the 5000 limit).
-      duration = "0s"
+      duration = "60s"
       query    = <<-EOT
       {t_0: # The remaining tokens in the rate limit reset window
           fetch k8s_container::workload.googleapis.com/github_token_usage
