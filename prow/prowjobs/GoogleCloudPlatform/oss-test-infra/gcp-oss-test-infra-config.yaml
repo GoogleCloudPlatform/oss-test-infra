@@ -40,7 +40,7 @@ postsubmits:
     spec:
       serviceAccountName: testgrid-config-updater
       containers:
-      - image: gcr.io/k8s-prow/configurator:v20220510-ea8855b057
+      - image: gcr.io/k8s-prow/configurator:v20220512-991c32830b
         command:
         - configurator
         args:
@@ -73,7 +73,7 @@ periodics:
     testgrid-num-failures-to-alert: '3'
   spec:
     containers:
-    - image: gcr.io/k8s-prow/generic-autobumper:v20220510-ea8855b057
+    - image: gcr.io/k8s-prow/generic-autobumper:v20220512-991c32830b
       command:
       - generic-autobumper
       args:
@@ -110,7 +110,7 @@ periodics:
     testgrid-num-failures-to-alert: '1'
   spec:
     containers:
-    - image: gcr.io/k8s-prow/generic-autobumper:v20220510-ea8855b057
+    - image: gcr.io/k8s-prow/generic-autobumper:v20220512-991c32830b
       command:
       - generic-autobumper
       args:
