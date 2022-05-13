@@ -14,7 +14,8 @@ set -o pipefail
 # Specific to Prow instance, don't change these.
 export PROW_INSTANCE_NAME="${PROW_INSTANCE_NAME:-oss-prow}"
 export ADMIN_IAM_MEMBER="${ADMIN_IAM_MEMBER:-group:mdb.cloud-kubernetes-engprod-oncall@google.com}"
-export PROW_SECRET_ACCESSOR_SA="kubernetes-external-secrets-sa@oss-prow.iam.gserviceaccount.com"
+export PROW_SERVICE_PROJECT="oss-prow"
+export PROW_SECRET_ACCESSOR_SA="gencred-refresher@oss-prow.iam.gserviceaccount.com"
 export PROW_DEPLOYMENT_DIR="./prow/oss/cluster" # From root of repo
 export CONTROL_PLANE_SA="oss-prow-public-deck@oss-prow.iam.gserviceaccount.com,oss-prow@oss-prow.iam.gserviceaccount.com"
 

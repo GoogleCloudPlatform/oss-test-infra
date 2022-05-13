@@ -55,7 +55,27 @@ postsubmits:
         resources:
           requests:
             memory: "1Gi"
-
+  - name: post-test-infra-gencred-refresh-kubeconfig
+    cluster: test-infra-trusted
+    run_if_changed: '^(prow/oss/gencred-config/|prow/prowjobs/GoogleCloudPlatform/oss-test-infra/gcp-oss-test-infra-config\.yaml)'
+    decorate: true
+    branches:
+    - ^master$
+    spec:
+      serviceAccountName: gencred-refresher
+      containers:
+      - name: gencred
+        image: gcr.io/k8s-prow/gencred:v20220512-991c32830b
+        command:
+        - gencred
+        args:
+        - --config=./prow/oss/gencred-config/gencred-config.yaml
+    annotations:
+      testgrid-num-failures-to-alert: '1'
+      testgrid-dashboards: googleoss-test-infra
+      testgrid-tab-name: postsubmit-gencred-refresh-kubeconfig
+      testgrid-alert-email: k8s-infra-oncall@google.com
+      description: Runs gencred to refresh generated kubeconfigs.
 
 periodics:
 - cron: "30 * * * 1-5"  # Bump don't label `skip-review`. Run at :30 past every hour Mon-Fri
@@ -155,3 +175,23 @@ periodics:
         requests:
           cpu: 100m
           memory: 1Gi
+- cron: "17 */6 * * *"  # Every 6 hours at 17 minutes past the hour
+  name: ci-test-infra-gencred-refresh-kubeconfig
+  cluster: test-infra-trusted
+  decorate: true
+  spec:
+    serviceAccountName: gencred-refresher
+    containers:
+    - name: gencred
+      image: gcr.io/k8s-prow/gencred:v20220512-991c32830b
+      command:
+      - gencred
+      args:
+      - --config=./prow/oss/gencred-config/gencred-config.yaml
+  annotations:
+    testgrid-num-failures-to-alert: '3'
+    testgrid-alert-stale-results-hours: '12'
+    testgrid-dashboards: googleoss-test-infra
+    testgrid-tab-name: ci-gencred-refresh-kubeconfig
+    testgrid-alert-email: k8s-infra-oncall@google.com
+    description: Runs gencred to refresh generated kubeconfigs.
