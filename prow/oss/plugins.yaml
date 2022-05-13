@@ -185,6 +185,14 @@ plugins:
     - owners-label
     - size
     - verify-owners
+  GoogleCloudPlatform/netd:
+    plugins:
+    - approve
+    - help
+    - lgtm
+    - size
+    - verify-owners
+    - wip
   GoogleCloudPlatform/osconfig:
     plugins:
     - approve
