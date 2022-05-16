@@ -57,7 +57,7 @@ postsubmits:
             memory: "1Gi"
   - name: post-test-infra-gencred-refresh-kubeconfig
     cluster: test-infra-trusted
-    run_if_changed: '^(prow/oss/gencred-config/|prow/prowjobs/GoogleCloudPlatform/oss-test-infra/gcp-oss-test-infra-config\.yaml)'
+    run_if_changed: '^prow/oss/gencred-config/'
     decorate: true
     branches:
     - ^master$
@@ -179,6 +179,10 @@ periodics:
   name: ci-test-infra-gencred-refresh-kubeconfig
   cluster: test-infra-trusted
   decorate: true
+  extra_refs:
+  - org: GoogleCloudPlatform
+    repo: oss-test-infra
+    base_ref: master
   spec:
     serviceAccountName: gencred-refresher
     containers:
