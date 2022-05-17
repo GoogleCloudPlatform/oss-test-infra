@@ -4,7 +4,7 @@
 # https://cloud.google.com/stackdriver/docs/managed-prometheus/setup-managed#gmp-pod-monitoring.
 ---
 apiVersion: monitoring.googleapis.com/v1
-kind: PodMonitor
+kind: PodMonitoring
 metadata:
   labels:
     app: deck
@@ -20,7 +20,7 @@ spec:
       app: deck
 ---
 apiVersion: monitoring.googleapis.com/v1
-kind: PodMonitor
+kind: PodMonitoring
 metadata:
   labels:
     app: ghproxy
@@ -36,7 +36,7 @@ spec:
       app: ghproxy
 ---
 apiVersion: monitoring.googleapis.com/v1
-kind: PodMonitor
+kind: PodMonitoring
 metadata:
   labels:
     app: hook
@@ -52,7 +52,7 @@ spec:
       app: hook
 ---
 apiVersion: monitoring.googleapis.com/v1
-kind: PodMonitor
+kind: PodMonitoring
 metadata:
   labels:
     app: plank
@@ -68,7 +68,7 @@ spec:
       app: prow-controller-manager
 ---
 apiVersion: monitoring.googleapis.com/v1
-kind: PodMonitor
+kind: PodMonitoring
 metadata:
   labels:
     app: sinker
@@ -84,7 +84,7 @@ spec:
       app: sinker
 ---
 apiVersion: monitoring.googleapis.com/v1
-kind: PodMonitor
+kind: PodMonitoring
 metadata:
   labels:
     app: tide
@@ -100,7 +100,7 @@ spec:
       app: tide
 ---
 apiVersion: monitoring.googleapis.com/v1
-kind: PodMonitor
+kind: PodMonitoring
 metadata:
   labels:
     app: horologium
@@ -116,7 +116,7 @@ spec:
       app: horologium
 ---
 apiVersion: monitoring.googleapis.com/v1
-kind: PodMonitor
+kind: PodMonitoring
 metadata:
   labels:
     app: crier
@@ -132,7 +132,7 @@ spec:
       app: crier
 ---
 apiVersion: monitoring.googleapis.com/v1
-kind: PodMonitor
+kind: PodMonitoring
 metadata:
   labels:
     app: sub
@@ -148,7 +148,7 @@ spec:
       app: sub
 ---
 apiVersion: monitoring.googleapis.com/v1
-kind: PodMonitor
+kind: PodMonitoring
 metadata:
   labels:
     app.kubernetes.io/name: kubernetes-external-secrets
