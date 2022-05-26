@@ -169,6 +169,8 @@ presubmits:
       - image: python:3.7
         command:
         - ./backend/src/v2/test/sample-test.sh
+    skip_branches:
+    - ^sdk\/release-1.*$
   
   - name: kubeflow-pipelines-integration-v2
     run_if_changed: "^(samples/core/(parameterized_tfx_oss|dataflow)/.*)$"
