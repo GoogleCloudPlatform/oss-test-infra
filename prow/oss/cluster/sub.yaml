@@ -24,7 +24,7 @@ spec:
       serviceAccountName: sub
       containers:
       - name: sub
-        image: gcr.io/k8s-prow/sub:v20220601-9a19b5dc14
+        image: gcr.io/k8s-prow/sub:v20220602-a4b31d7576
         args:
         - --config-path=/etc/config/config.yaml
         - --job-config-path=/etc/job-config
