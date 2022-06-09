@@ -1,0 +1,52 @@
+presubmits:
+  google/bms-toolkit:
+  - name: bms-toolkit-install
+    cluster: build-bms-oracle-team
+    always_run: false
+    # Introducing max_concurrency, as noted in the design doc (internal) comment thread: https://docs.google.com/document/d/1mv2nV0Cv6EKv-ZTScv59JdyqvmNfYeMojqFJdJVhdmk/edit?pli=1&disco=AAAAUQ1gyBE
+    max_concurrency: 1
+    decorate: true
+    spec:
+      hostNetwork: true
+      containers:
+      - image: quay.io/ansible/ansible-runner:stable-2.9-latest
+        command:
+        # . represents the base directory of the cloned bms-toolkit repo, which is bms-toolkit
+        - ./presubmit_tests/test-pr-poc.sh
+        resources:
+          requests:
+            memory: "2.0Gi"
+            cpu: "3.0"
+        volumeMounts:
+        - name: all-in-one
+          mountPath: /etc/files_needed_for_tk
+      volumes:
+      - name: all-in-one
+        projected:
+          sources:
+          - secret:
+              name: id-rsa-bms-ansible9-syd1
+              items:
+                - key: id_rsa_bms_tk_key
+                  path: id_rsa_bms_tk_key
+                  mode: 0400
+          - configMap:
+              name: nonrac-asm-syd1
+              items:
+                - key: asm_disk_config_nonrac_primary_syd1.json
+                  path: nonrac-asm.json
+          - configMap:
+              name: nonrac-datamounts-syd1
+              items:
+                - key: data_mounts_config_nonrac_primary_syd1.json
+                  path: nonrac-datamounts.json
+          - configMap:
+              name: nonrac-inventory-syd1
+              items:
+                - key: inventory_orcl_nonrac_primary_syd1
+                  path: nonrac-inv
+          - configMap:
+              name: google-cloud-sdk
+              items:
+                - key: google-cloud-sdk.repo
+                  path: google-cloud-sdk.repo

@@ -31,7 +31,7 @@ tide:
     kubeflow:
       title: "{{ .Title }} (#{{ .Number }})"
   target_urls:
-    "*": https://oss-prow.knative.dev/tide
+    "*": https://oss.gprow.dev/tide
     "GoogleCloudPlatform/blueprints": https://prow.infra.cft.dev/tide
   queries:
   - repos:
@@ -54,6 +54,17 @@ tide:
     - approved
     missingLabels:
     - do-not-merge
+    - do-not-merge/hold
+    - do-not-merge/invalid-owners-file
+    - do-not-merge/work-in-progress
+  - repos:
+    - GoogleCloudPlatform/netd
+    labels:
+    - lgtm
+    - approved
+    missingLabels:
+    - do-not-merge
+    - do-not-merge/blocked-paths
     - do-not-merge/hold
     - do-not-merge/invalid-owners-file
     - do-not-merge/work-in-progress
@@ -81,7 +92,7 @@ tide:
 
 plank:
   job_url_prefix_config:
-    '*': https://oss-prow.knative.dev/view/
+    '*': https://oss.gprow.dev/view/
     "GoogleCloudPlatform/blueprints": https://prow.infra.cft.dev/view/
   pod_pending_timeout: 30m
   pod_unscheduled_timeout: 10m
@@ -91,10 +102,10 @@ plank:
       timeout: 7200000000000 # 2h
       grace_period: 15000000000 # 15s
       utility_images:
-        clonerefs: "gcr.io/k8s-prow/clonerefs:v20220321-4b84703439"
-        initupload: "gcr.io/k8s-prow/initupload:v20220321-4b84703439"
-        entrypoint: "gcr.io/k8s-prow/entrypoint:v20220321-4b84703439"
-        sidecar: "gcr.io/k8s-prow/sidecar:v20220321-4b84703439"
+        clonerefs: "gcr.io/k8s-prow/clonerefs:v20220608-93cbdb8cdc"
+        initupload: "gcr.io/k8s-prow/initupload:v20220608-93cbdb8cdc"
+        entrypoint: "gcr.io/k8s-prow/entrypoint:v20220608-93cbdb8cdc"
+        sidecar: "gcr.io/k8s-prow/sidecar:v20220608-93cbdb8cdc"
       gcs_configuration:
         bucket: "oss-prow"
         path_strategy: "explicit"
@@ -131,7 +142,12 @@ plank:
         bucket: "bmaas-testing-prow-bucket"
       default_service_account_name: "prowjob-default-sa" # Use workload identity
       gcs_credentials_secret: ""                         # rather than service account key secret
-
+  - cluster: build-compute-image-import
+    config:
+      gcs_configuration:
+        bucket: "compute-image-import-prow"
+      default_service_account_name: "prowjob-default-sa" # Use workload identity
+      gcs_credentials_secret: ""                         # rather than service account key secret
 
 sinker:
   resync_period: 1m
@@ -190,8 +206,18 @@ deck:
           - artifacts/junit.*\.xml
       - lens:
           name: podinfo
+          config:
+            runner_configs:
+              "default":
+                pod_link_template: "https://console.cloud.google.com/kubernetes/pod/us-west1-a/prow/test-pods/{{ .Name }}/details?project=oss-prow-builds"
+              "test-infra-trusted":
+                pod_link_template: "https://console.cloud.google.com/kubernetes/pod/us-west1-a/prow/test-pods/{{ .Name }}/details?project=oss-prow"
+              "build-kubeflow":
+                pod_link_template: "https://console.cloud.google.com/kubernetes/pod/us-east1-d/kf-ci-v1/test-pods/{{ .Name }}/details?project=kubeflow-ci"
         required_files:
           - podinfo.json
+        optional_files:
+          - prowjob.json
       - lens:
           name: html
         required_files:

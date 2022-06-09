@@ -24,14 +24,14 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
       - name: deck
-        image: gcr.io/k8s-prow/deck:v20220321-4b84703439
+        image: gcr.io/k8s-prow/deck:v20220608-93cbdb8cdc
         args:
         - --config-path=/etc/config/config.yaml
         - --job-config-path=/etc/job-config
         - --spyglass=true
         - --tide-url=http://tide/
         - --hook-url=http://hook:8888/plugin-help
-        - --redirect-http-to=oss-prow.knative.dev
+        - --redirect-http-to=oss.gprow.dev
         - --rerun-creates-job
         - --oauth-url=/github-login
         - --github-token-path=/etc/github/oauth
@@ -43,13 +43,16 @@ spec:
         env:
         # Use KUBECONFIG envvar rather than --kubeconfig flag in order to provide multiple configs to merge.
         - name: KUBECONFIG
-          value: "/etc/kubeconfig/config-20211108:/etc/build-bms-oracle-team/kubeconfig:/etc/build-blueprints/kubeconfig:/etc/build-elcarro/kubeconfig:/etc/build-kubeflow/kubeconfig"
+          value: "/etc/kubeconfig/config-20211108:/etc/build-compute-image-import/kubeconfig:/etc/build-bms-oracle-team/kubeconfig:/etc/build-blueprints/kubeconfig:/etc/build-elcarro/kubeconfig:/etc/build-kubeflow/kubeconfig"
         ports:
         - name: http
           containerPort: 8080
         - name: metrics
           containerPort: 9090
         volumeMounts:
+        - mountPath: /etc/build-compute-image-import
+          name: build-compute-image-import
+          readOnly: true
         - mountPath: /etc/build-bms-oracle-team
           name: build-bms-oracle-team
           readOnly: true
@@ -97,6 +100,10 @@ spec:
           periodSeconds: 3
           timeoutSeconds: 600
       volumes:
+      - name: build-compute-image-import
+        secret:
+          defaultMode: 420
+          secretName: kubeconfig-build-compute-image-import
       - name: build-bms-oracle-team
         secret:
           defaultMode: 420
@@ -111,7 +118,7 @@ spec:
           secretName: kubeconfig-build-elcarro
       - name: oauth-config
         secret:
-          secretName: github-oauth-config-20200326-oss-prow-knative-dev
+          secretName: github-oauth-config-oss-gprow-dev
       - name: oauth-token
         secret:
           secretName: oauth-token-2

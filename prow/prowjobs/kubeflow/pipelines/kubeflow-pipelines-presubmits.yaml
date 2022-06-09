@@ -116,19 +116,9 @@ presubmits:
     run_if_changed: "^(components/.*\\.yaml)|(test/presubmit-component-yaml.sh)$"
     spec:
       containers:
-      - image: python:3.6
+      - image: python:3.7
         command:
         - ./test/presubmit-component-yaml.sh
-
-  - name: kubeflow-pipelines-components-gcp-python27
-    cluster: build-kubeflow
-    decorate: true
-    run_if_changed: "^(components/gcp/container/.*)|(test/presubmit-components-gcp.sh)$"
-    spec:
-      containers:
-      - image: python:2.7
-        command:
-        - ./test/presubmit-components-gcp.sh
 
   - name: kubeflow-pipelines-components-gcp-python37
     cluster: build-kubeflow
@@ -169,6 +159,8 @@ presubmits:
       - image: python:3.7
         command:
         - ./backend/src/v2/test/sample-test.sh
+    skip_branches:
+    - ^sdk\/release-1.*$
   
   - name: kubeflow-pipelines-integration-v2
     run_if_changed: "^(samples/core/(parameterized_tfx_oss|dataflow)/.*)$"
@@ -179,16 +171,6 @@ presubmits:
       - image: python:3.7
         command:
         - ./backend/src/v2/test/integration-test.sh
-
-  - name: kubeflow-pipelines-v2-go-test
-    cluster: build-kubeflow
-    decorate: true
-    run_if_changed: "^backend/src/v2/.*$"
-    spec:
-      containers:
-        - image: gcr.io/google.com/cloudsdktool/cloud-sdk:latest
-          command:
-            - ./backend/src/v2/test/presubmit-v2-go-test.sh
 
   - name: kubeflow-pipelines-manifests
     cluster: build-kubeflow

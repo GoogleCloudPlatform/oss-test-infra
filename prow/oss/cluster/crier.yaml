@@ -20,7 +20,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
       - name: crier
-        image: gcr.io/k8s-prow/crier:v20220321-4b84703439
+        image: gcr.io/k8s-prow/crier:v20220608-93cbdb8cdc
         args:
         - --blob-storage-workers=1
         - --config-path=/etc/config/config.yaml
@@ -28,7 +28,6 @@ spec:
         - --gerrit-projects=https://kunit-review.googlesource.com=linux
         - --gerrit-projects=https://linux-review.googlesource.com=linux/kernel/git/torvalds/linux
         - --gerrit-workers=1
-        - --additional-slack-token-files=knative=/etc/knative-slack-token/token
         - --pubsub-workers=1
         - --github-endpoint=http://ghproxy
         - --github-endpoint=https://api.github.com
@@ -40,7 +39,7 @@ spec:
         env:
         # Use KUBECONFIG envvar rather than --kubeconfig flag in order to provide multiple configs to merge.
         - name: KUBECONFIG
-          value: "/etc/kubeconfig/config-20211108:/etc/build-bms-oracle-team/kubeconfig:/etc/build-blueprints/kubeconfig:/etc/build-elcarro/kubeconfig:/etc/build-kubeflow/kubeconfig"
+          value: "/etc/kubeconfig/config-20211108:/etc/build-compute-image-import/kubeconfig:/etc/build-bms-oracle-team/kubeconfig:/etc/build-blueprints/kubeconfig:/etc/build-elcarro/kubeconfig:/etc/build-kubeflow/kubeconfig"
         - name: GITHUB_APP_ID
           valueFrom:
             secretKeyRef:
@@ -50,6 +49,9 @@ spec:
         - name: metrics
           containerPort: 9090
         volumeMounts:
+        - mountPath: /etc/build-compute-image-import
+          name: build-compute-image-import
+          readOnly: true
         - mountPath: /etc/build-bms-oracle-team
           name: build-bms-oracle-team
           readOnly: true
@@ -77,10 +79,11 @@ spec:
         - name: ghapp-token
           mountPath: /etc/github
           readOnly: true
-        - name: knative-slack-token
-          mountPath: etc/knative-slack-token
-          readOnly: true
       volumes:
+      - name: build-compute-image-import
+        secret:
+          defaultMode: 420
+          secretName: kubeconfig-build-compute-image-import
       - name: build-bms-oracle-team
         secret:
           defaultMode: 420
@@ -114,9 +117,6 @@ spec:
       - name: ghapp-token
         secret:
           secretName: ghapp-token
-      - name: knative-slack-token
-        secret:
-          secretName: knative-slack-token
 ---
 kind: ServiceAccount
 apiVersion: v1

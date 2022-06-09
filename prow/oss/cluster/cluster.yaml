@@ -37,6 +37,24 @@ spec:
 apiVersion: networking.gke.io/v1beta1
 kind: ManagedCertificate
 metadata:
+  name: oss-private-gprow-dev
+  namespace: default
+spec:
+  domains:
+  - oss-private.gprow.dev
+---
+apiVersion: networking.gke.io/v1beta1
+kind: ManagedCertificate
+metadata:
+  name: oss-gprow-dev
+  namespace: default
+spec:
+  domains:
+  - oss.gprow.dev
+---
+apiVersion: networking.gke.io/v1beta1
+kind: ManagedCertificate
+metadata:
   name: oss-prow-blueprints-deck
   namespace: default
 spec:
@@ -73,6 +91,46 @@ spec:
             port:
               number: 8888
   - host: oss-prow-private.knative.dev
+    http:
+      paths:
+      - path: /*
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: deck-private
+            port:
+              number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: gprow-ing
+  namespace: default
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: "oss-gprow-dev"
+    kubernetes.io/ingress.class: "gce"
+    kubernetes.io/tls-acme: "true"
+    networking.gke.io/managed-certificates: oss-gprow-dev,oss-private-gprow-dev
+spec:
+  rules:
+  - host: oss.gprow.dev
+    http:
+      paths:
+      - path: /*
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: deck
+            port:
+              number: 80
+      - path: /ghapp-hook
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: hook
+            port:
+              number: 8888
+  - host: oss-private.gprow.dev
     http:
       paths:
       - path: /*

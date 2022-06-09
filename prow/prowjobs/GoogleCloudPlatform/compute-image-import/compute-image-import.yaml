@@ -1,0 +1,358 @@
+periodics:
+- name: compute-image-import-cleanerupper
+  cluster: build-compute-image-import
+  decorate: true
+  annotations:
+    testgrid-dashboards: googleoss-compute-image-import
+    testgrid-tab-name: cleanerupper
+  interval: 1h
+  agent: kubernetes
+  spec:
+    activeDeadlineSeconds: 1800
+    containers:
+    - image: gcr.io/gcp-guest/cleanerupper:latest
+      command:
+      - /cleanerupper
+      args:
+      - -dry_run=false
+      - -duration=24h
+      - -instances=true
+      - -disks=true
+      - -images=true
+      - -machine_images=true
+      - -networks=true
+      - -snapshots=true
+      - -projects=compute-import-test-pool-001,compute-import-test-pool-001-1,compute-import-test-pool-001-2,compute-import-test-pool-002,compute-import-test-pool-003,compute-import-test-pool-004,compute-import-test-pool-005,compute-import-test-pool-006,compute-image-test-custom-vpc
+      env:
+      - name: GOOGLE_APPLICATION_CREDENTIALS
+        value: ""
+- name: compute-image-import-ci-daisy-e2e
+  cluster: build-compute-image-import
+  decorate: true
+  annotations:
+    testgrid-dashboards: googleoss-compute-image-import
+    testgrid-tab-name: ci-daisy-e2e
+  interval: 3h
+  agent: kubernetes
+  spec:
+    containers:
+    - image: gcr.io/compute-image-tools-test/test-runner:latest
+      command:
+      - /main.sh
+      args:
+      - -out_path=$(ARTIFACTS)/junit.xml
+      # One project is enough for daisy tests, no test requires a write lock.
+      - -projects=compute-import-test-pool-001
+      - -zone=us-central1-c
+      - daisy_integration_tests/daisy_e2e.test.gotmpl
+      env:
+      - name: GOOGLE_APPLICATION_CREDENTIALS
+        value: ""
+      - name: REPO_OWNER
+        value: GoogleCloudPlatform
+      - name: REPO_NAME
+        value: compute-image-import
+- name: compute-image-import-ci-daisy-e2e-daily
+  cluster: build-compute-image-import
+  decorate: true
+  decoration_config:
+    timeout: 23h
+  annotations:
+    testgrid-dashboards: googleoss-compute-image-import
+    testgrid-tab-name: ci-daisy-e2e-daily
+  interval: 24h
+  agent: kubernetes
+  spec:
+    containers:
+    - image: gcr.io/compute-image-tools-test/test-runner:latest
+      command:
+      - /main.sh
+      args:
+      - -out_path=$(ARTIFACTS)/junit.xml
+      # One project is enough for daisy tests, no test requires a write lock.
+      - -projects=compute-import-test-pool-001
+      - -zone=us-central1-c
+      - daisy_integration_tests/daisy_e2e_daily.test.gotmpl
+      env:
+      - name: GOOGLE_APPLICATION_CREDENTIALS
+        value: ""
+      - name: REPO_OWNER
+        value: GoogleCloudPlatform
+      - name: REPO_NAME
+        value: compute-image-import
+- name: compute-image-import-ci-daisy-e2e-weekly
+  cluster: build-compute-image-import
+  decorate: true
+  decoration_config:
+    timeout: 23h
+  annotations:
+    testgrid-dashboards: googleoss-compute-image-import
+    testgrid-tab-name: ci-daisy-e2e-weekly
+  interval: 168h
+  agent: kubernetes
+  spec:
+    containers:
+    - image: gcr.io/compute-image-tools-test/test-runner:latest
+      command:
+      - /main.sh
+      args:
+      - -out_path=$(ARTIFACTS)/junit.xml
+      # One project is enough for daisy tests, no test requires a write lock.
+      - -projects=compute-import-test-pool-001
+      - -zone=us-central1-c
+      - daisy_integration_tests/daisy_e2e_weekly.test.gotmpl
+      env:
+      - name: GOOGLE_APPLICATION_CREDENTIALS
+        value: ""
+      - name: REPO_OWNER
+        value: GoogleCloudPlatform
+      - name: REPO_NAME
+        value: compute-image-import
+- name: compute-image-import-ovf-import-e2e-tests-daily
+  cluster: build-compute-image-import
+  decorate: true
+  decoration_config:
+    timeout: 11h
+  annotations:
+    testgrid-dashboards: googleoss-compute-image-import
+    testgrid-tab-name: ci-ovf-import-e2e-tests-daily
+  interval: 12h
+  agent: kubernetes
+  spec:
+    containers:
+    - image: gcr.io/compute-image-import-test/gce-ovf-import-tests:latest
+      command:
+      - /gce_ovf_import_test_runner
+      args:
+      - -out_dir=$(ARTIFACTS)
+      - -test_project_id=compute-import-test-pool-001
+      - -test_zone=us-central1-c
+      - -variables=compute_service_account_without_default_service_account=pool-001-1-sa@compute-import-test-pool-001-1.iam.gserviceaccount.com,compute_service_account_without_default_service_account_permission=pool-001-2-sa@compute-import-test-pool-001-2.iam.gserviceaccount.com,instance_service_account_without_default_service_account=pool-001-1-sa-2@compute-import-test-pool-001-1.iam.gserviceaccount.com,instance_service_account_without_default_service_account_permission=pool-001-2-sa-2@compute-import-test-pool-001-2.iam.gserviceaccount.com,project_id_without_default_service_account=compute-import-test-pool-001-1,project_id_without_default_service_account_permission=compute-import-test-pool-001-2
+      env:
+      - name: GOOGLE_APPLICATION_CREDENTIALS
+        value: ""
+- name: compute-image-import-ovf-export-e2e-tests-daily
+  cluster: build-compute-image-import
+  decorate: true
+  decoration_config:
+    timeout: 11h
+  annotations:
+    testgrid-dashboards: googleoss-compute-image-import
+    testgrid-tab-name: ci-ovf-export-e2e-tests-daily
+  interval: 12h
+  agent: kubernetes
+  spec:
+    containers:
+    - image: gcr.io/compute-image-import-test/gce-ovf-export-tests:latest
+      command:
+      - /gce_ovf_export_test_runner
+      args:
+      - -out_dir=$(ARTIFACTS)
+      - -test_project_id=compute-import-test-pool-001
+      - -test_zone=us-central1-c
+      env:
+      - name: GOOGLE_APPLICATION_CREDENTIALS
+        value: ""
+- name: compute-image-import-images-import-export-cli-e2e-tests
+  cluster: build-compute-image-import
+  decorate: true
+  decoration_config:
+    timeout: 11h
+  annotations:
+    testgrid-dashboards: googleoss-compute-image-import
+    testgrid-tab-name: ci-images-import-export-cli-e2e-tests
+  interval: 12h
+  agent: kubernetes
+  spec:
+    containers:
+    - image: gcr.io/compute-image-import-test/gce-image-import-export-tests:latest
+      command:
+      - /gce_image_import_export_test_runner
+      args:
+      - -out_dir=$(ARTIFACTS)
+      - -test_project_id=compute-import-test-pool-001
+      - -test_zone=us-central1-b
+      - -variables=aws_region=us-east-2,aws_bucket=s3://onestep-test,ubuntu_ami_id=ami-04d75010218164863,windows_ami_id=ami-0c91f2e838828598d,ubuntu_vmdk=s3://onestep-test/ubuntu1804.vmdk,windows_vmdk=s3://onestep-test/windows2019.vmdk,aws_cred_file_path=gs://compute-image-import-test-resources/onestep-test-user,compute_service_account_without_default_service_account=pool-001-1-sa@compute-import-test-pool-001-1.iam.gserviceaccount.com,compute_service_account_without_default_service_account_permission=pool-001-2-sa@compute-import-test-pool-001-2.iam.gserviceaccount.com,project_id_without_default_service_account=compute-import-test-pool-001-1,project_id_without_default_service_account_permission=compute-import-test-pool-001-2
+      env:
+      - name: GOOGLE_APPLICATION_CREDENTIALS
+        value: ""
+postsubmits:
+  GoogleCloudPlatform/compute-image-import:
+  # Integ tests that need credentials to create resources in a GCP project.
+  - name: compute-image-import-postsubmit-module-tests
+    cluster: build-compute-image-import
+    decorate: true
+    annotations:
+      testgrid-dashboards: googleoss-compute-image-import
+      testgrid-tab-name: module-tests
+      description: Postsubmit tests; executes cli_tools_tests/module/
+    branches:
+    - ^main$
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/cli-tools-module-tests:latest
+        # The security context is required to allow gcsfuse to create a mount.
+        securityContext:
+          privileged: true
+        imagePullPolicy: Always
+        command:
+        - /go/main.sh
+        args:
+        - cli_tools_tests/module/
+        - -test.timeout=30m
+        - -test.parallel=8
+        env:
+        - name: GOOGLE_CLOUD_PROJECT
+          value: compute-import-test-pool-001
+        - name: GOOGLE_CLOUD_ZONE
+          value: us-central1-a
+presubmits:
+  GoogleCloudPlatform/compute-image-import:
+  - name: compute-image-import-flake8
+    cluster: build-compute-image-import
+    run_if_changed: .*\.py$
+    trigger: (?m)^/flake8$
+    rerun_command: /flake8
+    context: prow/presubmit/flake8
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/flake8:latest
+        imagePullPolicy: Always
+        command:
+        - /main.sh
+  - name: compute-image-import-boot-inspect-pytest
+    cluster: build-compute-image-import
+    run_if_changed: daisy_workflows/image_import/inspection/.*
+    trigger: (?m)^/pytest-boot-inspect$
+    rerun_command: /pytest-boot-inspect
+    context: prow/presubmit/pytest/boot-inspect
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/pytest:latest
+        imagePullPolicy: Always
+        command:
+        - /main.py
+        args:
+        - daisy_workflows/image_import/inspection
+  - name: compute-image-import-presubmit-gocheck
+    cluster: build-compute-image-import
+    run_if_changed: cli_tools/.*
+    trigger: (?m)^/gocheck-cli-tools$
+    rerun_command: /gocheck-cli-tools
+    context: prow/presubmit/gocheck/cli-tools
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gocheck:latest
+        imagePullPolicy: Always
+        command:
+        - /go/main.sh
+        args:
+        - cli_tools/
+  - name: cli-tools-presubmit-gotest
+    cluster: build-compute-image-import
+    run_if_changed: cli_tools/.*
+    trigger: (?m)^/gotest-cli-tools$
+    rerun_command: /gotest-cli-tools
+    context: prow/presubmit/gotest/cli-tools
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gotest:latest
+        imagePullPolicy: Always
+        command:
+        - /go/main.sh
+        args:
+        - cli_tools/
+  - name: compute-image-import-presubmit-gobuild
+    cluster: build-compute-image-import
+    run_if_changed: cli_tools/.*
+    trigger: (?m)^/gobuild-cli-tools$
+    rerun_command: /gobuild-cli-tools
+    context: prow/presubmit/gobuild/cli-tools
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gobuild:latest
+        imagePullPolicy: Always
+        command:
+        - /go/main.sh
+        args:
+        - cli_tools/
+  - name: compute-image-import-common-presubmit-gocheck
+    cluster: build-compute-image-import
+    run_if_changed: common/.*
+    trigger: (?m)^/gocheck-common$
+    rerun_command: /gocheck-common
+    context: prow/presubmit/gocheck/common
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gocheck:latest
+        imagePullPolicy: Always
+        command:
+        - /go/main.sh
+        args:
+        - common/
+  - name: compute-image-import-common-presubmit-gotest
+    cluster: build-compute-image-import
+    run_if_changed: common/.*
+    trigger: (?m)^/gotest-common$
+    rerun_command: /gotest-common
+    context: prow/presubmit/gotest/common
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gotest:latest
+        imagePullPolicy: Always
+        command:
+        - /go/main.sh
+        args:
+        - common/
+  - name: compute-image-import-common-presubmit-gobuild
+    cluster: build-compute-image-import
+    run_if_changed: common/.*
+    trigger: (?m)^/gobuild-common$
+    rerun_command: /gobuild-common
+    context: prow/presubmit/gobuild/common
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gobuild:latest
+        imagePullPolicy: Always
+        command:
+        - /go/main.sh
+        args:
+        - common/
+  - name: compute-image-import-tests-presubmit-gocheck
+    cluster: build-compute-image-import
+    run_if_changed: cli_tools_tests/.*
+    trigger: (?m)^/gocheck-cli-tools-tests$
+    rerun_command: /gocheck-cli-tools-tests
+    context: prow/presubmit/gocheck/cli-tools-tests
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gocheck:latest
+        imagePullPolicy: Always
+        command:
+        - /go/main.sh
+        args:
+        - cli_tools_tests/
+  - name: compute-image-import-tests-presubmit-gobuild
+    cluster: build-compute-image-import
+    run_if_changed: cli_tools_tests/.*
+    trigger: (?m)^/gobuild-cli-tools-tests$
+    rerun_command: /gobuild-cli-tools-tests
+    context: prow/presubmit/gobuild/cli-tools-tests
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gobuild:latest
+        imagePullPolicy: Always
+        command:
+        - /go/main.sh
+        args:
+        - cli_tools_tests/

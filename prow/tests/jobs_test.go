@@ -176,32 +176,6 @@ func TestPrivateJobs(t *testing.T) {
 	}
 }
 
-// Knative cluster is not meant to run any prow job from this repo
-func TestKnativeCluster(t *testing.T) {
-	const protected = "knative-prow-trusted"
-	verifyFunc := func(t *testing.T, jobName, cluster string) {
-		if cluster == protected {
-			t.Errorf("%s: cannot use knative cluster", jobName)
-		}
-	}
-
-	for _, pres := range c.PresubmitsStatic {
-		for _, pre := range pres {
-			verifyFunc(t, pre.Name, pre.Cluster)
-		}
-	}
-
-	for _, posts := range c.PostsubmitsStatic {
-		for _, post := range posts {
-			verifyFunc(t, post.Name, post.Cluster)
-		}
-	}
-
-	for _, per := range c.AllPeriodics() {
-		verifyFunc(t, per.Name, per.Cluster)
-	}
-}
-
 // TestNoAutomaticOrExpensiveOrgWidePlugins validates that none of the
 // specified orgs have plugins enabled at the org level that either:
 //   1) Act automatically without prompting from the user (e.g. size plugin or

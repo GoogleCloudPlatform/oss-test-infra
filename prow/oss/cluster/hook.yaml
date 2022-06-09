@@ -25,7 +25,7 @@ spec:
       terminationGracePeriodSeconds: 180
       containers:
       - name: hook
-        image: gcr.io/k8s-prow/hook:v20220321-4b84703439
+        image: gcr.io/k8s-prow/hook:v20220608-93cbdb8cdc
         imagePullPolicy: Always
         args:
         - --webhook-path=/ghapp-hook
@@ -39,7 +39,7 @@ spec:
         env:
         # Use KUBECONFIG envvar rather than --kubeconfig flag in order to provide multiple configs to merge.
         - name: KUBECONFIG
-          value: "/etc/kubeconfig/config-20211108:/etc/build-bms-oracle-team/kubeconfig:/etc/build-blueprints/kubeconfig:/etc/build-elcarro/kubeconfig:/etc/build-kubeflow/kubeconfig"
+          value: "/etc/kubeconfig/config-20211108:/etc/build-compute-image-import/kubeconfig:/etc/build-bms-oracle-team/kubeconfig:/etc/build-blueprints/kubeconfig:/etc/build-elcarro/kubeconfig:/etc/build-kubeflow/kubeconfig"
         - name: GITHUB_APP_ID
           valueFrom:
             secretKeyRef:
@@ -51,6 +51,9 @@ spec:
         - name: metrics
           containerPort: 9090
         volumeMounts:
+        - mountPath: /etc/build-compute-image-import
+          name: build-compute-image-import
+          readOnly: true
         - mountPath: /etc/build-bms-oracle-team
           name: build-bms-oracle-team
           readOnly: true
@@ -99,6 +102,10 @@ spec:
           periodSeconds: 3
           timeoutSeconds: 600
       volumes:
+      - name: build-compute-image-import
+        secret:
+          defaultMode: 420
+          secretName: kubeconfig-build-compute-image-import
       - name: build-bms-oracle-team
         secret:
           defaultMode: 420

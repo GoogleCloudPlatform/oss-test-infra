@@ -24,7 +24,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
       - name: deck-blueprints
-        image: gcr.io/k8s-prow/deck:v20220321-4b84703439
+        image: gcr.io/k8s-prow/deck:v20220608-93cbdb8cdc
         args:
         - --config-path=/etc/config/config.yaml
         - --hook-url=http://hook:8888/plugin-help
@@ -44,13 +44,16 @@ spec:
         env:
         # Use KUBECONFIG envvar rather than --kubeconfig flag in order to provide multiple configs to merge.
         - name: KUBECONFIG
-          value: "/etc/kubeconfig/config-20211108:/etc/build-bms-oracle-team/kubeconfig:/etc/build-blueprints/kubeconfig:/etc/build-elcarro/kubeconfig:/etc/build-kubeflow/kubeconfig"
+          value: "/etc/kubeconfig/config-20211108:/etc/build-compute-image-import/kubeconfig:/etc/build-bms-oracle-team/kubeconfig:/etc/build-blueprints/kubeconfig:/etc/build-elcarro/kubeconfig:/etc/build-kubeflow/kubeconfig"
         ports:
         - name: http
           containerPort: 8080
         - name: metrics
           containerPort: 9090
         volumeMounts:
+        - mountPath: /etc/build-compute-image-import
+          name: build-compute-image-import
+          readOnly: true
         - mountPath: /etc/build-bms-oracle-team
           name: build-bms-oracle-team
           readOnly: true
@@ -98,7 +101,7 @@ spec:
           periodSeconds: 3
           timeoutSeconds: 600
       - name: oauth2-proxy
-        image: quay.io/oauth2-proxy/oauth2-proxy
+        image: quay.io/oauth2-proxy/oauth2-proxy:v7.2.1
         ports:
         - containerPort: 4180
           protocol: TCP
@@ -142,6 +145,10 @@ spec:
               name: blueprints-github-oauth
               key: cookieSecret
       volumes:
+      - name: build-compute-image-import
+        secret:
+          defaultMode: 420
+          secretName: kubeconfig-build-compute-image-import
       - name: build-bms-oracle-team
         secret:
           defaultMode: 420

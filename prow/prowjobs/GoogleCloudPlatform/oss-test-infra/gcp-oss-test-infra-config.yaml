@@ -23,39 +23,6 @@ postsubmits:
         - deploy
         - deploy-build
         - deploy-monitoring
-  - name: post-oss-test-infra-deploy-knative-prow
-    cluster: test-infra-trusted
-    run_if_changed: '^prow/knative/cluster/|^prow/oss/serviceaccounts/'
-    decorate: true
-    branches:
-    - master
-    annotations:
-      testgrid-dashboards: googleoss-test-infra
-      testgrid-tab-name: knative-prow-deploy
-      testgrid-alert-email: k8s-infra-oncall@google.com
-      testgrid-num-failures-to-alert: '2'
-    reporter_config:
-      slack:
-        host: "knative" # Must match additional-slack-token-files in crier deployment
-        channel: "test"
-        job_states_to_report:
-        - success
-        - failure
-        - aborted
-        - error
-        report_template: 'Deploying prow: {{.Status.State}}. <{{.Spec.Refs.BaseLink}}|Commit {{.Spec.Refs.BaseSHA}}> <{{.Status.URL}}|View logs> <https://testgrid.k8s.io/googleoss-test-infra#knative-prow-deploy|Job history on Testgrid>'
-    spec:
-      serviceAccountName: prow-deployer
-      containers:
-      - image: gcr.io/k8s-testimages/gcloud-in-go:v20200824-5d057db
-        command:
-        - make
-        args:
-        - -C
-        - prow/knative
-        - deploy
-        - deploy-build
-        - deploy-monitoring
   - name: post-oss-test-infra-create-testgrid-config
     cluster: test-infra-trusted
     branches:
@@ -73,7 +40,7 @@ postsubmits:
     spec:
       serviceAccountName: testgrid-config-updater
       containers:
-      - image: gcr.io/k8s-prow/configurator:v20220321-4b84703439
+      - image: gcr.io/k8s-prow/configurator:v20220608-93cbdb8cdc
         command:
         - configurator
         args:
@@ -88,7 +55,27 @@ postsubmits:
         resources:
           requests:
             memory: "1Gi"
-
+  - name: post-test-infra-gencred-refresh-kubeconfig
+    cluster: test-infra-trusted
+    run_if_changed: '^prow/oss/gencred-config/'
+    decorate: true
+    branches:
+    - ^master$
+    spec:
+      serviceAccountName: gencred-refresher
+      containers:
+      - name: gencred
+        image: gcr.io/k8s-prow/gencred:v20220608-93cbdb8cdc
+        command:
+        - gencred
+        args:
+        - --config=./prow/oss/gencred-config/gencred-config.yaml
+    annotations:
+      testgrid-num-failures-to-alert: '1'
+      testgrid-dashboards: googleoss-test-infra
+      testgrid-tab-name: postsubmit-gencred-refresh-kubeconfig
+      testgrid-alert-email: k8s-infra-oncall@google.com
+      description: Runs gencred to refresh generated kubeconfigs.
 
 periodics:
 - cron: "30 * * * 1-5"  # Bump don't label `skip-review`. Run at :30 past every hour Mon-Fri
@@ -106,7 +93,7 @@ periodics:
     testgrid-num-failures-to-alert: '3'
   spec:
     containers:
-    - image: gcr.io/k8s-prow/generic-autobumper:v20220321-4b84703439
+    - image: gcr.io/k8s-prow/generic-autobumper:v20220608-93cbdb8cdc
       command:
       - generic-autobumper
       args:
@@ -143,84 +130,11 @@ periodics:
     testgrid-num-failures-to-alert: '1'
   spec:
     containers:
-    - image: gcr.io/k8s-prow/generic-autobumper:v20220321-4b84703439
+    - image: gcr.io/k8s-prow/generic-autobumper:v20220608-93cbdb8cdc
       command:
       - generic-autobumper
       args:
       - --config=prow/oss/oss-autobump-config.yaml
-      - --labels-override=skip-review # This label is used by tide for identifying trusted PR
-      - --skip-if-no-oncall # Only apply `skip-review` label when oncall is active
-      volumeMounts:
-      - name: github
-        mountPath: /etc/github-token
-        readOnly: true
-      - name: ssh
-        mountPath: /root/.ssh
-    volumes:
-    - name: github
-      secret:
-        secretName: oauth-token-2
-    - name: ssh
-      secret:
-        secretName: google-oss-robot-ssh-keys
-        defaultMode: 0400
-- cron: "15 15-23 * * 1-5"  # Run at 7:15-15:15 PST (15:15 UTC) Mon-Fri
-  name: ci-oss-test-infra-autobump-knative-prow
-  cluster: test-infra-trusted
-  decorate: true
-  extra_refs:
-  - org: GoogleCloudPlatform
-    repo: oss-test-infra
-    base_ref: master
-  annotations:
-    testgrid-dashboards: googleoss-test-infra
-    testgrid-tab-name: autobump-knative-prow
-    testgrid-alert-email: k8s-infra-oncall@google.com
-    testgrid-num-failures-to-alert: '3'
-  spec:
-    containers:
-    - image: gcr.io/k8s-prow/generic-autobumper:v20220321-4b84703439
-      command:
-      - generic-autobumper
-      args:
-      - --config=prow/knative/knative-autobump-config.yaml
-      volumeMounts:
-      - name: github
-        mountPath: /etc/github-token
-        readOnly: true
-      - name: ssh
-        mountPath: /root/.ssh
-    volumes:
-    - name: github
-      secret:
-        secretName: oauth-token-2
-    - name: ssh
-      secret:
-        secretName: google-oss-robot-ssh-keys
-        defaultMode: 0400
-- cron: "30 21 * * 1-5"  # Bump with label `skip-review`. Run at 13:30 PST (21:30 UTC, fall) Mon-Fri
-  # Save for daylight saving:
-  # (Could consider not to switch, since running at 14:30 PST is an acceptable time)
-  # cron: "30 20 * * 1-5"  # Bump with label `skip-review`. Run at 13:30 PST (20:30 UTC, spring) Mon-Fri
-  name: ci-oss-test-infra-autobump-knative-prow-for-auto-deploy
-  cluster: test-infra-trusted
-  decorate: true
-  extra_refs:
-  - org: GoogleCloudPlatform
-    repo: oss-test-infra
-    base_ref: master
-  annotations:
-    testgrid-dashboards: googleoss-test-infra
-    testgrid-tab-name: autobump-knative-prow-for-auto-deploy
-    testgrid-alert-email: k8s-infra-oncall@google.com
-    testgrid-num-failures-to-alert: '1'
-  spec:
-    containers:
-    - image: gcr.io/k8s-prow/generic-autobumper:v20220321-4b84703439
-      command:
-      - generic-autobumper
-      args:
-      - --config=prow/knative/knative-autobump-config.yaml
       - --labels-override=skip-review # This label is used by tide for identifying trusted PR
       - --skip-if-no-oncall # Only apply `skip-review` label when oncall is active
       volumeMounts:
@@ -261,3 +175,27 @@ periodics:
         requests:
           cpu: 100m
           memory: 1Gi
+- cron: "17 */6 * * *"  # Every 6 hours at 17 minutes past the hour
+  name: ci-test-infra-gencred-refresh-kubeconfig
+  cluster: test-infra-trusted
+  decorate: true
+  extra_refs:
+  - org: GoogleCloudPlatform
+    repo: oss-test-infra
+    base_ref: master
+  spec:
+    serviceAccountName: gencred-refresher
+    containers:
+    - name: gencred
+      image: gcr.io/k8s-prow/gencred:v20220608-93cbdb8cdc
+      command:
+      - gencred
+      args:
+      - --config=./prow/oss/gencred-config/gencred-config.yaml
+  annotations:
+    testgrid-num-failures-to-alert: '3'
+    testgrid-alert-stale-results-hours: '12'
+    testgrid-dashboards: googleoss-test-infra
+    testgrid-tab-name: ci-gencred-refresh-kubeconfig
+    testgrid-alert-email: k8s-infra-oncall@google.com
+    description: Runs gencred to refresh generated kubeconfigs.

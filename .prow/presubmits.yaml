@@ -4,7 +4,7 @@ presubmits:
   run_if_changed: '^prow/(oss/(config|plugins)\.yaml$|prowjobs/)|^\.prow'
   spec:
     containers:
-      - image: gcr.io/k8s-prow/checkconfig:v20220321-4b84703439
+      - image: gcr.io/k8s-prow/checkconfig:v20220608-93cbdb8cdc
         imagePullPolicy: Always
         command:
           - checkconfig
@@ -49,7 +49,7 @@ presubmits:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: gcr.io/k8s-prow/configurator:v20220321-4b84703439
+    - image: gcr.io/k8s-prow/configurator:v20220608-93cbdb8cdc
       command:
       - configurator
       args:
@@ -64,31 +64,6 @@ presubmits:
       resources:
         requests:
           memory: "1Gi"
-- name: pull-knative-prow-config-validate
-  run_if_changed: '^prow/knative/(config|plugins)\.yaml$'
-  decorate: true
-  extra_refs:
-  - org: knative
-    repo: test-infra
-    base_ref: main
-  spec:
-    containers:
-      - image: gcr.io/k8s-prow/checkconfig:v20220321-4b84703439
-        imagePullPolicy: Always
-        command:
-          - checkconfig
-        args:
-          - --config-path=./prow/knative/config.yaml
-          - --job-config-path=../../knative/test-infra/prow/jobs
-          - --plugin-config=prow/knative/plugins.yaml
-          - --strict
-          # This warning can forbid valid (and convenient) config. Exclude it.
-          # Details: https://github.com/GoogleCloudPlatform/oss-test-infra/pull/131#discussion_r334208082
-          - --exclude-warning=mismatched-tide
-          - --exclude-warning=non-decorated-jobs
-          - --exclude-warning=long-job-names
-          # TODO: Re-enable these once we're done experimenting with CODEOWNERS in net-contour.
-          - --exclude-warning=mismatched-tide-lenient
 - name: pull-oss-test-infra-oss-terraform-validate
   run_if_changed: '^prow/oss/terraform/'
   decorate: true
