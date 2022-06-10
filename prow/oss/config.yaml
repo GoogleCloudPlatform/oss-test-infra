@@ -32,7 +32,6 @@ tide:
       title: "{{ .Title }} (#{{ .Number }})"
   target_urls:
     "*": https://oss.gprow.dev/tide
-    "looker/helltool": https://oss-private.gprow.dev/tide
     "GoogleCloudPlatform/blueprints": https://prow.infra.cft.dev/tide
   queries:
   - repos:
@@ -94,13 +93,10 @@ tide:
 plank:
   job_url_prefix_config:
     '*': https://oss.gprow.dev/view/
-    'looker': https://oss-private.gprow.dev/view/
     "GoogleCloudPlatform/blueprints": https://prow.infra.cft.dev/view/
   pod_pending_timeout: 30m
   pod_unscheduled_timeout: 10m
   build_cluster_status_file: 'gs://oss-prow/oss-prow-build-clusters-statuses.json'
-  report_templates:
-    "looker/helltool": "View Performance Test Results Here:\n  [Frontend Tests](https://meta.looker.com/dashboards/8195?My%20Commit={{with index .Spec.Refs.Pulls 0}}{{.SHA}}{{end}})\n  [Backend Tests](https://meta.looker.com/dashboards/8194?My%20Commit={{with index .Spec.Refs.Pulls 0}}{{.SHA}}{{end}})"
   default_decoration_config_entries:
   - config:
       timeout: 7200000000000 # 2h
@@ -122,38 +118,6 @@ plank:
     config:
       gcs_credentials_secret: "" # Use workload identity
       default_service_account_name: "prowjob-default-sa" # SA in build cluster
-  - cluster: build-looker-private
-    config:
-      gcs_configuration:
-        bucket: "looker-private"
-      gcs_credentials_secret: "" # Use workload identity
-      default_service_account_name: "prowjob-default-sa" # SA in build cluster
-      ssh_key_secrets:
-      - looker-ssh-deploy-key
-  - cluster: build-looker-int-test
-    config:
-      gcs_configuration:
-        bucket: "looker-private"
-      gcs_credentials_secret: "" # Use workload identity
-      default_service_account_name: "prowjob-default-sa" # SA in build cluster
-      ssh_key_secrets:
-      - looker-ssh-deploy-key
-  - cluster: build-looker-16
-    config:
-      gcs_configuration:
-        bucket: "looker-private"
-      gcs_credentials_secret: "" # Use workload identity
-      default_service_account_name: "prowjob-default-sa" # SA in build cluster
-      ssh_key_secrets:
-      - looker-ssh-deploy-key
-  - cluster: build-looker-32
-    config:
-      gcs_configuration:
-        bucket: "looker-private"
-      gcs_credentials_secret: "" # Use workload identity
-      default_service_account_name: "prowjob-default-sa" # SA in build cluster
-      ssh_key_secrets:
-      - looker-ssh-deploy-key
   - cluster: build-elcarro
     config:
       gcs_configuration:
@@ -196,26 +160,6 @@ pod_namespace: test-pods
 log_level: debug
 
 prowjob_default_entries:
-  - cluster: "build-looker-16"
-    repo: "*"
-    config:
-      tenant_id: 'looker'
-  - cluster: "build-looker-32"
-    repo: "*"
-    config:
-      tenant_id: 'looker'
-  - cluster: "build-looker-int-test"
-    repo: "*"
-    config:
-      tenant_id: 'looker'
-  - cluster: "build-looker-private"
-    repo: "*"
-    config:
-      tenant_id: 'looker'
-  - cluster: '*'
-    repo: 'looker'
-    config:
-      tenant_id: 'looker'
   - cluster: '*'
     repo: 'GoogleCloudPlatform/blueprints'
     config:
@@ -285,29 +229,18 @@ deck:
   additional_allowed_buckets:
     - compute-image-tools-test
     - gcp-guest-testgrid
-  hidden_repos:
-  - looker
 
 in_repo_config:
   enabled:
     chaotoppicks: true
     GoogleCloudPlatform/blueprints: true
     GoogleCloudPlatform/oss-test-infra: true
-    looker/helltool: true
 
   allowed_clusters:
     "*": []
     "chaotoppicks": ["default"] # For experimenting purpose, will remove once done with experiments
     "GoogleCloudPlatform/blueprints": ["build-blueprints"]
     "GoogleCloudPlatform/oss-test-infra": ["default"]
-    "looker/helltool": ["build-looker-private", "build-looker-int-test", "build-looker-16", "build-looker-32"]
-
-# settings for github reporter from crier
-github_reporter:
-  # summary_comment_repos is a list of orgs and org/repos for which failure report
-  # comments is only sent when all jobs from current PR are finished.
-  summary_comment_repos:
-  - looker/helltool
 
 presets:
 # docker-in-docker preset
@@ -332,13 +265,3 @@ presets:
   volumeMounts:
   - name: docker-graph
     mountPath: /docker-graph
-
-pubsub_triggers:
-  - allowed_clusters:
-      - "build-looker-private"
-      - "build-looker-int-test"
-      - "build-looker-16"
-      - "build-looker-32"
-    project: 'prow-build-looker-github'
-    topics:
-      - "prow-test"
