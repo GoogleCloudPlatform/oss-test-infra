@@ -19,29 +19,11 @@
 apiVersion: networking.gke.io/v1beta1
 kind: ManagedCertificate
 metadata:
-  name: oss-prow-private-knative-dev
-  namespace: default
-spec:
-  domains:
-  - oss-prow-private.knative.dev
----
-apiVersion: networking.gke.io/v1beta1
-kind: ManagedCertificate
-metadata:
   name: oss-prow-knative-dev
   namespace: default
 spec:
   domains:
   - oss-prow.knative.dev
----
-apiVersion: networking.gke.io/v1beta1
-kind: ManagedCertificate
-metadata:
-  name: oss-private-gprow-dev
-  namespace: default
-spec:
-  domains:
-  - oss-private.gprow.dev
 ---
 apiVersion: networking.gke.io/v1beta1
 kind: ManagedCertificate
@@ -70,7 +52,7 @@ metadata:
     kubernetes.io/ingress.global-static-ip-name: "oss-prow"
     kubernetes.io/ingress.class: "gce"
     kubernetes.io/tls-acme: "true"
-    networking.gke.io/managed-certificates: oss-prow-knative-dev,oss-prow-private-knative-dev
+    networking.gke.io/managed-certificates: oss-prow-knative-dev
 spec:
   rules:
   - host: oss-prow.knative.dev
@@ -90,16 +72,6 @@ spec:
             name: hook
             port:
               number: 8888
-  - host: oss-prow-private.knative.dev
-    http:
-      paths:
-      - path: /*
-        pathType: ImplementationSpecific
-        backend:
-          service:
-            name: deck-private
-            port:
-              number: 80
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -110,7 +82,7 @@ metadata:
     kubernetes.io/ingress.global-static-ip-name: "oss-gprow-dev"
     kubernetes.io/ingress.class: "gce"
     kubernetes.io/tls-acme: "true"
-    networking.gke.io/managed-certificates: oss-gprow-dev,oss-private-gprow-dev
+    networking.gke.io/managed-certificates: oss-gprow-dev
 spec:
   rules:
   - host: oss.gprow.dev
@@ -130,16 +102,6 @@ spec:
             name: hook
             port:
               number: 8888
-  - host: oss-private.gprow.dev
-    http:
-      paths:
-      - path: /*
-        pathType: ImplementationSpecific
-        backend:
-          service:
-            name: deck-private
-            port:
-              number: 80
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
