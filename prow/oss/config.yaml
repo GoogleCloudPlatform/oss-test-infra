@@ -235,12 +235,14 @@ in_repo_config:
     chaotoppicks: true
     GoogleCloudPlatform/blueprints: true
     GoogleCloudPlatform/oss-test-infra: true
+    GoogleCloudPlatform/testgrid: true
 
   allowed_clusters:
     "*": []
     "chaotoppicks": ["default"] # For experimenting purpose, will remove once done with experiments
     "GoogleCloudPlatform/blueprints": ["build-blueprints"]
     "GoogleCloudPlatform/oss-test-infra": ["default"]
+    "GoogleCloudPlatform/testgrid": ["default"]
 
 presets:
 # docker-in-docker preset

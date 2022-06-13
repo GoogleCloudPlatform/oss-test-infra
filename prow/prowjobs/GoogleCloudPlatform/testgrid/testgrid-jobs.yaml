@@ -15,6 +15,29 @@ presubmits:
         - test
         - --config=ci
         - //...
+  - name: pull-testgrid-validate-prow-yaml
+    run_if_changed: ^\.prow\.yaml$
+    decorate: true
+    optional: true # TODO(chaodaiG): remove once confirmed that this works
+    extra_refs:
+    - org: GoogleCloudPlatform
+      repo: oss-test-infra
+      base_ref: master
+    spec:
+      containers:
+      - image: gcr.io/k8s-prow/checkconfig:v20220608-93cbdb8cdc
+        command:
+        - checkconfig
+        args:
+        - --plugin-config=../../GoogleCloudPlatform/oss-test-infra/prow/oss/plugins.yaml
+        - --config-path=../../GoogleCloudPlatform/oss-test-infra/prow/oss/config.yaml
+        - --job-config-path=../../GoogleCloudPlatform/oss-test-infra/prow/prowjobs
+        - --prow-yaml-repo-name=$(REPO_OWNER)/$(REPO_NAME)
+        - --strict
+        - --exclude-warning=mismatched-tide
+        - --exclude-warning=non-decorated-jobs
+        - --warnings=unknown-fields-all
+        - --include-default-warnings
 
 postsubmits:
   GoogleCloudPlatform/testgrid:
