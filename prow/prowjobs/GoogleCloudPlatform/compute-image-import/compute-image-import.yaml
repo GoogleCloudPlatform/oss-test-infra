@@ -172,7 +172,7 @@ periodics:
       - -out_dir=$(ARTIFACTS)
       - -test_project_id=compute-import-test-pool-001
       - -test_zone=us-central1-b
-      - -variables=aws_region=us-east-2,aws_bucket=s3://onestep-test,ubuntu_ami_id=ami-04d75010218164863,windows_ami_id=ami-0c91f2e838828598d,ubuntu_vmdk=s3://onestep-test/ubuntu1804.vmdk,windows_vmdk=s3://onestep-test/windows2019.vmdk,aws_cred_file_path=gs://compute-image-import-test-resources/onestep-test-user,compute_service_account_without_default_service_account=pool-001-1-sa@compute-import-test-pool-001-1.iam.gserviceaccount.com,compute_service_account_without_default_service_account_permission=pool-001-2-sa@compute-import-test-pool-001-2.iam.gserviceaccount.com,project_id_without_default_service_account=compute-import-test-pool-001-1,project_id_without_default_service_account_permission=compute-import-test-pool-001-2
+      - -variables=aws_region=us-west-2,aws_bucket=s3://onestep-e2e-tests,ubuntu_ami_id=ami-0f914731d0a56a859,debian_ami_id=ami-08b94fd8d55eea581,ubuntu_vmdk=s3://onestep-e2e-tests/aws-ubuntu-18.vmdk,windows_vmdk=s3://onestep-e2e-tests/windows-2019.vmdk,aws_cred_file_path=gs://compute-image-import-test-resources/onestep-e2e-cred-file,compute_service_account_without_default_service_account=pool-001-1-sa@compute-import-test-pool-001-1.iam.gserviceaccount.com,compute_service_account_without_default_service_account_permission=pool-001-2-sa@compute-import-test-pool-001-2.iam.gserviceaccount.com,project_id_without_default_service_account=compute-import-test-pool-001-1,project_id_without_default_service_account_permission=compute-import-test-pool-001-2
       env:
       - name: GOOGLE_APPLICATION_CREDENTIALS
         value: ""
