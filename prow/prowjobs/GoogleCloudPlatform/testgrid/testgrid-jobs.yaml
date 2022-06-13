@@ -8,7 +8,7 @@ presubmits:
     spec:
       serviceAccountName: presubmits
       containers:
-      - image: gcr.io/k8s-testimages/launcher.gcr.io/google/bazel:v20210806-38e1be0-testgrid
+      - image: gcr.io/k8s-testgrid/gcloud-bazel:v20220613-v0.6-58-ge5a50c7
         command:
         - bazel
         args:
@@ -31,7 +31,7 @@ postsubmits:
     spec:
       serviceAccountName: testgrid-pusher
       containers:
-      - image: gcr.io/k8s-testimages/bazelbuild:v20210806-7bef894-testgrid
+      - image: gcr.io/k8s-testgrid/gcloud-bazel:v20220613-v0.6-58-ge5a50c7
         command:
         - ./images/push.sh
   - name: post-testgrid-deploy-prod
@@ -46,7 +46,7 @@ postsubmits:
     spec:
       serviceAccountName: testgrid-deployer
       containers:
-      - image: gcr.io/k8s-testgrid/gcloud-bazel:v20210806-v0.6-37-g8086289
+      - image: gcr.io/k8s-testgrid/gcloud-bazel:v20220613-v0.6-58-ge5a50c7
         command:
         - ./cluster/deploy.sh
         args:
@@ -64,7 +64,7 @@ postsubmits:
     spec:
       serviceAccountName: testgrid-deployer
       containers:
-      - image: gcr.io/k8s-testgrid/gcloud-bazel:v20210806-v0.6-37-g8086289
+      - image: gcr.io/k8s-testgrid/gcloud-bazel:v20220613-v0.6-58-ge5a50c7
         command:
         - ./cluster/deploy.sh
         args:
