@@ -168,7 +168,7 @@ presubmits:
         - --gcp-zone=us-west1-b
         - --gcp-network=default
         - --gcp-node-image=gci
-        - --gke-create-command=container clusters create --cluster-ipv4-cidr=/19 --quiet
+        - --gke-create-command=container clusters create --cluster-ipv4-cidr=/25 --quiet
         - '--gke-shape={"default":{"Nodes":1,"MachineType":"e2-standard-2"}}'
         - --gke-environment=prod
         - --provider=gke
@@ -183,7 +183,7 @@ presubmits:
         command:
         - runner.sh
         - /workspace/scenarios/kubernetes_e2e.py
-        image: gcr.io/k8s-testimages/kubekins-e2e:v20200811-4afd9ba-master
+        image: gcr.io/k8s-testimages/kubekins-e2e:latest-1.21
         env:
         - name: GOOGLE_APPLICATION_CREDENTIALS
           value: /etc/service-account/service-account.json
@@ -227,7 +227,7 @@ presubmits:
         - --gcp-zone=us-west1-b
         - --gcp-network=default
         - --gcp-node-image=gci
-        - --gke-create-command=container clusters create --cluster-ipv4-cidr=/19 --quiet
+        - --gke-create-command=container clusters create --cluster-ipv4-cidr=/25 --quiet
         - '--gke-shape={"default":{"Nodes":1,"MachineType":"e2-standard-2"}}'
         - --gke-environment=prod
         - --provider=gke
@@ -242,7 +242,7 @@ presubmits:
         command:
         - runner.sh
         - /workspace/scenarios/kubernetes_e2e.py
-        image: gcr.io/k8s-testimages/kubekins-e2e:v20200811-4afd9ba-master
+        image: gcr.io/k8s-testimages/kubekins-e2e:latest-1.21
         env:
         - name: GOOGLE_APPLICATION_CREDENTIALS
           value: /etc/service-account/service-account.json
@@ -286,7 +286,7 @@ presubmits:
         - --gcp-zone=us-west1-b
         - --gcp-network=default
         - --gcp-node-image=gci
-        - --gke-create-command=container clusters create --cluster-ipv4-cidr=/19 --quiet
+        - --gke-create-command=container clusters create --cluster-ipv4-cidr=/25 --quiet
         - '--gke-shape={"default":{"Nodes":1,"MachineType":"e2-standard-2"}}'
         - --gke-environment=prod
         - --provider=gke
@@ -301,7 +301,7 @@ presubmits:
         command:
         - runner.sh
         - /workspace/scenarios/kubernetes_e2e.py
-        image: gcr.io/k8s-testimages/kubekins-e2e:v20200811-4afd9ba-master
+        image: gcr.io/k8s-testimages/kubekins-e2e:latest-1.21
         env:
         - name: GOOGLE_APPLICATION_CREDENTIALS
           value: /etc/service-account/service-account.json
@@ -345,7 +345,7 @@ presubmits:
         - --gcp-zone=us-west1-b
         - --gcp-network=default
         - --gcp-node-image=gci
-        - --gke-create-command=container clusters create --cluster-ipv4-cidr=/19 --quiet
+        - --gke-create-command=container clusters create --cluster-ipv4-cidr=/25 --quiet
         - '--gke-shape={"default":{"Nodes":1,"MachineType":"e2-standard-2"}}'
         - --gke-environment=prod
         - --provider=gke
@@ -360,7 +360,7 @@ presubmits:
         command:
         - runner.sh
         - /workspace/scenarios/kubernetes_e2e.py
-        image: gcr.io/k8s-testimages/kubekins-e2e:v20200811-4afd9ba-master
+        image: gcr.io/k8s-testimages/kubekins-e2e:latest-1.21
         env:
         - name: GOOGLE_APPLICATION_CREDENTIALS
           value: /etc/service-account/service-account.json
@@ -403,7 +403,7 @@ presubmits:
         - --gcp-zone=us-west1-b
         - --gcp-network=default
         - --gcp-node-image=gci
-        - --gke-create-command=container clusters create --cluster-ipv4-cidr=/19 --quiet
+        - --gke-create-command=container clusters create --cluster-ipv4-cidr=/25 --quiet
         - '--gke-shape={"default":{"Nodes":1,"MachineType":"e2-standard-2"}}'
         - --gke-environment=prod
         - --provider=gke
@@ -419,7 +419,7 @@ presubmits:
         command:
         - runner.sh
         - /workspace/scenarios/kubernetes_e2e.py
-        image: gcr.io/k8s-testimages/kubekins-e2e:v20200811-4afd9ba-master
+        image: gcr.io/k8s-testimages/kubekins-e2e:latest-1.21
         env:
         - name: GOOGLE_APPLICATION_CREDENTIALS
           value: /etc/service-account/service-account.json
@@ -777,7 +777,7 @@ periodics:
             - --gcp-zone=us-west1-c
             - --gcp-network=default
             - --gcp-node-image=gci
-            - --gke-create-command=container clusters create --cluster-ipv4-cidr=/19 --quiet
+            - --gke-create-command=container clusters create --cluster-ipv4-cidr=/25 --quiet
             - '--gke-shape={"default":{"Nodes":1,"MachineType":"e2-standard-2"}}'
             - --gke-environment=prod
             - --provider=gke
@@ -791,7 +791,7 @@ periodics:
           command:
             - runner.sh
             - /workspace/scenarios/kubernetes_e2e.py
-          image: gcr.io/k8s-testimages/kubekins-e2e:v20200811-4afd9ba-master
+          image: gcr.io/k8s-testimages/kubekins-e2e:latest-1.21
           env:
             - name: GOOGLE_APPLICATION_CREDENTIALS
               value: /etc/service-account/service-account.json
@@ -841,7 +841,7 @@ periodics:
         - --gcp-zone=us-west1-c
         - --gcp-network=default
         - --gcp-node-image=gci
-        - --gke-create-command=container clusters create --cluster-ipv4-cidr=/19 --quiet
+        - --gke-create-command=container clusters create --cluster-ipv4-cidr=/25 --quiet
         - '--gke-shape={"default":{"Nodes":1,"MachineType":"e2-standard-2"}}'
         - --gke-environment=prod
         - --provider=gke
@@ -855,7 +855,7 @@ periodics:
         command:
         - runner.sh
         - /workspace/scenarios/kubernetes_e2e.py
-        image: gcr.io/k8s-testimages/kubekins-e2e:v20200811-4afd9ba-master
+        image: gcr.io/k8s-testimages/kubekins-e2e:latest-1.21
         env:
         - name: GOOGLE_APPLICATION_CREDENTIALS
           value: /etc/service-account/service-account.json
@@ -905,7 +905,7 @@ periodics:
             - --gcp-zone=us-west1-c
             - --gcp-network=default
             - --gcp-node-image=gci
-            - --gke-create-command=container clusters create --cluster-ipv4-cidr=/19 --quiet
+            - --gke-create-command=container clusters create --cluster-ipv4-cidr=/25 --quiet
             - '--gke-shape={"default":{"Nodes":1,"MachineType":"e2-standard-2"}}'
             - --gke-environment=prod
             - --provider=gke
@@ -919,7 +919,7 @@ periodics:
           command:
             - runner.sh
             - /workspace/scenarios/kubernetes_e2e.py
-          image: gcr.io/k8s-testimages/kubekins-e2e:v20200811-4afd9ba-master
+          image: gcr.io/k8s-testimages/kubekins-e2e:latest-1.21
           env:
             - name: GOOGLE_APPLICATION_CREDENTIALS
               value: /etc/service-account/service-account.json
@@ -969,7 +969,7 @@ periodics:
             - --gcp-zone=us-west1-c
             - --gcp-network=default
             - --gcp-node-image=gci
-            - --gke-create-command=container clusters create --cluster-ipv4-cidr=/19 --quiet
+            - --gke-create-command=container clusters create --cluster-ipv4-cidr=/25 --quiet
             - '--gke-shape={"default":{"Nodes":1,"MachineType":"e2-standard-2"}}'
             - --gke-environment=prod
             - --provider=gke
@@ -983,7 +983,7 @@ periodics:
           command:
             - runner.sh
             - /workspace/scenarios/kubernetes_e2e.py
-          image: gcr.io/k8s-testimages/kubekins-e2e:v20200811-4afd9ba-master
+          image: gcr.io/k8s-testimages/kubekins-e2e:latest-1.21
           env:
             - name: GOOGLE_APPLICATION_CREDENTIALS
               value: /etc/service-account/service-account.json
@@ -1032,7 +1032,7 @@ periodics:
             - --gcp-zone=us-west1-c
             - --gcp-network=default
             - --gcp-node-image=gci
-            - --gke-create-command=container clusters create --cluster-ipv4-cidr=/19 --quiet
+            - --gke-create-command=container clusters create --cluster-ipv4-cidr=/25 --quiet
             - '--gke-shape={"default":{"Nodes":1,"MachineType":"e2-standard-2"}}'
             - --gke-environment=prod
             - --provider=gke
@@ -1047,7 +1047,7 @@ periodics:
           command:
             - runner.sh
             - /workspace/scenarios/kubernetes_e2e.py
-          image: gcr.io/k8s-testimages/kubekins-e2e:v20200811-4afd9ba-master
+          image: gcr.io/k8s-testimages/kubekins-e2e:latest-1.21
           env:
             - name: GOOGLE_APPLICATION_CREDENTIALS
               value: /etc/service-account/service-account.json
@@ -1254,7 +1254,7 @@ periodics:
             - --age=5 # clean anything older than 5h
             - '--filter=name~^e2e-'
             - --verbose
-          image: gcr.io/k8s-testimages/kubekins-e2e:v20191203-6fb6647-1.17
+          image: gcr.io/k8s-testimages/kubekins-e2e:latest-1.21
           env:
           - name: GOOGLE_APPLICATION_CREDENTIALS
             value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
