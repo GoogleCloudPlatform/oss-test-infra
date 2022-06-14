@@ -1,24 +1,8 @@
 presubmits:
   GoogleCloudPlatform/testgrid:
-  - name: test-testgrid-all
-    branches:
-    - ^master$
-    decorate: true
-    always_run: true
-    spec:
-      serviceAccountName: presubmits
-      containers:
-      - image: gcr.io/k8s-testgrid/gcloud-bazel:v20220613-v0.6-58-ge5a50c7
-        command:
-        - bazel
-        args:
-        - test
-        - --config=ci
-        - //...
   - name: pull-testgrid-validate-prow-yaml
     run_if_changed: ^\.prow\.yaml$
     decorate: true
-    optional: true # TODO(chaodaiG): remove once confirmed that this works
     extra_refs:
     - org: GoogleCloudPlatform
       repo: oss-test-infra
