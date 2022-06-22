@@ -234,7 +234,7 @@ presubmits:
       - image: gcr.io/gcp-guest/daisy-builder:latest
         command:
         - "/main.sh"
-        args: ["gcp-guest", "us-west1-a", "deb9,deb11-arm64,el7,el8,el9,goo"]
+        args: ["gcp-guest", "us-west1-a", "deb9,deb11_arm64,el7,el8,el9,goo"]
 
   GoogleCloudPlatform/guest-logging-go:
   - name: guest-logging-presubmit-gocheck
