@@ -223,6 +223,14 @@ plugins:
     - size
     - verify-owners
     - wip
+  GoogleCloudPlatform/compute-image-import:
+    plugins:
+    - approve
+    - blunderbuss
+    - lgtm
+    - size
+    - verify-owners
+    - wip
 
   googleforgames/agones:
     plugins:

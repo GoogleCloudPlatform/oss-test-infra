@@ -26,6 +26,7 @@ tide:
     GoogleCloudPlatform/artifact-registry-apt-transport: squash
     GoogleCloudPlatform/artifact-registry-yum-plugin: squash
     GoogleCloudPlatform/blueprints: squash
+    GoogleCloudPlatform/compute-image-import: squash
     kubeflow: squash
   merge_commit_template:
     kubeflow:
@@ -59,6 +60,17 @@ tide:
     - do-not-merge/work-in-progress
   - repos:
     - GoogleCloudPlatform/netd
+    labels:
+    - lgtm
+    - approved
+    missingLabels:
+    - do-not-merge
+    - do-not-merge/blocked-paths
+    - do-not-merge/hold
+    - do-not-merge/invalid-owners-file
+    - do-not-merge/work-in-progress
+  - repos:
+    - GoogleCloudPlatform/compute-image-import
     labels:
     - lgtm
     - approved
