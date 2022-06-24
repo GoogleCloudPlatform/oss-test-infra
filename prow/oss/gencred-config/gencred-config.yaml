@@ -1,1 +1,7 @@
 clusters:
+- gke: projects/oss-prow-build-kpt-config-sync/locations/us-central1-b/clusters/oss-prow-build-kpt-config-sync
+  name: build-kpt-config-sync
+  duration: 48h
+  gsm:
+    name: prow_build_cluster_kubeconfig_build-kpt-config-sync
+    project: oss-prow
