@@ -27,6 +27,7 @@ tide:
     GoogleCloudPlatform/artifact-registry-yum-plugin: squash
     GoogleCloudPlatform/blueprints: squash
     GoogleCloudPlatform/compute-image-import: squash
+    GoogleContainerTools/kpt-config-sync: squash
     kubeflow: squash
   merge_commit_template:
     kubeflow:
@@ -50,6 +51,7 @@ tide:
     - GoogleCloudPlatform/oss-test-infra
     - GoogleCloudPlatform/testgrid
     - GoogleCloudPlatform/k8s-cloud-provider
+    - GoogleContainerTools/kpt-config-sync
     labels:
     - lgtm
     - approved
