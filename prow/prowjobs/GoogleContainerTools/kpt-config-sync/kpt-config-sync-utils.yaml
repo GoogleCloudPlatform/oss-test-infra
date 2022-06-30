@@ -1,0 +1,39 @@
+periodics:
+- name: prober-runner-sa-key-rotate
+  interval: 3h
+  cluster: build-kpt-config-sync
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync
+    testgrid-tab-name: periodic
+  labels:
+    preset-service-account: "true"
+    preset-dind-enabled: "true"
+  decorate: true
+  decoration_config:
+    timeout: 30m
+  extra_refs:
+  - org: GoogleContainerTools
+    repo: kpt-config-sync
+    base_ref: main
+  spec:
+    containers:
+    - image: gcr.io/oss-prow-build-kpt-config-sync/image-pull-rotate:latest
+      command:
+      - ./scripts/oss-prow/prober-runner-sa-key-rotate.sh
+      securityContext:
+        privileged: true
+      volumeMounts:
+      - name: prober-cred
+        mountPath: /etc/prober-gcp-service-account
+        readOnly: true
+      resources:
+        requests:
+          memory: "2Gi"
+          cpu: "2000m"
+    nodeSelector:
+      # This job requires 8vCPUs or less, so it is "small".
+      cloud.google.com/gke-nodepool: small-job-pool
+    volumes:
+    - name: prober-cred
+      secret:
+        secretName: nomos-prober-runner-gcp-client-key

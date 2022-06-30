@@ -1,0 +1,141 @@
+presubmits:
+  GoogleContainerTools/kpt-config-sync:
+  - name: kpt-config-sync-presubmit
+    cluster: build-kpt-config-sync
+#    branches: ["master"]
+    always_run: true
+    decorate: true
+    labels:
+      preset-dind-enabled: "true"
+    spec:
+      containers:
+      - image: gcr.io/k8s-staging-test-infra/kubekins-e2e:v20220607-4b3fb50c36-1.22
+        command:
+        - runner.sh
+        args:
+        - make
+        - test-presubmit
+        # docker-in-docker needs privileged mode
+        securityContext:
+          privileged: true
+        resources:
+          requests:
+            memory: "2Gi"
+            cpu: "2000m"
+      nodeSelector:
+        # This job requires 8vCPUs or less, so it is "small".
+        cloud.google.com/gke-nodepool: small-job-pool
+  - name: kpt-config-sync-presubmit-e2e-mono-repo
+    cluster: build-kpt-config-sync
+    # branches: ["master"]
+    always_run: true
+    # Ensure that we don't try to schedule more than 3 jobs at a time. This means
+    # we won't automatically get "Pods Unschedulable", but Prow will wait patiently
+    # for other jobs to complete before running. At this level, we support up to
+    # 12 presubmit runs per hour, which is appropriate for our team size.
+    max_concurrency: 3
+    decorate: true
+    labels:
+      # We think this label is required to use kind. Copied from presubmit job above.
+      preset-kind-volume-mounts: "true"
+      # These labels are on the other jobs, so they're here.
+      preset-service-account: "true"
+      # Enable docker-in-docker, and use memory for etcd instead of disk-backed.
+      preset-dind-enabled-memory: "true"
+    decoration_config:
+      # Tests usually finish in ~15 minutes, but this ensures we don't fail on the
+      # odd test that takes much longer than normal.
+      timeout: 60m
+    spec:
+      containers:
+      # Use the special version of the kubekins 1.22 image with Kind
+      # v0.11.1 installed.
+      - image: gcr.io/oss-prow-build-kpt-config-sync/e2e-prow:kubekins-e2e-v20220607-4b3fb50c36-1.22-kind-v0.11.1
+        command:
+        - runner.sh
+        args:
+        - make
+        - test-e2e-go-ephemeral-mono-repo
+        env:
+        # This is only used to tell the job where to store the images.
+        # It can be any non-empty value that is a valid gcr.io folder name.
+        - name: USER
+          value: "kpt-config-sync-e2e-go-ci"
+        securityContext:
+          privileged: true
+        # This volume mount for prober creds may be superfluous. We don't really
+        # have a way to know.
+        volumeMounts:
+        - name: prober-cred
+          mountPath: /etc/prober-gcp-service-account
+          readOnly: true
+        resources:
+          requests:
+            # When running at parallel=15, we use 20Gi. So request 40Gi to be safe.
+            memory: "40Gi"
+            # This value is experimentally determined.
+            # We know to increase this when CPU usage is reported as above 1.0
+            # and we observe randomly flaky tests. Check the nodes in our Prow CI
+            # cluster.
+            cpu: "29000m"
+      volumes:
+      - name: prober-cred
+        secret:
+          secretName: nomos-prober-runner-gcp-client-key
+  - name: kpt-config-sync-presubmit-e2e-multi-repo
+    # branches: ["master"]
+    cluster: build-kpt-config-sync
+    always_run: true
+    # Ensure that we don't try to schedule more than 3 jobs at a time. This means
+    # we won't automatically get "Pods Unschedulable", but Prow will wait patiently
+    # for other jobs to complete before running. At this level, we support up to
+    # 12 presubmit runs per hour, which is appropriate for our team size.
+    max_concurrency: 3
+    decorate: true
+    labels:
+      # We think this label is required to use kind. Copied from presubmit job above.
+      preset-kind-volume-mounts: "true"
+      # These labels are on the other jobs, so they're here.
+      preset-service-account: "true"
+      # Enable docker-in-docker, and use memory for etcd instead of disk-backed.
+      preset-dind-enabled-memory: "true"
+    decoration_config:
+      # Tests usually finish in ~15 minutes, but this ensures we don't fail on the
+      # odd test that takes much longer than normal.
+      timeout: 60m
+    spec:
+      containers:
+      # Use the special version of the kubekins 1.22 image with Kind
+      # v0.11.1 installed.
+      - image: gcr.io/oss-prow-build-kpt-config-sync/e2e-prow:kubekins-e2e-v20220607-4b3fb50c36-1.22-kind-v0.11.1
+        command:
+        - runner.sh
+        args:
+        - make
+        - test-e2e-go-ephemeral-multi-repo
+        env:
+        # This is only used to tell the job where to store the images.
+        # It can be any non-empty value that is a valid gcr.io folder name.
+        - name: USER
+          value: "kpt-config-sync-e2e-go-ci"
+        securityContext:
+          privileged: true
+        # This volume mount for prober creds may be superfluous. We don't really
+        # have a way to know.
+        volumeMounts:
+        - name: prober-cred
+          mountPath: /etc/prober-gcp-service-account
+          readOnly: true
+        resources:
+          requests:
+            # When running at parallel=15, we use 20Gi. So request 40Gi to be safe.
+            memory: "40Gi"
+            # This value is experimentally determined.
+            # We know to increase this when CPU usage is reported as above 1.0
+            # and we observe randomly flaky tests. Check the nodes in our Prow CI
+            # cluster.
+            cpu: "29000m"
+      volumes:
+      - name: prober-cred
+        secret:
+          secretName: nomos-prober-runner-gcp-client-key
