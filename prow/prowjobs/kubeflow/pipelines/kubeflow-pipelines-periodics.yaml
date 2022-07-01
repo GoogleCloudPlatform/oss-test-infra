@@ -49,3 +49,30 @@ periodics:
     description: Periodic job to cleanup ml-pipeline-test GCP project
     testgrid-alert-email: kubeflow-pipelines+test@google.com
     testgrid-num-failures-to-alert: "5"
+- name: kubeflow-pipelines-periodic-mysql-cleanup
+  cluster: build-kubeflow
+  interval: 1h
+  decorate: true
+  extra_refs:
+  - org: kubeflow
+    repo: pipelines
+    base_ref: master
+    workdir: true
+  spec:
+    containers:
+      - image: python:3.7
+        imagePullPolicy: Always
+        command:
+        - "./test/tools/project-cleaner/delete-old-mysql-records.sh"
+        env:
+          - name: REPO_OWNER
+            value: kubeflow
+          - name: REPO_NAME
+            value: kubeflow
+          - name: BRANCH_NAME
+            value: master
+  annotations:
+    testgrid-dashboards: googleoss-kubeflow-pipelines
+    description: Periodic job to cleanup old mysql records on kfp-ci test instance.
+    testgrid-alert-email: kubeflow-pipelines+test@google.com
+    testgrid-num-failures-to-alert: "5"
