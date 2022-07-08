@@ -153,7 +153,9 @@ presubmits:
   - name: kubeflow-pipelines-samples-v2
     cluster: build-kubeflow
     decorate: true
-    run_if_changed: "^(sdk/python/.*)|(samples/.*)|(backend/src/v2/.*)$"
+    # None of the samples from contrib folder are covered by samples-v2 tests.
+    # Exclude the path for now until we have a plan to cover them.
+    run_if_changed: "^(sdk/python/.*)|(samples/(?!contrib).*)|(backend/src/v2/.*)$"
     spec:
       containers:
       - image: python:3.7
