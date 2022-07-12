@@ -181,6 +181,42 @@ presubmits:
       - image: gcr.io/google.com/cloudsdktool/cloud-sdk:latest
         command:
         - ./manifests/kustomize/hack/presubmit.sh
+  - name: kubeflow-pipelines-sdk-isort
+    cluster: build-kubeflow
+    decorate: true
+    # TODO: remove optional and skip_report when code is adherent and consistently passing
+    optional: true
+    skip_report: true
+    run_if_changed: "^(sdk/python/.*)|(test/presubmit-isort-sdk.sh)$"
+    spec:
+      containers:
+      - image: python:3.7
+        command:
+        - ./test/presubmit-isort-sdk.sh
+  - name: kubeflow-pipelines-sdk-yapf
+    cluster: build-kubeflow
+    decorate: true
+    # TODO: remove optional and skip_report when code is adherent and consistently passing
+    optional: true
+    skip_report: true
+    run_if_changed: "^(sdk/python/.*)|(test/presubmit-yapf-sdk.sh)$"
+    spec:
+      containers:
+      - image: python:3.7
+        command:
+        - ./test/presubmit-yapf-sdk.sh
+  - name: kubeflow-pipelines-sdk-docformatter
+    cluster: build-kubeflow
+    decorate: true
+    # TODO: remove optional and skip_report when code is adherent and consistently passing
+    optional: true
+    skip_report: true
+    run_if_changed: "^(sdk/python/.*)|(test/presubmit-docformatter-sdk.sh)$"
+    spec:
+      containers:
+      - image: python:3.7
+        command:
+        - ./test/presubmit-docformatter-sdk.sh
 
   # this test is not passing
   # - name: kubeflow-pipeline-multiuser-test
