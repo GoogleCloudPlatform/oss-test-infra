@@ -9,7 +9,7 @@ presubmits:
       preset-dind-enabled: "true"
     spec:
       containers:
-      - image: gcr.io/k8s-staging-test-infra/kubekins-e2e:v20220607-4b3fb50c36-1.22
+      - image: gcr.io/k8s-staging-test-infra/kubekins-e2e:v20220708-6b0cfd300e-1.23
         command:
         - runner.sh
         args:
@@ -50,7 +50,7 @@ presubmits:
       containers:
       # Use the special version of the kubekins 1.22 image with Kind
       # v0.11.1 installed.
-      - image: gcr.io/oss-prow-build-kpt-config-sync/e2e-prow:kubekins-e2e-v20220607-4b3fb50c36-1.22-kind-v0.11.1
+      - image: gcr.io/oss-prow-build-kpt-config-sync/e2e-prow:kubekins-e2e-v20220708-6b0cfd300e-1.23-kind-v0.11.1
         command:
         - runner.sh
         args:
@@ -107,7 +107,7 @@ presubmits:
       containers:
       # Use the special version of the kubekins 1.22 image with Kind
       # v0.11.1 installed.
-      - image: gcr.io/oss-prow-build-kpt-config-sync/e2e-prow:kubekins-e2e-v20220607-4b3fb50c36-1.22-kind-v0.11.1
+      - image: gcr.io/oss-prow-build-kpt-config-sync/e2e-prow:kubekins-e2e-v20220708-6b0cfd300e-1.23-kind-v0.11.1
         command:
         - runner.sh
         args:
