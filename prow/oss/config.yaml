@@ -162,6 +162,12 @@ plank:
         bucket: "compute-image-import-prow"
       default_service_account_name: "prowjob-default-sa" # Use workload identity
       gcs_credentials_secret: ""                         # rather than service account key secret
+  - cluster: build-kpt-config-sync
+    config:
+      gcs_configuration:
+        bucket: "oss-prow-build-kpt-config-sync"
+      default_service_account_name: "prowjob-default-sa" # Use workload identity
+      gcs_credentials_secret: ""                         # rather than service account key secret
 
 sinker:
   resync_period: 1m
