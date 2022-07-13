@@ -13,7 +13,7 @@ presubmits:
         imagePullPolicy: Always
         command:
         - "/main.sh"
-        args: ["gcp-guest", "us-west1-a", "el7,el8"]
+        args: ["gcp-guest", "us-west1-a", "el7,el8,el9"]
   GoogleCloudPlatform/artifact-registry-apt-transport:
   - name: apt-transport-presubmit-build
     cluster: gcp-guest
@@ -28,7 +28,7 @@ presubmits:
         imagePullPolicy: Always
         command:
         - "/main.sh"
-        args: ["gcp-guest", "us-west1-a", "deb9"]
+        args: ["gcp-guest", "us-west1-a", "deb10"]
   - name: apt-transport-presubmit-gocheck
     cluster: gcp-guest
     run_if_changed: '\.go$'
@@ -82,7 +82,7 @@ presubmits:
         imagePullPolicy: Always
         command:
         - "/main.sh"
-        args: ["gcp-guest", "us-west1-a", "deb9,el7,el8"]
+        args: ["gcp-guest", "us-west1-a", "deb10,el7,el8,el9"]
 
   GoogleCloudPlatform/guest-diskexpand:
   - name: disk-expand-presubmit-build
@@ -97,7 +97,7 @@ presubmits:
         imagePullPolicy: Always
         command:
         - "/main.sh"
-        args: ["gcp-guest", "us-west1-a", "deb10,el7,el8"]
+        args: ["gcp-guest", "us-west1-a", "deb10,el7,el8,el9"]
 
   GoogleCloudPlatform/osconfig:
   - name: osconfig-presubmit-build
@@ -112,7 +112,7 @@ presubmits:
       - image: gcr.io/gcp-guest/daisy-builder:latest
         command:
         - "/main.sh"
-        args: ["gcp-guest", "us-west1-a", "deb10,el7,el8,goo"]
+        args: ["gcp-guest", "us-west1-a", "deb10,deb11_arm64,el7,el8,el8_arm64,el9,el9_arm64,goo"]
   - name: osconfig-presubmit-gocheck
     cluster: gcp-guest
     run_if_changed: '\.go$'
@@ -234,7 +234,7 @@ presubmits:
       - image: gcr.io/gcp-guest/daisy-builder:latest
         command:
         - "/main.sh"
-        args: ["gcp-guest", "us-west1-a", "deb9,deb11_arm64,el7,el8,el9,goo"]
+        args: ["gcp-guest", "us-west1-a", "deb10,deb11_arm64,el7,el8,el8_arm64,el9,el9_arm64,goo"]
 
   GoogleCloudPlatform/guest-logging-go:
   - name: guest-logging-presubmit-gocheck
@@ -290,7 +290,7 @@ presubmits:
       - image: gcr.io/gcp-guest/daisy-builder:latest
         command:
         - "/main.sh"
-        args: ["gcp-guest", "us-west1-a", "deb9,deb10,el7,el8"]
+        args: ["gcp-guest", "us-west1-a", "deb10,deb11,deb11_arm64,el7,el8,el8_arm64,el9,el9_arm64"]
   - name: oslogin-presubmit-selinux-module
     cluster: gcp-guest
     run_if_changed: "policy/"
@@ -407,6 +407,6 @@ periodics:
       args:
       - "-project=gcp-guest"
       - "-zone=us-west1-a"
-      - "-images=projects/bct-prod-images/global/images/family/debian-9,projects/bct-prod-images/global/images/family/debian-10,projects/bct-prod-images/global/images/family/debian-11,projects/bct-prod-images/global/images/family/centos-7,projects/bct-prod-images/global/images/family/centos-stream-8,projects/bct-prod-images/global/images/family/centos-stream-9,projects/bct-prod-images/global/images/family/rhel-7,projects/bct-prod-images/global/images/family/rhel-8,projects/bct-prod-images/global/images/family/rocky-linux-8,projects/bct-prod-images/global/images/family/almalinux-8"
+      - "-images=projects/bct-prod-images/global/images/family/debian-10,projects/bct-prod-images/global/images/family/debian-11,projects/bct-prod-images/global/images/family/centos-7,projects/bct-prod-images/global/images/family/centos-stream-8,projects/bct-prod-images/global/images/family/centos-stream-9,projects/bct-prod-images/global/images/family/rhel-7,projects/bct-prod-images/global/images/family/rhel-8,projects/bct-prod-images/global/images/family/rhel-9,projects/bct-prod-images/global/images/family/rocky-linux-8,projects/bct-prod-images/global/images/family/rocky-linux-8-optimized-gcp,projects/bct-prod-images/global/images/family/almalinux-8"
       - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
       - "-exclude=oslogin"
