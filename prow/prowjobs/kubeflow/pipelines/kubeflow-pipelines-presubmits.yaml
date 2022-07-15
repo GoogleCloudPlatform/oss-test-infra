@@ -184,9 +184,6 @@ presubmits:
   - name: kubeflow-pipelines-sdk-isort
     cluster: build-kubeflow
     decorate: true
-    # TODO: remove optional and skip_report when code is adherent and consistently passing
-    optional: true
-    skip_report: true
     run_if_changed: "^(sdk/python/.*)|(test/presubmit-isort-sdk.sh)$"
     spec:
       containers:
@@ -196,9 +193,6 @@ presubmits:
   - name: kubeflow-pipelines-sdk-yapf
     cluster: build-kubeflow
     decorate: true
-    # TODO: remove optional and skip_report when code is adherent and consistently passing
-    optional: true
-    skip_report: true
     run_if_changed: "^(sdk/python/.*)|(test/presubmit-yapf-sdk.sh)$"
     spec:
       containers:
@@ -208,9 +202,6 @@ presubmits:
   - name: kubeflow-pipelines-sdk-docformatter
     cluster: build-kubeflow
     decorate: true
-    # TODO: remove optional and skip_report when code is adherent and consistently passing
-    optional: true
-    skip_report: true
     run_if_changed: "^(sdk/python/.*)|(test/presubmit-docformatter-sdk.sh)$"
     spec:
       containers:
