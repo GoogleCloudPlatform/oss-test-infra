@@ -16,7 +16,7 @@ periodics:
       - "/cleanerupper"
       args:
       - "-dry_run=false"
-      - "-duration=24h"
+      - "-duration=12h"
       - "-instances=true"
       - "-disks=true"
       - "-images=true"
