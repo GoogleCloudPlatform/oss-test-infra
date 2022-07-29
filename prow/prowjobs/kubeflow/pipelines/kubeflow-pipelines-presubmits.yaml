@@ -18,7 +18,7 @@ presubmits:
     decorate: true
     spec:
       containers:
-      - image: golang:1.17.6-bullseye
+      - image: golang:1.18-bullseye
         command:
         - ./test/presubmit-backend-test.sh
   - name: kubeflow-pipeline-e2e-test
