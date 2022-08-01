@@ -13,7 +13,6 @@ set -o pipefail
 
 # Specific to Prow instance, don't change these.
 export PROW_INSTANCE_NAME="${PROW_INSTANCE_NAME:-oss-prow}"
-export ADMIN_IAM_MEMBER="${ADMIN_IAM_MEMBER:-group:mdb.cloud-kubernetes-engprod-oncall@google.com}"
 export PROW_SERVICE_PROJECT="oss-prow"
 export PROW_SECRET_ACCESSOR_SA="gencred-refresher@oss-prow.iam.gserviceaccount.com"
 export PROW_DEPLOYMENT_DIR="./prow/oss/cluster" # From root of repo
@@ -37,5 +36,8 @@ export DISKSIZE="${DISKSIZE:-100GB}"
 # Only needed for creating project
 export FOLDER_ID="${FOLDER_ID:-0123}"
 export BILLING_ACCOUNT_ID="${BILLING_ACCOUNT_ID:-0123}"  # Find the billing account ID in the cloud console.
+# ADMIN_IAM_MEMBER will be set as the owner of the created project, override
+# this value unless it's desired for our oncall team to help debug something.
+export ADMIN_IAM_MEMBER="${ADMIN_IAM_MEMBER:-group:mdb.cloud-kubernetes-engprod-oncall@google.com}"
 
 bash <(curl -sSfL https://raw.githubusercontent.com/kubernetes/test-infra/master/prow/create-build-cluster.sh) "$@"
