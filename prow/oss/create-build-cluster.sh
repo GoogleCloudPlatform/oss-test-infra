@@ -3,8 +3,7 @@
 # single pd-ssd nodepool that will have autoupgrade and autorepair enabled.
 #
 # Usage: populate the parameters by setting them below or specifying environment variables then run
-# the script and follow the prompts. You'll be prompted to share some credentials and commands
-# with the current oncall.
+# the script and follow the prompts.
 
 
 set -o errexit
