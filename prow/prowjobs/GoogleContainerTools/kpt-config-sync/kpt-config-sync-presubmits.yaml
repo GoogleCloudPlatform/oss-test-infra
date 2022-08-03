@@ -49,8 +49,8 @@ presubmits:
     spec:
       containers:
       # Use the special version of the kubekins 1.22 image with Kind
-      # v0.14.0 installed.
-      - image: gcr.io/oss-prow-build-kpt-config-sync/e2e-prow:kubekins-e2e-v20220708-6b0cfd300e-1.23-kind-v0.14.0
+      # v0.11.1 installed.
+      - image: gcr.io/oss-prow-build-kpt-config-sync/e2e-prow:kubekins-e2e-v20220708-6b0cfd300e-1.23-kind-v0.11.1
         command:
         - runner.sh
         args:
@@ -106,8 +106,8 @@ presubmits:
     spec:
       containers:
       # Use the special version of the kubekins 1.22 image with Kind
-      # v0.14.0 installed.
-      - image: gcr.io/oss-prow-build-kpt-config-sync/e2e-prow:kubekins-e2e-v20220708-6b0cfd300e-1.23-kind-v0.14.0
+      # v0.11.1 installed.
+      - image: gcr.io/oss-prow-build-kpt-config-sync/e2e-prow:kubekins-e2e-v20220708-6b0cfd300e-1.23-kind-v0.11.1
         command:
         - runner.sh
         args:
