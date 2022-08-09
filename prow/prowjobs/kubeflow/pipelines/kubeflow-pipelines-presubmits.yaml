@@ -185,6 +185,8 @@ presubmits:
     cluster: build-kubeflow
     decorate: true
     run_if_changed: "^(sdk/python/.*)|(test/presubmit-isort-sdk.sh)$"
+    branches:
+    - master
     spec:
       containers:
       - image: python:3.7
@@ -194,6 +196,8 @@ presubmits:
     cluster: build-kubeflow
     decorate: true
     run_if_changed: "^(sdk/python/.*)|(test/presubmit-yapf-sdk.sh)$"
+    branches:
+    - master
     spec:
       containers:
       - image: python:3.7
@@ -203,6 +207,8 @@ presubmits:
     cluster: build-kubeflow
     decorate: true
     run_if_changed: "^(sdk/python/.*)|(test/presubmit-docformatter-sdk.sh)$"
+    branches:
+    - master
     spec:
       containers:
       - image: python:3.7
