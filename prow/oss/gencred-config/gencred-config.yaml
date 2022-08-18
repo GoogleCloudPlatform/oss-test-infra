@@ -1,4 +1,10 @@
 clusters:
+- gke: projects/gke-accel-cntnr-ng-tests/locations/us-west1-b/clusters/gke-accel-cntnr-ng-tests
+  name: build-cloud-kubernetes-node-management-team
+  duration: 48h
+  gsm:
+    name: prow_build_cluster_kubeconfig_build-cloud-kubernetes-node-management-team
+    project: oss-prow
 - gke: projects/oss-prow-build-kpt-config-sync/locations/us-central1-b/clusters/oss-prow-build-kpt-config-sync
   name: build-kpt-config-sync
   duration: 48h
