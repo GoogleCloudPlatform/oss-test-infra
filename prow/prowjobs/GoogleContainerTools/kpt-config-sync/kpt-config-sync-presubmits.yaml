@@ -71,8 +71,8 @@ presubmits:
           readOnly: true
         resources:
           requests:
-            # When running at parallel=15, we use 20Gi. So request 40Gi to be safe.
-            memory: "40Gi"
+            # When running at parallel=15, we use 20Gi. So request 80Gi to be safe.
+            memory: "80Gi"
             # This value is experimentally determined.
             # We know to increase this when CPU usage is reported as above 1.0
             # and we observe randomly flaky tests. Check the nodes in our Prow CI
@@ -128,8 +128,8 @@ presubmits:
           readOnly: true
         resources:
           requests:
-            # When running at parallel=15, we use 20Gi. So request 40Gi to be safe.
-            memory: "40Gi"
+            # When running at parallel=15, we use 20Gi. So request 80Gi to be safe.
+            memory: "80Gi"
             # This value is experimentally determined.
             # We know to increase this when CPU usage is reported as above 1.0
             # and we observe randomly flaky tests. Check the nodes in our Prow CI
