@@ -28,11 +28,14 @@ spec:
         env:
         # Use KUBECONFIG envvar rather than --kubeconfig flag in order to provide multiple configs to merge.
         - name: KUBECONFIG
-          value: "/etc/kubeconfig/config-20211108:/etc/build-kpt-config-sync/kubeconfig:/etc/build-compute-image-import/kubeconfig:/etc/build-bms-oracle-team/kubeconfig:/etc/build-blueprints/kubeconfig:/etc/build-elcarro/kubeconfig:/etc/build-kubeflow/kubeconfig"
+          value: "/etc/kubeconfig/config-20211108:/etc/build-cloud-kubernetes-node-management-team/kubeconfig:/etc/build-kpt-config-sync/kubeconfig:/etc/build-compute-image-import/kubeconfig:/etc/build-bms-oracle-team/kubeconfig:/etc/build-blueprints/kubeconfig:/etc/build-elcarro/kubeconfig:/etc/build-kubeflow/kubeconfig"
         ports:
         - name: metrics
           containerPort: 9090
         volumeMounts:
+        - mountPath: /etc/build-cloud-kubernetes-node-management-team
+          name: build-cloud-kubernetes-node-management-team
+          readOnly: true
         - mountPath: /etc/build-kpt-config-sync
           name: build-kpt-config-sync
           readOnly: true
@@ -61,6 +64,10 @@ spec:
           mountPath: /etc/build-kubeflow
           readOnly: true
       volumes:
+      - name: build-cloud-kubernetes-node-management-team
+        secret:
+          defaultMode: 420
+          secretName: kubeconfig-build-cloud-kubernetes-node-management-team
       - name: build-kpt-config-sync
         secret:
           defaultMode: 420
