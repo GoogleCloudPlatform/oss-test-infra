@@ -32,7 +32,7 @@ periodics:
   decorate: true
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
-    testgrid-tab-name: cleanerupper
+    testgrid-tab-name: cleanerupper-osconfig
   interval: 5h
   agent: kubernetes
   spec:
