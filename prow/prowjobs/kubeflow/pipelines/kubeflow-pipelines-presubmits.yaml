@@ -100,6 +100,16 @@ presubmits:
         command:
         - ./test/presubmit-tests-sdk.sh
 
+  - name: kubeflow-pipelines-sdk-python310
+    cluster: build-kubeflow
+    decorate: true
+    run_if_changed: "^(sdk/.*)|(test/presubmit-tests-sdk.sh)$"
+    spec:
+      containers:
+      - image: python:3.10
+        command:
+        - ./test/presubmit-tests-sdk.sh
+
   - name: kubeflow-pipelines-tfx-python37
     cluster: build-kubeflow
     decorate: true
