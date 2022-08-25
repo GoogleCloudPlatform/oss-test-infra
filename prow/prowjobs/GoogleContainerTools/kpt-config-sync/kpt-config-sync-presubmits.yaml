@@ -29,7 +29,7 @@ presubmits:
     cluster: build-kpt-config-sync
     # branches: ["master"]
     always_run: false
-    skip_if_only_changed: "\\.md$|^(LICENSE|OWNERS)$"
+    skip_if_only_changed: "^(docs|dashboard)/|\\.md$|^(LICENSE|OWNERS)$"
     # Ensure that we don't try to schedule more than 3 jobs at a time. This means
     # we won't automatically get "Pods Unschedulable", but Prow will wait patiently
     # for other jobs to complete before running. At this level, we support up to
@@ -87,7 +87,7 @@ presubmits:
     # branches: ["master"]
     cluster: build-kpt-config-sync
     always_run: false
-    skip_if_only_changed: "\\.md$|^(LICENSE|OWNERS)$"
+    skip_if_only_changed: "^(docs|dashboard)/|\\.md$|^(LICENSE|OWNERS)$"
     # Ensure that we don't try to schedule more than 3 jobs at a time. This means
     # we won't automatically get "Pods Unschedulable", but Prow will wait patiently
     # for other jobs to complete before running. At this level, we support up to
