@@ -165,7 +165,7 @@ presubmits:
   - name: kubeflow-pipelines-samples-v2
     cluster: build-kubeflow
     decorate: true
-    run_if_changed: "^(sdk/python/.*)|(samples/.*)|(backend/src/v2/.*)$"
+    run_if_changed: "^(samples/.*)|(backend/src/v2/.*)$"
     spec:
       containers:
       - image: python:3.7
@@ -226,6 +226,19 @@ presubmits:
       - image: python:3.7
         command:
         - ./test/presubmit-docformatter-sdk.sh
+  - name: kubeflow-pipelines-sdk-execution-tests
+    cluster: build-kubeflow
+    decorate: true
+    # TODO: remove when proven to pass
+    optional: true
+    run_if_changed: "^(sdk/python/.*)|(test/presubmit-sdk-execution-tests.sh)$"
+    branches:
+    - master
+    spec:
+      containers:
+      - image: python:3.7
+        command:
+        - ./test/presubmit-sdk-execution-tests.sh
 
   # this test is not passing
   # - name: kubeflow-pipeline-multiuser-test
