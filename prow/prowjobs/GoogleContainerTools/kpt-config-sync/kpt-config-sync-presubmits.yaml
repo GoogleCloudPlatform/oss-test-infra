@@ -30,11 +30,10 @@ presubmits:
     # branches: ["master"]
     always_run: false
     skip_if_only_changed: "^(docs|dashboard)/|\\.md$|^(LICENSE|OWNERS)$"
-    # Ensure that we don't try to schedule more than 3 jobs at a time. This means
+    # Ensure that we don't try to schedule more than 5 jobs at a time. This means
     # we won't automatically get "Pods Unschedulable", but Prow will wait patiently
-    # for other jobs to complete before running. At this level, we support up to
-    # 12 presubmit runs per hour, which is appropriate for our team size.
-    max_concurrency: 3
+    # for other jobs to complete before running.
+    max_concurrency: 5
     decorate: true
     labels:
       # We think this label is required to use kind. Copied from presubmit job above.
@@ -88,11 +87,10 @@ presubmits:
     cluster: build-kpt-config-sync
     always_run: false
     skip_if_only_changed: "^(docs|dashboard)/|\\.md$|^(LICENSE|OWNERS)$"
-    # Ensure that we don't try to schedule more than 3 jobs at a time. This means
+    # Ensure that we don't try to schedule more than 5 jobs at a time. This means
     # we won't automatically get "Pods Unschedulable", but Prow will wait patiently
-    # for other jobs to complete before running. At this level, we support up to
-    # 12 presubmit runs per hour, which is appropriate for our team size.
-    max_concurrency: 3
+    # for other jobs to complete before running.
+    max_concurrency: 5
     decorate: true
     labels:
       # We think this label is required to use kind. Copied from presubmit job above.
