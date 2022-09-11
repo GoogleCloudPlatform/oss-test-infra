@@ -246,6 +246,7 @@ deck:
     '*':
       github_orgs:
       - GoogleCloudPlatform
+  skip_storage_path_validation: false
   additional_allowed_buckets:
     - compute-image-tools-test
     - gcp-guest-testgrid
