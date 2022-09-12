@@ -71,12 +71,12 @@ presubmits:
           readOnly: true
         resources:
           requests:
-            memory: "105Gi"
+            memory: "100Gi"
             # This value is experimentally determined.
             # We know to increase this when CPU usage is reported as above 1.0
             # and we observe randomly flaky tests. Check the nodes in our Prow CI
             # cluster.
-            cpu: "54000m"
+            cpu: "52000m"
       volumes:
       - name: prober-cred
         secret:
@@ -127,12 +127,12 @@ presubmits:
           readOnly: true
         resources:
           requests:
-            memory: "105Gi"
+            memory: "100Gi"
             # This value is experimentally determined.
             # We know to increase this when CPU usage is reported as above 1.0
             # and we observe randomly flaky tests. Check the nodes in our Prow CI
             # cluster.
-            cpu: "54000m"
+            cpu: "52000m"
       volumes:
       - name: prober-cred
         secret:
