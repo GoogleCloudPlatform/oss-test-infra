@@ -33,7 +33,7 @@ presubmits:
     # Ensure that we don't try to schedule more than 5 jobs at a time. This means
     # we won't automatically get "Pods Unschedulable", but Prow will wait patiently
     # for other jobs to complete before running.
-    max_concurrency: 5
+    max_concurrency: 3
     decorate: true
     labels:
       # We think this label is required to use kind. Copied from presubmit job above.
@@ -71,12 +71,12 @@ presubmits:
           readOnly: true
         resources:
           requests:
-            memory: "30Gi"
+            memory: "50Gi"
             # This value is experimentally determined.
             # We know to increase this when CPU usage is reported as above 1.0
             # and we observe randomly flaky tests. Check the nodes in our Prow CI
             # cluster.
-            cpu: "17000m"
+            cpu: "26000m"
       volumes:
       - name: prober-cred
         secret:
@@ -89,7 +89,7 @@ presubmits:
     # Ensure that we don't try to schedule more than 5 jobs at a time. This means
     # we won't automatically get "Pods Unschedulable", but Prow will wait patiently
     # for other jobs to complete before running.
-    max_concurrency: 5
+    max_concurrency: 3
     decorate: true
     labels:
       # We think this label is required to use kind. Copied from presubmit job above.
@@ -127,12 +127,12 @@ presubmits:
           readOnly: true
         resources:
           requests:
-            memory: "30Gi"
+            memory: "50Gi"
             # This value is experimentally determined.
             # We know to increase this when CPU usage is reported as above 1.0
             # and we observe randomly flaky tests. Check the nodes in our Prow CI
             # cluster.
-            cpu: "17000m"
+            cpu: "26000m"
       volumes:
       - name: prober-cred
         secret:
@@ -145,7 +145,7 @@ presubmits:
     # Ensure that we don't try to schedule more than 5 jobs at a time. This means
     # we won't automatically get "Pods Unschedulable", but Prow will wait patiently
     # for other jobs to complete before running.
-    max_concurrency: 5
+    max_concurrency: 3
     decorate: true
     labels:
       # We think this label is required to use kind. Copied from presubmit job above.
@@ -183,12 +183,12 @@ presubmits:
           readOnly: true
         resources:
           requests:
-            memory: "30Gi"
+            memory: "50Gi"
             # This value is experimentally determined.
             # We know to increase this when CPU usage is reported as above 1.0
             # and we observe randomly flaky tests. Check the nodes in our Prow CI
             # cluster.
-            cpu: "17000m"
+            cpu: "26000m"
       volumes:
       - name: prober-cred
         secret:
@@ -201,7 +201,7 @@ presubmits:
     # Ensure that we don't try to schedule more than 5 jobs at a time. This means
     # we won't automatically get "Pods Unschedulable", but Prow will wait patiently
     # for other jobs to complete before running.
-    max_concurrency: 5
+    max_concurrency: 3
     decorate: true
     labels:
       # We think this label is required to use kind. Copied from presubmit job above.
@@ -239,12 +239,12 @@ presubmits:
           readOnly: true
         resources:
           requests:
-            memory: "30Gi"
+            memory: "50Gi"
             # This value is experimentally determined.
             # We know to increase this when CPU usage is reported as above 1.0
             # and we observe randomly flaky tests. Check the nodes in our Prow CI
             # cluster.
-            cpu: "17000m"
+            cpu: "26000m"
       volumes:
       - name: prober-cred
         secret:
@@ -257,7 +257,7 @@ presubmits:
     # Ensure that we don't try to schedule more than 5 jobs at a time. This means
     # we won't automatically get "Pods Unschedulable", but Prow will wait patiently
     # for other jobs to complete before running.
-    max_concurrency: 5
+    max_concurrency: 3
     decorate: true
     labels:
       # We think this label is required to use kind. Copied from presubmit job above.
@@ -295,12 +295,12 @@ presubmits:
           readOnly: true
         resources:
           requests:
-            memory: "30Gi"
+            memory: "50Gi"
             # This value is experimentally determined.
             # We know to increase this when CPU usage is reported as above 1.0
             # and we observe randomly flaky tests. Check the nodes in our Prow CI
             # cluster.
-            cpu: "17000m"
+            cpu: "26000m"
       volumes:
       - name: prober-cred
         secret:
@@ -313,7 +313,7 @@ presubmits:
     # Ensure that we don't try to schedule more than 5 jobs at a time. This means
     # we won't automatically get "Pods Unschedulable", but Prow will wait patiently
     # for other jobs to complete before running.
-    max_concurrency: 5
+    max_concurrency: 3
     decorate: true
     labels:
       # We think this label is required to use kind. Copied from presubmit job above.
@@ -351,12 +351,12 @@ presubmits:
           readOnly: true
         resources:
           requests:
-            memory: "30Gi"
+            memory: "50Gi"
             # This value is experimentally determined.
             # We know to increase this when CPU usage is reported as above 1.0
             # and we observe randomly flaky tests. Check the nodes in our Prow CI
             # cluster.
-            cpu: "17000m"
+            cpu: "26000m"
       volumes:
       - name: prober-cred
         secret:
