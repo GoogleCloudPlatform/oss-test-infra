@@ -33,7 +33,7 @@ presubmits:
     # Ensure that we don't try to schedule more than 5 jobs at a time. This means
     # we won't automatically get "Pods Unschedulable", but Prow will wait patiently
     # for other jobs to complete before running.
-    max_concurrency: 3
+    max_concurrency: 4
     decorate: true
     labels:
       # We think this label is required to use kind. Copied from presubmit job above.
@@ -89,7 +89,7 @@ presubmits:
     # Ensure that we don't try to schedule more than 5 jobs at a time. This means
     # we won't automatically get "Pods Unschedulable", but Prow will wait patiently
     # for other jobs to complete before running.
-    max_concurrency: 3
+    max_concurrency: 4
     decorate: true
     labels:
       # We think this label is required to use kind. Copied from presubmit job above.
@@ -145,7 +145,7 @@ presubmits:
     # Ensure that we don't try to schedule more than 5 jobs at a time. This means
     # we won't automatically get "Pods Unschedulable", but Prow will wait patiently
     # for other jobs to complete before running.
-    max_concurrency: 3
+    max_concurrency: 4
     decorate: true
     labels:
       # We think this label is required to use kind. Copied from presubmit job above.
@@ -201,7 +201,7 @@ presubmits:
     # Ensure that we don't try to schedule more than 5 jobs at a time. This means
     # we won't automatically get "Pods Unschedulable", but Prow will wait patiently
     # for other jobs to complete before running.
-    max_concurrency: 3
+    max_concurrency: 4
     decorate: true
     labels:
       # We think this label is required to use kind. Copied from presubmit job above.
@@ -257,7 +257,7 @@ presubmits:
     # Ensure that we don't try to schedule more than 5 jobs at a time. This means
     # we won't automatically get "Pods Unschedulable", but Prow will wait patiently
     # for other jobs to complete before running.
-    max_concurrency: 3
+    max_concurrency: 4
     decorate: true
     labels:
       # We think this label is required to use kind. Copied from presubmit job above.
@@ -313,7 +313,7 @@ presubmits:
     # Ensure that we don't try to schedule more than 5 jobs at a time. This means
     # we won't automatically get "Pods Unschedulable", but Prow will wait patiently
     # for other jobs to complete before running.
-    max_concurrency: 3
+    max_concurrency: 4
     decorate: true
     labels:
       # We think this label is required to use kind. Copied from presubmit job above.
