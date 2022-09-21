@@ -8,7 +8,7 @@ prow_ignored:
       cloud.google.com/gke-nodepool: small-job-pool
     containers:
     - &config-sync-terraform-container
-      image: hashicorp/terraform:1.3.0
+      image: gcr.io/k8s-testimages/gcloud-terraform:v20220913-3bc71e6c7a
       command:
       - make
       resources:
