@@ -1,0 +1,31 @@
+prow_ignored:
+- &config-sync-terraform-job
+  cluster: build-kpt-config-sync
+  decorate: true
+  spec: &config-sync-terraform-job-spec
+    nodeSelector:
+      # This job requires 8vCPUs or less, so it is "small".
+      cloud.google.com/gke-nodepool: small-job-pool
+    containers:
+    - &config-sync-terraform-container
+      image: hashicorp/terraform:1.3.0
+      command:
+      - make
+      resources:
+        requests:
+          memory: "1Gi"
+          cpu: "1000m"
+
+presubmits:
+  GoogleContainerTools/kpt-config-sync:
+  - <<: *config-sync-terraform-job
+    name: kpt-config-sync-terraform-presubmit
+    run_if_changed: "^e2e/testinfra/terraform/"
+    spec:
+      <<: *config-sync-terraform-job-spec
+      containers:
+      - <<: *config-sync-terraform-container
+        args:
+        - -C
+        - e2e/testinfra/terraform
+        - validate
