@@ -29,13 +29,13 @@ config_updater:
 approve:
 - repos:
   - GoogleCloudPlatform
-  - GoogleContainerTools
   - google
   - googleforgames
   - grpc-ecosystem
   - chaotoppicks
   require_self_approval: false
 - repos:
+  - GoogleContainerTools
   - kubeflow/caffe2-operator
   - kubeflow/chainer-operator
   - kubeflow/common
@@ -251,6 +251,7 @@ plugins:
     - trigger
     - verify-owners
     - yuks
+    - wip
 
   googleforgames/agones:
     plugins:
