@@ -36,12 +36,6 @@ prow_ignored:
         value: "kpt-config-sync-e2e-go-ci"
       securityContext:
         privileged: true
-      # This volume mount for prober creds may be superfluous. We don't really
-      # have a way to know.
-      volumeMounts:
-      - name: prober-cred
-        mountPath: /etc/prober-gcp-service-account
-        readOnly: true
       resources:
         requests:
           memory: "50Gi"
@@ -50,10 +44,6 @@ prow_ignored:
           # and we observe randomly flaky tests. Check the nodes in our Prow CI
           # cluster.
           cpu: "26000m"
-    volumes:
-    - name: prober-cred
-      secret:
-        secretName: nomos-prober-runner-gcp-client-key
     nodeSelector:
       cloud.google.com/gke-nodepool: large-job-pool
 
