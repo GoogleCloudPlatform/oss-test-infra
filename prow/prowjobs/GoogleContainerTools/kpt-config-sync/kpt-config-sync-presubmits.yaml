@@ -1,7 +1,8 @@
 prow_ignored:
 - &config-sync-e2e-job
   cluster: build-kpt-config-sync
-  # branches: ["master"]
+  skip_branches:
+  - ^v1\.13$
   always_run: false
   skip_if_only_changed: "^(docs|dashboard)/|\\.md$|^(LICENSE|OWNERS)$"
   # Ensure that we don't try to schedule more than 5 jobs at a time. This means
@@ -53,6 +54,8 @@ prow_ignored:
     - name: prober-cred
       secret:
         secretName: nomos-prober-runner-gcp-client-key
+    nodeSelector:
+      cloud.google.com/gke-nodepool: large-job-pool
 
 
 presubmits:
@@ -136,3 +139,43 @@ presubmits:
         args:
         - make
         - test-e2e-kind-multi-repo-test-group3
+  # TODO: remove this job once cherry picks are done for v1.13
+  - <<: *config-sync-e2e-job
+    name: kpt-config-sync-presubmit-e2e-multi-repo
+    branches:
+    - ^v1\.13$
+    skip_branches: []
+    max_concurrency: 2
+    spec:
+      <<: *config-sync-e2e-job-spec
+      containers:
+      - <<: *config-sync-e2e-container
+        args:
+        - make
+        - test-e2e-go-ephemeral-multi-repo
+        resources:
+          requests:
+            memory: "100Gi"
+            cpu: "54000m"
+      nodeSelector:
+        cloud.google.com/gke-nodepool: large-job-pool-v113
+  # TODO: remove this job once cherry picks are done for v1.13
+  - <<: *config-sync-e2e-job
+    name: kpt-config-sync-presubmit-e2e-mono-repo
+    branches:
+    - ^v1\.13$
+    skip_branches: []
+    max_concurrency: 2
+    spec:
+      <<: *config-sync-e2e-job-spec
+      containers:
+      - <<: *config-sync-e2e-container
+        args:
+        - make
+        - test-e2e-go-ephemeral-mono-repo
+        resources:
+          requests:
+            memory: "100Gi"
+            cpu: "54000m"
+      nodeSelector:
+        cloud.google.com/gke-nodepool: large-job-pool-v113
