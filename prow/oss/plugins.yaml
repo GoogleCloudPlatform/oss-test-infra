@@ -34,6 +34,7 @@ approve:
   - grpc-ecosystem
   - chaotoppicks
   require_self_approval: false
+  commandHelpLink: https://oss.gprow.dev/command-help
 - repos:
   - GoogleContainerTools
   - kubeflow/caffe2-operator
@@ -48,6 +49,7 @@ approve:
   - kubeflow/tf-operator
   - kubeflow/xgboost-operator
   require_self_approval: true
+  commandHelpLink: https://oss.gprow.dev/command-help
 
 blunderbuss:
   use_status_availability: true
