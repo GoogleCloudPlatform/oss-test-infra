@@ -25,8 +25,6 @@ spec:
         - --blob-storage-workers=1
         - --config-path=/etc/config/config.yaml
         - --cookiefile=/etc/cookies/cookies
-        - --gerrit-projects=https://kunit-review.googlesource.com=linux
-        - --gerrit-projects=https://linux-review.googlesource.com=linux/kernel/git/torvalds/linux
         - --gerrit-workers=1
         - --pubsub-workers=1
         - --github-endpoint=http://ghproxy

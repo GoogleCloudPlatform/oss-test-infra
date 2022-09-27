@@ -251,6 +251,17 @@ deck:
     - compute-image-tools-test
     - gcp-guest-testgrid
 
+gerrit:
+  deck_url: https://oss.gprow.dev/
+  tick_interval: 30s
+  org_repos_config:
+  - org: https://kunit-review.googlesource.com
+    repos:
+    - linux
+  - org: https://linux-review.googlesource.com
+    repos:
+    - linux/kernel/git/torvalds/linux
+
 in_repo_config:
   enabled:
     chaotoppicks: true
