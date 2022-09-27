@@ -1,0 +1,76 @@
+# YAML anchors for reference elsewhere.
+# to view expanded yaml, run: `yq eval 'explode(.)' [file]`
+prow_ignored:
+- &config-sync-ci-job
+  interval: 1h
+  cluster: build-kpt-config-sync
+  labels:
+    preset-service-account: "true"
+    preset-dind-enabled-memory: "true"
+  decorate: true
+  decoration_config:
+    timeout: 2h
+  extra_refs:
+  - org: GoogleContainerTools
+    repo: kpt-config-sync
+    base_ref: main
+  spec: &config-sync-ci-job-spec
+    containers:
+    - &config-sync-ci-container
+      image: gcr.io/gke-test-infra/kubekins-e2e:v20220204-29ea0e1be-1.23
+      command:
+      - runner.sh
+      env:
+      - name: UID
+        value: "10333"
+      - name: GID
+        value: "10333"
+      - name: GKE_E2E_TIMEOUT
+        value: 2h
+      securityContext:
+        privileged: true
+      volumeMounts:
+      - name: prober-cred
+        mountPath: /etc/prober-gcp-service-account
+        readOnly: true
+      resources:
+        requests:
+          memory: "2Gi"
+          cpu: "2000m"
+    nodeSelector:
+      # This job requires 8vCPUs or less, so it is "small".
+      cloud.google.com/gke-nodepool: small-job-pool
+    volumes:
+    - name: prober-cred
+      secret:
+        secretName: nomos-prober-runner-gcp-client-key
+
+periodics:
+- <<: *config-sync-ci-job
+  name: multi-repo-gke-test-group-1-std-stable
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-test-group1
+    testgrid-tab-name: multi-repo-gke-test-group-1-std-stable
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group1
+      - 'GCP_CLUSTER=multi-repo-gke-test-group-1-std-stable'
+
+
+- <<: *config-sync-ci-job
+  name: multi-repo-gke-test-group-2-std-stable
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-test-group2
+    testgrid-tab-name: multi-repo-gke-test-group-2-std-stable
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group2
+      - 'GCP_CLUSTER=multi-repo-gke-test-group-2-std-stable'
