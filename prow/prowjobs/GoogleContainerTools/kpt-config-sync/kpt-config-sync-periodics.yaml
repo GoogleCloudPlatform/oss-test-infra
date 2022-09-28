@@ -17,7 +17,7 @@ prow_ignored:
   spec: &config-sync-ci-job-spec
     containers:
     - &config-sync-ci-container
-      image: gcr.io/gke-test-infra/kubekins-e2e:v20220204-29ea0e1be-1.23
+      image: gcr.io/k8s-staging-test-infra/kubekins-e2e:v20220708-6b0cfd300e-1.23
       command:
       - runner.sh
       env:
