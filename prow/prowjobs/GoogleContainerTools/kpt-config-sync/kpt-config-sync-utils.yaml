@@ -3,8 +3,8 @@ periodics:
   interval: 3h
   cluster: build-kpt-config-sync
   annotations:
-    testgrid-dashboards: googleoss-kpt-config-sync
-    testgrid-tab-name: periodic
+    testgrid-dashboards: googleoss-kpt-config-sync-misc
+    testgrid-tab-name: prober-runner-sa-key-rotate
   labels:
     preset-service-account: "true"
     preset-dind-enabled: "true"

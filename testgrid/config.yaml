@@ -11,7 +11,9 @@ dashboards:
 - name: googleoss-kubeflow-gcp-blueprints
 - name: googleoss-grpc-transcoder
 - name: googleoss-http-pattern-matcher
-- name: googleoss-kpt-config-sync
+- name: googleoss-kpt-config-sync-multi-repo-test-group1
+- name: googleoss-kpt-config-sync-multi-repo-test-group2
+- name: googleoss-kpt-config-sync-misc
 
 dashboard_groups:
   - name: googleoss
@@ -24,8 +26,12 @@ dashboard_groups:
     - googleoss-esp-v2-periodic
     - googleoss-grpc-transcoder
     - googleoss-http-pattern-matcher
-    - googleoss-kpt-config-sync
   - name: googleoss-kubeflow
     dashboard_names:
     - googleoss-kubeflow-pipelines
     - googleoss-kubeflow-gcp-blueprints
+  - name: googleoss-kpt-config-sync
+    dashboard_names:
+    - googleoss-kpt-config-sync-multi-repo-test-group1
+    - googleoss-kpt-config-sync-multi-repo-test-group2
+    - googleoss-kpt-config-sync-misc
