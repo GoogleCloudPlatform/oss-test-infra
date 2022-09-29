@@ -27,6 +27,8 @@ prow_ignored:
         value: "10333"
       - name: GKE_E2E_TIMEOUT
         value: 2h
+      - name: GCP_PROJECT
+        value: oss-prow-build-kpt-config-sync
       securityContext:
         privileged: true
       volumeMounts:
