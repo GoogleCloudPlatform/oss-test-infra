@@ -2,7 +2,8 @@
 # to view expanded yaml, run: `yq eval 'explode(.)' [file]`
 prow_ignored:
 - &config-sync-ci-job
-  interval: 1h
+  # TODO: change it back to 1h after the test infra is set up in the OSS project.
+  interval: 24h
   cluster: build-kpt-config-sync
   labels:
     preset-service-account: "true"
@@ -58,9 +59,10 @@ periodics:
     containers:
     - <<: *config-sync-ci-container
       args:
-      - make
-      - test-e2e-gke-multi-repo-test-group1
-      - 'GCP_CLUSTER=multi-repo-gke-test-group-1-std-stable'
+      #  We're going to replace these two dummy test jobs with real CI jobs.
+      #  Noop them in the interim.
+      - exit
+      - '0'
 
 
 - <<: *config-sync-ci-job
@@ -73,6 +75,7 @@ periodics:
     containers:
     - <<: *config-sync-ci-container
       args:
-      - make
-      - test-e2e-gke-multi-repo-test-group2
-      - 'GCP_CLUSTER=multi-repo-gke-test-group-2-std-stable'
+      #  We're going to replace these two dummy test jobs with real CI jobs.
+      #  Noop them in the interim.
+      - exit
+      - '0'
