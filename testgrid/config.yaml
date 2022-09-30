@@ -11,8 +11,14 @@ dashboards:
 - name: googleoss-kubeflow-gcp-blueprints
 - name: googleoss-grpc-transcoder
 - name: googleoss-http-pattern-matcher
-- name: googleoss-kpt-config-sync-multi-repo-test-group1
-- name: googleoss-kpt-config-sync-multi-repo-test-group2
+- name: googleoss-kpt-config-sync-multi-repo-1
+- name: googleoss-kpt-config-sync-multi-repo-2
+- name: googleoss-kpt-config-sync-multi-repo-3
+- name: googleoss-kpt-config-sync-multi-repo-4
+- name: googleoss-kpt-config-sync-multi-repo-5
+- name: googleoss-kpt-config-sync-multi-repo-6
+- name: googleoss-kpt-config-sync-multi-repo-7
+- name: googleoss-kpt-config-sync-multi-repo-8
 - name: googleoss-kpt-config-sync-misc
 
 dashboard_groups:
@@ -32,6 +38,12 @@ dashboard_groups:
     - googleoss-kubeflow-gcp-blueprints
   - name: googleoss-kpt-config-sync
     dashboard_names:
-    - googleoss-kpt-config-sync-multi-repo-test-group1
-    - googleoss-kpt-config-sync-multi-repo-test-group2
+    - googleoss-kpt-config-sync-multi-repo-1
+    - googleoss-kpt-config-sync-multi-repo-2
+    - googleoss-kpt-config-sync-multi-repo-3
+    - googleoss-kpt-config-sync-multi-repo-4
+    - googleoss-kpt-config-sync-multi-repo-5
+    - googleoss-kpt-config-sync-multi-repo-6
+    - googleoss-kpt-config-sync-multi-repo-7
+    - googleoss-kpt-config-sync-multi-repo-8
     - googleoss-kpt-config-sync-misc

@@ -48,10 +48,11 @@ prow_ignored:
         secretName: nomos-prober-runner-gcp-client-key
 
 periodics:
+### multi-repo test group 1 jobs ###
 - <<: *config-sync-ci-job
   name: multi-repo-1-standard-stable
   annotations:
-    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-test-group1
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-1
     testgrid-tab-name: standard-stable
   spec:
     <<: *config-sync-ci-job-spec
@@ -65,7 +66,7 @@ periodics:
 - <<: *config-sync-ci-job
   name: multi-repo-1-standard-regular
   annotations:
-    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-test-group1
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-1
     testgrid-tab-name: standard-regular
   spec:
     <<: *config-sync-ci-job-spec
@@ -79,7 +80,7 @@ periodics:
 - <<: *config-sync-ci-job
   name: multi-repo-1-standard-rapid
   annotations:
-    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-test-group1
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-1
     testgrid-tab-name: standard-rapid
   spec:
     <<: *config-sync-ci-job-spec
@@ -93,7 +94,7 @@ periodics:
 - <<: *config-sync-ci-job
   name: multi-repo-1-standard-rapid-latest
   annotations:
-    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-test-group1
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-1
     testgrid-tab-name: standard-rapid-latest
   spec:
     <<: *config-sync-ci-job-spec
@@ -107,7 +108,7 @@ periodics:
 - <<: *config-sync-ci-job
   name: multi-repo-1-autopilot-stable
   annotations:
-    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-test-group1
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-1
     testgrid-tab-name: autopilot-stable
   spec:
     <<: *config-sync-ci-job-spec
@@ -121,7 +122,7 @@ periodics:
 - <<: *config-sync-ci-job
   name: multi-repo-1-autopilot-regular
   annotations:
-    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-test-group1
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-1
     testgrid-tab-name: autopilot-regular
   spec:
     <<: *config-sync-ci-job-spec
@@ -135,7 +136,7 @@ periodics:
 - <<: *config-sync-ci-job
   name: multi-repo-1-autopilot-rapid
   annotations:
-    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-test-group1
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-1
     testgrid-tab-name: autopilot-rapid
   spec:
     <<: *config-sync-ci-job-spec
@@ -149,7 +150,7 @@ periodics:
 - <<: *config-sync-ci-job
   name: multi-repo-1-autopilot-rapid-latest
   annotations:
-    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-test-group1
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-1
     testgrid-tab-name: autopilot-rapid-latest
   spec:
     <<: *config-sync-ci-job-spec
@@ -160,10 +161,11 @@ periodics:
       - test-e2e-gke-multi-repo-test-group1
       - 'GCP_CLUSTER=multi-repo-1-autopilot-rapid-latest'
 
+### multi-repo test group 2 jobs ###
 - <<: *config-sync-ci-job
   name: multi-repo-2-standard-stable
   annotations:
-    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-test-group2
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-2
     testgrid-tab-name: standard-stable
   spec:
     <<: *config-sync-ci-job-spec
@@ -177,7 +179,7 @@ periodics:
 - <<: *config-sync-ci-job
   name: multi-repo-2-standard-regular
   annotations:
-    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-test-group2
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-2
     testgrid-tab-name: standard-regular
   spec:
     <<: *config-sync-ci-job-spec
@@ -191,7 +193,7 @@ periodics:
 - <<: *config-sync-ci-job
   name: multi-repo-2-standard-rapid
   annotations:
-    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-test-group2
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-2
     testgrid-tab-name: standard-rapid
   spec:
     <<: *config-sync-ci-job-spec
@@ -205,7 +207,7 @@ periodics:
 - <<: *config-sync-ci-job
   name: multi-repo-2-standard-rapid-latest
   annotations:
-    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-test-group2
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-2
     testgrid-tab-name: standard-rapid-latest
   spec:
     <<: *config-sync-ci-job-spec
@@ -219,7 +221,7 @@ periodics:
 - <<: *config-sync-ci-job
   name: multi-repo-2-autopilot-stable
   annotations:
-    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-test-group2
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-2
     testgrid-tab-name: autopilot-stable
   spec:
     <<: *config-sync-ci-job-spec
@@ -233,7 +235,7 @@ periodics:
 - <<: *config-sync-ci-job
   name: multi-repo-2-autopilot-regular
   annotations:
-    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-test-group2
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-2
     testgrid-tab-name: autopilot-regular
   spec:
     <<: *config-sync-ci-job-spec
@@ -247,7 +249,7 @@ periodics:
 - <<: *config-sync-ci-job
   name: multi-repo-2-autopilot-rapid
   annotations:
-    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-test-group2
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-2
     testgrid-tab-name: autopilot-rapid
   spec:
     <<: *config-sync-ci-job-spec
@@ -261,7 +263,7 @@ periodics:
 - <<: *config-sync-ci-job
   name: multi-repo-2-autopilot-rapid-latest
   annotations:
-    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-test-group2
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-2
     testgrid-tab-name: autopilot-rapid-latest
   spec:
     <<: *config-sync-ci-job-spec
@@ -271,3 +273,682 @@ periodics:
       - make
       - test-e2e-gke-multi-repo-test-group2
       - 'GCP_CLUSTER=multi-repo-2-autopilot-rapid-latest'
+
+### multi-repo test group 3 jobs ###
+- <<: *config-sync-ci-job
+  name: multi-repo-3-standard-stable
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-3
+    testgrid-tab-name: standard-stable
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group3
+      - 'GCP_CLUSTER=multi-repo-3-standard-stable'
+
+- <<: *config-sync-ci-job
+  name: multi-repo-3-standard-regular
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-3
+    testgrid-tab-name: standard-regular
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group3
+      - 'GCP_CLUSTER=multi-repo-3-standard-regular'
+
+- <<: *config-sync-ci-job
+  name: multi-repo-3-standard-rapid
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-3
+    testgrid-tab-name: standard-rapid
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group3
+      - 'GCP_CLUSTER=multi-repo-3-standard-rapid'
+
+- <<: *config-sync-ci-job
+  name: multi-repo-3-standard-rapid-latest
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-3
+    testgrid-tab-name: standard-rapid-latest
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group3
+      - 'GCP_CLUSTER=multi-repo-3-standard-rapid-latest'
+
+- <<: *config-sync-ci-job
+  name: multi-repo-3-autopilot-stable
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-3
+    testgrid-tab-name: autopilot-stable
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group3
+      - 'GCP_CLUSTER=multi-repo-3-autopilot-stable'
+
+- <<: *config-sync-ci-job
+  name: multi-repo-3-autopilot-regular
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-3
+    testgrid-tab-name: autopilot-regular
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group3
+      - 'GCP_CLUSTER=multi-repo-3-autopilot-regular'
+
+- <<: *config-sync-ci-job
+  name: multi-repo-3-autopilot-rapid
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-3
+    testgrid-tab-name: autopilot-rapid
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group3
+      - 'GCP_CLUSTER=multi-repo-3-autopilot-rapid'
+
+- <<: *config-sync-ci-job
+  name: multi-repo-3-autopilot-rapid-latest
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-3
+    testgrid-tab-name: autopilot-rapid-latest
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group3
+      - 'GCP_CLUSTER=multi-repo-3-autopilot-rapid-latest'
+
+### multi-repo test group 4 jobs ###
+- <<: *config-sync-ci-job
+  name: multi-repo-4-standard-stable
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-4
+    testgrid-tab-name: standard-stable
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group4
+      - 'GCP_CLUSTER=multi-repo-4-standard-stable'
+
+- <<: *config-sync-ci-job
+  name: multi-repo-4-standard-regular
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-4
+    testgrid-tab-name: standard-regular
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group4
+      - 'GCP_CLUSTER=multi-repo-4-standard-regular'
+
+- <<: *config-sync-ci-job
+  name: multi-repo-4-standard-rapid
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-4
+    testgrid-tab-name: standard-rapid
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group4
+      - 'GCP_CLUSTER=multi-repo-4-standard-rapid'
+
+- <<: *config-sync-ci-job
+  name: multi-repo-4-standard-rapid-latest
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-4
+    testgrid-tab-name: standard-rapid-latest
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group4
+      - 'GCP_CLUSTER=multi-repo-4-standard-rapid-latest'
+
+- <<: *config-sync-ci-job
+  name: multi-repo-4-autopilot-stable
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-4
+    testgrid-tab-name: autopilot-stable
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group4
+      - 'GCP_CLUSTER=multi-repo-4-autopilot-stable'
+
+- <<: *config-sync-ci-job
+  name: multi-repo-4-autopilot-regular
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-4
+    testgrid-tab-name: autopilot-regular
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group4
+      - 'GCP_CLUSTER=multi-repo-4-autopilot-regular'
+
+- <<: *config-sync-ci-job
+  name: multi-repo-4-autopilot-rapid
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-4
+    testgrid-tab-name: autopilot-rapid
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group4
+      - 'GCP_CLUSTER=multi-repo-4-autopilot-rapid'
+
+- <<: *config-sync-ci-job
+  name: multi-repo-4-autopilot-rapid-latest
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-4
+    testgrid-tab-name: autopilot-rapid-latest
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group4
+      - 'GCP_CLUSTER=multi-repo-4-autopilot-rapid-latest'
+
+### multi-repo test group 5 jobs ###
+- <<: *config-sync-ci-job
+  name: multi-repo-5-standard-stable
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-5
+    testgrid-tab-name: standard-stable
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group5
+      - 'GCP_CLUSTER=multi-repo-5-standard-stable'
+
+- <<: *config-sync-ci-job
+  name: multi-repo-5-standard-regular
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-5
+    testgrid-tab-name: standard-regular
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group5
+      - 'GCP_CLUSTER=multi-repo-5-standard-regular'
+
+- <<: *config-sync-ci-job
+  name: multi-repo-5-standard-rapid
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-5
+    testgrid-tab-name: standard-rapid
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group5
+      - 'GCP_CLUSTER=multi-repo-5-standard-rapid'
+
+- <<: *config-sync-ci-job
+  name: multi-repo-5-standard-rapid-latest
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-5
+    testgrid-tab-name: standard-rapid-latest
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group5
+      - 'GCP_CLUSTER=multi-repo-5-standard-rapid-latest'
+
+- <<: *config-sync-ci-job
+  name: multi-repo-5-autopilot-stable
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-5
+    testgrid-tab-name: autopilot-stable
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group5
+      - 'GCP_CLUSTER=multi-repo-5-autopilot-stable'
+
+- <<: *config-sync-ci-job
+  name: multi-repo-5-autopilot-regular
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-5
+    testgrid-tab-name: autopilot-regular
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group5
+      - 'GCP_CLUSTER=multi-repo-5-autopilot-regular'
+
+- <<: *config-sync-ci-job
+  name: multi-repo-5-autopilot-rapid
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-5
+    testgrid-tab-name: autopilot-rapid
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group5
+      - 'GCP_CLUSTER=multi-repo-5-autopilot-rapid'
+
+- <<: *config-sync-ci-job
+  name: multi-repo-5-autopilot-rapid-latest
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-5
+    testgrid-tab-name: autopilot-rapid-latest
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group5
+      - 'GCP_CLUSTER=multi-repo-5-autopilot-rapid-latest'
+
+### multi-repo test group 6 jobs ###
+- <<: *config-sync-ci-job
+  name: multi-repo-6-standard-stable
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-6
+    testgrid-tab-name: standard-stable
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group6
+      - 'GCP_CLUSTER=multi-repo-6-standard-stable'
+
+- <<: *config-sync-ci-job
+  name: multi-repo-6-standard-regular
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-6
+    testgrid-tab-name: standard-regular
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group6
+      - 'GCP_CLUSTER=multi-repo-6-standard-regular'
+
+- <<: *config-sync-ci-job
+  name: multi-repo-6-standard-rapid
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-6
+    testgrid-tab-name: standard-rapid
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group6
+      - 'GCP_CLUSTER=multi-repo-6-standard-rapid'
+
+- <<: *config-sync-ci-job
+  name: multi-repo-6-standard-rapid-latest
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-6
+    testgrid-tab-name: standard-rapid-latest
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group6
+      - 'GCP_CLUSTER=multi-repo-6-standard-rapid-latest'
+
+- <<: *config-sync-ci-job
+  name: multi-repo-6-autopilot-stable
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-6
+    testgrid-tab-name: autopilot-stable
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group6
+      - 'GCP_CLUSTER=multi-repo-6-autopilot-stable'
+
+- <<: *config-sync-ci-job
+  name: multi-repo-6-autopilot-regular
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-6
+    testgrid-tab-name: autopilot-regular
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group6
+      - 'GCP_CLUSTER=multi-repo-6-autopilot-regular'
+
+- <<: *config-sync-ci-job
+  name: multi-repo-6-autopilot-rapid
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-6
+    testgrid-tab-name: autopilot-rapid
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group6
+      - 'GCP_CLUSTER=multi-repo-6-autopilot-rapid'
+
+- <<: *config-sync-ci-job
+  name: multi-repo-6-autopilot-rapid-latest
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-6
+    testgrid-tab-name: autopilot-rapid-latest
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group6
+      - 'GCP_CLUSTER=multi-repo-6-autopilot-rapid-latest'
+
+### multi-repo test group 7 jobs ###
+- <<: *config-sync-ci-job
+  name: multi-repo-7-standard-stable
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-7
+    testgrid-tab-name: standard-stable
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group7
+      - 'GCP_CLUSTER=multi-repo-7-standard-stable'
+
+- <<: *config-sync-ci-job
+  name: multi-repo-7-standard-regular
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-7
+    testgrid-tab-name: standard-regular
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group7
+      - 'GCP_CLUSTER=multi-repo-7-standard-regular'
+
+- <<: *config-sync-ci-job
+  name: multi-repo-7-standard-rapid
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-7
+    testgrid-tab-name: standard-rapid
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group7
+      - 'GCP_CLUSTER=multi-repo-7-standard-rapid'
+
+- <<: *config-sync-ci-job
+  name: multi-repo-7-standard-rapid-latest
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-7
+    testgrid-tab-name: standard-rapid-latest
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group7
+      - 'GCP_CLUSTER=multi-repo-7-standard-rapid-latest'
+
+- <<: *config-sync-ci-job
+  name: multi-repo-7-autopilot-stable
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-7
+    testgrid-tab-name: autopilot-stable
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group7
+      - 'GCP_CLUSTER=multi-repo-7-autopilot-stable'
+
+- <<: *config-sync-ci-job
+  name: multi-repo-7-autopilot-regular
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-7
+    testgrid-tab-name: autopilot-regular
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group7
+      - 'GCP_CLUSTER=multi-repo-7-autopilot-regular'
+
+- <<: *config-sync-ci-job
+  name: multi-repo-7-autopilot-rapid
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-7
+    testgrid-tab-name: autopilot-rapid
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group7
+      - 'GCP_CLUSTER=multi-repo-7-autopilot-rapid'
+
+- <<: *config-sync-ci-job
+  name: multi-repo-7-autopilot-rapid-latest
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-7
+    testgrid-tab-name: autopilot-rapid-latest
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group7
+      - 'GCP_CLUSTER=multi-repo-7-autopilot-rapid-latest'
+
+### multi-repo test group 8 jobs ###
+- <<: *config-sync-ci-job
+  name: multi-repo-8-standard-stable
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-8
+    testgrid-tab-name: standard-stable
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group8
+      - 'GCP_CLUSTER=multi-repo-8-standard-stable'
+
+- <<: *config-sync-ci-job
+  name: multi-repo-8-standard-regular
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-8
+    testgrid-tab-name: standard-regular
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group8
+      - 'GCP_CLUSTER=multi-repo-8-standard-regular'
+
+- <<: *config-sync-ci-job
+  name: multi-repo-8-standard-rapid
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-8
+    testgrid-tab-name: standard-rapid
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group8
+      - 'GCP_CLUSTER=multi-repo-8-standard-rapid'
+
+- <<: *config-sync-ci-job
+  name: multi-repo-8-standard-rapid-latest
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-8
+    testgrid-tab-name: standard-rapid-latest
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group8
+      - 'GCP_CLUSTER=multi-repo-8-standard-rapid-latest'
+
+- <<: *config-sync-ci-job
+  name: multi-repo-8-autopilot-stable
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-8
+    testgrid-tab-name: autopilot-stable
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group8
+      - 'GCP_CLUSTER=multi-repo-8-autopilot-stable'
+
+- <<: *config-sync-ci-job
+  name: multi-repo-8-autopilot-regular
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-8
+    testgrid-tab-name: autopilot-regular
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group8
+      - 'GCP_CLUSTER=multi-repo-8-autopilot-regular'
+
+- <<: *config-sync-ci-job
+  name: multi-repo-8-autopilot-rapid
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-8
+    testgrid-tab-name: autopilot-rapid
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group8
+      - 'GCP_CLUSTER=multi-repo-8-autopilot-rapid'
+
+- <<: *config-sync-ci-job
+  name: multi-repo-8-autopilot-rapid-latest
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-8
+    testgrid-tab-name: autopilot-rapid-latest
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group8
+      - 'GCP_CLUSTER=multi-repo-8-autopilot-rapid-latest'
+
