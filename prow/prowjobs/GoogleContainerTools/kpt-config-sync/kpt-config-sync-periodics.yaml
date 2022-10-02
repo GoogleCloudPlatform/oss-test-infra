@@ -118,6 +118,8 @@ periodics:
       - make
       - test-e2e-gke-multi-repo-test-group1
       - 'GCP_CLUSTER=multi-repo-1-autopilot-stable'
+      - 'GCP_REGION=us-central1'
+      - 'GCP_ZONE=""'
 
 - <<: *config-sync-ci-job
   name: multi-repo-1-autopilot-regular
@@ -132,6 +134,8 @@ periodics:
       - make
       - test-e2e-gke-multi-repo-test-group1
       - 'GCP_CLUSTER=multi-repo-1-autopilot-regular'
+      - 'GCP_REGION=us-central1'
+      - 'GCP_ZONE=""'
 
 - <<: *config-sync-ci-job
   name: multi-repo-1-autopilot-rapid
@@ -146,6 +150,8 @@ periodics:
       - make
       - test-e2e-gke-multi-repo-test-group1
       - 'GCP_CLUSTER=multi-repo-1-autopilot-rapid'
+      - 'GCP_REGION=us-central1'
+      - 'GCP_ZONE=""'
 
 - <<: *config-sync-ci-job
   name: multi-repo-1-autopilot-rapid-latest
@@ -160,6 +166,8 @@ periodics:
       - make
       - test-e2e-gke-multi-repo-test-group1
       - 'GCP_CLUSTER=multi-repo-1-autopilot-rapid-latest'
+      - 'GCP_REGION=us-central1'
+      - 'GCP_ZONE=""'
 
 ### multi-repo test group 2 jobs ###
 - <<: *config-sync-ci-job
@@ -231,6 +239,8 @@ periodics:
       - make
       - test-e2e-gke-multi-repo-test-group2
       - 'GCP_CLUSTER=multi-repo-2-autopilot-stable'
+      - 'GCP_REGION=us-central1'
+      - 'GCP_ZONE=""'
 
 - <<: *config-sync-ci-job
   name: multi-repo-2-autopilot-regular
@@ -245,6 +255,8 @@ periodics:
       - make
       - test-e2e-gke-multi-repo-test-group2
       - 'GCP_CLUSTER=multi-repo-2-autopilot-regular'
+      - 'GCP_REGION=us-central1'
+      - 'GCP_ZONE=""'
 
 - <<: *config-sync-ci-job
   name: multi-repo-2-autopilot-rapid
@@ -259,6 +271,8 @@ periodics:
       - make
       - test-e2e-gke-multi-repo-test-group2
       - 'GCP_CLUSTER=multi-repo-2-autopilot-rapid'
+      - 'GCP_REGION=us-central1'
+      - 'GCP_ZONE=""'
 
 - <<: *config-sync-ci-job
   name: multi-repo-2-autopilot-rapid-latest
@@ -273,6 +287,8 @@ periodics:
       - make
       - test-e2e-gke-multi-repo-test-group2
       - 'GCP_CLUSTER=multi-repo-2-autopilot-rapid-latest'
+      - 'GCP_REGION=us-central1'
+      - 'GCP_ZONE=""'
 
 ### multi-repo test group 3 jobs ###
 - <<: *config-sync-ci-job
@@ -344,6 +360,8 @@ periodics:
       - make
       - test-e2e-gke-multi-repo-test-group3
       - 'GCP_CLUSTER=multi-repo-3-autopilot-stable'
+      - 'GCP_REGION=us-central1'
+      - 'GCP_ZONE=""'
 
 - <<: *config-sync-ci-job
   name: multi-repo-3-autopilot-regular
@@ -358,6 +376,8 @@ periodics:
       - make
       - test-e2e-gke-multi-repo-test-group3
       - 'GCP_CLUSTER=multi-repo-3-autopilot-regular'
+      - 'GCP_REGION=us-central1'
+      - 'GCP_ZONE=""'
 
 - <<: *config-sync-ci-job
   name: multi-repo-3-autopilot-rapid
@@ -372,6 +392,8 @@ periodics:
       - make
       - test-e2e-gke-multi-repo-test-group3
       - 'GCP_CLUSTER=multi-repo-3-autopilot-rapid'
+      - 'GCP_REGION=us-central1'
+      - 'GCP_ZONE=""'
 
 - <<: *config-sync-ci-job
   name: multi-repo-3-autopilot-rapid-latest
@@ -386,6 +408,8 @@ periodics:
       - make
       - test-e2e-gke-multi-repo-test-group3
       - 'GCP_CLUSTER=multi-repo-3-autopilot-rapid-latest'
+      - 'GCP_REGION=us-central1'
+      - 'GCP_ZONE=""'
 
 ### multi-repo test group 4 jobs ###
 - <<: *config-sync-ci-job
@@ -457,6 +481,8 @@ periodics:
       - make
       - test-e2e-gke-multi-repo-test-group4
       - 'GCP_CLUSTER=multi-repo-4-autopilot-stable'
+      - 'GCP_REGION=us-central1'
+      - 'GCP_ZONE=""'
 
 - <<: *config-sync-ci-job
   name: multi-repo-4-autopilot-regular
@@ -471,6 +497,8 @@ periodics:
       - make
       - test-e2e-gke-multi-repo-test-group4
       - 'GCP_CLUSTER=multi-repo-4-autopilot-regular'
+      - 'GCP_REGION=us-central1'
+      - 'GCP_ZONE=""'
 
 - <<: *config-sync-ci-job
   name: multi-repo-4-autopilot-rapid
@@ -485,6 +513,8 @@ periodics:
       - make
       - test-e2e-gke-multi-repo-test-group4
       - 'GCP_CLUSTER=multi-repo-4-autopilot-rapid'
+      - 'GCP_REGION=us-central1'
+      - 'GCP_ZONE=""'
 
 - <<: *config-sync-ci-job
   name: multi-repo-4-autopilot-rapid-latest
@@ -499,6 +529,8 @@ periodics:
       - make
       - test-e2e-gke-multi-repo-test-group4
       - 'GCP_CLUSTER=multi-repo-4-autopilot-rapid-latest'
+      - 'GCP_REGION=us-central1'
+      - 'GCP_ZONE=""'
 
 ### multi-repo test group 5 jobs ###
 - <<: *config-sync-ci-job
@@ -570,6 +602,8 @@ periodics:
       - make
       - test-e2e-gke-multi-repo-test-group5
       - 'GCP_CLUSTER=multi-repo-5-autopilot-stable'
+      - 'GCP_REGION=us-central1'
+      - 'GCP_ZONE=""'
 
 - <<: *config-sync-ci-job
   name: multi-repo-5-autopilot-regular
@@ -584,6 +618,8 @@ periodics:
       - make
       - test-e2e-gke-multi-repo-test-group5
       - 'GCP_CLUSTER=multi-repo-5-autopilot-regular'
+      - 'GCP_REGION=us-central1'
+      - 'GCP_ZONE=""'
 
 - <<: *config-sync-ci-job
   name: multi-repo-5-autopilot-rapid
@@ -598,6 +634,8 @@ periodics:
       - make
       - test-e2e-gke-multi-repo-test-group5
       - 'GCP_CLUSTER=multi-repo-5-autopilot-rapid'
+      - 'GCP_REGION=us-central1'
+      - 'GCP_ZONE=""'
 
 - <<: *config-sync-ci-job
   name: multi-repo-5-autopilot-rapid-latest
@@ -612,6 +650,8 @@ periodics:
       - make
       - test-e2e-gke-multi-repo-test-group5
       - 'GCP_CLUSTER=multi-repo-5-autopilot-rapid-latest'
+      - 'GCP_REGION=us-central1'
+      - 'GCP_ZONE=""'
 
 ### multi-repo test group 6 jobs ###
 - <<: *config-sync-ci-job
@@ -683,6 +723,8 @@ periodics:
       - make
       - test-e2e-gke-multi-repo-test-group6
       - 'GCP_CLUSTER=multi-repo-6-autopilot-stable'
+      - 'GCP_REGION=us-central1'
+      - 'GCP_ZONE=""'
 
 - <<: *config-sync-ci-job
   name: multi-repo-6-autopilot-regular
@@ -697,6 +739,8 @@ periodics:
       - make
       - test-e2e-gke-multi-repo-test-group6
       - 'GCP_CLUSTER=multi-repo-6-autopilot-regular'
+      - 'GCP_REGION=us-central1'
+      - 'GCP_ZONE=""'
 
 - <<: *config-sync-ci-job
   name: multi-repo-6-autopilot-rapid
@@ -711,6 +755,8 @@ periodics:
       - make
       - test-e2e-gke-multi-repo-test-group6
       - 'GCP_CLUSTER=multi-repo-6-autopilot-rapid'
+      - 'GCP_REGION=us-central1'
+      - 'GCP_ZONE=""'
 
 - <<: *config-sync-ci-job
   name: multi-repo-6-autopilot-rapid-latest
@@ -725,6 +771,8 @@ periodics:
       - make
       - test-e2e-gke-multi-repo-test-group6
       - 'GCP_CLUSTER=multi-repo-6-autopilot-rapid-latest'
+      - 'GCP_REGION=us-central1'
+      - 'GCP_ZONE=""'
 
 ### multi-repo test group 7 jobs ###
 - <<: *config-sync-ci-job
@@ -796,6 +844,8 @@ periodics:
       - make
       - test-e2e-gke-multi-repo-test-group7
       - 'GCP_CLUSTER=multi-repo-7-autopilot-stable'
+      - 'GCP_REGION=us-central1'
+      - 'GCP_ZONE=""'
 
 - <<: *config-sync-ci-job
   name: multi-repo-7-autopilot-regular
@@ -810,6 +860,8 @@ periodics:
       - make
       - test-e2e-gke-multi-repo-test-group7
       - 'GCP_CLUSTER=multi-repo-7-autopilot-regular'
+      - 'GCP_REGION=us-central1'
+      - 'GCP_ZONE=""'
 
 - <<: *config-sync-ci-job
   name: multi-repo-7-autopilot-rapid
@@ -824,6 +876,8 @@ periodics:
       - make
       - test-e2e-gke-multi-repo-test-group7
       - 'GCP_CLUSTER=multi-repo-7-autopilot-rapid'
+      - 'GCP_REGION=us-central1'
+      - 'GCP_ZONE=""'
 
 - <<: *config-sync-ci-job
   name: multi-repo-7-autopilot-rapid-latest
@@ -838,6 +892,8 @@ periodics:
       - make
       - test-e2e-gke-multi-repo-test-group7
       - 'GCP_CLUSTER=multi-repo-7-autopilot-rapid-latest'
+      - 'GCP_REGION=us-central1'
+      - 'GCP_ZONE=""'
 
 ### multi-repo test group 8 jobs ###
 - <<: *config-sync-ci-job
@@ -909,6 +965,8 @@ periodics:
       - make
       - test-e2e-gke-multi-repo-test-group8
       - 'GCP_CLUSTER=multi-repo-8-autopilot-stable'
+      - 'GCP_REGION=us-central1'
+      - 'GCP_ZONE=""'
 
 - <<: *config-sync-ci-job
   name: multi-repo-8-autopilot-regular
@@ -923,6 +981,8 @@ periodics:
       - make
       - test-e2e-gke-multi-repo-test-group8
       - 'GCP_CLUSTER=multi-repo-8-autopilot-regular'
+      - 'GCP_REGION=us-central1'
+      - 'GCP_ZONE=""'
 
 - <<: *config-sync-ci-job
   name: multi-repo-8-autopilot-rapid
@@ -937,6 +997,8 @@ periodics:
       - make
       - test-e2e-gke-multi-repo-test-group8
       - 'GCP_CLUSTER=multi-repo-8-autopilot-rapid'
+      - 'GCP_REGION=us-central1'
+      - 'GCP_ZONE=""'
 
 - <<: *config-sync-ci-job
   name: multi-repo-8-autopilot-rapid-latest
@@ -951,4 +1013,6 @@ periodics:
       - make
       - test-e2e-gke-multi-repo-test-group8
       - 'GCP_CLUSTER=multi-repo-8-autopilot-rapid-latest'
+      - 'GCP_REGION=us-central1'
+      - 'GCP_ZONE=""'
 
