@@ -9,7 +9,7 @@ prow_ignored:
     preset-dind-enabled-memory: "true"
   decorate: true
   decoration_config:
-    timeout: 2h
+    timeout: 3h
   extra_refs:
   - org: GoogleContainerTools
     repo: kpt-config-sync
@@ -26,7 +26,7 @@ prow_ignored:
       - name: GID
         value: "10333"
       - name: GKE_E2E_TIMEOUT
-        value: 2h
+        value: 3h
       - name: GCP_PROJECT
         value: oss-prow-build-kpt-config-sync
       securityContext:
