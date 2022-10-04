@@ -29,6 +29,9 @@ tide:
     GoogleCloudPlatform/compute-image-import: squash
     GoogleContainerTools/kpt-config-sync: squash
     kubeflow: squash
+  squash_label: tide/merge-method-squash
+  rebase_label: tide/merge-method-rebase
+  merge_label: tide/merge-method-merge
   merge_commit_template:
     kubeflow:
       title: "{{ .Title }} (#{{ .Number }})"
