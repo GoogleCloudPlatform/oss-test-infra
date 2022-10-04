@@ -68,6 +68,13 @@ lgtm:
   review_acts_as_lgtm: true
   trusted_team_for_sticky_lgtm: 'TestGrid Admins'
 
+label:
+  additional_labels:
+  # These labels are used to make Tide merge with a non-default merge method
+  - tide/merge-method-merge
+  - tide/merge-method-rebase
+  - tide/merge-method-squash
+
 plugins:
   GoogleCloudPlatform:
     plugins:
