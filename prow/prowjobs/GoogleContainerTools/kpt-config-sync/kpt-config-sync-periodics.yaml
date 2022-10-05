@@ -56,12 +56,16 @@ periodics:
     testgrid-tab-name: standard-stable
   spec:
     <<: *config-sync-ci-job-spec
+    serviceAccountName: e2e-test-runner
     containers:
     - <<: *config-sync-ci-container
       args:
       - make
       - test-e2e-gke-multi-repo-test-group1
       - 'GCP_CLUSTER=multi-repo-1-standard-stable'
+      - 'PROBER_DOCKER_ARGS=""'
+      volumeMounts: []
+    volumes: []
 
 - <<: *config-sync-ci-job
   name: multi-repo-1-standard-regular
