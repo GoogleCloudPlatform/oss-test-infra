@@ -15,6 +15,7 @@ prow_ignored:
     repo: kpt-config-sync
     base_ref: main
   spec: &config-sync-ci-job-spec
+    serviceAccountName: e2e-test-runner
     containers:
     - &config-sync-ci-container
       image: gcr.io/k8s-staging-test-infra/kubekins-e2e:v20220708-6b0cfd300e-1.23
@@ -29,12 +30,11 @@ prow_ignored:
         value: 3h
       - name: GCP_PROJECT
         value: oss-prow-build-kpt-config-sync
+      # Set PROBER_DOCKER_ARGS to empty to disable mounting prober creds
+      - name: PROBER_DOCKER_ARGS
+        value:
       securityContext:
         privileged: true
-      volumeMounts:
-      - name: prober-cred
-        mountPath: /etc/prober-gcp-service-account
-        readOnly: true
       resources:
         requests:
           memory: "2Gi"
@@ -42,10 +42,6 @@ prow_ignored:
     nodeSelector:
       # This job requires 8vCPUs or less, so it is "small".
       cloud.google.com/gke-nodepool: small-job-pool
-    volumes:
-    - name: prober-cred
-      secret:
-        secretName: nomos-prober-runner-gcp-client-key
 
 periodics:
 ### multi-repo test group 1 jobs ###
@@ -56,16 +52,12 @@ periodics:
     testgrid-tab-name: standard-stable
   spec:
     <<: *config-sync-ci-job-spec
-    serviceAccountName: e2e-test-runner
     containers:
     - <<: *config-sync-ci-container
       args:
       - make
       - test-e2e-gke-multi-repo-test-group1
       - 'GCP_CLUSTER=multi-repo-1-standard-stable'
-      - 'PROBER_DOCKER_ARGS='
-      volumeMounts: []
-    volumes: []
 
 - <<: *config-sync-ci-job
   name: multi-repo-1-standard-regular
