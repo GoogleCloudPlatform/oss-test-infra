@@ -207,7 +207,7 @@ branch-protection:
 deck:
   google_analytics: G-NQ9CERRMYD
   spyglass:
-    announcement: "<b>Googlers: Please fill out the <a href='http://go/prow-user-survey-2022-h1'>Prow User Survey (2022 H1)</a> by Friday, September 30, 2022.</b>"
+    announcement: "<b>Googlers: Please fill out the <a href='http://go/prow-user-survey-2022-h1'>Prow User Survey (2022 H1)</a> by Friday, October 14, 2022.</b>"
     size_limit: 500000000 # 500MB
     gcs_browser_prefix: https://pantheon.corp.google.com/storage/browser/ # TODO(fejta): something publicly accessible
     testgrid_config: gs://k8s-testgrid/config
