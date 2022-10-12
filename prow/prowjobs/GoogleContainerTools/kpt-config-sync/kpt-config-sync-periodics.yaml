@@ -165,6 +165,36 @@ periodics:
       - 'GCP_REGION=us-central1'
       - 'GCP_ZONE=""'
 
+- <<: *config-sync-ci-job
+  name: multi-repo-1-standard-regular-bitbucket
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-1
+    testgrid-tab-name: standard-regular-bitbucket
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group1
+      - 'E2E_ARGS=--git-provider=bitbucket'
+      - 'GCP_CLUSTER=multi-repo-1-standard-regular-bitbucket'
+
+- <<: *config-sync-ci-job
+  name: multi-repo-1-standard-regular-gitlab
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-1
+    testgrid-tab-name: standard-regular-gitlab
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group1
+      - 'E2E_ARGS=--git-provider=gitlab'
+      - 'GCP_CLUSTER=multi-repo-1-standard-regular-gitlab'
+
 ### multi-repo test group 2 jobs ###
 - <<: *config-sync-ci-job
   name: multi-repo-2-standard-stable
@@ -285,6 +315,36 @@ periodics:
       - 'GCP_CLUSTER=multi-repo-2-autopilot-rapid-latest'
       - 'GCP_REGION=us-central1'
       - 'GCP_ZONE=""'
+
+- <<: *config-sync-ci-job
+  name: multi-repo-2-standard-regular-bitbucket
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-2
+    testgrid-tab-name: standard-regular-bitbucket
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group2
+      - 'E2E_ARGS=--git-provider=bitbucket'
+      - 'GCP_CLUSTER=multi-repo-2-standard-regular-bitbucket'
+
+- <<: *config-sync-ci-job
+  name: multi-repo-2-standard-regular-gitlab
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-2
+    testgrid-tab-name: standard-regular-gitlab
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group2
+      - 'E2E_ARGS=--git-provider=gitlab'
+      - 'GCP_CLUSTER=multi-repo-2-standard-regular-gitlab'
 
 ### multi-repo test group 3 jobs ###
 - <<: *config-sync-ci-job
@@ -407,6 +467,36 @@ periodics:
       - 'GCP_REGION=us-central1'
       - 'GCP_ZONE=""'
 
+- <<: *config-sync-ci-job
+  name: multi-repo-3-standard-regular-bitbucket
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-3
+    testgrid-tab-name: standard-regular-bitbucket
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group3
+      - 'E2E_ARGS=--git-provider=bitbucket'
+      - 'GCP_CLUSTER=multi-repo-3-standard-regular-bitbucket'
+
+- <<: *config-sync-ci-job
+  name: multi-repo-3-standard-regular-gitlab
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-3
+    testgrid-tab-name: standard-regular-gitlab
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group3
+      - 'E2E_ARGS=--git-provider=gitlab'
+      - 'GCP_CLUSTER=multi-repo-3-standard-regular-gitlab'
+
 ### multi-repo test group 4 jobs ###
 - <<: *config-sync-ci-job
   name: multi-repo-4-standard-stable
@@ -527,6 +617,36 @@ periodics:
       - 'GCP_CLUSTER=multi-repo-4-autopilot-rapid-latest'
       - 'GCP_REGION=us-central1'
       - 'GCP_ZONE=""'
+
+- <<: *config-sync-ci-job
+  name: multi-repo-4-standard-regular-bitbucket
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-4
+    testgrid-tab-name: standard-regular-bitbucket
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group4
+      - 'E2E_ARGS=--git-provider=bitbucket'
+      - 'GCP_CLUSTER=multi-repo-4-standard-regular-bitbucket'
+
+- <<: *config-sync-ci-job
+  name: multi-repo-4-standard-regular-gitlab
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-4
+    testgrid-tab-name: standard-regular-gitlab
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group4
+      - 'E2E_ARGS=--git-provider=gitlab'
+      - 'GCP_CLUSTER=multi-repo-4-standard-regular-gitlab'
 
 ### multi-repo test group 5 jobs ###
 - <<: *config-sync-ci-job
@@ -649,6 +769,36 @@ periodics:
       - 'GCP_REGION=us-central1'
       - 'GCP_ZONE=""'
 
+- <<: *config-sync-ci-job
+  name: multi-repo-5-standard-regular-bitbucket
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-5
+    testgrid-tab-name: standard-regular-bitbucket
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group5
+      - 'E2E_ARGS=--git-provider=bitbucket'
+      - 'GCP_CLUSTER=multi-repo-5-standard-regular-bitbucket'
+
+- <<: *config-sync-ci-job
+  name: multi-repo-5-standard-regular-gitlab
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-5
+    testgrid-tab-name: standard-regular-gitlab
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group5
+      - 'E2E_ARGS=--git-provider=gitlab'
+      - 'GCP_CLUSTER=multi-repo-5-standard-regular-gitlab'
+
 ### multi-repo test group 6 jobs ###
 - <<: *config-sync-ci-job
   name: multi-repo-6-standard-stable
@@ -769,6 +919,36 @@ periodics:
       - 'GCP_CLUSTER=multi-repo-6-autopilot-rapid-latest'
       - 'GCP_REGION=us-central1'
       - 'GCP_ZONE=""'
+
+- <<: *config-sync-ci-job
+  name: multi-repo-6-standard-regular-bitbucket
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-6
+    testgrid-tab-name: standard-regular-bitbucket
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group6
+      - 'E2E_ARGS=--git-provider=bitbucket'
+      - 'GCP_CLUSTER=multi-repo-6-standard-regular-bitbucket'
+
+- <<: *config-sync-ci-job
+  name: multi-repo-6-standard-regular-gitlab
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-6
+    testgrid-tab-name: standard-regular-gitlab
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group6
+      - 'E2E_ARGS=--git-provider=gitlab'
+      - 'GCP_CLUSTER=multi-repo-6-standard-regular-gitlab'
 
 ### multi-repo test group 7 jobs ###
 - <<: *config-sync-ci-job
@@ -891,6 +1071,36 @@ periodics:
       - 'GCP_REGION=us-central1'
       - 'GCP_ZONE=""'
 
+- <<: *config-sync-ci-job
+  name: multi-repo-7-standard-regular-bitbucket
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-7
+    testgrid-tab-name: standard-regular-bitbucket
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group7
+      - 'E2E_ARGS=--git-provider=bitbucket'
+      - 'GCP_CLUSTER=multi-repo-7-standard-regular-bitbucket'
+
+- <<: *config-sync-ci-job
+  name: multi-repo-7-standard-regular-gitlab
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-7
+    testgrid-tab-name: standard-regular-gitlab
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group7
+      - 'E2E_ARGS=--git-provider=gitlab'
+      - 'GCP_CLUSTER=multi-repo-7-standard-regular-gitlab'
+
 ### multi-repo test group 8 jobs ###
 - <<: *config-sync-ci-job
   name: multi-repo-8-standard-stable
@@ -1012,3 +1222,32 @@ periodics:
       - 'GCP_REGION=us-central1'
       - 'GCP_ZONE=""'
 
+- <<: *config-sync-ci-job
+  name: multi-repo-8-standard-regular-bitbucket
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-8
+    testgrid-tab-name: standard-regular-bitbucket
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group8
+      - 'E2E_ARGS=--git-provider=bitbucket'
+      - 'GCP_CLUSTER=multi-repo-8-standard-regular-bitbucket'
+
+- <<: *config-sync-ci-job
+  name: multi-repo-8-standard-regular-gitlab
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-8
+    testgrid-tab-name: standard-regular-gitlab
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-multi-repo-test-group8
+      - 'E2E_ARGS=--git-provider=gitlab'
+      - 'GCP_CLUSTER=multi-repo-8-standard-regular-gitlab'
