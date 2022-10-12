@@ -1251,3 +1251,228 @@ periodics:
       - test-e2e-gke-multi-repo-test-group8
       - 'E2E_ARGS=--git-provider=gitlab'
       - 'GCP_CLUSTER=multi-repo-8-standard-regular-gitlab'
+
+### mono-repo jobs ###
+- <<: *config-sync-ci-job
+  name: mono-repo-1-standard-stable
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-mono-repo
+    testgrid-tab-name: standard-stable-1
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-mono-repo-test-group1
+      - 'GCP_CLUSTER=mono-repo-1-standard-stable'
+
+- <<: *config-sync-ci-job
+  name: mono-repo-1-standard-regular
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-mono-repo
+    testgrid-tab-name: standard-regular-1
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-mono-repo-test-group1
+      - 'GCP_CLUSTER=mono-repo-1-standard-regular'
+
+- <<: *config-sync-ci-job
+  name: mono-repo-1-standard-rapid
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-mono-repo
+    testgrid-tab-name: standard-rapid-1
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-mono-repo-test-group1
+      - 'GCP_CLUSTER=mono-repo-1-standard-rapid'
+
+- <<: *config-sync-ci-job
+  name: mono-repo-1-standard-rapid-latest
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-mono-repo
+    testgrid-tab-name: standard-rapid-latest-1
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-mono-repo-test-group1
+      - 'GCP_CLUSTER=mono-repo-1-standard-rapid-latest'
+
+- <<: *config-sync-ci-job
+  name: mono-repo-2-standard-stable
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-mono-repo
+    testgrid-tab-name: standard-stable-2
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-mono-repo-test-group2
+      - 'GCP_CLUSTER=mono-repo-2-standard-stable'
+
+- <<: *config-sync-ci-job
+  name: mono-repo-2-standard-regular
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-mono-repo
+    testgrid-tab-name: standard-regular-2
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-mono-repo-test-group2
+      - 'GCP_CLUSTER=mono-repo-2-standard-regular'
+
+- <<: *config-sync-ci-job
+  name: mono-repo-2-standard-rapid
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-mono-repo
+    testgrid-tab-name: standard-rapid-2
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-mono-repo-test-group2
+      - 'GCP_CLUSTER=mono-repo-2-standard-rapid'
+
+- <<: *config-sync-ci-job
+  name: mono-repo-2-standard-rapid-latest
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-mono-repo
+    testgrid-tab-name: standard-rapid-latest-2
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-mono-repo-test-group2
+      - 'GCP_CLUSTER=mono-repo-2-standard-rapid-latest'
+
+- <<: *config-sync-ci-job
+  name: mono-repo-3-standard-stable
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-mono-repo
+    testgrid-tab-name: standard-stable-3
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-mono-repo-test-group3
+      - 'GCP_CLUSTER=mono-repo-3-standard-stable'
+
+- <<: *config-sync-ci-job
+  name: mono-repo-3-standard-regular
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-mono-repo
+    testgrid-tab-name: standard-regular-3
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-mono-repo-test-group3
+      - 'GCP_CLUSTER=mono-repo-3-standard-regular'
+
+- <<: *config-sync-ci-job
+  name: mono-repo-3-standard-rapid
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-mono-repo
+    testgrid-tab-name: standard-rapid-3
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-mono-repo-test-group3
+      - 'GCP_CLUSTER=mono-repo-3-standard-rapid'
+
+- <<: *config-sync-ci-job
+  name: mono-repo-3-standard-rapid-latest
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-mono-repo
+    testgrid-tab-name: standard-rapid-latest-3
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-mono-repo-test-group3
+      - 'GCP_CLUSTER=mono-repo-3-standard-rapid-latest'
+
+- <<: *config-sync-ci-job
+  name: mono-repo-4-standard-stable
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-mono-repo
+    testgrid-tab-name: standard-stable-4
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-mono-repo-test-group4
+      - 'GCP_CLUSTER=mono-repo-4-standard-stable'
+
+- <<: *config-sync-ci-job
+  name: mono-repo-4-standard-regular
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-mono-repo
+    testgrid-tab-name: standard-regular-4
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-mono-repo-test-group4
+      - 'GCP_CLUSTER=mono-repo-4-standard-regular'
+
+- <<: *config-sync-ci-job
+  name: mono-repo-4-standard-rapid
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-mono-repo
+    testgrid-tab-name: standard-rapid-4
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-mono-repo-test-group4
+      - 'GCP_CLUSTER=mono-repo-4-standard-rapid'
+
+- <<: *config-sync-ci-job
+  name: mono-repo-4-standard-rapid-latest
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-mono-repo
+    testgrid-tab-name: standard-rapid-latest-4
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-mono-repo-test-group4
+      - 'GCP_CLUSTER=mono-repo-4-standard-rapid-latest'

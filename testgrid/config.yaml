@@ -20,6 +20,7 @@ dashboards:
 - name: googleoss-kpt-config-sync-multi-repo-7
 - name: googleoss-kpt-config-sync-multi-repo-8
 - name: googleoss-kpt-config-sync-misc
+- name: googleoss-kpt-config-sync-mono-repo
 
 dashboard_groups:
   - name: googleoss
@@ -47,3 +48,4 @@ dashboard_groups:
     - googleoss-kpt-config-sync-multi-repo-7
     - googleoss-kpt-config-sync-multi-repo-8
     - googleoss-kpt-config-sync-misc
+    - googleoss-kpt-config-sync-mono-repo
