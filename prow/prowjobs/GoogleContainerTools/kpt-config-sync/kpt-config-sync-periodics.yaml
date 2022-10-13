@@ -5,6 +5,7 @@ prow_ignored:
   interval: 1h
   cluster: build-kpt-config-sync
   labels:
+    &config-sync-ci-labels
     preset-service-account: "true"
     preset-dind-enabled-memory: "true"
   decorate: true
@@ -1254,6 +1255,28 @@ periodics:
 
 ### miscellaneous jobs ###
 - <<: *config-sync-ci-job
+  name: multi-repo-kind
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-misc
+    testgrid-tab-name: multi-repo-kind
+  labels:
+    preset-kind-volume-mounts: "true"
+    <<: *config-sync-ci-labels
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-kind-multi-repo
+      resources:
+        requests:
+          memory: "60Gi"
+          cpu: "30000m"
+    nodeSelector:
+      cloud.google.com/gke-nodepool: large-job-pool-periodic
+
+- <<: *config-sync-ci-job
   name: multi-repo-kcc
   annotations:
     testgrid-dashboards: googleoss-kpt-config-sync-misc
@@ -1297,3 +1320,25 @@ periodics:
       - test-e2e-gke-ci
       - 'E2E_ARGS=--multirepo --stress -run=TestStress*'
       - 'GCP_CLUSTER=stress-test'
+
+- <<: *config-sync-ci-job
+  name: mono-repo-kind
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-misc
+    testgrid-tab-name: mono-repo-kind
+  labels:
+    preset-kind-volume-mounts: "true"
+    <<: *config-sync-ci-labels
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-kind-mono-repo
+      resources:
+        requests:
+          memory: "60Gi"
+          cpu: "30000m"
+    nodeSelector:
+      cloud.google.com/gke-nodepool: large-job-pool-periodic
