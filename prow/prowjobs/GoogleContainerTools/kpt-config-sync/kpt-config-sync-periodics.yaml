@@ -1251,3 +1251,49 @@ periodics:
       - test-e2e-gke-multi-repo-test-group8
       - 'E2E_ARGS=--git-provider=gitlab'
       - 'GCP_CLUSTER=multi-repo-8-standard-regular-gitlab'
+
+### miscellaneous jobs ###
+- <<: *config-sync-ci-job
+  name: multi-repo-kcc
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-misc
+    testgrid-tab-name: multi-repo-kcc
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-ci
+      - 'E2E_ARGS=--share-test-env --multirepo --kcc -run=TestKCC*'
+      - 'GCP_CLUSTER=multi-repo-kcc'
+
+- <<: *config-sync-ci-job
+  name: multi-repo-gcenode
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-misc
+    testgrid-tab-name: multi-repo-gcenode
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-ci
+      - 'E2E_ARGS=--share-test-env --multirepo --gcenode -run=TestGCENode'
+      - 'GCP_CLUSTER=multi-repo-gcenode'
+
+- <<: *config-sync-ci-job
+  name: stress-test
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-misc
+    testgrid-tab-name: stress-test
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - make
+      - test-e2e-gke-ci
+      - 'E2E_ARGS=--multirepo --stress -run=TestStress*'
+      - 'GCP_CLUSTER=stress-test'
