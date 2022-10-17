@@ -48,7 +48,8 @@ prow_ignored:
           # cluster.
           cpu: "26000m"
     nodeSelector:
-      cloud.google.com/gke-nodepool: large-job-pool
+      kpt-config-sync/type: presubmit
+      kpt-config-sync/size: large
 
 
 presubmits:
