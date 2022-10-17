@@ -195,6 +195,8 @@ presubmits:
           value: /etc/cloudesf-ssh-key-secret/ssh-public
         - name: USER
           value: prow
+        - name: USE_TEST_INFRA_LOG_DUMPING
+          value: "true"
         volumeMounts:
         - name: service
           mountPath: /etc/service-account
@@ -254,6 +256,8 @@ presubmits:
           value: /etc/cloudesf-ssh-key-secret/ssh-public
         - name: USER
           value: prow
+        - name: USE_TEST_INFRA_LOG_DUMPING
+          value: "true"
         volumeMounts:
         - name: service
           mountPath: /etc/service-account
@@ -313,6 +317,8 @@ presubmits:
           value: /etc/cloudesf-ssh-key-secret/ssh-public
         - name: USER
           value: prow
+        - name: USE_TEST_INFRA_LOG_DUMPING
+          value: "true"
         volumeMounts:
         - name: service
           mountPath: /etc/service-account
@@ -372,6 +378,8 @@ presubmits:
           value: /etc/cloudesf-ssh-key-secret/ssh-public
         - name: USER
           value: prow
+        - name: USE_TEST_INFRA_LOG_DUMPING
+          value: "true"
         volumeMounts:
         - name: service
           mountPath: /etc/service-account
@@ -431,6 +439,8 @@ presubmits:
           value: /etc/cloudesf-ssh-key-secret/ssh-public
         - name: USER
           value: prow
+        - name: USE_TEST_INFRA_LOG_DUMPING
+          value: "true"
         volumeMounts:
         - name: service
           mountPath: /etc/service-account
@@ -803,6 +813,8 @@ periodics:
               value: /etc/cloudesf-ssh-key-secret/ssh-public
             - name: USER
               value: prow
+            - name: USE_TEST_INFRA_LOG_DUMPING
+              value: "true"
           volumeMounts:
             - name: service
               mountPath: /etc/service-account
@@ -867,6 +879,8 @@ periodics:
           value: /etc/cloudesf-ssh-key-secret/ssh-public
         - name: USER
           value: prow
+        - name: USE_TEST_INFRA_LOG_DUMPING
+          value: "true"
         volumeMounts:
         - name: service
           mountPath: /etc/service-account
@@ -931,6 +945,8 @@ periodics:
               value: /etc/cloudesf-ssh-key-secret/ssh-public
             - name: USER
               value: prow
+            - name: USE_TEST_INFRA_LOG_DUMPING
+              value: "true"
           volumeMounts:
             - name: service
               mountPath: /etc/service-account
@@ -995,6 +1011,8 @@ periodics:
               value: /etc/cloudesf-ssh-key-secret/ssh-public
             - name: USER
               value: prow
+            - name: USE_TEST_INFRA_LOG_DUMPING
+              value: "true"
           volumeMounts:
             - name: service
               mountPath: /etc/service-account
@@ -1059,6 +1077,8 @@ periodics:
               value: /etc/cloudesf-ssh-key-secret/ssh-public
             - name: USER
               value: prow
+            - name: USE_TEST_INFRA_LOG_DUMPING
+              value: "true"
           volumeMounts:
             - name: service
               mountPath: /etc/service-account
