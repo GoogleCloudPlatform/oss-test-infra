@@ -1271,7 +1271,7 @@ periodics:
       - test-e2e-kind-multi-repo
       resources:
         requests:
-          memory: "60Gi"
+          memory: "50Gi"
           cpu: "30000m"
     nodeSelector:
       cloud.google.com/gke-nodepool: large-job-pool-periodic
@@ -1338,7 +1338,7 @@ periodics:
       - test-e2e-kind-mono-repo
       resources:
         requests:
-          memory: "60Gi"
+          memory: "50Gi"
           cpu: "30000m"
     nodeSelector:
       cloud.google.com/gke-nodepool: large-job-pool-periodic
