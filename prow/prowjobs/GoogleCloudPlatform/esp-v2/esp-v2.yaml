@@ -196,7 +196,7 @@ presubmits:
         - name: USER
           value: prow
         - name: USE_TEST_INFRA_LOG_DUMPING
-          value: true
+          value: "true"
         volumeMounts:
         - name: service
           mountPath: /etc/service-account
@@ -257,7 +257,7 @@ presubmits:
         - name: USER
           value: prow
         - name: USE_TEST_INFRA_LOG_DUMPING
-          value: true
+          value: "true"
         volumeMounts:
         - name: service
           mountPath: /etc/service-account
@@ -318,7 +318,7 @@ presubmits:
         - name: USER
           value: prow
         - name: USE_TEST_INFRA_LOG_DUMPING
-          value: true
+          value: "true"
         volumeMounts:
         - name: service
           mountPath: /etc/service-account
@@ -379,7 +379,7 @@ presubmits:
         - name: USER
           value: prow
         - name: USE_TEST_INFRA_LOG_DUMPING
-          value: true
+          value: "true"
         volumeMounts:
         - name: service
           mountPath: /etc/service-account
@@ -440,7 +440,7 @@ presubmits:
         - name: USER
           value: prow
         - name: USE_TEST_INFRA_LOG_DUMPING
-          value: true
+          value: "true"
         volumeMounts:
         - name: service
           mountPath: /etc/service-account
@@ -814,7 +814,7 @@ periodics:
             - name: USER
               value: prow
             - name: USE_TEST_INFRA_LOG_DUMPING
-              value: true
+              value: "true"
           volumeMounts:
             - name: service
               mountPath: /etc/service-account
@@ -880,7 +880,7 @@ periodics:
         - name: USER
           value: prow
         - name: USE_TEST_INFRA_LOG_DUMPING
-          value: true
+          value: "true"
         volumeMounts:
         - name: service
           mountPath: /etc/service-account
@@ -946,7 +946,7 @@ periodics:
             - name: USER
               value: prow
             - name: USE_TEST_INFRA_LOG_DUMPING
-              value: true
+              value: "true"
           volumeMounts:
             - name: service
               mountPath: /etc/service-account
@@ -1012,7 +1012,7 @@ periodics:
             - name: USER
               value: prow
             - name: USE_TEST_INFRA_LOG_DUMPING
-              value: true
+              value: "true"
           volumeMounts:
             - name: service
               mountPath: /etc/service-account
@@ -1078,7 +1078,7 @@ periodics:
             - name: USER
               value: prow
             - name: USE_TEST_INFRA_LOG_DUMPING
-              value: true
+              value: "true"
           volumeMounts:
             - name: service
               mountPath: /etc/service-account
