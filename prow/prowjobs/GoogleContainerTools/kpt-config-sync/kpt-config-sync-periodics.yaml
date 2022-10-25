@@ -10,7 +10,7 @@ prow_ignored:
     preset-dind-enabled-memory: "true"
   decorate: true
   decoration_config:
-    timeout: 3h
+    timeout: 4h
   extra_refs:
   - org: GoogleContainerTools
     repo: kpt-config-sync
@@ -28,7 +28,7 @@ prow_ignored:
       - name: GID
         value: "10333"
       - name: GKE_E2E_TIMEOUT
-        value: 3h
+        value: 4h
       - name: GCP_PROJECT
         value: oss-prow-build-kpt-config-sync
       # Set PROBER_DOCKER_ARGS to empty to disable mounting prober creds
