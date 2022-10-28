@@ -103,8 +103,6 @@ presubmits:
   - name: kubeflow-pipelines-sdk-python310
     cluster: build-kubeflow
     decorate: true
-    optional: true
-    skip_report: true
     run_if_changed: "^(sdk/.*)|(test/presubmit-tests-sdk.sh)$"
     spec:
       containers:
