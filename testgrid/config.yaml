@@ -20,6 +20,7 @@ dashboards:
 - name: googleoss-kpt-config-sync-multi-repo-7
 - name: googleoss-kpt-config-sync-multi-repo-8
 - name: googleoss-kpt-config-sync-misc
+- name: googleoss-jwt-verify-lib
 
 dashboard_groups:
   - name: googleoss
@@ -32,6 +33,7 @@ dashboard_groups:
     - googleoss-esp-v2-periodic
     - googleoss-grpc-transcoder
     - googleoss-http-pattern-matcher
+    - googleoss-jwt-verify-lib
   - name: googleoss-kubeflow
     dashboard_names:
     - googleoss-kubeflow-pipelines
