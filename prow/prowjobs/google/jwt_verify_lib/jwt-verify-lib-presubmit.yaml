@@ -13,19 +13,6 @@ presubmits:
       - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20201230-v2.20.0-26-ge16dc8bc-master
         command:
         - ./script/ci.sh
-  - name: jwt-verify-lib-checkstyle
-    cluster: espv2
-    always_run: true
-    decorate: true
-    annotations:
-      testgrid-dashboards: googleoss-jwt-verify-lib
-      testgrid-tab-name: checkstyle
-      description: "Runs checkstyle against the entire codebase per PR"
-    spec:
-      containers:
-      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20201230-v2.20.0-26-ge16dc8bc-master
-        command:
-        - ./script/check-style
 
 periodics:
 - name: jwt-verify-lib-periodic
