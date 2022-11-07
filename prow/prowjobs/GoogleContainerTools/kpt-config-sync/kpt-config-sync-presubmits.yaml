@@ -80,33 +80,6 @@ presubmits:
         # This job requires 8vCPUs or less, so it is "small".
         cloud.google.com/gke-nodepool: small-job-pool
   - <<: *config-sync-e2e-job
-    name: kpt-config-sync-presubmit-e2e-mono-repo-test-group1
-    spec:
-      <<: *config-sync-e2e-job-spec
-      containers:
-      - <<: *config-sync-e2e-container
-        args:
-        - make
-        - test-e2e-kind-mono-repo-test-group1
-  - <<: *config-sync-e2e-job
-    name: kpt-config-sync-presubmit-e2e-mono-repo-test-group2
-    spec:
-      <<: *config-sync-e2e-job-spec
-      containers:
-      - <<: *config-sync-e2e-container
-        args:
-        - make
-        - test-e2e-kind-mono-repo-test-group2
-  - <<: *config-sync-e2e-job
-    name: kpt-config-sync-presubmit-e2e-mono-repo-test-group3
-    spec:
-      <<: *config-sync-e2e-job-spec
-      containers:
-      - <<: *config-sync-e2e-container
-        args:
-        - make
-        - test-e2e-kind-mono-repo-test-group3
-  - <<: *config-sync-e2e-job
     name: kpt-config-sync-presubmit-e2e-multi-repo-test-group1
     spec:
       <<: *config-sync-e2e-job-spec
