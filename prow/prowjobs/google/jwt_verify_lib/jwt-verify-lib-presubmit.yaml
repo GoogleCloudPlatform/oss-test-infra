@@ -10,7 +10,7 @@ presubmits:
       description: "Runs all unit tests per PR."
     spec:
       containers:
-      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20201230-v2.20.0-26-ge16dc8bc-master
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20220829-v2.38.0-5-gc746373d-master
         command:
         - ./script/ci.sh
 
@@ -29,6 +29,6 @@ periodics:
     base_ref: master
   spec:
     containers:
-    - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20201230-v2.20.0-26-ge16dc8bc-master
+    - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20220829-v2.38.0-5-gc746373d-master
       command:
       - ./script/ci.sh
