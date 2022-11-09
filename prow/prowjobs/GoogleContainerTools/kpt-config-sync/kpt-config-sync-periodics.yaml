@@ -1289,7 +1289,7 @@ periodics:
       args:
       - make
       - test-e2e-go-gke-ci
-      - 'E2E_ARGS=--share-test-env --multirepo --kcc -run=TestKCC*'
+      - 'E2E_ARGS=--share-test-env --kcc -run=TestKCC*'
       - 'GCP_CLUSTER=multi-repo-kcc'
 
 - <<: *config-sync-ci-job
@@ -1304,7 +1304,7 @@ periodics:
       args:
       - make
       - test-e2e-go-gke-ci
-      - 'E2E_ARGS=--share-test-env --multirepo --gcenode -run=TestGCENode'
+      - 'E2E_ARGS=--share-test-env --gcenode -run=TestGCENode'
       - 'GCP_CLUSTER=multi-repo-gcenode'
 
 - <<: *config-sync-ci-job
@@ -1319,5 +1319,5 @@ periodics:
       args:
       - make
       - test-e2e-go-gke-ci
-      - 'E2E_ARGS=--multirepo --stress -run=TestStress*'
+      - 'E2E_ARGS=--stress -run=TestStress*'
       - 'GCP_CLUSTER=stress-test'
