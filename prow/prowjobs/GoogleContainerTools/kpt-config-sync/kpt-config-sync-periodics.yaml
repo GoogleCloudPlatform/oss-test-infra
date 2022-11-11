@@ -31,9 +31,6 @@ prow_ignored:
         value: 4h
       - name: GCP_PROJECT
         value: oss-prow-build-kpt-config-sync
-      # Set PROBER_DOCKER_ARGS to empty to disable mounting prober creds
-      - name: PROBER_DOCKER_ARGS
-        value:
       securityContext:
         privileged: true
       resources:
