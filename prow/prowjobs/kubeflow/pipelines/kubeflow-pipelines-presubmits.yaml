@@ -239,8 +239,6 @@ presubmits:
   - name: kubeflow-pipelines-sdk-execution-tests
     cluster: build-kubeflow
     decorate: true
-    # TODO: remove when proven to pass
-    optional: true
     run_if_changed: "^(sdk/python/.*)|(test/presubmit-sdk-execution-tests.sh)$"
     branches:
     - master
