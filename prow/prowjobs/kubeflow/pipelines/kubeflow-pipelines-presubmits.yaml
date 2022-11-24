@@ -126,6 +126,8 @@ presubmits:
     cluster: build-kubeflow
     decorate: true
     run_if_changed: "^(sdk/.*)|(test/presubmit-tests-tfx.sh)$"
+    branches:
+    - sdk/release-1.8
     spec:
       containers:
       - image: python:3.7
