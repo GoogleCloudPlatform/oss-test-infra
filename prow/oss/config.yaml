@@ -334,3 +334,7 @@ presets:
     hostPath:
       path: /sys/fs/cgroup
       type: Directory
+
+pubsub_subscriptions:
+  "louhi-resources":
+  - "oss-prow-trigger"

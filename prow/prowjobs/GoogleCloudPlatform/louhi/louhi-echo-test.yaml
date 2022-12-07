@@ -1,0 +1,10 @@
+periodics:
+- cron: "* * 30 02 *" # Invalid date, should only run when triggered
+  name: louhi-echo-test-periodic
+  decorate: true
+  annotations:
+    testgrid-create-test-group: "false"
+  spec:
+    containers:
+    - image: alpine
+      command: ["/bin/date"]
