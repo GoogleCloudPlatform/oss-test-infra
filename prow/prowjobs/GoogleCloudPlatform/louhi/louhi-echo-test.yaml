@@ -1,0 +1,19 @@
+periodics:
+- cron: "* * 30 02 *" # Invalid date, should only run when triggered
+  name: louhi-echo-test-periodic
+  decorate: true
+  spec:
+    containers:
+    - image: alpine
+      command: ["/bin/date"]
+postsubmits:
+  https://cloud-release-internal-review.googlesource.com/louhi/test-prow:
+  - name: louhi-echo-test-postsubmit
+    cluster: test-infra-trusted
+    always_run: true
+    # required
+    decorate: true
+    spec:
+      containers:
+      - image: alpine
+        command: ["/bin/date"]

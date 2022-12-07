@@ -264,6 +264,9 @@ gerrit:
   - org: https://linux-review.googlesource.com
     repos:
     - linux/kernel/git/torvalds/linux
+  - org: https://cloud-release-internal-review.googlesource.com
+    repos:
+    - louhi/test-prow
 
 in_repo_config:
   enabled:
@@ -334,3 +337,7 @@ presets:
     hostPath:
       path: /sys/fs/cgroup
       type: Directory
+
+pubsub_subscriptions:
+  "louhi-resources":
+  - "oss-prow-trigger"
