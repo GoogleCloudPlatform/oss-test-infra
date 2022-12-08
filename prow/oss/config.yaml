@@ -337,4 +337,4 @@ presets:
 
 pubsub_subscriptions:
   "louhi-resources":
-  - "oss-prow-trigger"
+  - "oss-prow-trigger-subscription"
