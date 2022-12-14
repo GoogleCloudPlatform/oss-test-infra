@@ -13,7 +13,7 @@ presubmits:
         imagePullPolicy: Always
         command:
         - "/main.sh"
-        args: ["gcp-guest", "us-west1-a", "el7,el8,el9"]
+        args: ["gcp-guest", "us-west1-a", "el7,el8"]
   GoogleCloudPlatform/artifact-registry-apt-transport:
   - name: apt-transport-presubmit-build
     cluster: gcp-guest
