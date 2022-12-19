@@ -1,5 +1,22 @@
 presubmits:
   GoogleCloudPlatform/compute-image-tools:
+  - name: compute-image-tools-export-sbom
+    cluster: gcp-guest
+    run_if_changed: 'daisy_workflows/export/disk_export.wf.json'
+    trigger: "(?m)^/flake8$"
+    rerun_command: "/flake8"
+    context: prow/presubmit/sbom
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/compute-image-tools/daisy:latest
+        imagePullPolicy: Always
+        command:
+        - "/daisy"
+        args:
+        - "-project=compute-image-test-pool-001"
+        - "-var:syft_source=gs://gce-image-build-resources/linux/syft_0.59.0_linux_amd64.tar.gz"
+        - image_test/sbom/enterprise_sbom_test.wf.json"
   - name: compute-image-tools-flake8
     cluster: gcp-guest
     run_if_changed: '.*\.py$'
