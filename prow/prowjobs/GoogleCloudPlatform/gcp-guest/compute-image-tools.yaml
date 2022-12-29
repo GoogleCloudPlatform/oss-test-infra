@@ -2,7 +2,7 @@ presubmits:
   GoogleCloudPlatform/compute-image-tools:
   - name: compute-image-tools-export-sbom
     cluster: gcp-guest
-    run_if_changed: 'daisy_workflows/export/disk_export.wf.json'
+    run_if_changed: 'daisy_workflows/export/export_disk.sh'
     trigger: "(?m)^/flake8$"
     rerun_command: "/flake8"
     context: prow/presubmit/sbom
