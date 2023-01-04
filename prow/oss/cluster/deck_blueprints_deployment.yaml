@@ -24,7 +24,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
       - name: deck-blueprints
-        image: gcr.io/k8s-prow/deck:v20221220-5c7fbe528a
+        image: gcr.io/k8s-prow/deck:v20230104-cc182b7760
         args:
         - --config-path=/etc/config/config.yaml
         - --hook-url=http://hook:8888/plugin-help
