@@ -30,7 +30,7 @@ prow_ignored:
       - name: GKE_E2E_TIMEOUT
         value: 4h
       - name: GCP_PROJECT
-        value: kpt-config-sync-release-ci
+        value: kpt-config-sync-ci-release
       securityContext:
         privileged: true
       resources:
