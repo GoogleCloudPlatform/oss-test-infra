@@ -6,7 +6,7 @@ presubmits:
     decorate: true
     spec:
       containers:
-      - image: node:12
+      - image: node:14
         command:
         - /bin/sh
         args:
