@@ -16,7 +16,7 @@ presubmits:
         args:
         - "-project=compute-image-test-pool-001"
         - "-var:syft_source=gs://gce-image-build-resources/linux/syft_0.59.0_linux_amd64.tar.gz"
-        - image_test/sbom/enterprise_sbom_test.wf.json"
+        - daisy_workflows/sbom_validation/enterprise_sbom_test.wf.json"
   - name: compute-image-tools-flake8
     cluster: gcp-guest
     run_if_changed: '.*\.py$'
