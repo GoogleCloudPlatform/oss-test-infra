@@ -875,6 +875,8 @@ periodics:
 
 - <<: *config-sync-ci-job
   name: release-multi-repo-7-autopilot-rapid-latest
+  decoration_config:
+     timeout: 5h
   annotations:
     testgrid-dashboards: googleoss-kpt-config-sync-release-multi-repo-7
     testgrid-tab-name: autopilot-rapid-latest
@@ -882,6 +884,15 @@ periodics:
     <<: *config-sync-ci-job-spec
     containers:
     - <<: *config-sync-ci-container
+      env:
+      - name: UID
+        value: "10333"
+      - name: GID
+        value: "10333"
+      - name: GKE_E2E_TIMEOUT
+        value: 5h
+      - name: GCP_PROJECT
+        value: kpt-config-sync-ci-release
       args:
       - make
       - test-e2e-gke-multi-repo-test-group7
