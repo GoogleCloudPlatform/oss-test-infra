@@ -144,16 +144,6 @@ presubmits:
         command:
         - ./test/presubmit-component-yaml.sh
 
-  - name: kubeflow-pipelines-components-gcp-python37
-    cluster: build-kubeflow
-    decorate: true
-    run_if_changed: "^(components/gcp/container/.*)|(test/presubmit-components-gcp.sh)$"
-    spec:
-      containers:
-      - image: python:3.7
-        command:
-        - ./test/presubmit-components-gcp.sh
-
   - name: kubeflow-pipelines-components-google-cloud-python38
     cluster: build-kubeflow
     decorate: true
