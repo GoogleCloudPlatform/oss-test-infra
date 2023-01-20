@@ -554,6 +554,8 @@ periodics:
 
 - <<: *config-sync-ci-job
   name: multi-repo-4-autopilot-stable
+  decoration_config:
+    timeout: 5h
   annotations:
     testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-4
     testgrid-tab-name: autopilot-stable
@@ -567,9 +569,12 @@ periodics:
       - 'GCP_CLUSTER=multi-repo-4-autopilot-stable'
       - 'GCP_REGION=us-central1'
       - 'GCP_ZONE=""'
+      - 'GKE_E2E_TIMEOUT=5h'
 
 - <<: *config-sync-ci-job
   name: multi-repo-4-autopilot-regular
+  decoration_config:
+    timeout: 5h
   annotations:
     testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-4
     testgrid-tab-name: autopilot-regular
@@ -583,9 +588,12 @@ periodics:
       - 'GCP_CLUSTER=multi-repo-4-autopilot-regular'
       - 'GCP_REGION=us-central1'
       - 'GCP_ZONE=""'
+      - 'GKE_E2E_TIMEOUT=5h'
 
 - <<: *config-sync-ci-job
   name: multi-repo-4-autopilot-rapid
+  decoration_config:
+    timeout: 5h
   annotations:
     testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-4
     testgrid-tab-name: autopilot-rapid
@@ -599,9 +607,12 @@ periodics:
       - 'GCP_CLUSTER=multi-repo-4-autopilot-rapid'
       - 'GCP_REGION=us-central1'
       - 'GCP_ZONE=""'
+      - 'GKE_E2E_TIMEOUT=5h'
 
 - <<: *config-sync-ci-job
   name: multi-repo-4-autopilot-rapid-latest
+  decoration_config:
+    timeout: 5h
   annotations:
     testgrid-dashboards: googleoss-kpt-config-sync-multi-repo-4
     testgrid-tab-name: autopilot-rapid-latest
@@ -615,6 +626,7 @@ periodics:
       - 'GCP_CLUSTER=multi-repo-4-autopilot-rapid-latest'
       - 'GCP_REGION=us-central1'
       - 'GCP_ZONE=""'
+      - 'GKE_E2E_TIMEOUT=5h'
 
 - <<: *config-sync-ci-job
   name: multi-repo-4-standard-regular-bitbucket
