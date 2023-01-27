@@ -1,8 +1,14 @@
+# This file enables automatic assignment of PR reviewers.
 # See the OWNERS docs at https://go.k8s.io/owners
 
 approvers:
-  - hopkiw
+  - bkatyl
+  - chaitanyakulkarni28
+  - dorileo
+  - jjerger
+  - karnvadaliya
   - koln67
   - linskeyd
-  - wrigri
+  - quintonamore
+  - vorakl
   - zmarano
