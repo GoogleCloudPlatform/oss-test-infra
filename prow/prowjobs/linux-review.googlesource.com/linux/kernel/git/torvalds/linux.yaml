@@ -4,7 +4,9 @@ presubmits:
     branches:
     - master
     decorate: true
-    always_run: true
+    always_run: false
+    trigger: "run kunit tests"
+    rerun_command: "run kunit tests"
     spec:
       volumes:
       - name: shared-mem
