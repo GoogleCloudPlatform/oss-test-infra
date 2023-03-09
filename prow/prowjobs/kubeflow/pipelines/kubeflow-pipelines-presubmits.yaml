@@ -70,13 +70,18 @@ presubmits:
         - --test_result_folder
         - upgrade_test
 
-  - name: kubeflow-pipelines-sdk-python37
+  - name: kubeflow-pipelines-sdk-parameterized
     cluster: build-kubeflow
     decorate: true
     run_if_changed: "^(sdk/.*)|(test/presubmit-tests-sdk.sh)$"
     spec:
+      params:
+        - name: image
+          description: Values to use in the job
+          default: ["python:3.7", "python:3.8"]
+          type: string
       containers:
-      - image: python:3.7
+      - image: "{{inputs.parameters.value}}"
         command:
         - ./test/presubmit-tests-sdk.sh
 
