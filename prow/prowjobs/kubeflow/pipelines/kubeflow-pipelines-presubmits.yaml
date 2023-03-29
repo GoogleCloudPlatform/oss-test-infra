@@ -114,6 +114,8 @@ presubmits:
     cluster: build-kubeflow
     decorate: true
     run_if_changed: "^(sdk/.*)|(test/presubmit-tests-sdk.sh)$"
+    branches:
+      - master
     spec:
       containers:
       - image: python:3.11
