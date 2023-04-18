@@ -168,6 +168,8 @@ presubmits:
     cluster: build-kubeflow
     decorate: true
     run_if_changed: "^(samples/.*)|(backend/src/v2/.*)$"
+    # TODO(chensun): restore as required test once we migrated sample test to use v2 client.
+    optional: true
     spec:
       containers:
       - image: python:3.7
@@ -232,6 +234,8 @@ presubmits:
     cluster: build-kubeflow
     decorate: true
     run_if_changed: "^(sdk/python/.*)|(test/presubmit-sdk-execution-tests.sh)$"
+    # TODO(chensun): restore as required test once we upgraded the test deployment.
+    optional: true
     branches:
     - master
     spec:
