@@ -14,7 +14,7 @@ prow_ignored:
   extra_refs:
   - org: GoogleContainerTools
     repo: kpt-config-sync
-    base_ref: v1.14
+    base_ref: v1.15
   spec: &config-sync-ci-job-spec
     serviceAccountName: e2e-test-runner
     containers:
