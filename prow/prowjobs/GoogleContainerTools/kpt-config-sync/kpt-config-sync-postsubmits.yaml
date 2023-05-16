@@ -1,0 +1,41 @@
+postsubmits:
+  GoogleContainerTools/kpt-config-sync:
+  # this postsubmit job publishes artifacts (images, manifests, etc) when a new ref is pushed.
+  - name: kpt-config-sync-publish-artifacts
+    annotations:
+      testgrid-dashboards: googleoss-kpt-config-sync-misc
+      testgrid-tab-name: postsubmit-publish-artifacts
+    cluster: build-kpt-config-sync
+    branches:
+    # main branch
+    - ^main$
+    # TODO: add release branches after postsubmit target is cherry picked
+    # release branches
+    # - ^v\d+\.\d+$
+    # feature branches
+    # - ^feature/notification$
+    always_run: true
+    decorate: true
+    labels:
+      preset-dind-enabled: "true"
+    spec:
+      serviceAccountName: postsubmit-runner
+      containers:
+      - image: gcr.io/k8s-staging-test-infra/kubekins-e2e:v20230309-9a6b1b3121-1.23
+        command:
+        - runner.sh
+        args:
+        - make
+        - postsubmit
+        securityContext:
+          privileged: true
+        env:
+        - name: GCP_PROJECT
+          value: "kpt-config-sync-ci-artifacts"
+        resources:
+          requests:
+            memory: "2Gi"
+            cpu: "2000m"
+      nodeSelector:
+        # This job requires 8vCPUs or less, so it is "small".
+        cloud.google.com/gke-nodepool: small-job-pool
