@@ -1,7 +1,7 @@
 periodics:
 - name: gcsfuse-pytorch-dino-periodic
   cluster: gcsfuse-prow-test
-  interval: 7d
+  interval: 180h
   decorate: true
   annotations:
     testgrid-dashboards: gcsfuse
