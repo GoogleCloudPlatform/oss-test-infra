@@ -3,10 +3,6 @@ periodics:
   cluster: gcsfuse-prow-test
   interval: 180h
   decorate: true
-  annotations:
-    testgrid-dashboards: gcsfuse
-    testgrid-tab-name: pytorch-dino-periodic
-    description: "Runs pytorch dino model every 7 days using gcsfuse."
   spec:
     containers:
     - name: pytorch-dino-model
