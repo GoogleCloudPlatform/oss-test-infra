@@ -13,7 +13,7 @@ postsubmits:
     # release branches
     # - ^v\d+\.\d+$
     # feature branches
-    # - ^feature/notification$
+    - ^feature/notification$
     always_run: true
     decorate: true
     labels:
