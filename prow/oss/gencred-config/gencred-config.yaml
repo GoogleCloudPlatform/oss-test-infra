@@ -1,4 +1,10 @@
 clusters:
+- gke: projects/gcs-fuse-test-ml/locations/us-central1-c/clusters/gcsfuse-prow-test
+  name: build-gcsfuse
+  duration: 48h
+  gsm:
+    name: prow_build_cluster_kubeconfig_build-gcsfuse
+    project: oss-prow
 - gke: projects/gke-accel-cntnr-ng-tests/locations/us-west1-b/clusters/gke-accel-cntnr-ng-tests
   name: build-cloud-kubernetes-node-management-team
   duration: 48h
