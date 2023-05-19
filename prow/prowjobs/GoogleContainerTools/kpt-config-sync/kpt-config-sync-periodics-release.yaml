@@ -12,7 +12,8 @@ prow_ignored:
   decoration_config:
     timeout: 4h
   extra_refs:
-  - org: GoogleContainerTools
+  - &extra_refs
+    org: GoogleContainerTools
     repo: kpt-config-sync
     base_ref: v1.15
   spec: &config-sync-ci-job-spec
@@ -1102,3 +1103,29 @@ periodics:
       - test-e2e-go-gke-ci
       - 'E2E_ARGS=--stress -run=TestStress*'
       - 'GCP_CLUSTER=stress-test'
+
+- name: release-vulnerability-scan
+  interval: 30m
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-release-misc
+    testgrid-tab-name: vulnerability-scan
+  cluster: build-kpt-config-sync
+  decorate: true
+  decoration_config:
+    timeout: 30m
+  extra_refs:
+  - <<: *extra_refs
+  spec:
+    serviceAccountName: vulnerability-scanner
+    containers:
+    - image: us-docker.pkg.dev/kpt-config-sync-ci-artifacts/test-infra/vulnerability-scanner:v1.0.0-60ad07344
+      command:
+      - make
+      - vulnerability-scan-postsubmit
+      resources:
+        requests:
+          memory: "64Mi"
+          cpu: "250m"
+    nodeSelector:
+      # This job requires 8vCPUs or less, so it is "small".
+      cloud.google.com/gke-nodepool: small-job-pool
