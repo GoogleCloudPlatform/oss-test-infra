@@ -9,9 +9,8 @@ postsubmits:
     branches:
     # main branch
     - ^main$
-    # TODO: add release branches after postsubmit target is cherry picked
     # release branches
-    # - ^v\d+\.\d+$
+    - ^v\d+\.\d+$
     # feature branches
     - ^feature/notification$
     always_run: true
