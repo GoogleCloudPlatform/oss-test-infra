@@ -1344,7 +1344,7 @@ periodics:
       - 'GCP_CLUSTER=stress-test'
 
 - name: vulnerability-scan
-  interval: 1h
+  interval: 30m
   annotations:
     testgrid-dashboards: googleoss-kpt-config-sync-misc
     testgrid-tab-name: vulnerability-scan
