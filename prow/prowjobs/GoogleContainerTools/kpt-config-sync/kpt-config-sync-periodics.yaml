@@ -1379,7 +1379,7 @@ periodics:
         value: us-central1-a
       - name: GKE_RELEASE_CHANNEL
         value: regular
-      - name: NUM_CLUSTERS
+      - name: E2E_NUM_CLUSTERS
         value: "8"
       resources:
         requests:
@@ -1427,7 +1427,7 @@ periodics:
         value: regular
       - name: GKE_AUTOPILOT
         value: "true"
-      - name: NUM_CLUSTERS
+      - name: E2E_NUM_CLUSTERS
         value: "8"
       resources:
         requests:
