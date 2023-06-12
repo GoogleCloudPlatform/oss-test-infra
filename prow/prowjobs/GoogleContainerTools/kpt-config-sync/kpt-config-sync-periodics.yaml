@@ -1343,6 +1343,101 @@ periodics:
       - 'E2E_ARGS=--stress -run=TestStress*'
       - 'GCP_CLUSTER=stress-test'
 
+# Experimental prowjob to verify the new create-clusters flow on standard.
+# If stable, this is intended to replace the above testgroup-based definitions
+- name: standard-regular
+  interval: 1h
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-misc
+    testgrid-tab-name: standard-regular
+  cluster: build-kpt-config-sync
+  decorate: true
+  decoration_config:
+    timeout: 2h
+  extra_refs:
+  - org: GoogleContainerTools
+    repo: kpt-config-sync
+    base_ref: main
+  spec:
+    serviceAccountName: e2e-test-runner
+    containers:
+    - image: us-docker.pkg.dev/kpt-config-sync-ci-artifacts/test-infra/gke-e2e:v1.0.0-d11cc175e
+      command:
+      - make
+      args:
+      - test-e2e-gke-ci
+      env:
+      - name: GKE_E2E_TIMEOUT
+        value: 2h
+      - name: GCP_PROJECT
+        value: kpt-config-sync-ci-main
+      - name: GCP_NETWORK
+        value: prow-e2e-network-1
+      - name: GCP_SUBNETWORK
+        value: prow-e2e-subnetwork-1
+      - name: GCP_ZONE
+        value: us-central1-a
+      - name: GKE_RELEASE_CHANNEL
+        value: regular
+      - name: NUM_CLUSTERS
+        value: "8"
+      resources:
+        requests:
+          memory: "8Gi"
+          cpu: "4000m"
+    nodeSelector:
+      # This job requires 8vCPUs or less, so it is "small".
+      cloud.google.com/gke-nodepool: small-job-pool
+
+# Experimental prowjob to verify the new create-clusters flow on autopilot.
+# If stable, this is intended to replace the above testgroup-based definitions
+- name: autopilot-regular
+  interval: 1h
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-misc
+    testgrid-tab-name: autopilot-regular
+  cluster: build-kpt-config-sync
+  decorate: true
+  decoration_config:
+    timeout: 4h
+  extra_refs:
+  - org: GoogleContainerTools
+    repo: kpt-config-sync
+    base_ref: main
+  spec:
+    serviceAccountName: e2e-test-runner
+    containers:
+    - image: us-docker.pkg.dev/kpt-config-sync-ci-artifacts/test-infra/gke-e2e:v1.0.0-d11cc175e
+      command:
+      - make
+      args:
+      - test-e2e-gke-ci
+      env:
+      - name: GKE_E2E_TIMEOUT
+        value: 4h
+      - name: GCP_PROJECT
+        value: kpt-config-sync-ci-main
+      - name: GCP_NETWORK
+        value: prow-e2e-network-1
+      - name: GCP_SUBNETWORK
+        value: prow-e2e-subnetwork-2
+      - name: GCP_ZONE
+        value: us-central1-a
+      - name: GKE_RELEASE_CHANNEL
+        value: regular
+      - name: GKE_AUTOPILOT
+        value: "true"
+      - name: NUM_CLUSTERS
+        value: "8"
+      resources:
+        requests:
+          memory: "8Gi"
+          cpu: "4000m"
+    nodeSelector:
+      # This job requires 8vCPUs or less, so it is "small".
+      cloud.google.com/gke-nodepool: small-job-pool
+
+
 - name: vulnerability-scan
   interval: 30m
   annotations:
