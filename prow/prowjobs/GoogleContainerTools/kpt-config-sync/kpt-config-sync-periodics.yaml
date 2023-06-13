@@ -1421,8 +1421,8 @@ periodics:
         value: prow-e2e-network-1
       - name: GCP_SUBNETWORK
         value: prow-e2e-subnetwork-2
-      - name: GCP_ZONE
-        value: us-central1-a
+      - name: GCP_REGION
+        value: us-central1
       - name: GKE_RELEASE_CHANNEL
         value: regular
       - name: GKE_AUTOPILOT
