@@ -1361,7 +1361,7 @@ periodics:
   spec:
     serviceAccountName: e2e-test-runner
     containers:
-    - image: us-docker.pkg.dev/kpt-config-sync-ci-artifacts/test-infra/gke-e2e:v1.0.0-d11cc175e
+    - image: us-docker.pkg.dev/kpt-config-sync-ci-artifacts/test-infra/gke-e2e:v1.0.0-590be013d
       command:
       - make
       args:
@@ -1407,7 +1407,7 @@ periodics:
   spec:
     serviceAccountName: e2e-test-runner
     containers:
-    - image: us-docker.pkg.dev/kpt-config-sync-ci-artifacts/test-infra/gke-e2e:v1.0.0-d11cc175e
+    - image: us-docker.pkg.dev/kpt-config-sync-ci-artifacts/test-infra/gke-e2e:v1.0.0-590be013d
       command:
       - make
       args:
