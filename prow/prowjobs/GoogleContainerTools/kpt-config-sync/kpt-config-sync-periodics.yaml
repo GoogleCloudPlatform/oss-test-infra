@@ -1421,6 +1421,9 @@ periodics:
         value: prow-e2e-network-1
       - name: GCP_SUBNETWORK
         value: prow-e2e-subnetwork-2
+      # only one of GCP_ZONE and GCP_REGION can be provided
+      - name: GCP_ZONE
+        value: ""
       - name: GCP_REGION
         value: us-central1
       - name: GKE_RELEASE_CHANNEL
