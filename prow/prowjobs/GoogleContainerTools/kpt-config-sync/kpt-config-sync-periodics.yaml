@@ -1380,7 +1380,7 @@ periodics:
       - name: GKE_RELEASE_CHANNEL
         value: regular
       - name: E2E_NUM_CLUSTERS
-        value: "8"
+        value: "10"
       resources:
         requests:
           memory: "8Gi"
@@ -1431,7 +1431,7 @@ periodics:
       - name: GKE_AUTOPILOT
         value: "true"
       - name: E2E_NUM_CLUSTERS
-        value: "8"
+        value: "12"
       resources:
         requests:
           memory: "8Gi"
