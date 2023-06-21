@@ -1431,7 +1431,7 @@ periodics:
       - name: GKE_AUTOPILOT
         value: "true"
       - name: E2E_NUM_CLUSTERS
-        value: "12"
+        value: "15"
       resources:
         requests:
           memory: "8Gi"
