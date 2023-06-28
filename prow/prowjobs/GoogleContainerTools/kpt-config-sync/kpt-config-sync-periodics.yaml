@@ -41,6 +41,50 @@ prow_ignored:
       # This job requires 8vCPUs or less, so it is "small".
       cloud.google.com/gke-nodepool: small-job-pool
 
+# Experimental anchor to verify the new create-clusters flow.
+# If stable, this is intended to replace the above anchor.
+- &config-sync-ci-job-v2
+  interval: 1h
+  cluster: build-kpt-config-sync
+  decorate: true
+  decoration_config:
+    timeout: 4h
+  extra_refs:
+  - org: GoogleContainerTools
+    repo: kpt-config-sync
+    base_ref: main
+  spec: &config-sync-ci-job-spec-v2
+    serviceAccountName: e2e-test-runner
+    containers:
+    - &config-sync-ci-container-v2
+      image: us-docker.pkg.dev/kpt-config-sync-ci-artifacts/test-infra/gke-e2e:v1.0.0-590be013d
+      command:
+      - make
+      - test-e2e-gke-ci
+      env:
+      - name: GKE_E2E_TIMEOUT
+        value: 4h
+      - name: GCP_PROJECT
+        value: kpt-config-sync-ci-main
+      - name: GCP_NETWORK
+        value: prow-e2e-network-1
+      # Unset zone/region so that it can be set by the job (standard->zone, autopilot->region)
+      - name: GCP_ZONE
+        value: ""
+      - name: GCP_REGION
+        value: ""
+      - name: E2E_CREATE_CLUSTERS
+        value: "lazy"
+      - name: E2E_DESTROY_CLUSTERS
+        value: "false"
+      resources:
+        requests:
+          memory: "8Gi"
+          cpu: "4000m"
+    nodeSelector:
+      # This job requires 8vCPUs or less, so it is "small".
+      cloud.google.com/gke-nodepool: small-job-pool
+
 periodics:
 ### multi-repo test group 1 jobs ###
 - <<: *config-sync-ci-job
@@ -1345,101 +1389,42 @@ periodics:
 
 # Experimental prowjob to verify the new create-clusters flow on standard.
 # If stable, this is intended to replace the above testgroup-based definitions
-- name: standard-regular
-  interval: 1h
+- <<: *config-sync-ci-job-v2
+  name: kpt-config-sync-standard-regular
   annotations:
     testgrid-dashboards: googleoss-kpt-config-sync-misc
     testgrid-tab-name: standard-regular
-  cluster: build-kpt-config-sync
-  decorate: true
-  decoration_config:
-    timeout: 2h
-  extra_refs:
-  - org: GoogleContainerTools
-    repo: kpt-config-sync
-    base_ref: main
   spec:
-    serviceAccountName: e2e-test-runner
+    <<: *config-sync-ci-job-spec-v2
     containers:
-    - image: us-docker.pkg.dev/kpt-config-sync-ci-artifacts/test-infra/gke-e2e:v1.0.0-590be013d
-      command:
-      - make
+    - <<: *config-sync-ci-container-v2
       args:
-      - test-e2e-gke-ci
-      env:
-      - name: GKE_E2E_TIMEOUT
-        value: 2h
-      - name: GCP_PROJECT
-        value: kpt-config-sync-ci-main
-      - name: GCP_NETWORK
-        value: prow-e2e-network-1
-      - name: GCP_SUBNETWORK
-        value: prow-e2e-subnetwork-1
-      - name: GCP_ZONE
-        value: us-central1-a
-      - name: GKE_RELEASE_CHANNEL
-        value: regular
-      - name: E2E_NUM_CLUSTERS
-        value: "10"
-      resources:
-        requests:
-          memory: "8Gi"
-          cpu: "4000m"
-    nodeSelector:
-      # This job requires 8vCPUs or less, so it is "small".
-      cloud.google.com/gke-nodepool: small-job-pool
+      - 'GKE_E2E_TIMEOUT=2h'
+      - 'GCP_SUBNETWORK=prow-e2e-subnetwork-1'
+      - 'GCP_ZONE=us-central1-a'
+      - 'GKE_RELEASE_CHANNEL=regular'
+      - 'E2E_NUM_CLUSTERS=10'
+      - 'E2E_CLUSTER_PREFIX=standard-regular'
 
 # Experimental prowjob to verify the new create-clusters flow on autopilot.
 # If stable, this is intended to replace the above testgroup-based definitions
-- name: autopilot-regular
-  interval: 1h
+- <<: *config-sync-ci-job-v2
+  name: kpt-config-sync-autopilot-regular
   annotations:
     testgrid-dashboards: googleoss-kpt-config-sync-misc
     testgrid-tab-name: autopilot-regular
-  cluster: build-kpt-config-sync
-  decorate: true
-  decoration_config:
-    timeout: 4h
-  extra_refs:
-  - org: GoogleContainerTools
-    repo: kpt-config-sync
-    base_ref: main
   spec:
-    serviceAccountName: e2e-test-runner
+    <<: *config-sync-ci-job-spec-v2
     containers:
-    - image: us-docker.pkg.dev/kpt-config-sync-ci-artifacts/test-infra/gke-e2e:v1.0.0-590be013d
-      command:
-      - make
+    - <<: *config-sync-ci-container-v2
       args:
-      - test-e2e-gke-ci
-      env:
-      - name: GKE_E2E_TIMEOUT
-        value: 4h
-      - name: GCP_PROJECT
-        value: kpt-config-sync-ci-main
-      - name: GCP_NETWORK
-        value: prow-e2e-network-1
-      - name: GCP_SUBNETWORK
-        value: prow-e2e-subnetwork-2
-      # only one of GCP_ZONE and GCP_REGION can be provided
-      - name: GCP_ZONE
-        value: ""
-      - name: GCP_REGION
-        value: us-central1
-      - name: GKE_RELEASE_CHANNEL
-        value: regular
-      - name: GKE_AUTOPILOT
-        value: "true"
-      - name: E2E_NUM_CLUSTERS
-        value: "15"
-      resources:
-        requests:
-          memory: "8Gi"
-          cpu: "4000m"
-    nodeSelector:
-      # This job requires 8vCPUs or less, so it is "small".
-      cloud.google.com/gke-nodepool: small-job-pool
-
+      - 'GKE_E2E_TIMEOUT=4h'
+      - 'GCP_SUBNETWORK=prow-e2e-subnetwork-2'
+      - 'GCP_REGION=us-central1'
+      - 'GKE_RELEASE_CHANNEL=regular'
+      - 'GKE_AUTOPILOT=true'
+      - 'E2E_NUM_CLUSTERS=15'
+      - 'E2E_CLUSTER_PREFIX=autopilot-regular'
 
 - name: vulnerability-scan
   interval: 30m
