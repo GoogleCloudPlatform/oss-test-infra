@@ -44,7 +44,7 @@ prow_ignored:
 # Experimental anchor to verify the new create-clusters flow.
 # If stable, this is intended to replace the above anchor.
 - &config-sync-ci-job-v2
-  interval: 1h
+  interval: 30m
   cluster: build-kpt-config-sync
   decorate: true
   decoration_config:
