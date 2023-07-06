@@ -1406,6 +1406,50 @@ periodics:
       - 'E2E_NUM_CLUSTERS=10'
       - 'E2E_CLUSTER_PREFIX=standard-regular'
 
+# Experiment with new cluster shape to use faster resources with lower footprint.
+# Uses a single node cluster to minimize number of persistent disks.
+- <<: *config-sync-ci-job-v2
+  name: kpt-config-sync-standard-rapid
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-misc
+    testgrid-tab-name: standard-rapid
+  spec:
+    <<: *config-sync-ci-job-spec-v2
+    containers:
+    - <<: *config-sync-ci-container-v2
+      args:
+      - 'GKE_E2E_TIMEOUT=2h'
+      - 'GCP_SUBNETWORK=prow-e2e-subnetwork-3'
+      - 'GCP_ZONE=us-central1-a'
+      - 'GKE_RELEASE_CHANNEL=rapid'
+      - 'E2E_NUM_CLUSTERS=10'
+      - 'E2E_CLUSTER_PREFIX=standard-rapid'
+      - 'GKE_NUM_NODES=1'
+      - 'GKE_MACHINE_TYPE=n2-standard-8'
+      - 'GKE_DISK_TYPE=pd-ssd'
+      - 'GKE_DISK_SIZE=50Gb'
+
+# Experiment with new cluster shape to use persistent SSDs
+- <<: *config-sync-ci-job-v2
+  name: kpt-config-sync-standard-rapid-latest
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-misc
+    testgrid-tab-name: standard-rapid-latest
+  spec:
+    <<: *config-sync-ci-job-spec-v2
+    containers:
+    - <<: *config-sync-ci-container-v2
+      args:
+      - 'GKE_E2E_TIMEOUT=2h'
+      - 'GCP_SUBNETWORK=prow-e2e-subnetwork-4'
+      - 'GCP_ZONE=us-central1-a'
+      - 'GKE_RELEASE_CHANNEL=rapid'
+      - 'GKE_CLUSTER_VERSION=latest'
+      - 'E2E_NUM_CLUSTERS=10'
+      - 'E2E_CLUSTER_PREFIX=standard-rapid-latest'
+      - 'GKE_DISK_TYPE=pd-ssd'
+      - 'GKE_DISK_SIZE=50Gb'
+
 # Experimental prowjob to verify the new create-clusters flow on autopilot.
 # If stable, this is intended to replace the above testgroup-based definitions
 - <<: *config-sync-ci-job-v2
