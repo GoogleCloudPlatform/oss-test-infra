@@ -128,6 +128,14 @@ plugins:
     - owners-label
     - size
     - verify-owners
+  GoogleCloudPlatform/compute-image-windows:
+    plugins:
+    - approve
+    - blunderbuss
+    - lgtm
+    - owners-label
+    - size
+    - verify-owners
   GoogleCloudPlatform/elcarro-oracle-operator:
     plugins:
     - approve
