@@ -1392,7 +1392,7 @@ periodics:
 - <<: *config-sync-ci-job-v2
   name: kpt-config-sync-standard-regular
   annotations:
-    testgrid-dashboards: googleoss-kpt-config-sync-misc
+    testgrid-dashboards: googleoss-kpt-config-sync-main
     testgrid-tab-name: standard-regular
   spec:
     <<: *config-sync-ci-job-spec-v2
@@ -1411,7 +1411,7 @@ periodics:
 - <<: *config-sync-ci-job-v2
   name: kpt-config-sync-standard-rapid
   annotations:
-    testgrid-dashboards: googleoss-kpt-config-sync-misc
+    testgrid-dashboards: googleoss-kpt-config-sync-main
     testgrid-tab-name: standard-rapid
   spec:
     <<: *config-sync-ci-job-spec-v2
@@ -1433,7 +1433,7 @@ periodics:
 - <<: *config-sync-ci-job-v2
   name: kpt-config-sync-standard-rapid-latest
   annotations:
-    testgrid-dashboards: googleoss-kpt-config-sync-misc
+    testgrid-dashboards: googleoss-kpt-config-sync-main
     testgrid-tab-name: standard-rapid-latest
   spec:
     <<: *config-sync-ci-job-spec-v2
@@ -1455,7 +1455,7 @@ periodics:
 - <<: *config-sync-ci-job-v2
   name: kpt-config-sync-autopilot-regular
   annotations:
-    testgrid-dashboards: googleoss-kpt-config-sync-misc
+    testgrid-dashboards: googleoss-kpt-config-sync-main
     testgrid-tab-name: autopilot-regular
   spec:
     <<: *config-sync-ci-job-spec-v2
