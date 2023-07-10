@@ -1399,6 +1399,9 @@ periodics:
 
 # Experimental prowjob to verify the new create-clusters flow on standard.
 # If stable, this is intended to replace the above testgroup-based definitions
+
+#### Begin GKE standard jobs
+
 - <<: *config-sync-ci-job-v2
   name: kpt-config-sync-standard-regular
   annotations:
@@ -1452,6 +1455,64 @@ periodics:
       - 'E2E_CLUSTER_PREFIX=standard-rapid-latest'
 
 - <<: *config-sync-ci-job-v2
+  name: kpt-config-sync-standard-stable
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-main
+    testgrid-tab-name: standard-stable
+  spec:
+    <<: *config-sync-ci-job-spec-v2
+    containers:
+    - <<: *config-sync-ci-container-v2
+      args:
+      - 'GKE_E2E_TIMEOUT=2h'
+      - 'GCP_SUBNETWORK=prow-e2e-subnetwork-5'
+      - 'GCP_ZONE=us-central1-a'
+      - 'GKE_RELEASE_CHANNEL=stable'
+      - 'E2E_NUM_CLUSTERS=10'
+      - 'E2E_CLUSTER_PREFIX=standard-stable'
+
+#### End GKE standard jobs
+#### Begin git provider specific jobs
+- <<: *config-sync-ci-job-v2
+  name: kpt-config-sync-standard-regular-bitbucket
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-main
+    testgrid-tab-name: standard-regular-bitbucket
+  spec:
+    <<: *config-sync-ci-job-spec-v2
+    containers:
+    - <<: *config-sync-ci-container-v2
+      args:
+      - 'GKE_E2E_TIMEOUT=2h'
+      - 'GCP_SUBNETWORK=prow-e2e-subnetwork-6'
+      - 'GCP_ZONE=us-central1-a'
+      - 'GKE_RELEASE_CHANNEL=regular'
+      - 'E2E_NUM_CLUSTERS=10'
+      - 'E2E_CLUSTER_PREFIX=standard-regular-bitbucket'
+      - 'E2E_ARGS=--git-provider=bitbucket'
+
+- <<: *config-sync-ci-job-v2
+  name: kpt-config-sync-standard-regular-gitlab
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-main
+    testgrid-tab-name: standard-regular-gitlab
+  spec:
+    <<: *config-sync-ci-job-spec-v2
+    containers:
+    - <<: *config-sync-ci-container-v2
+      args:
+      - 'GKE_E2E_TIMEOUT=2h'
+      - 'GCP_SUBNETWORK=prow-e2e-subnetwork-7'
+      - 'GCP_ZONE=us-central1-a'
+      - 'GKE_RELEASE_CHANNEL=regular'
+      - 'E2E_NUM_CLUSTERS=10'
+      - 'E2E_CLUSTER_PREFIX=standard-regular-gitlab'
+      - 'E2E_ARGS=--git-provider=gitlab'
+
+#### End git provider specific jobs
+#### Begin GKE autopilot jobs
+
+- <<: *config-sync-ci-job-v2
   name: kpt-config-sync-autopilot-regular
   annotations:
     testgrid-dashboards: googleoss-kpt-config-sync-main
@@ -1469,6 +1530,121 @@ periodics:
       - 'E2E_NUM_CLUSTERS=15'
       - 'E2E_CLUSTER_PREFIX=autopilot-regular'
 
+- <<: *config-sync-ci-job-v2
+  name: kpt-config-sync-autopilot-stable
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-main
+    testgrid-tab-name: autopilot-stable
+  spec:
+    <<: *config-sync-ci-job-spec-v2
+    containers:
+    - <<: *config-sync-ci-container-v2
+      args:
+      - 'GKE_E2E_TIMEOUT=4h'
+      - 'GCP_SUBNETWORK=prow-e2e-subnetwork-8'
+      - 'GCP_REGION=us-central1'
+      - 'GKE_RELEASE_CHANNEL=stable'
+      - 'GKE_AUTOPILOT=true'
+      - 'E2E_NUM_CLUSTERS=15'
+      - 'E2E_CLUSTER_PREFIX=autopilot-stable'
+
+- <<: *config-sync-ci-job-v2
+  name: kpt-config-sync-autopilot-rapid
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-main
+    testgrid-tab-name: autopilot-rapid
+  spec:
+    <<: *config-sync-ci-job-spec-v2
+    containers:
+    - <<: *config-sync-ci-container-v2
+      args:
+      - 'GKE_E2E_TIMEOUT=4h'
+      - 'GCP_SUBNETWORK=prow-e2e-subnetwork-9'
+      - 'GCP_REGION=us-central1'
+      - 'GKE_RELEASE_CHANNEL=rapid'
+      - 'GKE_AUTOPILOT=true'
+      - 'E2E_NUM_CLUSTERS=15'
+      - 'E2E_CLUSTER_PREFIX=autopilot-rapid'
+
+- <<: *config-sync-ci-job-v2
+  name: kpt-config-sync-autopilot-rapid-latest
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-main
+    testgrid-tab-name: autopilot-rapid-latest
+  spec:
+    <<: *config-sync-ci-job-spec-v2
+    containers:
+    - <<: *config-sync-ci-container-v2
+      args:
+      - 'GKE_E2E_TIMEOUT=4h'
+      - 'GCP_SUBNETWORK=prow-e2e-subnetwork-10'
+      - 'GCP_REGION=us-central1'
+      - 'GKE_RELEASE_CHANNEL=rapid'
+      - 'GKE_CLUSTER_VERSION=latest'
+      - 'GKE_AUTOPILOT=true'
+      - 'E2E_NUM_CLUSTERS=15'
+      - 'E2E_CLUSTER_PREFIX=autopilot-rapid-latest'
+
+#### End GKE autopilot jobs
+#### Begin one-off jobs
+
+# The below job definitions each use a small number of clusters (e.g. 1),
+# so they can share a single subnetwork (max 15 clusters per subnetwork).
+- <<: *config-sync-ci-job
+  name: kpt-config-sync-standard-regular-kcc
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-main
+    testgrid-tab-name: standard-regular-kcc
+  spec:
+    <<: *config-sync-ci-job-spec-v2
+    containers:
+    - <<: *config-sync-ci-container-v2
+      args:
+      - 'GKE_E2E_TIMEOUT=2h'
+      - 'GCP_SUBNETWORK=prow-e2e-subnetwork-11'
+      - 'GCP_ZONE=us-central1-a'
+      - 'GKE_RELEASE_CHANNEL=regular'
+      - 'E2E_CLUSTER_PREFIX=standard-regular-kcc'
+      - 'E2E_NUM_CLUSTERS=1'
+      - 'E2E_ARGS=--kcc -run=TestKCC*'
+
+- <<: *config-sync-ci-job
+  name: kpt-config-sync-standard-regular-gcenode
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-main
+    testgrid-tab-name: standard-regular-gcenode
+  spec:
+    <<: *config-sync-ci-job-spec-v2
+    containers:
+    - <<: *config-sync-ci-container-v2
+      args:
+      - 'GKE_E2E_TIMEOUT=2h'
+      - 'GCP_SUBNETWORK=prow-e2e-subnetwork-11'
+      - 'GCP_ZONE=us-central1-a'
+      - 'GKE_RELEASE_CHANNEL=regular'
+      - 'E2E_CLUSTER_PREFIX=standard-regular-gcenode'
+      - 'E2E_NUM_CLUSTERS=1'
+      - 'E2E_ARGS=--gcenode -run=TestGCENode'
+
+- <<: *config-sync-ci-job
+  name: kpt-config-sync-standard-regular-stress
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-main
+    testgrid-tab-name: standard-regular-stress
+  spec:
+    <<: *config-sync-ci-job-spec-v2
+    containers:
+    - <<: *config-sync-ci-container-v2
+      args:
+      - 'GKE_E2E_TIMEOUT=2h'
+      - 'GCP_SUBNETWORK=prow-e2e-subnetwork-11'
+      - 'GCP_ZONE=us-central1-a'
+      - 'GKE_RELEASE_CHANNEL=regular'
+      - 'E2E_CLUSTER_PREFIX=standard-regular-stress'
+      - 'E2E_NUM_CLUSTERS=1'
+      - 'E2E_ARGS=--stress -run=TestStress*'
+
+#### End one-off jobs
 ### End new prowjob definitions
 
 - name: vulnerability-scan
