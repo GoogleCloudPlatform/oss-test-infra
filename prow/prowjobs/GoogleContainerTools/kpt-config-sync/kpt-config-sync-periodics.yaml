@@ -77,6 +77,14 @@ prow_ignored:
         value: "lazy"
       - name: E2E_DESTROY_CLUSTERS
         value: "false"
+      - name: GKE_NUM_NODES
+        value: "1"
+      - name: GKE_MACHINE_TYPE
+        value: "n2-standard-8"
+      - name: GKE_DISK_TYPE
+        value: "pd-ssd"
+      - name: GKE_DISK_SIZE
+        value: "50Gb"
       resources:
         requests:
           memory: "8Gi"
@@ -1387,6 +1395,8 @@ periodics:
       - 'E2E_ARGS=--stress -run=TestStress*'
       - 'GCP_CLUSTER=stress-test'
 
+### Begin new prowjob definitions
+
 # Experimental prowjob to verify the new create-clusters flow on standard.
 # If stable, this is intended to replace the above testgroup-based definitions
 - <<: *config-sync-ci-job-v2
@@ -1406,8 +1416,6 @@ periodics:
       - 'E2E_NUM_CLUSTERS=10'
       - 'E2E_CLUSTER_PREFIX=standard-regular'
 
-# Experiment with new cluster shape to use faster resources with lower footprint.
-# Uses a single node cluster to minimize number of persistent disks.
 - <<: *config-sync-ci-job-v2
   name: kpt-config-sync-standard-rapid
   annotations:
@@ -1424,12 +1432,7 @@ periodics:
       - 'GKE_RELEASE_CHANNEL=rapid'
       - 'E2E_NUM_CLUSTERS=10'
       - 'E2E_CLUSTER_PREFIX=standard-rapid'
-      - 'GKE_NUM_NODES=1'
-      - 'GKE_MACHINE_TYPE=n2-standard-8'
-      - 'GKE_DISK_TYPE=pd-ssd'
-      - 'GKE_DISK_SIZE=50Gb'
 
-# Experiment with new cluster shape to use persistent SSDs
 - <<: *config-sync-ci-job-v2
   name: kpt-config-sync-standard-rapid-latest
   annotations:
@@ -1447,11 +1450,7 @@ periodics:
       - 'GKE_CLUSTER_VERSION=latest'
       - 'E2E_NUM_CLUSTERS=10'
       - 'E2E_CLUSTER_PREFIX=standard-rapid-latest'
-      - 'GKE_DISK_TYPE=pd-ssd'
-      - 'GKE_DISK_SIZE=50Gb'
 
-# Experimental prowjob to verify the new create-clusters flow on autopilot.
-# If stable, this is intended to replace the above testgroup-based definitions
 - <<: *config-sync-ci-job-v2
   name: kpt-config-sync-autopilot-regular
   annotations:
@@ -1469,6 +1468,8 @@ periodics:
       - 'GKE_AUTOPILOT=true'
       - 'E2E_NUM_CLUSTERS=15'
       - 'E2E_CLUSTER_PREFIX=autopilot-regular'
+
+### End new prowjob definitions
 
 - name: vulnerability-scan
   interval: 30m
