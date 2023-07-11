@@ -17,6 +17,27 @@ presubmits:
         - "-project=compute-image-test-pool-001"
         - "-var:sbom_util_gcs_root=gs://gce-image-sbom-util"
         - "daisy_workflows/sbom_validation/enterprise_sbom_test.wf.json"
+  - name: compute-image-tools-export-sbom-windows
+    cluster: gcp-guest
+    run_if_changed: 'daisy_workflows/image_build/windows/bootstrap_install.ps1'
+    trigger: "(?m)^/sbom_windows$"
+    rerun_command: "/sbom_windows"
+    context: prow/presubmit/sbom_windows
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/compute-image-tools/daisy:latest
+        imagePullPolicy: Always
+        command:
+        - "/daisy"
+        args:
+        - "-project=compute-image-test-pool-001"
+        - "-var:sbom_util_gcs_root=gs://gce-image-sbom-util"
+        - "-var:media=gs://gce-image-build-resources/windows/iso/SW_DVD9_Win_Pro_10_21H2.6_64BIT_English_Pro_Ent_EDU_N_MLF_X23-13803.ISO"
+        - "-var:pwsh=gs://gce-image-build-resources/windows/PowerShell-7.2.6-win-x64.msi"
+        - "-var:cloudsdk=gs://gce-image-build-resources/windows/GoogleCloudSDKInstaller.exe"
+        - "-var:dotnet48=gs://gce-image-build-resources/windows/ndp48-x86-x64-enu_0885a72554ca76d2cd3ad76f98878f22b6a1d0b2.exe"
+        - "daisy_workflows/sbom_validation/windows_sbom_validation.wf.json"      
   - name: compute-image-tools-flake8
     cluster: gcp-guest
     run_if_changed: '.*\.py$'
