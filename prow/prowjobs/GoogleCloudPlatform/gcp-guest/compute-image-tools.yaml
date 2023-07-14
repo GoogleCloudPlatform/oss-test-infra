@@ -34,7 +34,7 @@ presubmits:
         - "-project=compute-image-test-pool-001"
         - "-var:sbom_util_gcs_root=gs://gce-image-sbom-util"
         - "-var:media=gs://gce-image-build-resources/windows/iso/SW_DVD9_Win_Server_STD_CORE_2019_1809.1_64Bit_English_DC_STD_MLF_X22-02970.ISO"
-        - "-var:pwsh=gs://gce-image-build-resources/windows/PowerShell-7.2.6-win-x64.msi"
+        - "-var:pwsh=$(gcloud secrets versions access latest --secret=windows_gcs_pwsh --project=gcp-guest)"
         - "-var:cloudsdk=gs://gce-image-build-resources/windows/GoogleCloudSDKInstaller.exe"
         - "-var:dotnet48=gs://gce-image-build-resources/windows/ndp48-x86-x64-enu_0885a72554ca76d2cd3ad76f98878f22b6a1d0b2.exe"
         - "daisy_workflows/sbom_validation/windows_sbom_validation.wf.json"      
