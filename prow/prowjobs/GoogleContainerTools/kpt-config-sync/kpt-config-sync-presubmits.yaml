@@ -26,7 +26,7 @@ prow_ignored:
     # Use the special version of the kubekins 1.22 image with Kind
     # v0.14.0 installed.
     - &config-sync-e2e-container
-      image: gcr.io/oss-prow-build-kpt-config-sync/e2e-prow:kubekins-e2e-v20230309-9a6b1b3121-1.23-kind-v0.14.0
+      image: us-docker.pkg.dev/kpt-config-sync-ci-artifacts/test-infra/kubekins-e2e:v1.0.0-612a3a80d
       command:
       - runner.sh
       env:
@@ -63,7 +63,7 @@ presubmits:
       preset-dind-enabled: "true"
     spec:
       containers:
-      - image: gcr.io/k8s-staging-test-infra/kubekins-e2e:v20230309-9a6b1b3121-1.23
+      - image: us-docker.pkg.dev/kpt-config-sync-ci-artifacts/test-infra/kubekins-e2e:v1.0.0-612a3a80d
         command:
         - runner.sh
         args:

@@ -19,7 +19,7 @@ prow_ignored:
     serviceAccountName: e2e-test-runner
     containers:
     - &config-sync-ci-container
-      image: gcr.io/k8s-staging-test-infra/kubekins-e2e:v20230309-9a6b1b3121-1.23
+      image: us-docker.pkg.dev/kpt-config-sync-ci-artifacts/test-infra/kubekins-e2e:v1.0.0-612a3a80d
       command:
       - runner.sh
       env:
@@ -1339,7 +1339,7 @@ periodics:
     <<: *config-sync-ci-job-spec
     containers:
     - <<: *config-sync-ci-container
-      image: gcr.io/oss-prow-build-kpt-config-sync/e2e-prow:kubekins-e2e-v20230309-9a6b1b3121-1.23-kind-v0.14.0
+      image: us-docker.pkg.dev/kpt-config-sync-ci-artifacts/test-infra/kubekins-e2e:v1.0.0-612a3a80d
       args:
       - make
       - test-e2e-kind-multi-repo
