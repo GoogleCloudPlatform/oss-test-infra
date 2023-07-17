@@ -9,7 +9,7 @@ presubmits:
     decorate: true
     spec:
       containers:
-      - image: gcr.io/compute-image-tools/daisy:latest
+      - image: gcr.io/compute-image-tools/cloud-image-tests:latest
         imagePullPolicy: Always
         command:
         - "/bin/sh"
