@@ -9,7 +9,7 @@ presubmits:
     decorate: true
     spec:
       containers:
-      - image: gcr.io/compute-image-tools/cloud-image-tests:latest
+      - image: gcr.io/gcp-guest/gointegtest:latest
         imagePullPolicy: Always
         command:
         - "/bin/sh"
