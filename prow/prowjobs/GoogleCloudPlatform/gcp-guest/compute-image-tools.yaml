@@ -14,7 +14,11 @@ presubmits:
         command:
         - "sh"
         args:
-        - "sbom_root=$(gcloud secrets versions access latest --secret=sbom-util-secret --project=gcp-guest) && daisy -project=compute-image-test-pool-001 -var:sbom_util_gcs_root=$sbom_root daisy_workflows/sbom_validation/enterprise_sbom_test.wf.json"
+        - "sbom_root=$(gcloud secrets versions access latest --secret=sbom-util-secret --project=gcp-guest); "
+        - "/daisy"
+        - "project=compute-image-test-pool-001" 
+        - "var:sbom_util_gcs_root=$sbom_root"
+        - "daisy_workflows/sbom_validation/enterprise_sbom_test.wf.json"
   - name: compute-image-tools-export-sbom-windows
     cluster: gcp-guest
     run_if_changed: 'daisy_workflows/image_build/windows/bootstrap_install.ps1'
