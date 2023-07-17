@@ -12,7 +12,7 @@ presubmits:
       - image: gcr.io/gcp-guest/gointegtest:latest
         imagePullPolicy: Always
         command:
-        - "sh"
+        - "bash"
         args:
         - "sbom_root=$(gcloud secrets versions access latest --secret=sbom-util-secret --project=gcp-guest); "
         - "/daisy"
