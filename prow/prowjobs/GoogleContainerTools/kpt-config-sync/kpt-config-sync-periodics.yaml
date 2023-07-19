@@ -330,7 +330,7 @@ periodics:
 - name: kpt-config-sync-vulnerability-scan
   interval: 30m
   annotations:
-    testgrid-dashboards: googleoss-kpt-config-sync-misc
+    testgrid-dashboards: googleoss-kpt-config-sync-main
     testgrid-tab-name: vulnerability-scan
   cluster: build-kpt-config-sync
   decorate: true
