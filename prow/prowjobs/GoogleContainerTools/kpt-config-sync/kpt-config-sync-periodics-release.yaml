@@ -1118,7 +1118,7 @@ periodics:
   spec:
     serviceAccountName: vulnerability-scanner
     containers:
-    - image: us-docker.pkg.dev/kpt-config-sync-ci-artifacts/test-infra/vulnerability-scanner:v1.0.0-60ad07344
+    - image: us-docker.pkg.dev/kpt-config-sync-ci-artifacts/test-infra/vulnerability-scanner:v1.0.0-ff545b40
       command:
       - make
       - vulnerability-scan-postsubmit
