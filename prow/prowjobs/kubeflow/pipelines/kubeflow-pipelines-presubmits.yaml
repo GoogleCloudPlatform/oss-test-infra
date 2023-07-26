@@ -252,6 +252,7 @@ presubmits:
     run_if_changed: "^(sdk/python/.*)|(test/presubmit-sdk-execution-tests.sh)$"
     # TODO(chensun): restore as required test once we upgraded the test deployment.
     optional: true
+    skip_report: true
     branches:
     - master
     spec:
