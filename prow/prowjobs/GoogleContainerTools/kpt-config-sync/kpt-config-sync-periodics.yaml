@@ -322,6 +322,7 @@ periodics:
       - 'GKE_RELEASE_CHANNEL=regular'
       - 'E2E_CLUSTER_PREFIX=standard-regular-stress'
       - 'E2E_NUM_CLUSTERS=1'
+      - 'GKE_NUM_NODES=3' # stress test needs a bigger cluster to handle finalizing
       - 'E2E_ARGS=--stress -run=TestStress*'
 
 #### End one-off jobs
