@@ -361,6 +361,17 @@ presubmits:
         command:
         - ./test/presubmit-test-kfp-dsl-runtime-code.sh
 
+  - name: test-run-all-gcpc-modules
+    cluster: build-kubeflow
+    decorate: true
+    run_if_changed: "^(sdk/python/.*)|(test/presubmit-test-run-all-gcpc-modules.sh)$"
+    spec:
+      containers:
+      # run on the lowest version of Python (with the least features) for most aggressive testing
+      - image: python:3.7
+        command:
+        - ./test/presubmit-test-run-all-gcpc-modules.sh
+
   # this test is not passing
   # - name: kubeflow-pipeline-multiuser-test
   #   cluster: build-kubeflow
