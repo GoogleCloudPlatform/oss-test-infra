@@ -12,6 +12,7 @@ dashboards:
 - name: googleoss-grpc-transcoder
 - name: googleoss-http-pattern-matcher
 - name: googleoss-kpt-config-sync-main
+- name: googleoss-kpt-config-sync-release
 - name: googleoss-kpt-config-sync-misc
 - name: googleoss-jwt-verify-lib
 
@@ -34,4 +35,5 @@ dashboard_groups:
   - name: googleoss-kpt-config-sync
     dashboard_names:
     - googleoss-kpt-config-sync-main
+    - googleoss-kpt-config-sync-release
     - googleoss-kpt-config-sync-misc
