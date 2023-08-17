@@ -307,10 +307,10 @@ periodics:
       - 'E2E_ARGS=--gcenode -run=TestGCENode'
 
 - <<: *config-sync-ci-job
-  name: kpt-config-sync-standard-regular-stress
+  name: kpt-config-sync-standard-rapid-latest-stress
   annotations:
     testgrid-dashboards: googleoss-kpt-config-sync-main
-    testgrid-tab-name: standard-regular-stress
+    testgrid-tab-name: standard-rapid-latest-stress
   spec:
     <<: *config-sync-ci-job-spec
     containers:
@@ -319,10 +319,31 @@ periodics:
       - 'GKE_E2E_TIMEOUT=2h'
       - 'GCP_SUBNETWORK=prow-e2e-subnetwork-11'
       - 'GCP_ZONE=us-central1-a'
-      - 'GKE_RELEASE_CHANNEL=regular'
-      - 'E2E_CLUSTER_PREFIX=standard-regular-stress'
+      - 'GKE_RELEASE_CHANNEL=rapid'
+      - 'GKE_CLUSTER_VERSION=latest'
+      - 'E2E_CLUSTER_PREFIX=standard-rapid-latest-stress'
       - 'E2E_NUM_CLUSTERS=1'
       - 'GKE_NUM_NODES=3' # stress test needs a bigger cluster to handle finalizing
+      - 'E2E_ARGS=--stress -run=TestStress*'
+
+- <<: *config-sync-ci-job
+  name: kpt-config-sync-autopilot-rapid-latest-stress
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-main
+    testgrid-tab-name: autopilot-rapid-latest-stress
+  spec:
+    <<: *config-sync-ci-job-spec
+    containers:
+    - <<: *config-sync-ci-container
+      args:
+      - 'GKE_E2E_TIMEOUT=2h'
+      - 'GCP_SUBNETWORK=prow-e2e-subnetwork-11'
+      - 'GCP_REGION=us-central1'
+      - 'GKE_RELEASE_CHANNEL=rapid'
+      - 'GKE_CLUSTER_VERSION=latest'
+      - 'E2E_CLUSTER_PREFIX=autopilot-rapid-latest-stress'
+      - 'GKE_AUTOPILOT=true'
+      - 'E2E_NUM_CLUSTERS=1'
       - 'E2E_ARGS=--stress -run=TestStress*'
 
 #### End one-off jobs
