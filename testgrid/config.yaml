@@ -13,15 +13,6 @@ dashboards:
 - name: googleoss-http-pattern-matcher
 - name: googleoss-kpt-config-sync-main
 - name: googleoss-kpt-config-sync-misc
-- name: googleoss-kpt-config-sync-release-multi-repo-1
-- name: googleoss-kpt-config-sync-release-multi-repo-2
-- name: googleoss-kpt-config-sync-release-multi-repo-3
-- name: googleoss-kpt-config-sync-release-multi-repo-4
-- name: googleoss-kpt-config-sync-release-multi-repo-5
-- name: googleoss-kpt-config-sync-release-multi-repo-6
-- name: googleoss-kpt-config-sync-release-multi-repo-7
-- name: googleoss-kpt-config-sync-release-multi-repo-8
-- name: googleoss-kpt-config-sync-release-misc
 - name: googleoss-jwt-verify-lib
 
 dashboard_groups:
@@ -44,14 +35,3 @@ dashboard_groups:
     dashboard_names:
     - googleoss-kpt-config-sync-main
     - googleoss-kpt-config-sync-misc
-  - name: googleoss-kpt-config-sync-release
-    dashboard_names:
-    - googleoss-kpt-config-sync-release-multi-repo-1
-    - googleoss-kpt-config-sync-release-multi-repo-2
-    - googleoss-kpt-config-sync-release-multi-repo-3
-    - googleoss-kpt-config-sync-release-multi-repo-4
-    - googleoss-kpt-config-sync-release-multi-repo-5
-    - googleoss-kpt-config-sync-release-multi-repo-6
-    - googleoss-kpt-config-sync-release-multi-repo-7
-    - googleoss-kpt-config-sync-release-multi-repo-8
-    - googleoss-kpt-config-sync-release-misc
