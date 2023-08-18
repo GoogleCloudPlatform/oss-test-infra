@@ -11,7 +11,7 @@ prow_ignored:
   - &config-sync-ci-ref
     org: GoogleContainerTools
     repo: kpt-config-sync
-    base_ref: v1.16.0-rc.2 # TODO: update this to v1.16 once the branch is created
+    base_ref: v1.16
   spec: &config-sync-ci-job-spec
     serviceAccountName: e2e-test-runner
     containers:
