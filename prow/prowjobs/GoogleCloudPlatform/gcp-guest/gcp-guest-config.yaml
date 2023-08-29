@@ -2,7 +2,7 @@ presubmits:
   GoogleCloudPlatform/artifact-registry-yum-plugin:
   - name: yum-plugin-presubmit-build
     cluster: gcp-guest
-    run_if_changed: "packaging/"
+    run_if_changed: "packaging/.*"
     trigger: "(?m)^/packagebuild$"
     rerun_command: "/packagebuild"
     context: prow/presubmit/packagebuild
@@ -17,7 +17,7 @@ presubmits:
   GoogleCloudPlatform/artifact-registry-apt-transport:
   - name: apt-transport-presubmit-build
     cluster: gcp-guest
-    run_if_changed: "packaging/"
+    run_if_changed: "packaging/.*"
     trigger: "(?m)^/packagebuild$"
     rerun_command: "/packagebuild"
     context: prow/presubmit/packagebuild
@@ -102,7 +102,7 @@ presubmits:
   GoogleCloudPlatform/osconfig:
   - name: osconfig-presubmit-build
     cluster: gcp-guest
-    run_if_changed: "packaging/"
+    run_if_changed: "packaging/.*"
     trigger: "(?m)^/packagebuild$"
     rerun_command: "/packagebuild"
     context: prow/presubmit/packagebuild
@@ -224,7 +224,7 @@ presubmits:
         - "/go/main.sh"
   - name: guest-agent-presubmit-build
     cluster: gcp-guest
-    run_if_changed: "packaging/"
+    run_if_changed: "packaging/.*"
     trigger: "(?m)^/packagebuild$"
     rerun_command: "/packagebuild"
     context: prow/presubmit/packagebuild
@@ -280,7 +280,7 @@ presubmits:
   GoogleCloudPlatform/guest-oslogin:
   - name: oslogin-presubmit-build
     cluster: gcp-guest
-    run_if_changed: "packaging/"
+    run_if_changed: "packaging/.*"
     trigger: "(?m)^/packagebuild$"
     rerun_command: "/packagebuild"
     context: prow/presubmit/packagebuild
