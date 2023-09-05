@@ -24,7 +24,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
       - name: deck
-        image: gcr.io/k8s-prow/deck:v20230829-df0ee1785b
+        image: gcr.io/k8s-prow/deck:v20230901-e9e5d470a5
         args:
         - --config-path=/etc/config/config.yaml
         - --job-config-path=/etc/job-config
@@ -43,7 +43,7 @@ spec:
         env:
         # Use KUBECONFIG envvar rather than --kubeconfig flag in order to provide multiple configs to merge.
         - name: KUBECONFIG
-          value: "/etc/kubeconfig/config-20211108:/etc/build-bms-oracle-team/kubeconfig:/etc/build-gcsfuse/kubeconfig:/etc/build-cloud-kubernetes-node-management-team/kubeconfig:/etc/build-kpt-config-sync/kubeconfig:/etc/build-compute-image-import/kubeconfig:/etc/build-bms-oracle-team/kubeconfig:/etc/build-blueprints/kubeconfig:/etc/build-elcarro/kubeconfig:/etc/build-kubeflow/kubeconfig"
+          value: "/etc/kubeconfig/config-20211108:/etc/build-bms-oracle-team/kubeconfig:/etc/build-gcsfuse/kubeconfig:/etc/build-cloud-kubernetes-node-management-team/kubeconfig:/etc/build-kpt-config-sync/kubeconfig:/etc/build-compute-image-import/kubeconfig:/etc/build-blueprints/kubeconfig:/etc/build-elcarro/kubeconfig:/etc/build-kubeflow/kubeconfig"
         ports:
         - name: http
           containerPort: 8080
@@ -64,9 +64,6 @@ spec:
           readOnly: true
         - mountPath: /etc/build-compute-image-import
           name: build-compute-image-import
-          readOnly: true
-        - mountPath: /etc/build-bms-oracle-team
-          name: build-bms-oracle-team
           readOnly: true
         - mountPath: /etc/build-blueprints
           name: build-blueprints
@@ -132,10 +129,6 @@ spec:
         secret:
           defaultMode: 420
           secretName: kubeconfig-build-compute-image-import
-      - name: build-bms-oracle-team
-        secret:
-          defaultMode: 420
-          secretName: kubeconfig-build-bms-oracle-team
       - name: build-blueprints
         secret:
           defaultMode: 420
