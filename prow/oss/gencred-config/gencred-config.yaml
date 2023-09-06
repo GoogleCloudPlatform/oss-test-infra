@@ -1,4 +1,10 @@
 clusters:
+- gke: projects/bmaas-testing/locations/southamerica-east1-b/clusters/bms-orcl-prow-sydrp
+  name: build-bms-oracle-team
+  duration: 48h
+  gsm:
+    name: prow_build_cluster_kubeconfig_build-bms-oracle-team
+    project: oss-prow
 - gke: projects/gcs-fuse-test-ml/locations/us-central1-c/clusters/gcsfuse-prow-test
   name: build-gcsfuse
   duration: 48h
