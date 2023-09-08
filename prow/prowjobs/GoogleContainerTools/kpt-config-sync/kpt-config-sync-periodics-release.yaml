@@ -80,7 +80,7 @@ periodics:
           memory: "50Gi"
           cpu: "30000m"
     nodeSelector:
-      cloud.google.com/gke-nodepool: large-job-pool-periodic
+      cloud.google.com/gke-nodepool: large-job-pool-periodic-release
 
 #### Begin GKE standard jobs
 - <<: *config-sync-ci-job
