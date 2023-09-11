@@ -409,7 +409,7 @@ periodics:
       - "-zone=us-west1-a"
       - "-images=projects/bct-prod-images/global/images/family/debian-10,projects/bct-prod-images/global/images/family/debian-11,projects/bct-prod-images/global/images/family/centos-7,projects/bct-prod-images/global/images/family/centos-stream-8,projects/bct-prod-images/global/images/family/centos-stream-9,projects/bct-prod-images/global/images/family/rhel-7,projects/bct-prod-images/global/images/family/rhel-8,projects/bct-prod-images/global/images/family/rhel-9,projects/bct-prod-images/global/images/family/rocky-linux-8,projects/bct-prod-images/global/images/family/rocky-linux-8-optimized-gcp,projects/bct-prod-images/global/images/family/almalinux-8"
       - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
-      - "-exclude=(oslogin)|(networkperf)|(storageperf)|(hotattach)"
+      - "-exclude=(oslogin)|(networkperf)|(storageperf)|(hotattach)|(shapevalidation)"
 - name: cit-periodics-performance
   cluster: gcp-guest
   decorate: true
