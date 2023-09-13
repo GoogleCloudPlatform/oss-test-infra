@@ -39,7 +39,3 @@ get-cluster-credentials: save-kubeconfig activate-serviceaccount
 .PHONY: get-build-cluster-credentials
 get-build-cluster-credentials: save-kubeconfig activate-serviceaccount
 	gcloud container clusters get-credentials "$(CLUSTER_BUILD)" --project="$(PROJECT_BUILD)" --zone="$(ZONE)"
-
-.PHONY: update-kubeconfigs
-update-kubeconfigs:
-	kubectl create configmap kubeconfigs --from-file=kubeconfigs.yaml=kubeconfigs.yaml --dry-run=client -o yaml | kubectl replace configmap kubeconfigs -f -

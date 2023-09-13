@@ -30,8 +30,12 @@ update-config: get-cluster-credentials
 update-plugins: get-cluster-credentials
 	kubectl create configmap plugins --from-file=plugins.yaml=plugins.yaml --dry-run -o yaml | kubectl replace configmap plugins -f -
 
+.PHONY: update-kubeconfigs
+update-kubeconfigs:
+	kubectl create configmap kubeconfigs --from-file=kubeconfigs.yaml=cluster/kubeconfigs/kubeconfigs.yaml --dry-run=client -o yaml | kubectl apply -f -
+
 .PHONY: deploy
-deploy: get-cluster-credentials
+deploy: get-cluster-credentials update-kubeconfigs
 # Apply the ProwJob CRD with --server-side=true due to its size.
 	kubectl apply --server-side=true -f ./cluster/prowjob-crd/
 	kubectl apply -f ./cluster/
