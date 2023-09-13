@@ -23,10 +23,8 @@ prow_ignored:
     timeout: 60m
   spec: &config-sync-e2e-job-spec
     containers:
-    # Use the special version of the kubekins 1.22 image with Kind
-    # v0.14.0 installed.
     - &config-sync-e2e-container
-      image: us-docker.pkg.dev/kpt-config-sync-ci-artifacts/test-infra/kubekins-e2e:v1.0.0-612a3a80d
+      image: gcr.io/k8s-staging-test-infra/kubekins-e2e:v20230908-f87868ed63-1.26
       command:
       - runner.sh
       env:
@@ -63,7 +61,7 @@ presubmits:
       preset-dind-enabled: "true"
     spec:
       containers:
-      - image: us-docker.pkg.dev/kpt-config-sync-ci-artifacts/test-infra/kubekins-e2e:v1.0.0-612a3a80d
+      - image: gcr.io/k8s-staging-test-infra/kubekins-e2e:v20230908-f87868ed63-1.26
         command:
         - runner.sh
         args:

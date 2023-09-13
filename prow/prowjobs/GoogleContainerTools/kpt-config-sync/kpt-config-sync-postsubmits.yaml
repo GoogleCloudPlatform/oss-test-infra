@@ -20,7 +20,7 @@ postsubmits:
     spec:
       serviceAccountName: postsubmit-runner
       containers:
-      - image: us-docker.pkg.dev/kpt-config-sync-ci-artifacts/test-infra/kubekins-e2e:v1.0.0-612a3a80d
+      - image: gcr.io/k8s-staging-test-infra/kubekins-e2e:v20230908-f87868ed63-1.26
         command:
         - runner.sh
         args:
