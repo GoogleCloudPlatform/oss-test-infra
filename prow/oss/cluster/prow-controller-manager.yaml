@@ -28,7 +28,7 @@ spec:
         env:
         # Use KUBECONFIG envvar rather than --kubeconfig flag in order to provide multiple configs to merge.
         - name: KUBECONFIG
-          value: "/etc/kubeconfig/config-20211108:/etc/build-bms-oracle-team/kubeconfig:/etc/build-gcsfuse/kubeconfig:/etc/build-cloud-kubernetes-node-management-team/kubeconfig:/etc/build-kpt-config-sync/kubeconfig:/etc/build-compute-image-import/kubeconfig:/etc/build-blueprints/kubeconfig:/etc/build-elcarro/kubeconfig:/etc/build-kubeflow/kubeconfig"
+          value: "/etc/kubeconfig/config-20211108:/etc/build-bms-oracle-team/kubeconfig:/etc/build-gcsfuse/kubeconfig:/etc/build-cloud-kubernetes-node-management-team/kubeconfig:/etc/build-kpt-config-sync/kubeconfig:/etc/build-compute-image-import/kubeconfig:/etc/build-blueprints/kubeconfig:/etc/build-elcarro/kubeconfig:/etc/build-kubeflow/kubeconfig:/etc/gke-gcloud-auth-plugin-based/kubeconfigs/kubeconfigs.yaml"
         ports:
         - name: metrics
           containerPort: 9090
@@ -65,6 +65,9 @@ spec:
           readOnly: true
         - name: build-kubeflow
           mountPath: /etc/build-kubeflow
+          readOnly: true
+        - mountPath: /etc/gke-gcloud-auth-plugin-based
+          name: kubeconfigs
           readOnly: true
       volumes:
       - name: build-bms-oracle-team
@@ -109,6 +112,9 @@ spec:
         secret:
           defaultMode: 420
           secretName: kubeconfig-build-kubeflow
+      - name: kubeconfigs
+        configMap:
+          name: kubeconfigs
 ---
 apiVersion: v1
 kind: ServiceAccount
