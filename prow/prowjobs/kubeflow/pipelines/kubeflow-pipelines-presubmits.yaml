@@ -250,8 +250,6 @@ presubmits:
     cluster: build-kubeflow
     decorate: true
     run_if_changed: "^(sdk/python/.*)|(test/presubmit-sdk-execution-tests.sh)$"
-    # TODO(chensun): restore as required test once we upgraded the test deployment.
-    optional: true
     branches:
     - master
     spec:
