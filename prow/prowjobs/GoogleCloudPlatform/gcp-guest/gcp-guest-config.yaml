@@ -413,6 +413,8 @@ periodics:
 - name: cit-periodics-performance
   cluster: gcp-guest
   decorate: true
+  decoration_config:
+    timeout: 5h
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: cit-periodics-performance
