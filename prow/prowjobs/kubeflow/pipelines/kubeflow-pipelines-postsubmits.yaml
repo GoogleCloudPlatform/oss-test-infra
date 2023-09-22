@@ -7,7 +7,7 @@ postsubmits:
     decorate: true
     spec:
       containers:
-      - image: python:3.7
+      - image: python:3.9
         command:
         - ./backend/src/v2/test/integration-test.sh
     annotations:
