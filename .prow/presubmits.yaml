@@ -4,7 +4,7 @@ presubmits:
   run_if_changed: '^prow/(oss/(config|plugins)\.yaml$|prowjobs/)|^\.prow'
   spec:
     containers:
-      - image: gcr.io/k8s-prow/checkconfig:v20230922-b115014be0
+      - image: gcr.io/k8s-prow/checkconfig:v20230923-2d7622ba27
         imagePullPolicy: Always
         command:
           - checkconfig
@@ -49,7 +49,7 @@ presubmits:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: gcr.io/k8s-prow/configurator:v20230922-b115014be0
+    - image: gcr.io/k8s-prow/configurator:v20230923-2d7622ba27
       command:
       - configurator
       args:
