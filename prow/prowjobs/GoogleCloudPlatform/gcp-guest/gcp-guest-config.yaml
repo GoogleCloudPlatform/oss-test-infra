@@ -389,6 +389,19 @@ presubmits:
         imagePullPolicy: Always
         command:
         - "/go/main.sh"
+  - name: infra-presubmit-citpresubmit
+    cluster: gcp-guest
+    run_if_changed: 'imagetest/.*(\.go|go\.mod|go\.sum|Dockerfile)$'
+    trigger: "(?m)^/citpresubmit$"
+    rerun_command: "/citpresubmit"
+    context: prow/presubmit/citpresubmit
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/citpresubmit:latest
+        imagePullPolicy: Always
+        command:
+        - "/go/main.sh"
 
 periodics:
 - name: cit-periodics
