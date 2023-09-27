@@ -251,6 +251,17 @@ plugins:
     - verify-owners
     - wip
 
+  GoogleCloudPlatform/k8s-config-connector:
+    plugins:
+    # Inherited from GoogleCloudPlatform:
+    #- assign
+    #- hold
+    #- label
+    - approve
+    - lgtm
+    - verify-owners
+    - wip
+
   GoogleContainerTools/kpt-config-sync:
     plugins:
     - approve
