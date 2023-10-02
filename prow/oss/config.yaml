@@ -30,6 +30,7 @@ tide:
     GoogleCloudPlatform/compute-image-import: squash
     GoogleContainerTools/kpt-config-sync: squash
     kubeflow: squash
+    GoogleCloudPlatform/k8s-config-connector: merge
   squash_label: tide/merge-method-squash
   rebase_label: tide/merge-method-rebase
   merge_label: tide/merge-method-merge
@@ -57,6 +58,7 @@ tide:
     - GoogleCloudPlatform/testgrid
     - GoogleCloudPlatform/k8s-cloud-provider
     - GoogleContainerTools/kpt-config-sync
+    - GoogleCloudPlatform/k8s-config-connector
     labels:
     - lgtm
     - approved
