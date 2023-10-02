@@ -410,7 +410,7 @@ periodics:
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: cit-periodics
-  interval: 1h
+  interval: 2h
   spec:
     containers:
     - image: gcr.io/compute-image-tools/cloud-image-tests:latest
@@ -419,10 +419,10 @@ periodics:
       - "/manager"
       args:
       - "-project=gcp-guest"
-      - "-zone=us-west1-a"
-      - "-images=projects/debian-cloud/global/images/family/debian-10,projects/debian-cloud/global/images/family/debian-11,projects/debian-cloud/global/images/family/debian-12,projects/centos-cloud/global/images/family/centos-7,projects/centos-cloud/global/images/family/centos-stream-8,projects/centos-cloud/global/images/family/centos-stream-9,projects/rhel-cloud/global/images/family/rhel-7,projects/rhel-cloud/global/images/family/rhel-8,projects/rhel-cloud/global/images/family/rhel-9,projects/rocky-linux-cloud/global/images/family/rocky-linux-8,projects/rocky-linux-cloud/global/images/family/rocky-linux-8-optimized-gcp,projects/almalinux-cloud/global/images/family/almalinux-8"
+      - "-zone=us-central1-c"
+      - "-images=projects/debian-cloud/global/images/family/debian-10,projects/debian-cloud/global/images/family/debian-11,projects/debian-cloud/global/images/family/debian-12,projects/centos-cloud/global/images/family/centos-7,projects/centos-cloud/global/images/family/centos-stream-8,projects/centos-cloud/global/images/family/centos-stream-9,projects/rhel-cloud/global/images/family/rhel-7,projects/rhel-cloud/global/images/family/rhel-8,projects/rhel-cloud/global/images/family/rhel-9,projects/rocky-linux-cloud/global/images/family/rocky-linux-8-optimized-gcp,projects/rocky-linux-cloud/global/images/family/rocky-linux-9-optimized-gcp,projects/almalinux-cloud/global/images/family/almalinux-8,projects/almalinux-cloud/global/images/family/almalinux-9,projects/ubuntu-os-cloud/global/images/family/ubuntu-2004-lts,projects/ubuntu-os-cloud/global/images/family/ubuntu-2204-lts,projects/suse-cloud/global/images/family/sles-12,projects/suse-cloud/global/images/family/sles-15"
       - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
-      - "-exclude=(oslogin)|(networkperf)|(storageperf)|(hotattach)|(shapevalidation)"
+      - "-exclude=(oslogin)|(networkperf)|(storageperf)|(shapevalidation)"
 - name: cit-periodics-performance
   cluster: gcp-guest
   decorate: true
