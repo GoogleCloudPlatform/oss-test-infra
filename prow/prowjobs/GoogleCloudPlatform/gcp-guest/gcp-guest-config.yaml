@@ -407,10 +407,12 @@ periodics:
 - name: cit-periodics
   cluster: gcp-guest
   decorate: true
+  decoration_config:
+    timeout: 3h
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: cit-periodics
-  interval: 2h
+  interval: 3h
   spec:
     containers:
     - image: gcr.io/compute-image-tools/cloud-image-tests:latest
