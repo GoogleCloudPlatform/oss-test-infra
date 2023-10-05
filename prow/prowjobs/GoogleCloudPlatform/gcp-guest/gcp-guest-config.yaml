@@ -413,7 +413,6 @@ periodics:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: cit-periodics
   interval: 4h
-
   spec:
     containers:
     - image: gcr.io/compute-image-tools/cloud-image-tests:latest
