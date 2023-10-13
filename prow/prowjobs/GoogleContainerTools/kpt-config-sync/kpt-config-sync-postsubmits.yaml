@@ -20,7 +20,9 @@ postsubmits:
     spec:
       serviceAccountName: postsubmit-runner
       containers:
-      - image: gcr.io/k8s-staging-test-infra/kubekins-e2e:v20230908-f87868ed63-1.26
+      # TODO: Switch back to a k8s-versioned release, once Go 1.21 is available there
+      # https://github.com/kubernetes/test-infra/blob/master/images/kubekins-e2e/variants.yaml
+      - image: gcr.io/k8s-staging-test-infra/kubekins-e2e:v20231012-0288f8bc6c-go-canary
         command:
         - runner.sh
         args:
