@@ -54,11 +54,11 @@ periodics:
   cluster: gcp-guest
   decorate: true
   decoration_config:
-    timeout: 5h
+    timeout: 11h
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: ci-windows-upgrade-e2e-tests
-  interval: 6h
+  interval: 12h
   agent: kubernetes
   spec:
     containers:
