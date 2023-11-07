@@ -87,7 +87,7 @@ periodics:
       command:
       - "/e2e_tests"
       args:
-      - "-test_case_filter=debian|centos|rhel|windows|cos|ubuntu"
+      - "-test_case_filter=debian|centos|rhel|windows|cos|ubuntu|rocky|opensuse|sles"
       - "-out_dir=$(ARTIFACTS)"
       - "-test_project_ids=compute-image-osconfig-agent,compute-image-osconfig-agent-2"
       - -test_zones={
