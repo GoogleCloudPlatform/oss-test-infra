@@ -376,8 +376,8 @@ presubmits:
         imagePullPolicy: Always
         command:
         - "/go/main.sh"
-	    args:
-		- imagetest/
+        args:
+        - imagetest/
   - name: infra-presubmit-gocheck-cleanerupper
     cluster: gcp-guest
     run_if_changed: 'container_images/cleanerupper.*\.go$'
@@ -391,8 +391,8 @@ presubmits:
         imagePullPolicy: Always
         command:
         - "/go/main.sh"
-	    args:
-		- container_images/cleanerupper/
+        args:
+        - container_images/cleanerupper/
   - name: infra-presubmit-gocheck-registryimage
     cluster: gcp-guest
     run_if_changed: 'container_images/registry-image-forked.*\.go$'
@@ -406,8 +406,8 @@ presubmits:
         imagePullPolicy: Always
         command:
         - "/go/main.sh"
-	    args:
-		- container_images/registry-image-forked/
+        args:
+        - container_images/registry-image-forked/
   - name: infra-presubmit-gobuild-root
     cluster: gcp-guest
     run_if_changed: '\.go$'
@@ -434,8 +434,8 @@ presubmits:
         imagePullPolicy: Always
         command:
         - "/go/main.sh"
-	    args:
-		- build
+        args:
+        - build
   - name: infra-presubmit-gobuild-cleanerupper
     cluster: gcp-guest
     run_if_changed: 'container_images/cleanerupper.*\.go$'
@@ -449,8 +449,8 @@ presubmits:
         imagePullPolicy: Always
         command:
         - "/go/main.sh"
-	    args:
-		- container_images/cleanerupper/
+        args:
+        - container_images/cleanerupper/
   - name: infra-presubmit-gobuild-registryimage
     cluster: gcp-guest
     run_if_changed: 'container_images/registry-image-forked.*\.go$'
@@ -464,8 +464,8 @@ presubmits:
         imagePullPolicy: Always
         command:
         - "/go/main.sh"
-	    args:
-		- container_images/registry-image-forked/
+        args:
+        - container_images/registry-image-forked/
   - name: infra-presubmit-gotest-root
     cluster: gcp-guest
     run_if_changed: '\.go$'
@@ -492,8 +492,8 @@ presubmits:
         imagePullPolicy: Always
         command:
         - "/go/main.sh"
-	    args:
-		- test
+        args:
+        - test
   - name: infra-presubmit-gotest-cleanerupper
     cluster: gcp-guest
     run_if_changed: 'container_images/cleanerupper.*\.go$'
@@ -507,8 +507,8 @@ presubmits:
         imagePullPolicy: Always
         command:
         - "/go/main.sh"
-	    args:
-		- container_images/cleanerupper/
+        args:
+        - container_images/cleanerupper/
   - name: infra-presubmit-gotest-registryimage
     cluster: gcp-guest
     run_if_changed: 'container_images/registry-image-forked.*\.go$'
@@ -522,8 +522,8 @@ presubmits:
         imagePullPolicy: Always
         command:
         - "/go/main.sh"
-	    args:
-		- container_images/registry-image-forked/
+        args:
+        - container_images/registry-image-forked/
 
 periodics:
 - name: cit-periodics
