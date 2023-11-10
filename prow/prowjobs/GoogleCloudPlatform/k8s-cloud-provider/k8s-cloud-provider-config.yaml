@@ -3,6 +3,7 @@ presubmits:
   - name: pull-k8s-cloud-provider-test
     branches:
     - master
+    - rgraph-unstable
     always_run: true         # Run for every PR, or only when requested.
     labels:
       preset-service-account: "true"
