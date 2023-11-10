@@ -350,12 +350,12 @@ presubmits:
         command:
         - "/main.sh"
         args: ["concourse/pipelines"]
-  - name: infra-presubmit-gocheck
+  - name: infra-presubmit-gocheck-root
     cluster: gcp-guest
     run_if_changed: '\.go$'
-    trigger: "(?m)^/gocheck$"
-    rerun_command: "/gocheck"
-    context: prow/presubmit/gocheck
+    trigger: "(?m)^/gocheckroot$"
+    rerun_command: "/gocheckroot"
+    context: prow/presubmit/gocheck/root
     decorate: true
     spec:
       containers:
@@ -363,12 +363,57 @@ presubmits:
         imagePullPolicy: Always
         command:
         - "/go/main.sh"
-  - name: infra-presubmit-gobuild
+  - name: infra-presubmit-gocheck-cit
+    cluster: gcp-guest
+    run_if_changed: 'imagetest.*\.go$'
+    trigger: "(?m)^/gocheckcit$"
+    rerun_command: "/gocheckcit"
+    context: prow/presubmit/gocheck/cit
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gocheck:latest
+        imagePullPolicy: Always
+        command:
+        - "/go/main.sh"
+        args:
+        - imagetest/
+  - name: infra-presubmit-gocheck-cleanerupper
+    cluster: gcp-guest
+    run_if_changed: 'container_images/cleanerupper.*\.go$'
+    trigger: "(?m)^/gocheckclean$"
+    rerun_command: "/gocheckclean"
+    context: prow/presubmit/gocheck/cleanerupper
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gocheck:latest
+        imagePullPolicy: Always
+        command:
+        - "/go/main.sh"
+        args:
+        - container_images/cleanerupper/
+  - name: infra-presubmit-gocheck-registryimage
+    cluster: gcp-guest
+    run_if_changed: 'container_images/registry-image-forked.*\.go$'
+    trigger: "(?m)^/gocheckregimage$"
+    rerun_command: "/gocheckregimage"
+    context: prow/presubmit/gocheck/registryimage
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gocheck:latest
+        imagePullPolicy: Always
+        command:
+        - "/go/main.sh"
+        args:
+        - container_images/registry-image-forked/
+  - name: infra-presubmit-gobuild-root
     cluster: gcp-guest
     run_if_changed: '\.go$'
-    trigger: "(?m)^/gobuild$"
-    rerun_command: "/gobuild"
-    context: prow/presubmit/gobuild
+    trigger: "(?m)^/gobuildroot$"
+    rerun_command: "/gobuildroot"
+    context: prow/presubmit/gobuild/root
     decorate: true
     spec:
       containers:
@@ -376,25 +421,12 @@ presubmits:
         imagePullPolicy: Always
         command:
         - "/go/main.sh"
-  - name: infra-presubmit-gotest
+  - name: infra-presubmit-gobuild-cit
     cluster: gcp-guest
-    run_if_changed: '\.go$'
-    trigger: "(?m)^/gotest$"
-    rerun_command: "/gotest"
-    context: prow/presubmit/gotest
-    decorate: true
-    spec:
-      containers:
-      - image: gcr.io/gcp-guest/gotest:latest
-        imagePullPolicy: Always
-        command:
-        - "/go/main.sh"
-  - name: infra-presubmit-citpresubmit
-    cluster: gcp-guest
-    run_if_changed: 'imagetest/.*(\.go|go\.mod|go\.sum|Dockerfile)$'
-    trigger: "(?m)^/citpresubmit$"
-    rerun_command: "/citpresubmit"
-    context: prow/presubmit/citpresubmit
+    run_if_changed: 'imagetest/.*(\.go|go\.mod|go\.sum|Dockerfile|\.sh)$'
+    trigger: "(?m)^/gobuildcit$"
+    rerun_command: "/gobuildcit"
+    context: prow/presubmit/gobuild/cit
     decorate: true
     spec:
       containers:
@@ -402,6 +434,96 @@ presubmits:
         imagePullPolicy: Always
         command:
         - "/go/main.sh"
+        args:
+        - build
+  - name: infra-presubmit-gobuild-cleanerupper
+    cluster: gcp-guest
+    run_if_changed: 'container_images/cleanerupper.*\.go$'
+    trigger: "(?m)^/gobuildclean$"
+    rerun_command: "/gobuildclean"
+    context: prow/presubmit/gobuild/cleanerupper
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gobuild:latest
+        imagePullPolicy: Always
+        command:
+        - "/go/main.sh"
+        args:
+        - container_images/cleanerupper/
+  - name: infra-presubmit-gobuild-registryimage
+    cluster: gcp-guest
+    run_if_changed: 'container_images/registry-image-forked.*\.go$'
+    trigger: "(?m)^/gobuildregimage$"
+    rerun_command: "/gobuildregimage"
+    context: prow/presubmit/gobuild/registryimage
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gobuild:latest
+        imagePullPolicy: Always
+        command:
+        - "/go/main.sh"
+        args:
+        - container_images/registry-image-forked/
+  - name: infra-presubmit-gotest-root
+    cluster: gcp-guest
+    run_if_changed: '\.go$'
+    trigger: "(?m)^/gotestroot$"
+    rerun_command: "/gotestroot"
+    context: prow/presubmit/gotest/root
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gotest:latest
+        imagePullPolicy: Always
+        command:
+        - "/go/main.sh"
+  - name: infra-presubmit-gotest-cit
+    cluster: gcp-guest
+    run_if_changed: 'imagetest.*\.go$'
+    trigger: "(?m)^/gotestcit$"
+    rerun_command: "/gotestcit"
+    context: prow/presubmit/gotest/cit
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/citpresubmit:latest
+        imagePullPolicy: Always
+        command:
+        - "/go/main.sh"
+        args:
+        - test
+  - name: infra-presubmit-gotest-cleanerupper
+    cluster: gcp-guest
+    run_if_changed: 'container_images/cleanerupper.*\.go$'
+    trigger: "(?m)^/gotestclean$"
+    rerun_command: "/gotestclean"
+    context: prow/presubmit/gotest/cleanerupper
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gotest:latest
+        imagePullPolicy: Always
+        command:
+        - "/go/main.sh"
+        args:
+        - container_images/cleanerupper/
+  - name: infra-presubmit-gotest-registryimage
+    cluster: gcp-guest
+    run_if_changed: 'container_images/registry-image-forked.*\.go$'
+    trigger: "(?m)^/gotestregimage$"
+    rerun_command: "/gotestregimage"
+    context: prow/presubmit/gotest/registryimage
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gotest:latest
+        imagePullPolicy: Always
+        command:
+        - "/go/main.sh"
+        args:
+        - container_images/registry-image-forked/
 
 periodics:
 - name: cit-periodics
