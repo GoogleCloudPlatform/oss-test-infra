@@ -352,7 +352,7 @@ presubmits:
         args: ["concourse/pipelines"]
   - name: infra-presubmit-gocheck-root
     cluster: gcp-guest
-    run_if_changed: '\.go$'
+    run_if_changed: '^((?!imagetest|cleanerupper|registry-image-forked).)*\.go$'
     trigger: "(?m)^/gocheckroot$"
     rerun_command: "/gocheckroot"
     context: prow/presubmit/gocheck/root
@@ -410,7 +410,7 @@ presubmits:
         - container_images/registry-image-forked/
   - name: infra-presubmit-gobuild-root
     cluster: gcp-guest
-    run_if_changed: '\.go$'
+    run_if_changed: '^((?!imagetest|cleanerupper|registry-image-forked).)*\.go$'
     trigger: "(?m)^/gobuildroot$"
     rerun_command: "/gobuildroot"
     context: prow/presubmit/gobuild/root
@@ -468,7 +468,7 @@ presubmits:
         - container_images/registry-image-forked/
   - name: infra-presubmit-gotest-root
     cluster: gcp-guest
-    run_if_changed: '\.go$'
+    run_if_changed: '^((?!imagetest|cleanerupper|registry-image-forked).)*\.go$'
     trigger: "(?m)^/gotestroot$"
     rerun_command: "/gotestroot"
     context: prow/presubmit/gotest/root
