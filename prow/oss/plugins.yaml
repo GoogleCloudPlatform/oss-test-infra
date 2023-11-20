@@ -64,6 +64,9 @@ lgtm:
   - grpc-ecosystem
   review_acts_as_lgtm: true
 - repos:
+  - GoogleContainerTools/kpt-config-sync
+  review_acts_as_lgtm: false
+- repos:
   - GoogleCloudPlatform/testgrid
   review_acts_as_lgtm: true
   trusted_team_for_sticky_lgtm: 'TestGrid Admins'
