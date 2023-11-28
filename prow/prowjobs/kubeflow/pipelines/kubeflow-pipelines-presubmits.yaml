@@ -138,6 +138,20 @@ presubmits:
         command:
         - ./test/presubmit-tests-sdk.sh
 
+  - name: kubeflow-pipelines-sdk-python312
+    cluster: build-kubeflow
+    decorate: true
+    run_if_changed: "^(sdk/.*)|(test/presubmit-tests-sdk.sh)$"
+    optional: true
+    skip_report: true
+    branches:
+      - master
+    spec:
+      containers:
+      - image: python:3.12
+        command:
+        - ./test/presubmit-tests-sdk.sh
+
   - name: kubeflow-pipelines-tfx-python37
     cluster: build-kubeflow
     decorate: true
@@ -309,6 +323,18 @@ presubmits:
         command:
         - ./test/presubmit-test-kfp-kubernetes-library.sh
 
+  - name: kfp-kubernetes-test-python312
+    cluster: build-kubeflow
+    decorate: true
+    run_if_changed: "^(kubernetes_platform/.*)|(test/presubmit-test-kfp-kubernetes-library.sh)$"
+    optional: true
+    skip_report: true
+    spec:
+      containers:
+      - image: python:3.12
+        command:
+        - ./test/presubmit-test-kfp-kubernetes-library.sh
+
 
   - name: test-run-all-gcpc-modules
     cluster: build-kubeflow
@@ -383,6 +409,18 @@ presubmits:
     spec:
       containers:
       - image: python:3.11
+        command:
+        - ./test/presubmit-test-kfp-runtime-code.sh
+
+  - name: test-kfp-runtime-code-python312
+    cluster: build-kubeflow
+    decorate: true
+    run_if_changed: "^(sdk/python/.*)|(test/presubmit-test-kfp-runtime-code.sh)$"
+    optional: true
+    skip_report: true
+    spec:
+      containers:
+      - image: python:3.12
         command:
         - ./test/presubmit-test-kfp-runtime-code.sh
 
