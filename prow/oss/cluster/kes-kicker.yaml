@@ -1,0 +1,53 @@
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: kes-kicker
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: kes-kicker
+rules:
+  - apiGroups: ["apps", "extensions"]
+    resources: ["deployments"]
+    # Restrict this RBAC to an explicitly-named deployment, in this case just "kubernetes-external-secrets".
+    resourceNames: ["kubernetes-external-secrets"]
+    verbs: ["get", "patch", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: kes-kicker
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: kes-kicker
+subjects:
+  - kind: ServiceAccount
+    name: kes-kicker
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: kes-kicker
+spec:
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 2
+  concurrencyPolicy: Forbid
+  schedule: "0 */4 * * *" # Run every 4 hours.
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      activeDeadlineSeconds: 300
+      template:
+        spec:
+          serviceAccountName: kes-kicker
+          restartPolicy: Never
+          containers:
+            - name: kubectl
+              image: gcr.io/k8s-staging-test-infra/gcloud-in-go:v20220607-33951ed1ed
+              command:
+                - "kubectl"
+                - "rollout"
+                - "restart"
+                - "deployment/kubernetes-external-secrets"
