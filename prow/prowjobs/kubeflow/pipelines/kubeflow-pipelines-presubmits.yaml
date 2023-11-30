@@ -142,8 +142,6 @@ presubmits:
     cluster: build-kubeflow
     decorate: true
     run_if_changed: "^(sdk/.*)|(test/presubmit-tests-sdk.sh)$"
-    optional: true
-    skip_report: true
     branches:
       - master
     spec:
@@ -327,8 +325,6 @@ presubmits:
     cluster: build-kubeflow
     decorate: true
     run_if_changed: "^(kubernetes_platform/.*)|(test/presubmit-test-kfp-kubernetes-library.sh)$"
-    optional: true
-    skip_report: true
     spec:
       containers:
       - image: python:3.12
@@ -361,7 +357,6 @@ presubmits:
     cluster: build-kubeflow
     decorate: true
     run_if_changed: "^(sdk/python/.*)|(test/presubmit-test-kfp-runtime-code.sh)$"
-    optional: true
     spec:
       containers:
       - image: python:3.7
@@ -372,7 +367,6 @@ presubmits:
     cluster: build-kubeflow
     decorate: true
     run_if_changed: "^(sdk/python/.*)|(test/presubmit-test-kfp-runtime-code.sh)$"
-    optional: true
     spec:
       containers:
       - image: python:3.8
@@ -383,7 +377,6 @@ presubmits:
     cluster: build-kubeflow
     decorate: true
     run_if_changed: "^(sdk/python/.*)|(test/presubmit-test-kfp-runtime-code.sh)$"
-    optional: true
     spec:
       containers:
       - image: python:3.9
@@ -394,7 +387,6 @@ presubmits:
     cluster: build-kubeflow
     decorate: true
     run_if_changed: "^(sdk/python/.*)|(test/presubmit-test-kfp-runtime-code.sh)$"
-    optional: true
     spec:
       containers:
       - image: python:3.10
@@ -405,7 +397,6 @@ presubmits:
     cluster: build-kubeflow
     decorate: true
     run_if_changed: "^(sdk/python/.*)|(test/presubmit-test-kfp-runtime-code.sh)$"
-    optional: true
     spec:
       containers:
       - image: python:3.11
@@ -416,8 +407,6 @@ presubmits:
     cluster: build-kubeflow
     decorate: true
     run_if_changed: "^(sdk/python/.*)|(test/presubmit-test-kfp-runtime-code.sh)$"
-    optional: true
-    skip_report: true
     spec:
       containers:
       - image: python:3.12
