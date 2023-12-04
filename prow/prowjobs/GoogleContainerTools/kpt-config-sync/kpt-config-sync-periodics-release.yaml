@@ -16,7 +16,7 @@ prow_ignored:
     serviceAccountName: e2e-test-runner
     containers:
     - &config-sync-ci-container
-      image: us-docker.pkg.dev/kpt-config-sync-ci-artifacts/test-infra/gke-e2e:v1.0.0-964106485
+      image: us-docker.pkg.dev/kpt-config-sync-ci-artifacts/test-infra/gke-e2e:v1.0.0-3865c4481
       command:
       - make
       - test-e2e-gke-ci
