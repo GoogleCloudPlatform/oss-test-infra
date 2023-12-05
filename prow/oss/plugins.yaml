@@ -30,7 +30,6 @@ approve:
 - repos:
   - GoogleCloudPlatform
   - google
-  - googleforgames
   - grpc-ecosystem
   - chaotoppicks
   require_self_approval: false
@@ -60,7 +59,6 @@ lgtm:
   - GoogleContainerTools
   - chaotoppicks
   - google
-  - googleforgames
   - grpc-ecosystem
   review_acts_as_lgtm: true
 - repos:
@@ -283,24 +281,6 @@ plugins:
     - verify-owners
     - yuks
     - wip
-
-  googleforgames/agones:
-    plugins:
-    - approve # /approve
-    - assign # /assign and /cc
-    - blunderbuss # auto-/cc
-    - cat # /meow
-    - dog # /woof
-    - golint # /lint
-    - heart # encourage OWNERS changes
-    - hold # /hold PR from merge
-    - lgtm # /lgtm
-    - pony # /pony
-    - shrug # /shrug
-    - size # auto-add size label
-    - verify-owners # validate OWNERS file changes
-    - wip # draft-PR awareness
-    - yuks # /joke
 
   google:
     plugins:
