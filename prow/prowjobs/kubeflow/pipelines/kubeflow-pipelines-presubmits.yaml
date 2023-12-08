@@ -162,15 +162,29 @@ presubmits:
         command:
         - ./test/presubmit-tests-tfx.sh
 
-  - name: kubeflow-pipelines-component-yaml
+  - name: kubeflow-pipelines-load-component-yaml
     cluster: build-kubeflow
     decorate: true
-    run_if_changed: "^(components/.*\\.yaml)|(test/presubmit-component-yaml.sh)|(sdk/python/.*)$"
+    run_if_changed: "^(components/.*\\.yaml)|(test/presubmit-component-yaml.sh)|(sdk/python/.*)|(api/v2alpha1/.*)$"
     spec:
       containers:
       - image: python:3.7
         command:
         - ./test/presubmit-component-yaml.sh
+
+  - name: compile-gcpc-components-smoke-test
+    cluster: build-kubeflow
+    decorate: true
+    run_if_changed: "^(components/google-cloud/.*)|(test/compile-gcpc-components.sh)|(sdk/python/.*)|(api/v2alpha1/.*)$"
+    # START TODO: remove when tests pass
+    optional: true
+    skip_report: false
+    # END TODO
+    spec:
+      containers:
+      - image: python:3.7
+        command:
+        - ./test/compile-gcpc-components.sh
 
   - name: kubeflow-pipelines-components-google-cloud-python38
     cluster: build-kubeflow

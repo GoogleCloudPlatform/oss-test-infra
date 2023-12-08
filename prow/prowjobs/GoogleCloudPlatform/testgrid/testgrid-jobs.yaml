@@ -9,7 +9,7 @@ presubmits:
       base_ref: master
     spec:
       containers:
-      - image: gcr.io/k8s-prow/checkconfig:v20231206-f5c8e5872b
+      - image: gcr.io/k8s-prow/checkconfig:v20231208-e9e4b8c0b8
         command:
         - checkconfig
         args:
@@ -90,7 +90,7 @@ postsubmits:
       testgrid-num-failures-to-alert: '3'
     spec:
       containers:
-      - image: gcr.io/k8s-prow/generic-autobumper:v20231206-f5c8e5872b
+      - image: gcr.io/k8s-prow/generic-autobumper:v20231208-e9e4b8c0b8
         command:
         - generic-autobumper
         args:
@@ -126,7 +126,7 @@ periodics:
     testgrid-num-failures-to-alert: '3'
   spec:
     containers:
-    - image: gcr.io/k8s-prow/generic-autobumper:v20231206-f5c8e5872b
+    - image: gcr.io/k8s-prow/generic-autobumper:v20231208-e9e4b8c0b8
       command:
       - generic-autobumper
       args:
