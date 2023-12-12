@@ -165,7 +165,7 @@ presubmits:
   - name: kubeflow-pipelines-component-yaml
     cluster: build-kubeflow
     decorate: true
-    run_if_changed: "^(components/.*\\.yaml)|(test/presubmit-component-yaml.sh)|(sdk/python/.*)$"
+    run_if_changed: "^(components/.*\\.yaml)|(test/presubmit-component-yaml.sh)|(sdk/python/.*)|(api/v2alpha1/.*)$"
     spec:
       containers:
       - image: python:3.7
@@ -261,7 +261,7 @@ presubmits:
   - name: kubeflow-pipelines-sdk-execution-tests
     cluster: build-kubeflow
     decorate: true
-    run_if_changed: "^(sdk/python/.*)|(test/presubmit-sdk-execution-tests.sh)$"
+    run_if_changed: "^(sdk/python/.*)|(api/v2alpha1/.*)|(test/presubmit-sdk-execution-tests.sh)$"
     branches:
     - master
     spec:
@@ -274,7 +274,7 @@ presubmits:
   - name: kfp-kubernetes-test-python37
     cluster: build-kubeflow
     decorate: true
-    run_if_changed: "^(kubernetes_platform/.*)|(test/presubmit-test-kfp-kubernetes-library.sh)$"
+    run_if_changed: "^(sdk/python/.*)|(api/v2alpha1/.*)|(kubernetes_platform/.*)|(test/presubmit-test-kfp-kubernetes-library.sh)$"
     spec:
       containers:
       - image: python:3.7
@@ -284,7 +284,7 @@ presubmits:
   - name: kfp-kubernetes-test-python38
     cluster: build-kubeflow
     decorate: true
-    run_if_changed: "^(kubernetes_platform/.*)|(test/presubmit-test-kfp-kubernetes-library.sh)$"
+    run_if_changed: "^(sdk/python/.*)|(api/v2alpha1/.*)|(kubernetes_platform/.*)|(test/presubmit-test-kfp-kubernetes-library.sh)$"
     spec:
       containers:
       - image: python:3.8
@@ -294,7 +294,7 @@ presubmits:
   - name: kfp-kubernetes-test-python39
     cluster: build-kubeflow
     decorate: true
-    run_if_changed: "^(kubernetes_platform/.*)|(test/presubmit-test-kfp-kubernetes-library.sh)$"
+    run_if_changed: "^(sdk/python/.*)|(api/v2alpha1/.*)|(kubernetes_platform/.*)|(test/presubmit-test-kfp-kubernetes-library.sh)$"
     spec:
       containers:
       - image: python:3.9
@@ -304,7 +304,7 @@ presubmits:
   - name: kfp-kubernetes-test-python310
     cluster: build-kubeflow
     decorate: true
-    run_if_changed: "^(kubernetes_platform/.*)|(test/presubmit-test-kfp-kubernetes-library.sh)$"
+    run_if_changed: "^(sdk/python/.*)|(api/v2alpha1/.*)|(kubernetes_platform/.*)|(test/presubmit-test-kfp-kubernetes-library.sh)$"
     spec:
       containers:
       - image: python:3.10
@@ -314,7 +314,7 @@ presubmits:
   - name: kfp-kubernetes-test-python311
     cluster: build-kubeflow
     decorate: true
-    run_if_changed: "^(kubernetes_platform/.*)|(test/presubmit-test-kfp-kubernetes-library.sh)$"
+    run_if_changed: "^(sdk/python/.*)|(api/v2alpha1/.*)|(kubernetes_platform/.*)|(test/presubmit-test-kfp-kubernetes-library.sh)$"
     spec:
       containers:
       - image: python:3.11
@@ -324,7 +324,7 @@ presubmits:
   - name: kfp-kubernetes-test-python312
     cluster: build-kubeflow
     decorate: true
-    run_if_changed: "^(kubernetes_platform/.*)|(test/presubmit-test-kfp-kubernetes-library.sh)$"
+    run_if_changed: "^(sdk/python/.*)|(api/v2alpha1/.*)|(kubernetes_platform/.*)|(test/presubmit-test-kfp-kubernetes-library.sh)$"
     spec:
       containers:
       - image: python:3.12
