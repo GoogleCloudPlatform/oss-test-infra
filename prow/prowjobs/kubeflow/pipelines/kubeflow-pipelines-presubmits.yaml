@@ -335,10 +335,6 @@ presubmits:
     cluster: build-kubeflow
     decorate: true
     run_if_changed: "^(sdk/python/.*)|(api/v2alpha1/.*)|(kubernetes_platform/.*)|(test/presubmit-kfp-kubernetes-execution-tests.sh)$"
-    # START TODO: remove when tests pass
-    optional: true
-    skip_report: false
-    # END TODO
     spec:
       containers:
       - image: python:3.7
