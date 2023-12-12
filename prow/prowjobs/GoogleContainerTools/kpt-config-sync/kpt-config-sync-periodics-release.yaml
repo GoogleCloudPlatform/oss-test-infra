@@ -11,7 +11,7 @@ prow_ignored:
   - &config-sync-ci-ref
     org: GoogleContainerTools
     repo: kpt-config-sync
-    base_ref: v1.16
+    base_ref: v1.17
   spec: &config-sync-ci-job-spec
     serviceAccountName: e2e-test-runner
     containers:
@@ -346,7 +346,7 @@ periodics:
       - 'GKE_CLUSTER_VERSION=latest'
       - 'E2E_CLUSTER_PREFIX=autopilot-rapid-latest-stress'
       - 'GKE_AUTOPILOT=true'
-      - 'E2E_NUM_CLUSTERS=1'
+      - 'E2E_NUM_CLUSTERS=2' # autopilot stress tests sometimes take greater than 2h to run on 1 cluster
       - 'E2E_ARGS=--stress -run=TestStress*'
 
 #### End one-off jobs
