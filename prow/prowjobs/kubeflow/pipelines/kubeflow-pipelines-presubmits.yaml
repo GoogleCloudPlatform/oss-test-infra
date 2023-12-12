@@ -165,7 +165,7 @@ presubmits:
   - name: kubeflow-pipelines-load-component-yaml
     cluster: build-kubeflow
     decorate: true
-    run_if_changed: "^(components/.*\\.yaml)|(test/presubmit-component-yaml.sh)|(sdk/python/.*)|(api/v2alpha1/.*)$"
+    run_if_changed: "^(components/.*\\.yaml)|(test/presubmit-component-yaml.sh)|(sdk/python/.*)$"
     spec:
       containers:
       - image: python:3.7
