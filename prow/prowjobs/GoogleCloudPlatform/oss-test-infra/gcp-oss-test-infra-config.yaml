@@ -40,7 +40,7 @@ postsubmits:
     spec:
       serviceAccountName: testgrid-config-updater
       containers:
-      - image: gcr.io/k8s-prow/configurator:v20240104-724ea5f0dc
+      - image: gcr.io/k8s-prow/configurator:v20240105-8718b1383a
         command:
         - configurator
         args:
@@ -65,7 +65,7 @@ postsubmits:
       serviceAccountName: gencred-refresher
       containers:
       - name: gencred
-        image: gcr.io/k8s-prow/gencred:v20240104-724ea5f0dc
+        image: gcr.io/k8s-prow/gencred:v20240105-8718b1383a
         command:
         - gencred
         args:
@@ -93,7 +93,7 @@ periodics:
     testgrid-num-failures-to-alert: '3'
   spec:
     containers:
-    - image: gcr.io/k8s-prow/generic-autobumper:v20240104-724ea5f0dc
+    - image: gcr.io/k8s-prow/generic-autobumper:v20240105-8718b1383a
       command:
       - generic-autobumper
       args:
@@ -130,7 +130,7 @@ periodics:
     testgrid-num-failures-to-alert: '1'
   spec:
     containers:
-    - image: gcr.io/k8s-prow/generic-autobumper:v20240104-724ea5f0dc
+    - image: gcr.io/k8s-prow/generic-autobumper:v20240105-8718b1383a
       command:
       - generic-autobumper
       args:
@@ -187,7 +187,7 @@ periodics:
     serviceAccountName: gencred-refresher
     containers:
     - name: gencred
-      image: gcr.io/k8s-prow/gencred:v20240104-724ea5f0dc
+      image: gcr.io/k8s-prow/gencred:v20240105-8718b1383a
       command:
       - gencred
       args:
