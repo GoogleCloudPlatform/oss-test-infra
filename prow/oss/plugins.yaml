@@ -262,6 +262,8 @@ plugins:
     - lgtm
     - verify-owners
     - wip
+    - trigger
+    - override
 
   GoogleContainerTools/kpt-config-sync:
     plugins:
