@@ -44,6 +44,10 @@ prow_ignored:
         value: "pd-ssd"
       - name: GKE_DISK_SIZE
         value: "50Gb"
+      - name: E2E_OCI_PROVIDER
+        value: "gar"
+      - name: E2E_HELM_PROVIDER
+        value: "gar"
       resources:
         requests:
           memory: "8Gi"
@@ -74,6 +78,8 @@ periodics:
       args:
       - make
       - test-e2e-kind-multi-repo
+      - 'E2E_OCI_PROVIDER=local'
+      - 'E2E_HELM_PROVIDER=local'
       securityContext:
         privileged: true
       resources:
