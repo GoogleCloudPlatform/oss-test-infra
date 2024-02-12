@@ -10,7 +10,7 @@ periodics:
   spec:
     activeDeadlineSeconds: 1800
     containers:
-    - image: gcr.io/gcp-guest/cleanerupper:latest
+    - image: gcr.io/compute-image-import/cleanerupper:latest
       command:
       - /cleanerupper
       args:
@@ -190,7 +190,7 @@ postsubmits:
     - ^main$
     spec:
       containers:
-      - image: gcr.io/gcp-guest/cli-tools-module-tests:latest
+      - image: gcr.io/compute-image-import/cli-tools-module-tests:latest
         # The security context is required to allow gcsfuse to create a mount.
         securityContext:
           privileged: true
@@ -217,7 +217,7 @@ presubmits:
     decorate: true
     spec:
       containers:
-      - image: gcr.io/gcp-guest/flake8:latest
+      - image: gcr.io/compute-image-import/flake8:latest
         imagePullPolicy: Always
         command:
         - /main.sh
@@ -230,7 +230,7 @@ presubmits:
     decorate: true
     spec:
       containers:
-      - image: gcr.io/gcp-guest/pytest:latest
+      - image: gcr.io/compute-image-import/pytest:latest
         imagePullPolicy: Always
         command:
         - /main.py
@@ -245,7 +245,7 @@ presubmits:
     decorate: true
     spec:
       containers:
-      - image: gcr.io/gcp-guest/gocheck:latest
+      - image: gcr.io/compute-image-import/gocheck:latest
         imagePullPolicy: Always
         command:
         - /go/main.sh
@@ -260,7 +260,7 @@ presubmits:
     decorate: true
     spec:
       containers:
-      - image: gcr.io/gcp-guest/gotest:latest
+      - image: gcr.io/compute-image-import/gotest:latest
         imagePullPolicy: Always
         command:
         - /go/main.sh
@@ -275,7 +275,7 @@ presubmits:
     decorate: true
     spec:
       containers:
-      - image: gcr.io/gcp-guest/gobuild:latest
+      - image: gcr.io/compute-image-import/gobuild:latest
         imagePullPolicy: Always
         command:
         - /go/main.sh
@@ -290,7 +290,7 @@ presubmits:
     decorate: true
     spec:
       containers:
-      - image: gcr.io/gcp-guest/gocheck:latest
+      - image: gcr.io/compute-image-import/gocheck:latest
         imagePullPolicy: Always
         command:
         - /go/main.sh
@@ -305,7 +305,7 @@ presubmits:
     decorate: true
     spec:
       containers:
-      - image: gcr.io/gcp-guest/gotest:latest
+      - image: gcr.io/compute-image-import/gotest:latest
         imagePullPolicy: Always
         command:
         - /go/main.sh
@@ -320,7 +320,7 @@ presubmits:
     decorate: true
     spec:
       containers:
-      - image: gcr.io/gcp-guest/gobuild:latest
+      - image: gcr.io/compute-image-import/gobuild:latest
         imagePullPolicy: Always
         command:
         - /go/main.sh
@@ -335,7 +335,7 @@ presubmits:
     decorate: true
     spec:
       containers:
-      - image: gcr.io/gcp-guest/gocheck:latest
+      - image: gcr.io/compute-image-import/gocheck:latest
         imagePullPolicy: Always
         command:
         - /go/main.sh
@@ -350,7 +350,7 @@ presubmits:
     decorate: true
     spec:
       containers:
-      - image: gcr.io/gcp-guest/gobuild:latest
+      - image: gcr.io/compute-image-import/gobuild:latest
         imagePullPolicy: Always
         command:
         - /go/main.sh
