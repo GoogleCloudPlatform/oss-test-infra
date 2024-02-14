@@ -1,8 +1,7 @@
 # YAML anchors for reference elsewhere.
 # to view expanded yaml, run: `yq eval 'explode(.)' [file]`
 prow_ignored:
-- &config-sync-ci-job
-  interval: 30m
+- &config-sync-base-job
   cluster: build-kpt-config-sync
   decorate: true
   decoration_config:
@@ -11,24 +10,41 @@ prow_ignored:
   - org: GoogleContainerTools
     repo: kpt-config-sync
     base_ref: main
-  spec: &config-sync-ci-job-spec
+  spec: &config-sync-base-job-spec
     serviceAccountName: e2e-test-runner
     containers:
-    - &config-sync-ci-container
+    - &config-sync-base-job-container
       image: us-docker.pkg.dev/kpt-config-sync-ci-artifacts/test-infra/gke-e2e:v1.0.0-3865c4481
       command:
       - make
       - test-e2e-gke-ci
+      resources:
+        requests:
+          memory: "8Gi"
+          cpu: "4000m"
+    nodeSelector:
+      # This job requires 8vCPUs or less, so it is "small".
+      cloud.google.com/gke-nodepool: small-job-pool
+# Base job definition for standard jobs
+- &config-sync-standard-job
+  <<: *config-sync-base-job
+  # Run on even hours to stagger
+  cron: 0 */2 * * *
+  spec: &config-sync-standard-job-spec
+    <<: *config-sync-base-job-spec
+    containers:
+    - &config-sync-standard-job-container
+      <<: *config-sync-base-job-container
       env:
       - name: GKE_E2E_TIMEOUT
-        value: 4h
+        value: 2h
       - name: GCP_PROJECT
         value: kpt-config-sync-ci-main
       - name: GCP_NETWORK
         value: prow-e2e-network-1
-      # Unset zone/region so that it can be set by the job (standard->zone, autopilot->region)
+      # Use zonal clusters for standard
       - name: GCP_ZONE
-        value: ""
+        value: "us-central1-a"
       - name: GCP_REGION
         value: ""
       - name: E2E_CREATE_CLUSTERS
@@ -48,19 +64,50 @@ prow_ignored:
         value: "gar"
       - name: E2E_HELM_PROVIDER
         value: "gar"
-      resources:
-        requests:
-          memory: "8Gi"
-          cpu: "4000m"
-    nodeSelector:
-      # This job requires 8vCPUs or less, so it is "small".
-      cloud.google.com/gke-nodepool: small-job-pool
+      - name: E2E_NUM_CLUSTERS
+        value: "10"
+# Base job definition for autopilot jobs
+- &config-sync-autopilot-job
+  <<: *config-sync-base-job
+  # Run on odd hours to stagger
+  cron: 0 1-23/2 * * *
+  spec: &config-sync-autopilot-job-spec
+    <<: *config-sync-base-job-spec
+    containers:
+    - &config-sync-autopilot-job-container
+      <<: *config-sync-base-job-container
+      env:
+      - name: GKE_E2E_TIMEOUT
+        value: 2h
+      - name: GCP_PROJECT
+        value: kpt-config-sync-ci-main
+      - name: GCP_NETWORK
+        value: prow-e2e-network-1
+      # Autopilot clusters must be regional
+      - name: GCP_ZONE
+        value: ""
+      - name: GCP_REGION
+        value: "us-central1"
+      - name: E2E_CREATE_CLUSTERS
+        value: "lazy"
+      # This can be set to true to destroy clusters after test execution
+      - name: E2E_DESTROY_CLUSTERS
+        value: "false"
+      - name: E2E_OCI_PROVIDER
+        value: "gar"
+      - name: E2E_HELM_PROVIDER
+        value: "gar"
+      - name: E2E_NUM_CLUSTERS
+        value: "15"
+      - name: GKE_AUTOPILOT
+        value: "true"
 
 periodics:
 # One-off KinD periodic job.
 # TODO: do we need this, given KinD is tested with presubmits?
-- <<: *config-sync-ci-job
+- <<: *config-sync-base-job
   name: kpt-config-sync-kind
+  interval: 1h
   annotations:
     testgrid-dashboards: googleoss-kpt-config-sync-main
     testgrid-tab-name: kind
@@ -90,187 +137,153 @@ periodics:
       cloud.google.com/gke-nodepool: large-job-pool-periodic
 
 #### Begin GKE standard jobs
-- <<: *config-sync-ci-job
+- <<: *config-sync-standard-job
   name: kpt-config-sync-standard-regular
   annotations:
     testgrid-dashboards: googleoss-kpt-config-sync-main
     testgrid-tab-name: standard-regular
   spec:
-    <<: *config-sync-ci-job-spec
+    <<: *config-sync-standard-job-spec
     containers:
-    - <<: *config-sync-ci-container
+    - <<: *config-sync-standard-job-container
       args:
-      - 'GKE_E2E_TIMEOUT=2h'
       - 'GCP_SUBNETWORK=prow-e2e-subnetwork-1'
-      - 'GCP_ZONE=us-central1-a'
       - 'GKE_RELEASE_CHANNEL=regular'
-      - 'E2E_NUM_CLUSTERS=10'
       - 'E2E_CLUSTER_PREFIX=standard-regular'
 
-- <<: *config-sync-ci-job
+- <<: *config-sync-standard-job
   name: kpt-config-sync-standard-rapid
   annotations:
     testgrid-dashboards: googleoss-kpt-config-sync-main
     testgrid-tab-name: standard-rapid
   spec:
-    <<: *config-sync-ci-job-spec
+    <<: *config-sync-standard-job-spec
     containers:
-    - <<: *config-sync-ci-container
+    - <<: *config-sync-standard-job-container
       args:
-      - 'GKE_E2E_TIMEOUT=2h'
       - 'GCP_SUBNETWORK=prow-e2e-subnetwork-3'
-      - 'GCP_ZONE=us-central1-a'
       - 'GKE_RELEASE_CHANNEL=rapid'
-      - 'E2E_NUM_CLUSTERS=10'
       - 'E2E_CLUSTER_PREFIX=standard-rapid'
 
-- <<: *config-sync-ci-job
+- <<: *config-sync-standard-job
   name: kpt-config-sync-standard-rapid-latest
   annotations:
     testgrid-dashboards: googleoss-kpt-config-sync-main
     testgrid-tab-name: standard-rapid-latest
   spec:
-    <<: *config-sync-ci-job-spec
+    <<: *config-sync-standard-job-spec
     containers:
-    - <<: *config-sync-ci-container
+    - <<: *config-sync-standard-job-container
       args:
-      - 'GKE_E2E_TIMEOUT=2h'
       - 'GCP_SUBNETWORK=prow-e2e-subnetwork-4'
-      - 'GCP_ZONE=us-central1-a'
       - 'GKE_RELEASE_CHANNEL=rapid'
       - 'GKE_CLUSTER_VERSION=latest'
-      - 'E2E_NUM_CLUSTERS=10'
       - 'E2E_CLUSTER_PREFIX=standard-rapid-latest'
 
-- <<: *config-sync-ci-job
+- <<: *config-sync-standard-job
   name: kpt-config-sync-standard-stable
   annotations:
     testgrid-dashboards: googleoss-kpt-config-sync-main
     testgrid-tab-name: standard-stable
   spec:
-    <<: *config-sync-ci-job-spec
+    <<: *config-sync-standard-job-spec
     containers:
-    - <<: *config-sync-ci-container
+    - <<: *config-sync-standard-job-container
       args:
-      - 'GKE_E2E_TIMEOUT=2h'
       - 'GCP_SUBNETWORK=prow-e2e-subnetwork-5'
-      - 'GCP_ZONE=us-central1-a'
       - 'GKE_RELEASE_CHANNEL=stable'
-      - 'E2E_NUM_CLUSTERS=10'
       - 'E2E_CLUSTER_PREFIX=standard-stable'
 
 #### End GKE standard jobs
 #### Begin git provider specific jobs
-- <<: *config-sync-ci-job
+- <<: *config-sync-standard-job
   name: kpt-config-sync-standard-regular-bitbucket
   annotations:
     testgrid-dashboards: googleoss-kpt-config-sync-main
     testgrid-tab-name: standard-regular-bitbucket
   spec:
-    <<: *config-sync-ci-job-spec
+    <<: *config-sync-standard-job-spec
     containers:
-    - <<: *config-sync-ci-container
+    - <<: *config-sync-standard-job-container
       args:
-      - 'GKE_E2E_TIMEOUT=2h'
       - 'GCP_SUBNETWORK=prow-e2e-subnetwork-6'
-      - 'GCP_ZONE=us-central1-a'
       - 'GKE_RELEASE_CHANNEL=regular'
-      - 'E2E_NUM_CLUSTERS=10'
       - 'E2E_CLUSTER_PREFIX=standard-regular-bitbucket'
       - 'E2E_ARGS=--git-provider=bitbucket'
 
-- <<: *config-sync-ci-job
+- <<: *config-sync-standard-job
   name: kpt-config-sync-standard-regular-gitlab
   annotations:
     testgrid-dashboards: googleoss-kpt-config-sync-main
     testgrid-tab-name: standard-regular-gitlab
   spec:
-    <<: *config-sync-ci-job-spec
+    <<: *config-sync-standard-job-spec
     containers:
-    - <<: *config-sync-ci-container
+    - <<: *config-sync-standard-job-container
       args:
-      - 'GKE_E2E_TIMEOUT=2h'
       - 'GCP_SUBNETWORK=prow-e2e-subnetwork-7'
-      - 'GCP_ZONE=us-central1-a'
       - 'GKE_RELEASE_CHANNEL=regular'
-      - 'E2E_NUM_CLUSTERS=10'
       - 'E2E_CLUSTER_PREFIX=standard-regular-gitlab'
       - 'E2E_ARGS=--git-provider=gitlab'
 
 #### End git provider specific jobs
 #### Begin GKE autopilot jobs
 
-- <<: *config-sync-ci-job
+- <<: *config-sync-autopilot-job
   name: kpt-config-sync-autopilot-regular
   annotations:
     testgrid-dashboards: googleoss-kpt-config-sync-main
     testgrid-tab-name: autopilot-regular
   spec:
-    <<: *config-sync-ci-job-spec
+    <<: *config-sync-autopilot-job-spec
     containers:
-    - <<: *config-sync-ci-container
+    - <<: *config-sync-autopilot-job-container
       args:
-      - 'GKE_E2E_TIMEOUT=4h'
       - 'GCP_SUBNETWORK=prow-e2e-subnetwork-2'
-      - 'GCP_REGION=us-central1'
       - 'GKE_RELEASE_CHANNEL=regular'
-      - 'GKE_AUTOPILOT=true'
-      - 'E2E_NUM_CLUSTERS=15'
       - 'E2E_CLUSTER_PREFIX=autopilot-regular'
 
-- <<: *config-sync-ci-job
+- <<: *config-sync-autopilot-job
   name: kpt-config-sync-autopilot-stable
   annotations:
     testgrid-dashboards: googleoss-kpt-config-sync-main
     testgrid-tab-name: autopilot-stable
   spec:
-    <<: *config-sync-ci-job-spec
+    <<: *config-sync-autopilot-job-spec
     containers:
-    - <<: *config-sync-ci-container
+    - <<: *config-sync-autopilot-job-container
       args:
-      - 'GKE_E2E_TIMEOUT=4h'
       - 'GCP_SUBNETWORK=prow-e2e-subnetwork-8'
-      - 'GCP_REGION=us-central1'
       - 'GKE_RELEASE_CHANNEL=stable'
-      - 'GKE_AUTOPILOT=true'
-      - 'E2E_NUM_CLUSTERS=15'
       - 'E2E_CLUSTER_PREFIX=autopilot-stable'
 
-- <<: *config-sync-ci-job
+- <<: *config-sync-autopilot-job
   name: kpt-config-sync-autopilot-rapid
   annotations:
     testgrid-dashboards: googleoss-kpt-config-sync-main
     testgrid-tab-name: autopilot-rapid
   spec:
-    <<: *config-sync-ci-job-spec
+    <<: *config-sync-autopilot-job-spec
     containers:
-    - <<: *config-sync-ci-container
+    - <<: *config-sync-autopilot-job-container
       args:
-      - 'GKE_E2E_TIMEOUT=4h'
       - 'GCP_SUBNETWORK=prow-e2e-subnetwork-9'
-      - 'GCP_REGION=us-central1'
       - 'GKE_RELEASE_CHANNEL=rapid'
-      - 'GKE_AUTOPILOT=true'
-      - 'E2E_NUM_CLUSTERS=15'
       - 'E2E_CLUSTER_PREFIX=autopilot-rapid'
 
-- <<: *config-sync-ci-job
+- <<: *config-sync-autopilot-job
   name: kpt-config-sync-autopilot-rapid-latest
   annotations:
     testgrid-dashboards: googleoss-kpt-config-sync-main
     testgrid-tab-name: autopilot-rapid-latest
   spec:
-    <<: *config-sync-ci-job-spec
+    <<: *config-sync-autopilot-job-spec
     containers:
-    - <<: *config-sync-ci-container
+    - <<: *config-sync-autopilot-job-container
       args:
-      - 'GKE_E2E_TIMEOUT=4h'
       - 'GCP_SUBNETWORK=prow-e2e-subnetwork-10'
-      - 'GCP_REGION=us-central1'
       - 'GKE_RELEASE_CHANNEL=rapid'
       - 'GKE_CLUSTER_VERSION=latest'
-      - 'GKE_AUTOPILOT=true'
-      - 'E2E_NUM_CLUSTERS=15'
       - 'E2E_CLUSTER_PREFIX=autopilot-rapid-latest'
 
 #### End GKE autopilot jobs
@@ -278,55 +291,49 @@ periodics:
 
 # The below job definitions each use a small number of clusters (e.g. 1),
 # so they can share a single subnetwork (max 15 clusters per subnetwork).
-- <<: *config-sync-ci-job
+- <<: *config-sync-standard-job
   name: kpt-config-sync-standard-regular-kcc
   annotations:
     testgrid-dashboards: googleoss-kpt-config-sync-main
     testgrid-tab-name: standard-regular-kcc
   spec:
-    <<: *config-sync-ci-job-spec
+    <<: *config-sync-standard-job-spec
     containers:
-    - <<: *config-sync-ci-container
+    - <<: *config-sync-standard-job-container
       args:
-      - 'GKE_E2E_TIMEOUT=2h'
       - 'GCP_SUBNETWORK=prow-e2e-subnetwork-11'
-      - 'GCP_ZONE=us-central1-a'
       - 'GKE_RELEASE_CHANNEL=regular'
       - 'E2E_CLUSTER_PREFIX=standard-regular-kcc'
       - 'E2E_NUM_CLUSTERS=1'
       - 'E2E_ARGS=--kcc -run=TestKCC*'
 
-- <<: *config-sync-ci-job
+- <<: *config-sync-standard-job
   name: kpt-config-sync-standard-regular-gcenode
   annotations:
     testgrid-dashboards: googleoss-kpt-config-sync-main
     testgrid-tab-name: standard-regular-gcenode
   spec:
-    <<: *config-sync-ci-job-spec
+    <<: *config-sync-standard-job-spec
     containers:
-    - <<: *config-sync-ci-container
+    - <<: *config-sync-standard-job-container
       args:
-      - 'GKE_E2E_TIMEOUT=2h'
       - 'GCP_SUBNETWORK=prow-e2e-subnetwork-11'
-      - 'GCP_ZONE=us-central1-a'
       - 'GKE_RELEASE_CHANNEL=regular'
       - 'E2E_CLUSTER_PREFIX=standard-regular-gcenode'
       - 'E2E_NUM_CLUSTERS=1'
       - 'E2E_ARGS=--gcenode -run=TestGCENode'
 
-- <<: *config-sync-ci-job
+- <<: *config-sync-standard-job
   name: kpt-config-sync-standard-rapid-latest-stress
   annotations:
     testgrid-dashboards: googleoss-kpt-config-sync-main
     testgrid-tab-name: standard-rapid-latest-stress
   spec:
-    <<: *config-sync-ci-job-spec
+    <<: *config-sync-standard-job-spec
     containers:
-    - <<: *config-sync-ci-container
+    - <<: *config-sync-standard-job-container
       args:
-      - 'GKE_E2E_TIMEOUT=2h'
       - 'GCP_SUBNETWORK=prow-e2e-subnetwork-11'
-      - 'GCP_ZONE=us-central1-a'
       - 'GKE_RELEASE_CHANNEL=rapid'
       - 'GKE_CLUSTER_VERSION=latest'
       - 'E2E_CLUSTER_PREFIX=standard-rapid-latest-stress'
@@ -334,23 +341,20 @@ periodics:
       - 'GKE_NUM_NODES=3' # stress test needs a bigger cluster to handle finalizing
       - 'E2E_ARGS=--stress -run=TestStress*'
 
-- <<: *config-sync-ci-job
+- <<: *config-sync-autopilot-job
   name: kpt-config-sync-autopilot-rapid-latest-stress
   annotations:
     testgrid-dashboards: googleoss-kpt-config-sync-main
     testgrid-tab-name: autopilot-rapid-latest-stress
   spec:
-    <<: *config-sync-ci-job-spec
+    <<: *config-sync-autopilot-job-spec
     containers:
-    - <<: *config-sync-ci-container
+    - <<: *config-sync-autopilot-job-container
       args:
-      - 'GKE_E2E_TIMEOUT=2h'
       - 'GCP_SUBNETWORK=prow-e2e-subnetwork-11'
-      - 'GCP_REGION=us-central1'
       - 'GKE_RELEASE_CHANNEL=rapid'
       - 'GKE_CLUSTER_VERSION=latest'
       - 'E2E_CLUSTER_PREFIX=autopilot-rapid-latest-stress'
-      - 'GKE_AUTOPILOT=true'
       - 'E2E_NUM_CLUSTERS=2' # autopilot stress tests sometimes take greater than 2h to run on 1 cluster
       - 'E2E_ARGS=--stress -run=TestStress*'
 
