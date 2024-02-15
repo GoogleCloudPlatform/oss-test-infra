@@ -47,6 +47,7 @@ approve:
   - kubeflow/pytorch-operator
   - kubeflow/tf-operator
   - kubeflow/xgboost-operator
+  - GoogleCloudPlatform/k8s-config-connector
   require_self_approval: true
   commandHelpLink: https://oss.gprow.dev/command-help
 
