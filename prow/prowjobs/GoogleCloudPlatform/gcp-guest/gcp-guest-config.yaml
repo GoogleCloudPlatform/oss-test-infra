@@ -549,6 +549,7 @@ periodics:
       - "/manager"
       args:
       - "-parallel_count=10"
+      - "-timeout=60m"
       - "-project=gcp-guest"
       - "-zone=us-central1-b"
 # First group in the parentheses allows testing of any 3rd gen or lower machine
