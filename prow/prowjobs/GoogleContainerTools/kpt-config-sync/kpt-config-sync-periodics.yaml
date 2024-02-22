@@ -42,11 +42,11 @@ prow_ignored:
         value: kpt-config-sync-ci-main
       - name: GCP_NETWORK
         value: prow-e2e-network-1
-      # Use zonal clusters for standard
+      # Use regional clusters to avoid capacity issues in a single zone
       - name: GCP_ZONE
-        value: "us-central1-a"
-      - name: GCP_REGION
         value: ""
+      - name: GCP_REGION
+        value: "us-central2"
       - name: E2E_CREATE_CLUSTERS
         value: "lazy"
       # This can be set to true to destroy clusters after test execution
@@ -55,11 +55,11 @@ prow_ignored:
       - name: GKE_NUM_NODES
         value: "1"
       - name: GKE_MACHINE_TYPE
-        value: "n2-standard-8"
+        value: "n2-standard-4"
       - name: GKE_DISK_TYPE
         value: "pd-ssd"
       - name: GKE_DISK_SIZE
-        value: "50Gb"
+        value: "25Gb"
       - name: E2E_OCI_PROVIDER
         value: "gar"
       - name: E2E_HELM_PROVIDER
@@ -147,7 +147,7 @@ periodics:
     containers:
     - <<: *config-sync-standard-job-container
       args:
-      - 'GCP_SUBNETWORK=prow-e2e-subnetwork-1'
+      - 'GCP_SUBNETWORK=prow-e2e-subnetwork-usc2-1'
       - 'GKE_RELEASE_CHANNEL=regular'
       - 'E2E_CLUSTER_PREFIX=standard-regular'
 
@@ -162,7 +162,7 @@ periodics:
     containers:
     - <<: *config-sync-standard-job-container
       args:
-      - 'GCP_SUBNETWORK=prow-e2e-subnetwork-3'
+      - 'GCP_SUBNETWORK=prow-e2e-subnetwork-usc2-3'
       - 'GKE_RELEASE_CHANNEL=rapid'
       - 'E2E_CLUSTER_PREFIX=standard-rapid'
 
@@ -177,7 +177,7 @@ periodics:
     containers:
     - <<: *config-sync-standard-job-container
       args:
-      - 'GCP_SUBNETWORK=prow-e2e-subnetwork-4'
+      - 'GCP_SUBNETWORK=prow-e2e-subnetwork-usc2-4'
       - 'GKE_RELEASE_CHANNEL=rapid'
       - 'GKE_CLUSTER_VERSION=latest'
       - 'E2E_CLUSTER_PREFIX=standard-rapid-latest'
@@ -193,7 +193,7 @@ periodics:
     containers:
     - <<: *config-sync-standard-job-container
       args:
-      - 'GCP_SUBNETWORK=prow-e2e-subnetwork-5'
+      - 'GCP_SUBNETWORK=prow-e2e-subnetwork-usc2-5'
       - 'GKE_RELEASE_CHANNEL=stable'
       - 'E2E_CLUSTER_PREFIX=standard-stable'
 
@@ -209,7 +209,7 @@ periodics:
     containers:
     - <<: *config-sync-standard-job-container
       args:
-      - 'GCP_SUBNETWORK=prow-e2e-subnetwork-6'
+      - 'GCP_SUBNETWORK=prow-e2e-subnetwork-usc2-6'
       - 'GKE_RELEASE_CHANNEL=regular'
       - 'E2E_CLUSTER_PREFIX=standard-regular-bitbucket'
       - 'E2E_ARGS=--git-provider=bitbucket'
@@ -224,7 +224,7 @@ periodics:
     containers:
     - <<: *config-sync-standard-job-container
       args:
-      - 'GCP_SUBNETWORK=prow-e2e-subnetwork-7'
+      - 'GCP_SUBNETWORK=prow-e2e-subnetwork-usc2-7'
       - 'GKE_RELEASE_CHANNEL=regular'
       - 'E2E_CLUSTER_PREFIX=standard-regular-gitlab'
       - 'E2E_ARGS=--git-provider=gitlab'
@@ -307,7 +307,7 @@ periodics:
     containers:
     - <<: *config-sync-standard-job-container
       args:
-      - 'GCP_SUBNETWORK=prow-e2e-subnetwork-11'
+      - 'GCP_SUBNETWORK=prow-e2e-subnetwork-usc2-11'
       - 'GKE_RELEASE_CHANNEL=regular'
       - 'E2E_CLUSTER_PREFIX=standard-regular-kcc'
       - 'E2E_NUM_CLUSTERS=1'
@@ -323,7 +323,7 @@ periodics:
     containers:
     - <<: *config-sync-standard-job-container
       args:
-      - 'GCP_SUBNETWORK=prow-e2e-subnetwork-11'
+      - 'GCP_SUBNETWORK=prow-e2e-subnetwork-usc2-11'
       - 'GKE_RELEASE_CHANNEL=regular'
       - 'E2E_CLUSTER_PREFIX=standard-regular-gcenode'
       - 'E2E_NUM_CLUSTERS=1'
@@ -339,7 +339,7 @@ periodics:
     containers:
     - <<: *config-sync-standard-job-container
       args:
-      - 'GCP_SUBNETWORK=prow-e2e-subnetwork-11'
+      - 'GCP_SUBNETWORK=prow-e2e-subnetwork-usc2-11'
       - 'GKE_RELEASE_CHANNEL=rapid'
       - 'GKE_CLUSTER_VERSION=latest'
       - 'E2E_CLUSTER_PREFIX=standard-rapid-latest-stress'
