@@ -344,7 +344,7 @@ periodics:
       - 'GKE_CLUSTER_VERSION=latest'
       - 'E2E_CLUSTER_PREFIX=standard-rapid-latest-stress'
       - 'E2E_NUM_CLUSTERS=1'
-      - 'GKE_NUM_NODES=3' # stress test needs a bigger cluster to handle finalizing
+      - 'GKE_MACHINE_TYPE=n2-standard-8' # stress test uses bigger nodes to run more quickly
       - 'E2E_ARGS=--stress -run=TestStress*'
 
 - <<: *config-sync-autopilot-job
@@ -361,7 +361,7 @@ periodics:
       - 'GKE_RELEASE_CHANNEL=rapid'
       - 'GKE_CLUSTER_VERSION=latest'
       - 'E2E_CLUSTER_PREFIX=autopilot-rapid-latest-stress'
-      - 'E2E_NUM_CLUSTERS=2' # autopilot stress tests sometimes take greater than 2h to run on 1 cluster
+      - 'E2E_NUM_CLUSTERS=2' # autopilot uses more clusters to run more quickly
       - 'E2E_ARGS=--stress -run=TestStress*'
 
 #### End one-off jobs
