@@ -584,3 +584,28 @@ periodics:
 # Same as cit-periodics but without Windows
         - "-images=projects/debian-cloud/global/images/family/debian-10,projects/debian-cloud/global/images/family/debian-11,projects/debian-cloud/global/images/family/debian-11-arm64,projects/debian-cloud/global/images/family/debian-12,projects/debian-cloud/global/images/family/debian-12-arm64,projects/centos-cloud/global/images/family/centos-7,projects/centos-cloud/global/images/family/centos-stream-8,projects/centos-cloud/global/images/family/centos-stream-9,projects/rhel-cloud/global/images/family/rhel-7,projects/rhel-cloud/global/images/family/rhel-8,projects/rhel-cloud/global/images/family/rhel-9,projects/rhel-cloud/global/images/family/rhel-9-arm64,projects/rocky-linux-cloud/global/images/family/rocky-linux-8,projects/rocky-linux-cloud/global/images/family/rocky-linux-8-optimized-gcp,projects/rocky-linux-cloud/global/images/family/rocky-linux-8-optimized-gcp-arm64,projects/rocky-linux-cloud/global/images/family/rocky-linux-9,projects/rocky-linux-cloud/global/images/family/rocky-linux-9-optimized-gcp,projects/rocky-linux-cloud/global/images/family/rocky-linux-9-arm64,projects/rocky-linux-cloud/global/images/family/rocky-linux-9-optimized-gcp-arm64,projects/almalinux-cloud/global/images/family/almalinux-8,projects/almalinux-cloud/global/images/family/almalinux-9,projects/opensuse-cloud/global/images/family/opensuse-leap,projects/opensuse-cloud/global/images/family/opensuse-leap-arm64,projects/suse-cloud/global/images/family/sles-12,projects/suse-cloud/global/images/family/sles-15,projects/suse-cloud/global/images/family/sles-15-arm64,projects/ubuntu-os-pro-cloud/global/images/family/ubuntu-pro-1604-lts,projects/ubuntu-os-pro-cloud/global/images/family/ubuntu-pro-1804-lts,projects/ubuntu-os-pro-cloud/global/images/family/ubuntu-pro-1804-lts,projects/ubuntu-os-pro-cloud/global/images/family/ubuntu-pro-1804-lts-arm64,projects/ubuntu-os-cloud/global/images/family/ubuntu-2004-lts,projects/ubuntu-os-cloud/global/images/family/ubuntu-2004-lts-arm64,projects/ubuntu-os-cloud/global/images/family/ubuntu-2204-lts,projects/ubuntu-os-cloud/global/images/family/ubuntu-2204-lts-arm64,projects/ubuntu-os-cloud/global/images/family/ubuntu-2310-amd64,projects/ubuntu-os-cloud/global/images/family/ubuntu-2310-arm64"
         - "-filter=oslogin"
+- name: ubuntu-daily-cit
+  cluster: gcp-guest
+  decorate: true
+  decoration_config:
+    timeout: 6h
+  annotations:
+    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-tab-name: ubuntu-daily-cit
+  interval: 24h
+  spec:
+    containers:
+    - image: gcr.io/compute-image-tools/cloud-image-tests:latest
+      imagePullPolicy: Always
+      command:
+      - "/manager"
+      args:
+      - "-parallel_count=10"
+      - "-project=gcp-guest"
+      - "-zone=us-central1-b"
+      - "-filter=(perf|shapevalidation)"
+      - "-storageperf_test_filter=(?i)^(([a-z][0-3]))"
+      - "-networkperf_test_filter=(?i)^(([a-z][0-3]))"
+      - "-shapevalidation_test_filter=(?i)^(([a-z][0-3]))"
+# gcloud compute images list --project ubuntu-os-cloud-devel --no-standard-images | tail -n +2 | awk '{print "projects/"$2"/global/images/family/"$3}' | sort -u | tr "\n" ,
+      - "-images=projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-1604-lts,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-1804-lts,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-1804-lts-arm64,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-2004-lts,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-2004-lts-arm64,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-2204-lts,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-2204-lts-arm64,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-2210-amd64,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-2210-arm64,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-2304-amd64,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-2304-arm64,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-2310-amd64,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-2310-arm64,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-2404-lts-amd64,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-2404-lts-arm64,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-minimal-1604-lts,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-minimal-1804-lts,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-minimal-1804-lts-arm64,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-minimal-2004-lts,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-minimal-2004-lts-arm64,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-minimal-2204-lts,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-minimal-2204-lts-arm64,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-minimal-2210-amd64,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-minimal-2210-arm64,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-minimal-2304-amd64,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-minimal-2304-arm64,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-minimal-2310-amd64,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-minimal-2310-arm64,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-minimal-2404-lts-amd64,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-minimal-2404-lts-arm64"
