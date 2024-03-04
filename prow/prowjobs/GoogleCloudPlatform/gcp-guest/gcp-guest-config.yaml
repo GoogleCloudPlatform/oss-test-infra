@@ -602,6 +602,7 @@ periodics:
       args:
       - "-parallel_count=10"
       - "-project=gcp-guest"
+      - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
       - "-zone=us-central1-b"
       - "-filter=(perf|shapevalidation)"
       - "-storageperf_test_filter=(?i)^(([a-z][0-3]))"
