@@ -517,7 +517,7 @@ periodics:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: cit-periodics
     testgrid-broken-column-threshold: '0.012' # Allow 1.2% of tests to be failing and still mark column as passing
-    testgrid-bug-component: '117405'
+    testgrid-alert-email: buganizer-system+117405@google.com
     testgrid-num-failures-to-alert: '3'
   interval: 6h
   spec:
@@ -576,7 +576,7 @@ periodics:
     testgrid-tab-name: oslogin-periodics
     testgrid-broken-column-threshold: '0.01'
     testgrid-num-failures-to-alert: '2'
-    testgrid-bug-component: '117405'
+    testgrid-alert-email: buganizer-system+117405@google.com
   interval: 12h
   spec:
     containers:
