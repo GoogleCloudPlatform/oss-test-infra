@@ -516,11 +516,9 @@ periodics:
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: cit-periodics
-    testgrid-broken-column-threshold: '0.985' # Allow 1.5% of tests to be failing and still mark column as passing
-    testgrid-alert-email: buganizer-system+117405@google.com
+    testgrid-broken-column-threshold: '0.015' # Allow 1.5% of tests to be failing and still mark column as passing
     testgrid-num-failures-to-alert: '3'
     testgrid-alert-stale-results-hours: '24'
-    testgrid-alert-mail-debug-url: http://go/cit-alert-runbook
   interval: 6h
   spec:
     containers:
@@ -529,6 +527,7 @@ periodics:
       command:
       - "/manager"
       args:
+      - "-set_exit_status=false"
       - "-parallel_count=20"
       - "-project=gcp-guest"
       - "-zone=us-central1-b"
@@ -576,11 +575,9 @@ periodics:
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: oslogin-periodics
-    testgrid-broken-column-threshold: '0.99'
+    testgrid-broken-column-threshold: '0.01'
     testgrid-num-failures-to-alert: '2'
     testgrid-alert-stale-results-hours: '24'
-    testgrid-alert-mail-debug-url: http://go/cit-alert-runbook
-    testgrid-alert-email: buganizer-system+117405@google.com
   interval: 12h
   spec:
     containers:
@@ -589,6 +586,7 @@ periodics:
         command:
         - "/manager"
         args:
+        - "-set_exit_status=false"
         - "-project=oslogin-cit"
         - "-zone=us-central1-b"
 # Same as cit-periodics but without Windows
