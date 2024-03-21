@@ -60,6 +60,8 @@ prow_ignored:
         value: "pd-ssd"
       - name: GKE_DISK_SIZE
         value: "25Gb"
+      - name: E2E_GIT_PROVIDER
+        value: "csr"
       - name: E2E_OCI_PROVIDER
         value: "gar"
       - name: E2E_HELM_PROVIDER
@@ -93,6 +95,8 @@ prow_ignored:
       # This can be set to true to destroy clusters after test execution
       - name: E2E_DESTROY_CLUSTERS
         value: "false"
+      - name: E2E_GIT_PROVIDER
+        value: "csr"
       - name: E2E_OCI_PROVIDER
         value: "gar"
       - name: E2E_HELM_PROVIDER
@@ -125,6 +129,7 @@ periodics:
       args:
       - make
       - test-e2e-kind-multi-repo
+      - 'E2E_GIT_PROVIDER=local'
       - 'E2E_OCI_PROVIDER=local'
       - 'E2E_HELM_PROVIDER=local'
       securityContext:
@@ -212,7 +217,7 @@ periodics:
       - 'GCP_SUBNETWORK=prow-e2e-subnetwork-usw1-6'
       - 'GKE_RELEASE_CHANNEL=regular'
       - 'E2E_CLUSTER_PREFIX=standard-regular-bitbucket'
-      - 'E2E_ARGS=--git-provider=bitbucket'
+      - 'E2E_GIT_PROVIDER=bitbucket'
 
 - <<: *config-sync-standard-job
   name: kpt-config-sync-standard-regular-gitlab
@@ -227,7 +232,7 @@ periodics:
       - 'GCP_SUBNETWORK=prow-e2e-subnetwork-usw1-7'
       - 'GKE_RELEASE_CHANNEL=regular'
       - 'E2E_CLUSTER_PREFIX=standard-regular-gitlab'
-      - 'E2E_ARGS=--git-provider=gitlab'
+      - 'E2E_GIT_PROVIDER=gitlab'
 
 #### End git provider specific jobs
 #### Begin GKE autopilot jobs
@@ -311,7 +316,7 @@ periodics:
       - 'GKE_RELEASE_CHANNEL=regular'
       - 'E2E_CLUSTER_PREFIX=standard-regular-kcc'
       - 'E2E_NUM_CLUSTERS=1'
-      - 'E2E_ARGS=--kcc -run=TestKCC*'
+      - 'E2E_ARGS=--kcc'
 
 - <<: *config-sync-standard-job
   name: kpt-config-sync-standard-regular-gcenode
@@ -327,7 +332,7 @@ periodics:
       - 'GKE_RELEASE_CHANNEL=regular'
       - 'E2E_CLUSTER_PREFIX=standard-regular-gcenode'
       - 'E2E_NUM_CLUSTERS=1'
-      - 'E2E_ARGS=--gcenode -run=TestGCENode'
+      - 'E2E_ARGS=--gcenode'
 
 - <<: *config-sync-standard-job
   name: kpt-config-sync-standard-rapid-latest-stress
@@ -345,7 +350,7 @@ periodics:
       - 'E2E_CLUSTER_PREFIX=standard-rapid-latest-stress'
       - 'E2E_NUM_CLUSTERS=1'
       - 'GKE_MACHINE_TYPE=n2-standard-8' # stress test uses bigger nodes to run more quickly
-      - 'E2E_ARGS=--stress -run=TestStress*'
+      - 'E2E_ARGS=--stress'
 
 - <<: *config-sync-autopilot-job
   name: kpt-config-sync-autopilot-rapid-latest-stress
@@ -362,7 +367,7 @@ periodics:
       - 'GKE_CLUSTER_VERSION=latest'
       - 'E2E_CLUSTER_PREFIX=autopilot-rapid-latest-stress'
       - 'E2E_NUM_CLUSTERS=2' # autopilot uses more clusters to run more quickly
-      - 'E2E_ARGS=--stress -run=TestStress*'
+      - 'E2E_ARGS=--stress'
 
 #### End one-off jobs
 ### End new prowjob definitions
