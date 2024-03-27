@@ -536,11 +536,11 @@ periodics:
   cluster: gcp-guest
   decorate: true
   decoration_config:
-    timeout: 7h
+    timeout: 24h
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: cit-periodics-performance
-  interval: 12h
+  interval: 168h # 1 week
   spec:
     containers:
     - image: gcr.io/compute-image-tools/cloud-image-tests:latest
@@ -548,7 +548,7 @@ periodics:
       command:
       - "/manager"
       args:
-      - "-parallel_count=10"
+      - "-parallel_count=2"
       - "-timeout=60m"
       - "-project=gcp-guest"
       - "-zone=us-central1-b"
@@ -588,11 +588,11 @@ periodics:
   cluster: gcp-guest
   decorate: true
   decoration_config:
-    timeout: 6h
+    timeout: 24h
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: ubuntu-daily-cit-performance
-  interval: 12h
+  interval: 72h # 3 days
   spec:
     containers:
     - image: gcr.io/compute-image-tools/cloud-image-tests:latest
@@ -600,7 +600,7 @@ periodics:
       command:
       - "/manager"
       args:
-      - "-parallel_count=10"
+      - "-parallel_count=2"
       - "-project=gcp-guest"
       - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
       - "-zone=us-central1-b"
