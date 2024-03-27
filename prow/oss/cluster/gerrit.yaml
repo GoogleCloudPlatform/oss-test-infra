@@ -20,7 +20,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
       - name: gerrit
-        image: gcr.io/k8s-prow/gerrit:v20240326-b7ee8eb083
+        image: gcr.io/k8s-prow/gerrit:v20240327-a58d781f5a
         args:
         - --config-path=/etc/config/config.yaml
         - --job-config-path=/etc/job-config
