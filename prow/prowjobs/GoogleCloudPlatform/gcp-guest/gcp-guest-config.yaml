@@ -548,7 +548,7 @@ periodics:
       command:
       - "/manager"
       args:
-      - "-parallel_count=2"
+      - "-parallel_count=3"
       - "-timeout=60m"
       - "-project=gcp-guest"
       - "-zone=us-central1-b"
