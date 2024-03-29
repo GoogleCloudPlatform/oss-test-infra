@@ -67,7 +67,7 @@ prow_ignored:
       - name: E2E_HELM_PROVIDER
         value: "gar"
       - name: E2E_NUM_CLUSTERS
-        value: "10"
+        value: "8"
 # Base job definition for autopilot jobs
 - &config-sync-autopilot-job
   <<: *config-sync-base-job
@@ -102,7 +102,7 @@ prow_ignored:
       - name: E2E_HELM_PROVIDER
         value: "gar"
       - name: E2E_NUM_CLUSTERS
-        value: "15"
+        value: "12"
       - name: GKE_AUTOPILOT
         value: "true"
 
