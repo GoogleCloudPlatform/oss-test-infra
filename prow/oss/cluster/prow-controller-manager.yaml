@@ -26,7 +26,7 @@ spec:
         - --enable-controller=plank
         - --job-config-path=/etc/job-config
         env:
-        # Use KUBECONFIG envvar rather than --kubeconfig flag in order to provide multiple configs to merge.
+        # Use KUBECONFIG envvar rather than --kubeconfig flag in order to append multiple configs.
         - name: KUBECONFIG
           value: "/etc/kubeconfig/config-20240403:/etc/build-bms-oracle-team/kubeconfig:/etc/build-gcsfuse/kubeconfig:/etc/build-cloud-kubernetes-node-management-team/kubeconfig:/etc/build-kpt-config-sync/kubeconfig:/etc/build-compute-image-import/kubeconfig:/etc/build-blueprints/kubeconfig:/etc/build-elcarro/kubeconfig:/etc/build-kubeflow/kubeconfig:/etc/gke-gcloud-auth-plugin-based/kubeconfigs.yaml"
         ports:
