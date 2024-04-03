@@ -32,7 +32,7 @@ update-plugins: get-cluster-credentials
 
 .PHONY: update-kubeconfigs
 update-kubeconfigs:
-	kubectl create configmap kubeconfigs --from-file=kubeconfigs.yaml=cluster/kubeconfigs/kubeconfigs.yaml --dry-run=client -o yaml | kubectl apply -f -
+	kubectl --namespace=default create configmap kubeconfigs --from-file=kubeconfigs.yaml=cluster/kubeconfigs/kubeconfigs.yaml --dry-run=client -o yaml | kubectl apply -f -
 
 .PHONY: deploy
 deploy: get-cluster-credentials update-kubeconfigs
