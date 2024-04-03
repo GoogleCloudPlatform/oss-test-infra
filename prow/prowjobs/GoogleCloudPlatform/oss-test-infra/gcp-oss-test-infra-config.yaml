@@ -2,7 +2,7 @@ postsubmits:
   GoogleCloudPlatform/oss-test-infra:
   - name: post-oss-test-infra-deploy-prow
     cluster: test-infra-trusted
-    run_if_changed: '^prow/oss/cluster/|^prow/oss/serviceaccounts/|^prow/prowjobs/GoogleCloudPlatform/oss-test-infra/gcp-oss-test-infra-config.yaml'
+    run_if_changed: '^prow/oss/Makefile|^prow/oss/cluster/|^prow/oss/serviceaccounts/|^prow/prowjobs/GoogleCloudPlatform/oss-test-infra/gcp-oss-test-infra-config.yaml'
     decorate: true
     branches:
     - master
