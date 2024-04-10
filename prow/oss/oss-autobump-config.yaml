@@ -23,3 +23,16 @@ prefixes:
     refConfigFile: "config/prow/cluster/deck_deployment.yaml"
     summarise: false
     consistentImages: true
+    # The following images are not published from kubernetes-sigs/prow and
+    # don't need to be consistent with the Prow images.
+    consistentImageExceptions:
+      - "gcr.io/k8s-prow/alpine"
+      - "gcr.io/k8s-prow/analyze"
+      - "gcr.io/k8s-prow/commenter"
+      - "gcr.io/k8s-prow/configurator"
+      - "gcr.io/k8s-prow/gcsweb"
+      - "gcr.io/k8s-prow/gencred"
+      - "gcr.io/k8s-prow/git"
+      - "gcr.io/k8s-prow/issue-creator"
+      - "gcr.io/k8s-prow/label_sync"
+      - "gcr.io/k8s-prow/pr-creator"
