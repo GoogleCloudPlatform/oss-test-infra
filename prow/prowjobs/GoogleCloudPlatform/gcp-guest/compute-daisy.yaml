@@ -70,7 +70,7 @@ presubmits:
         args: ["."]
   - name: compute-daisy-presubmit-gotest-cli
     cluster: gcp-guest
-    run_if_changed: 'cli/.*'
+    run_if_changed: '.*'
     trigger: "(?m)^/gotest-daisy-cli$"
     rerun_command: "/gotest-daisy-cli"
     context: prow/presubmit/gotest/daisy-cli
@@ -84,7 +84,7 @@ presubmits:
         args: ["./cli"]
   - name: compute-daisy-presubmit-gobuild-cli
     cluster: gcp-guest
-    run_if_changed: 'cli/.*'
+    run_if_changed: '.*'
     trigger: "(?m)^/gobuild-daisy-cli$"
     rerun_command: "/gobuild-daisy-cli"
     context: prow/presubmit/gobuild/daisy-cli
@@ -98,7 +98,7 @@ presubmits:
         args: ["./cli"]
   - name: compute-daisy-presubmit-gotest-compute
     cluster: gcp-guest
-    run_if_changed: 'compute/.*'
+    run_if_changed: '.*'
     trigger: "(?m)^/gotest-daisy-compute$"
     rerun_command: "/gotest-daisy-compute"
     context: prow/presubmit/gotest/daisy-compute
@@ -112,7 +112,7 @@ presubmits:
         args: ["./compute"]
   - name: compute-daisy-presubmit-gobuild-compute
     cluster: gcp-guest
-    run_if_changed: 'compute/.*'
+    run_if_changed: '.*'
     trigger: "(?m)^/gobuild-daisy-compute$"
     rerun_command: "/gobuild-daisy-compute"
     context: prow/presubmit/gobuild/daisy-compute
@@ -126,7 +126,7 @@ presubmits:
         args: ["./compute"]
   - name: compute-daisy-presubmit-gotest-testrunner
     cluster: gcp-guest
-    run_if_changed: 'daisy_test_runner/.*'
+    run_if_changed: '.*'
     trigger: "(?m)^/gotest-daisy-testrunner$"
     rerun_command: "/gotest-daisy-testrunner"
     context: prow/presubmit/gotest/daisy-testrunner
@@ -140,7 +140,7 @@ presubmits:
         args: ["./daisy_test_runner"]
   - name: compute-daisy-presubmit-gobuild-testrunner
     cluster: gcp-guest
-    run_if_changed: 'daisy_test_runner/.*'
+    run_if_changed: '.*'
     trigger: "(?m)^/gobuild-daisy-testrunner$"
     rerun_command: "/gobuild-daisy-testrunner"
     context: prow/presubmit/gobuild/daisy-testrunner
