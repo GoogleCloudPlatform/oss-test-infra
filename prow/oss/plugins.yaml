@@ -16,6 +16,10 @@ triggers:
 - repos:
   - kubeflow
   join_org_url: "https://www.kubeflow.org/docs/about/contributing/"
+- repos:
+  - GoogleCloudPlatform/compute-daisy
+  trusted_apps:
+    - copybara-service
 
 config_updater:
   maps:
