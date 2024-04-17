@@ -277,7 +277,6 @@ plugins:
     - cat
     - dog
     - golint
-    - hold
     - label
     - lgtm
     - pony
