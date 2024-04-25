@@ -321,7 +321,7 @@ presubmits:
     # END TODO
     spec:
       containers:
-      - image: python:3.7
+      - image: python:3.8
         command:
         - ./test/presubmit-kfp-kubernetes-execution-tests.sh
 
