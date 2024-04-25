@@ -86,16 +86,6 @@ presubmits:
         - upgrade_test
         - --test_v2_api
 
-  - name: kubeflow-pipelines-sdk-python37
-    cluster: build-kubeflow
-    decorate: true
-    run_if_changed: "^(sdk/.*)|(test/presubmit-tests-sdk.sh)$"
-    spec:
-      containers:
-      - image: python:3.7
-        command:
-        - ./test/presubmit-tests-sdk.sh
-
   - name: kubeflow-pipelines-sdk-python38
     cluster: build-kubeflow
     decorate: true
@@ -168,7 +158,7 @@ presubmits:
     run_if_changed: "^(components/.*\\.yaml)|(test/presubmit-component-yaml.sh)|(sdk/python/.*)|(api/v2alpha1/.*)$"
     spec:
       containers:
-      - image: python:3.7
+      - image: python:3.8
         command:
         - ./test/presubmit-component-yaml.sh
 
@@ -266,21 +256,11 @@ presubmits:
     - master
     spec:
       containers:
-      - image: python:3.7
+      - image: python:3.8
         command:
         - ./test/presubmit-sdk-execution-tests.sh
 
 # kfp.kubernetes tests
-  - name: kfp-kubernetes-test-python37
-    cluster: build-kubeflow
-    decorate: true
-    run_if_changed: "^(sdk/python/.*)|(api/v2alpha1/.*)|(kubernetes_platform/.*)|(test/presubmit-test-kfp-kubernetes-library.sh)$"
-    spec:
-      containers:
-      - image: python:3.7
-        command:
-        - ./test/presubmit-test-kfp-kubernetes-library.sh
-
   - name: kfp-kubernetes-test-python38
     cluster: build-kubeflow
     decorate: true
@@ -352,7 +332,7 @@ presubmits:
     spec:
       containers:
       # run on the lowest version of Python (with the least features) for most aggressive testing
-      - image: python:3.7
+      - image: python:3.8
         command:
         - ./test/presubmit-test-run-all-gcpc-modules.sh
 
@@ -362,19 +342,9 @@ presubmits:
     run_if_changed: "^(sdk/python/.*)|(test/presubmit-test-sdk-upgrade.sh)$"
     spec:
       containers:
-      - image: python:3.7
+      - image: python:3.8
         command:
         - ./test/presubmit-test-sdk-upgrade.sh
-
-  - name: test-kfp-runtime-code-python37
-    cluster: build-kubeflow
-    decorate: true
-    run_if_changed: "^(sdk/python/.*)|(test/presubmit-test-kfp-runtime-code.sh)$"
-    spec:
-      containers:
-      - image: python:3.7
-        command:
-        - ./test/presubmit-test-kfp-runtime-code.sh
 
   - name: test-kfp-runtime-code-python38
     cluster: build-kubeflow
