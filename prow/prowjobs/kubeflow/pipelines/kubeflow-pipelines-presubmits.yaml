@@ -56,7 +56,7 @@ presubmits:
         args:
         # We cannot call the shell script directly because the shebang in script is /bin/bash,
         # but the bash:alpine3.14 image has its bash in /usr/local/bin/bash.
-        - ./manifests/gcp_marketplace/test/presubmit.sh 
+        - ./manifests/gcp_marketplace/test/presubmit.sh
   - name: kubeflow-pipeline-upgrade-test
     run_if_changed: "^(backend/.*)|(manifests/kustomize/.*)|(test/upgrade.*)$"
     cluster: build-kubeflow
@@ -168,7 +168,7 @@ presubmits:
     run_if_changed: "^(components/.*\\.yaml)|(test/presubmit-component-yaml.sh)|(sdk/python/.*)|(api/v2alpha1/.*)$"
     spec:
       containers:
-      - image: python:3.7
+      - image: python:3.9
         command:
         - ./test/presubmit-component-yaml.sh
 
@@ -188,10 +188,10 @@ presubmits:
     run_if_changed: "^(backend/src/apiserver/visualization/.*)|(test/presubmit-backend-visualization.sh)$"
     spec:
       containers:
-      - image: python:3.8
+      - image: python:3.9
         command:
         - ./test/presubmit-backend-visualization.sh
-  
+
   - name: kubeflow-pipelines-samples-v2
     cluster: build-kubeflow
     decorate: true
@@ -200,19 +200,19 @@ presubmits:
     optional: true
     spec:
       containers:
-      - image: python:3.7
+      - image: python:3.9
         command:
         - ./backend/src/v2/test/sample-test.sh
     skip_branches:
     - ^sdk\/release-1.*$
-  
+
   - name: kubeflow-pipelines-integration-v2
     run_if_changed: "^(samples/core/(parameterized_tfx_oss|dataflow)/.*)$"
     cluster: build-kubeflow
     decorate: true
     spec:
       containers:
-      - image: python:3.7
+      - image: python:3.9
         command:
         - ./backend/src/v2/test/integration-test.sh
 
@@ -233,7 +233,7 @@ presubmits:
     - master
     spec:
       containers:
-      - image: python:3.7
+      - image: python:3.9
         command:
         - ./test/presubmit-isort-sdk.sh
   - name: kubeflow-pipelines-sdk-yapf
@@ -244,7 +244,7 @@ presubmits:
     - master
     spec:
       containers:
-      - image: python:3.7
+      - image: python:3.9
         command:
         - ./test/presubmit-yapf-sdk.sh
   - name: kubeflow-pipelines-sdk-docformatter
@@ -255,7 +255,7 @@ presubmits:
     - master
     spec:
       containers:
-      - image: python:3.7
+      - image: python:3.9
         command:
         - ./test/presubmit-docformatter-sdk.sh
   - name: kubeflow-pipelines-sdk-execution-tests
@@ -266,7 +266,7 @@ presubmits:
     - master
     spec:
       containers:
-      - image: python:3.7
+      - image: python:3.9
         command:
         - ./test/presubmit-sdk-execution-tests.sh
 
@@ -310,7 +310,7 @@ presubmits:
       - image: python:3.10
         command:
         - ./test/presubmit-test-kfp-kubernetes-library.sh
-  
+
   - name: kfp-kubernetes-test-python311
     cluster: build-kubeflow
     decorate: true
@@ -352,7 +352,7 @@ presubmits:
     spec:
       containers:
       # run on the lowest version of Python (with the least features) for most aggressive testing
-      - image: python:3.7
+      - image: python:3.9
         command:
         - ./test/presubmit-test-run-all-gcpc-modules.sh
 
@@ -362,7 +362,7 @@ presubmits:
     run_if_changed: "^(sdk/python/.*)|(test/presubmit-test-sdk-upgrade.sh)$"
     spec:
       containers:
-      - image: python:3.7
+      - image: python:3.9
         command:
         - ./test/presubmit-test-sdk-upgrade.sh
 
