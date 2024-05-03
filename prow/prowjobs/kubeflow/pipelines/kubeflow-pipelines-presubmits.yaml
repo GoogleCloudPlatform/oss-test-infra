@@ -25,6 +25,8 @@ presubmits:
     run_if_changed: "^(frontend/.*)|(backend/.*)|(proxy/.*)|(manifests/kustomize/.*)|(test/.*)|go.mod|go.sum$"
     cluster: build-kubeflow
     decorate: true
+    # TODO: temporarily make it optional due to https://github.com/kubeflow/pipelines/issues/10779 
+    optional: true
     spec:
       containers:
       - image: gcr.io/k8s-testimages/kubekins-e2e:v20210113-cc576af-master
@@ -61,6 +63,8 @@ presubmits:
     run_if_changed: "^(backend/.*)|(manifests/kustomize/.*)|(test/upgrade.*)$"
     cluster: build-kubeflow
     decorate: true
+    # TODO: temporarily make it optional due to https://github.com/kubeflow/pipelines/issues/10779 
+    optional: true
     spec:
       containers:
       - image: gcr.io/k8s-testimages/kubekins-e2e:v20210113-cc576af-master
