@@ -39,19 +39,25 @@ approve:
   require_self_approval: false
   commandHelpLink: https://oss.gprow.dev/command-help
 - repos:
-  - GoogleContainerTools
-  - kubeflow/caffe2-operator
-  - kubeflow/chainer-operator
-  - kubeflow/common
-  - kubeflow/fate-operator
-  - kubeflow/kubeflow
-  - kubeflow/mpi-operator
-  - kubeflow/mxnet-operator
-  - kubeflow/pipelines
-  - kubeflow/pytorch-operator
-  - kubeflow/tf-operator
-  - kubeflow/xgboost-operator
   - GoogleCloudPlatform/k8s-config-connector
+  - GoogleContainerTools
+  - kubeflow/arena
+  - kubeflow/blog
+  - kubeflow/community
+  - kubeflow/examples
+  - kubeflow/internal-acls
+  - kubeflow/katib
+  - kubeflow/kfp-tekton
+  - kubeflow/kubeflow
+  - kubeflow/manifests
+  - kubeflow/model-registry
+  - kubeflow/mpi-operator
+  - kubeflow/notebooks
+  - kubeflow/pipelines
+  - kubeflow/spark-operator
+  - kubeflow/testing
+  - kubeflow/training-operator
+  - kubeflow/website
   require_self_approval: true
   commandHelpLink: https://oss.gprow.dev/command-help
 
