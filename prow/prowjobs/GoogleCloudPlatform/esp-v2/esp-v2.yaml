@@ -11,6 +11,7 @@ presubmits:
     spec:
       containers:
       - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240503-v2.46.0-17-ge72b17e9-master
+        imagePullPolicy: Always
         command:
         - ./prow/gcpproxy-build.sh
         env:
@@ -36,6 +37,7 @@ presubmits:
     spec:
       containers:
       - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240503-v2.46.0-17-ge72b17e9-master
+        imagePullPolicy: Always
         command:
         - ./prow/gcpproxy-presubmit.sh
         env:
@@ -61,6 +63,7 @@ presubmits:
     spec:
       containers:
       - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240503-v2.46.0-17-ge72b17e9-master
+        imagePullPolicy: Always
         command:
         - ./prow/gcpproxy-api-regression.sh
         env:
@@ -86,6 +89,7 @@ presubmits:
     spec:
       containers:
       - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240503-v2.46.0-17-ge72b17e9-master
+        imagePullPolicy: Always
         command:
         - ./prow/presubmit-asan.sh
         env:
@@ -111,6 +115,7 @@ presubmits:
     spec:
       containers:
       - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240503-v2.46.0-17-ge72b17e9-master
+        imagePullPolicy: Always
         command:
         - ./prow/presubmit-tsan.sh
         env:
@@ -136,6 +141,7 @@ presubmits:
     spec:
       containers:
       - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240503-v2.46.0-17-ge72b17e9-master
+        imagePullPolicy: Always
         command:
         - ./prow/gcpproxy-coverage.sh
         env:
@@ -466,6 +472,7 @@ presubmits:
     spec:
       containers:
       - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240503-v2.46.0-17-ge72b17e9-master
+        imagePullPolicy: Always
         command:
         - ./prow/gcpproxy-e2e.sh
         env:
@@ -493,6 +500,7 @@ presubmits:
     spec:
       containers:
       - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240503-v2.46.0-17-ge72b17e9-master
+        imagePullPolicy: Always
         command:
         - ./prow/gcpproxy-e2e.sh
         env:
@@ -520,6 +528,7 @@ presubmits:
     spec:
       containers:
       - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240503-v2.46.0-17-ge72b17e9-master
+        imagePullPolicy: Always
         command:
         - ./prow/gcpproxy-e2e.sh
         env:
@@ -547,6 +556,7 @@ presubmits:
     spec:
       containers:
       - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240503-v2.46.0-17-ge72b17e9-master
+        imagePullPolicy: Always
         command:
         - ./prow/gcpproxy-e2e.sh
         env:
@@ -574,6 +584,7 @@ presubmits:
     spec:
       containers:
       - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240503-v2.46.0-17-ge72b17e9-master
+        imagePullPolicy: Always
         command:
         - ./prow/e2e-gcloud-build-image.sh
         env:
@@ -602,6 +613,7 @@ postsubmits:
     spec:
       containers:
       - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240503-v2.46.0-17-ge72b17e9-master
+        imagePullPolicy: Always
         command:
         - ./prow/gcpproxy-build.sh
         env:
@@ -632,17 +644,18 @@ periodics:
         base_ref: master
     spec:
       containers:
-        - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240503-v2.46.0-17-ge72b17e9-master
-          command:
-            - ./prow/continuous-build.sh
-          env:
-            - name: GOOGLE_APPLICATION_CREDENTIALS
-              value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
-            - name: CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE
-              value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
-          volumeMounts:
-            - name: cloudesf-testing-github-prow-service-account
-              mountPath: /etc/cloudesf-testing-github-prow-service-account
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240503-v2.46.0-17-ge72b17e9-master
+        imagePullPolicy: Always
+        command:
+          - ./prow/continuous-build.sh
+        env:
+          - name: GOOGLE_APPLICATION_CREDENTIALS
+            value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
+          - name: CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE
+            value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
+        volumeMounts:
+          - name: cloudesf-testing-github-prow-service-account
+            mountPath: /etc/cloudesf-testing-github-prow-service-account
       volumes:
         - name: cloudesf-testing-github-prow-service-account
           secret:
@@ -661,17 +674,18 @@ periodics:
         base_ref: master
     spec:
       containers:
-        - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240503-v2.46.0-17-ge72b17e9-master
-          command:
-            - ./prow/gcpproxy-presubmit.sh
-          env:
-            - name: GOOGLE_APPLICATION_CREDENTIALS
-              value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
-            - name: CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE
-              value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
-          volumeMounts:
-            - name: cloudesf-testing-github-prow-service-account
-              mountPath: /etc/cloudesf-testing-github-prow-service-account
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240503-v2.46.0-17-ge72b17e9-master
+        imagePullPolicy: Always
+        command:
+          - ./prow/gcpproxy-presubmit.sh
+        env:
+          - name: GOOGLE_APPLICATION_CREDENTIALS
+            value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
+          - name: CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE
+            value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
+        volumeMounts:
+          - name: cloudesf-testing-github-prow-service-account
+            mountPath: /etc/cloudesf-testing-github-prow-service-account
       volumes:
         - name: cloudesf-testing-github-prow-service-account
           secret:
@@ -690,17 +704,18 @@ periodics:
         base_ref: master
     spec:
       containers:
-        - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240503-v2.46.0-17-ge72b17e9-master
-          command:
-            - ./prow/presubmit-asan.sh
-          env:
-            - name: GOOGLE_APPLICATION_CREDENTIALS
-              value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
-            - name: CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE
-              value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
-          volumeMounts:
-            - name: cloudesf-testing-github-prow-service-account
-              mountPath: /etc/cloudesf-testing-github-prow-service-account
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240503-v2.46.0-17-ge72b17e9-master
+        imagePullPolicy: Always
+        command:
+          - ./prow/presubmit-asan.sh
+        env:
+          - name: GOOGLE_APPLICATION_CREDENTIALS
+            value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
+          - name: CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE
+            value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
+        volumeMounts:
+          - name: cloudesf-testing-github-prow-service-account
+            mountPath: /etc/cloudesf-testing-github-prow-service-account
       volumes:
         - name: cloudesf-testing-github-prow-service-account
           secret:
@@ -719,17 +734,18 @@ periodics:
         base_ref: master
     spec:
       containers:
-        - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240503-v2.46.0-17-ge72b17e9-master
-          command:
-            - ./prow/presubmit-tsan.sh
-          env:
-            - name: GOOGLE_APPLICATION_CREDENTIALS
-              value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
-            - name: CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE
-              value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
-          volumeMounts:
-            - name: cloudesf-testing-github-prow-service-account
-              mountPath: /etc/cloudesf-testing-github-prow-service-account
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240503-v2.46.0-17-ge72b17e9-master
+        imagePullPolicy: Always
+        command:
+          - ./prow/presubmit-tsan.sh
+        env:
+          - name: GOOGLE_APPLICATION_CREDENTIALS
+            value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
+          - name: CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE
+            value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
+        volumeMounts:
+          - name: cloudesf-testing-github-prow-service-account
+            mountPath: /etc/cloudesf-testing-github-prow-service-account
       volumes:
         - name: cloudesf-testing-github-prow-service-account
           secret:
@@ -749,6 +765,7 @@ periodics:
     spec:
       containers:
       - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240503-v2.46.0-17-ge72b17e9-master
+        imagePullPolicy: Always
         command:
         - ./prow/gcpproxy-coverage.sh
         env:
@@ -1109,17 +1126,18 @@ periodics:
         base_ref: master
     spec:
       containers:
-        - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240503-v2.46.0-17-ge72b17e9-master
-          command:
-            - ./prow/e2e-cloud-run-cloud-run-http-bookstore.sh
-          env:
-            - name: GOOGLE_APPLICATION_CREDENTIALS
-              value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
-            - name: CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE
-              value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
-          volumeMounts:
-            - name: cloudesf-testing-github-prow-service-account
-              mountPath: /etc/cloudesf-testing-github-prow-service-account
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240503-v2.46.0-17-ge72b17e9-master
+        imagePullPolicy: Always
+        command:
+          - ./prow/e2e-cloud-run-cloud-run-http-bookstore.sh
+        env:
+          - name: GOOGLE_APPLICATION_CREDENTIALS
+            value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
+          - name: CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE
+            value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
+        volumeMounts:
+          - name: cloudesf-testing-github-prow-service-account
+            mountPath: /etc/cloudesf-testing-github-prow-service-account
       volumes:
         - name: cloudesf-testing-github-prow-service-account
           secret:
@@ -1140,17 +1158,18 @@ periodics:
         base_ref: master
     spec:
       containers:
-        - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240503-v2.46.0-17-ge72b17e9-master
-          command:
-            - ./prow/e2e-cloud-run-cloud-function-http-bookstore.sh
-          env:
-            - name: GOOGLE_APPLICATION_CREDENTIALS
-              value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
-            - name: CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE
-              value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
-          volumeMounts:
-            - name: cloudesf-testing-github-prow-service-account
-              mountPath: /etc/cloudesf-testing-github-prow-service-account
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240503-v2.46.0-17-ge72b17e9-master
+        imagePullPolicy: Always
+        command:
+          - ./prow/e2e-cloud-run-cloud-function-http-bookstore.sh
+        env:
+          - name: GOOGLE_APPLICATION_CREDENTIALS
+            value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
+          - name: CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE
+            value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
+        volumeMounts:
+          - name: cloudesf-testing-github-prow-service-account
+            mountPath: /etc/cloudesf-testing-github-prow-service-account
       volumes:
         - name: cloudesf-testing-github-prow-service-account
           secret:
@@ -1172,6 +1191,7 @@ periodics:
     spec:
       containers:
       - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240503-v2.46.0-17-ge72b17e9-master
+        imagePullPolicy: Always
         command:
         - ./prow/e2e-cloud-run-app-engine-http-bookstore.sh
         env:
@@ -1202,17 +1222,18 @@ periodics:
         base_ref: master
     spec:
       containers:
-        - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240503-v2.46.0-17-ge72b17e9-master
-          command:
-            - ./prow/e2e-cloud-run-cloud-run-grpc-echo.sh
-          env:
-            - name: GOOGLE_APPLICATION_CREDENTIALS
-              value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
-            - name: CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE
-              value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
-          volumeMounts:
-            - name: cloudesf-testing-github-prow-service-account
-              mountPath: /etc/cloudesf-testing-github-prow-service-account
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240503-v2.46.0-17-ge72b17e9-master
+        imagePullPolicy: Always
+        command:
+          - ./prow/e2e-cloud-run-cloud-run-grpc-echo.sh
+        env:
+          - name: GOOGLE_APPLICATION_CREDENTIALS
+            value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
+          - name: CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE
+            value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
+        volumeMounts:
+          - name: cloudesf-testing-github-prow-service-account
+            mountPath: /etc/cloudesf-testing-github-prow-service-account
       volumes:
         - name: cloudesf-testing-github-prow-service-account
           secret:
@@ -1232,6 +1253,7 @@ periodics:
     spec:
       containers:
       - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240503-v2.46.0-17-ge72b17e9-master
+        imagePullPolicy: Always
         command:
         - ./prow/e2e-gcloud-build-image.sh
         env:
@@ -1301,17 +1323,18 @@ periodics:
         base_ref: master
     spec:
       containers:
-        - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240503-v2.46.0-17-ge72b17e9-master
-          command:
-            - ./prow/janitor.sh
-          env:
-            - name: GOOGLE_APPLICATION_CREDENTIALS
-              value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
-            - name: CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE
-              value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
-          volumeMounts:
-            - name: cloudesf-testing-github-prow-service-account
-              mountPath: /etc/cloudesf-testing-github-prow-service-account
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240503-v2.46.0-17-ge72b17e9-master
+        imagePullPolicy: Always
+        command:
+          - ./prow/janitor.sh
+        env:
+          - name: GOOGLE_APPLICATION_CREDENTIALS
+            value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
+          - name: CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE
+            value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
+        volumeMounts:
+          - name: cloudesf-testing-github-prow-service-account
+            mountPath: /etc/cloudesf-testing-github-prow-service-account
       volumes:
         - name: cloudesf-testing-github-prow-service-account
           secret:
