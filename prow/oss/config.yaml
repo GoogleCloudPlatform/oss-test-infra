@@ -198,9 +198,9 @@ branch-protection:
   orgs:
     kubeflow:
       protect: true
-      required_status_checks:
-        contexts:
-        - cla/google
+      #required_status_checks:
+      #  contexts:
+      #  - cla/google
       exclude:
       - "^revert-" # don't protect revert branches
       - "^dependabot/" # don't protect branches created by dependabot
