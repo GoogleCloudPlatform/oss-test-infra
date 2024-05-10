@@ -136,6 +136,7 @@ plugins:
   GoogleCloudPlatform/cloud-image-tests:
     plugins:
     - size
+    - trigger
   GoogleCloudPlatform/compute-image-tools:
     plugins:
     - approve
