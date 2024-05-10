@@ -27,7 +27,7 @@ presubmits:
         imagePullPolicy: Always
         command:
         - "bash"
-        args: ["-c", 'set -xe; go test -v -coverprofile=/tmp/coverage.out . $(for f in $(ls); do [[ -d $f ]] && [[ $f != "test_suites" ]] && echo -n "./$f/... "; done) > /tmp/go-test.txt; cat /tmp/go-test.txt | go-junit-report > ${ARTIFACTS}/junit.xml']
+        args: ["-c", 'set -xe; go test -v -coverprofile=/tmp/coverage.out . $(for f in $(ls); do [[ -d $f ]] && [[ $f != "test_suites" ]] && echo -n "./$f/... "; done) | go-junit-report > ${ARTIFACTS}/junit.xml']
   - name: cloud-image-tests-presubmit-gobuild
     cluster: gcp-guest
     run_if_changed: '.*'

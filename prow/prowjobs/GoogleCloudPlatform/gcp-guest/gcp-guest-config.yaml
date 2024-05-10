@@ -343,21 +343,6 @@ presubmits:
         imagePullPolicy: Always
         command:
         - "/go/main.sh"
-  - name: infra-presubmit-gocheck-cit
-    cluster: gcp-guest
-    run_if_changed: 'imagetest.*\.go$'
-    trigger: "(?m)^/gocheckcit$"
-    rerun_command: "/gocheckcit"
-    context: prow/presubmit/gocheck/cit
-    decorate: true
-    spec:
-      containers:
-      - image: gcr.io/gcp-guest/gocheck:latest
-        imagePullPolicy: Always
-        command:
-        - "/go/main.sh"
-        args:
-        - imagetest/
   - name: infra-presubmit-gocheck-cleanerupper
     cluster: gcp-guest
     run_if_changed: 'container_images/cleanerupper.*\.go$'
@@ -401,21 +386,6 @@ presubmits:
         imagePullPolicy: Always
         command:
         - "/go/main.sh"
-  - name: infra-presubmit-gobuild-cit
-    cluster: gcp-guest
-    run_if_changed: 'imagetest/.*(\.go|go\.mod|go\.sum|Dockerfile|\.sh)$'
-    trigger: "(?m)^/gobuildcit$"
-    rerun_command: "/gobuildcit"
-    context: prow/presubmit/gobuild/cit
-    decorate: true
-    spec:
-      containers:
-      - image: gcr.io/gcp-guest/citpresubmit:latest
-        imagePullPolicy: Always
-        command:
-        - "/go/main.sh"
-        args:
-        - build
   - name: infra-presubmit-gobuild-cleanerupper
     cluster: gcp-guest
     run_if_changed: 'container_images/cleanerupper.*(\.go|go\.mod|go\.sum)$'
@@ -459,21 +429,6 @@ presubmits:
         imagePullPolicy: Always
         command:
         - "/go/main.sh"
-  - name: infra-presubmit-gotest-cit
-    cluster: gcp-guest
-    run_if_changed: 'imagetest.*(\.go|go\.mod|go\.sum)$'
-    trigger: "(?m)^/gotestcit$"
-    rerun_command: "/gotestcit"
-    context: prow/presubmit/gotest/cit
-    decorate: true
-    spec:
-      containers:
-      - image: gcr.io/gcp-guest/citpresubmit:latest
-        imagePullPolicy: Always
-        command:
-        - "/go/main.sh"
-        args:
-        - test
   - name: infra-presubmit-gotest-cleanerupper
     cluster: gcp-guest
     run_if_changed: 'container_images/cleanerupper.*(\.go|go\.mod|go\.sum)$'
