@@ -18,6 +18,7 @@ triggers:
   join_org_url: "https://www.kubeflow.org/docs/about/contributing/"
 - repos:
   - GoogleCloudPlatform/compute-daisy
+  - GoogleCloudPlatform/cloud-image-tests
   trusted_apps:
     - copybara-service
 
@@ -132,6 +133,9 @@ plugins:
     - owners-label
     - size
     - verify-owners
+  GoogleCloudPlatform/cloud-image-tests:
+    plugins:
+    - size
   GoogleCloudPlatform/compute-image-tools:
     plugins:
     - approve
