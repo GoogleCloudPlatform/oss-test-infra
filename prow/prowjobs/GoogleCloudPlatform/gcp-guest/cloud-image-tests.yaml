@@ -1,0 +1,44 @@
+presubmits:
+  GoogleCloudPlatform/cloud-image-tests:
+  - name: cloud-image-tests-presubmit-gocheck
+    cluster: gcp-guest
+    run_if_changed: '.*'
+    trigger: "(?m)^/gocheck$"
+    rerun_command: "/gocheck"
+    context: prow/presubmit/gocheck/cloud-image-tests
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gocheck:latest
+        imagePullPolicy: Always
+        command:
+        - "/go/main.sh"
+        args: ["."]
+  - name: cloud-image-tests-presubmit-gotest
+    cluster: gcp-guest
+    run_if_changed: '.*'
+    trigger: "(?m)^/gotest$"
+    rerun_command: "/gotest"
+    context: prow/presubmit/gotest/cloud-image-tests
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gotest:latest
+        imagePullPolicy: Always
+        command:
+        - "bash"
+        args: ["-c", 'set -xe; go test -v -coverprofile=/tmp/coverage.out . $(for f in $(ls); do [[ -d $f ]] && [[ $f != "test_suites" ]] && echo -n "./$f/... "; done) > /tmp/go-test.txt; cat /tmp/go-test.txt | go-junit-report > ${ARTIFACTS}/junit.xml']
+  - name: cloud-image-tests-presubmit-gobuild
+    cluster: gcp-guest
+    run_if_changed: '.*'
+    trigger: "(?m)^/gobuild$"
+    rerun_command: "/gobuild"
+    context: prow/presubmit/gobuild/cloud-image-tests
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gobuild:latest
+        imagePullPolicy: Always
+        command:
+        - "bash"
+        args: ["-c", 'set -xe; ./local_build.sh -o /tmp/cit; project=compute-image-test-pool-001 cit_dir=/tmp/cit cmd/manager/genworkflow_test.sh']
