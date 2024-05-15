@@ -61,7 +61,7 @@ prow_ignored:
       - name: GKE_DISK_SIZE
         value: "25Gb"
       - name: E2E_GIT_PROVIDER
-        value: "csr"
+        value: "local"
       - name: E2E_OCI_PROVIDER
         value: "gar"
       - name: E2E_HELM_PROVIDER
@@ -96,7 +96,7 @@ prow_ignored:
       - name: E2E_DESTROY_CLUSTERS
         value: "false"
       - name: E2E_GIT_PROVIDER
-        value: "csr"
+        value: "local"
       - name: E2E_OCI_PROVIDER
         value: "gar"
       - name: E2E_HELM_PROVIDER
@@ -234,6 +234,20 @@ periodics:
       - 'E2E_CLUSTER_PREFIX=standard-regular-gitlab'
       - 'E2E_GIT_PROVIDER=gitlab'
 
+- <<: *config-sync-standard-job
+  name: kpt-config-sync-standard-regular-csr
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-main
+    testgrid-tab-name: standard-regular-csr
+  spec:
+    <<: *config-sync-standard-job-spec
+    containers:
+    - <<: *config-sync-standard-job-container
+      args:
+      - 'GCP_SUBNETWORK=prow-e2e-subnetwork-usw1-8'
+      - 'GKE_RELEASE_CHANNEL=regular'
+      - 'E2E_CLUSTER_PREFIX=standard-regular-csr'
+      - 'E2E_GIT_PROVIDER=csr'
 #### End git provider specific jobs
 #### Begin GKE autopilot jobs
 
