@@ -293,6 +293,7 @@ periodics:
       args:
       - 'GCP_SUBNETWORK=prow-e2e-subnetwork-9'
       - 'GKE_RELEASE_CHANNEL=rapid'
+      - 'GKE_CLUSTER_VERSION=1.29.4-gke.1670000'  # TODO(b/339056595#comment58): remove `GKE_CLUSTER_VERSION` when all versions in the rapid channel are newer than the pinned version
       - 'E2E_CLUSTER_PREFIX=autopilot-rapid'
 
 - <<: *config-sync-autopilot-job
@@ -308,7 +309,7 @@ periodics:
       args:
       - 'GCP_SUBNETWORK=prow-e2e-subnetwork-10'
       - 'GKE_RELEASE_CHANNEL=rapid'
-      - 'GKE_CLUSTER_VERSION=latest'
+      - 'GKE_CLUSTER_VERSION=1.29.4-gke.1670000'  # TODO(b/339056595#comment52): reset `GKE_CLUSTER_VERSION` to `latest` when `1.30.0-gke.1661000` is rolled out to production.
       - 'E2E_CLUSTER_PREFIX=autopilot-rapid-latest'
 
 #### End GKE autopilot jobs
