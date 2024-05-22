@@ -152,7 +152,7 @@ presubmits:
     - sdk/release-1.8
     spec:
       containers:
-      - image: python:3.7
+      - image: python:3.8
         command:
         - ./test/presubmit-tests-tfx.sh
 
@@ -194,7 +194,7 @@ presubmits:
     optional: true
     spec:
       containers:
-      - image: python:3.7
+      - image: python:3.8
         command:
         - ./backend/src/v2/test/sample-test.sh
     skip_branches:
@@ -206,7 +206,7 @@ presubmits:
     decorate: true
     spec:
       containers:
-      - image: python:3.7
+      - image: python:3.8
         command:
         - ./backend/src/v2/test/integration-test.sh
 
@@ -227,7 +227,7 @@ presubmits:
     - master
     spec:
       containers:
-      - image: python:3.7
+      - image: python:3.8
         command:
         - ./test/presubmit-isort-sdk.sh
   - name: kubeflow-pipelines-sdk-yapf
@@ -238,7 +238,7 @@ presubmits:
     - master
     spec:
       containers:
-      - image: python:3.7
+      - image: python:3.8
         command:
         - ./test/presubmit-yapf-sdk.sh
   - name: kubeflow-pipelines-sdk-docformatter
@@ -249,7 +249,7 @@ presubmits:
     - master
     spec:
       containers:
-      - image: python:3.7
+      - image: python:3.8
         command:
         - ./test/presubmit-docformatter-sdk.sh
   - name: kubeflow-pipelines-sdk-execution-tests
