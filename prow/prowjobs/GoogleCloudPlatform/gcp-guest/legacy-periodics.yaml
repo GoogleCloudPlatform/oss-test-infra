@@ -80,7 +80,7 @@ periodics:
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: osconfig-head-images
-  interval: 48
+  interval: 48h
   agent: kubernetes
   spec:
     activeDeadlineSeconds: 7200
