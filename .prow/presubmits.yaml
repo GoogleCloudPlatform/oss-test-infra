@@ -4,7 +4,7 @@ presubmits:
   run_if_changed: '^prow/(oss/(config|plugins)\.yaml$|prowjobs/)|^\.prow'
   spec:
     containers:
-      - image: gcr.io/k8s-prow/checkconfig:v20240530-7b7a89ab7
+      - image: gcr.io/k8s-prow/checkconfig:v20240531-8e43f4d08
         imagePullPolicy: Always
         command:
           - checkconfig
