@@ -72,13 +72,15 @@ periodics:
       env:
       - name: GOOGLE_APPLICATION_CREDENTIALS
         value: ''
+
+# TODO: Decrease the interval time again after fixing osconfig-head-images tests,
 - name: osconfig-head-images
   cluster: gcp-guest
   decorate: true
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: osconfig-head-images
-  interval: 5h
+  interval: 48h
   agent: kubernetes
   spec:
     activeDeadlineSeconds: 7200
@@ -117,13 +119,60 @@ periodics:
       env:
       - name: GOOGLE_APPLICATION_CREDENTIALS
         value: ''
+- name: osconfig-testing
+  cluster: gcp-guest
+  decorate: true
+  annotations:
+    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-tab-name: osconfig-testing
+  interval: 1h
+  agent: kubernetes
+  spec:
+    activeDeadlineSeconds: 7200
+    containers:
+    - image: gcr.io/compute-image-tools-test/osconfig-tests:latest
+      command:
+      - "/e2e_tests"
+      args:
+      - "-out_dir=$(ARTIFACTS)"
+      - "-agent_repo=testing"
+      - "-test_project_ids=compute-image-osconfig-agent,compute-image-osconfig-agent-2"
+      - "-agent_endpoint={zone}-staging-osconfig.sandbox.googleapis.com:443"
+      - "-endpoint=staging-osconfig.sandbox.googleapis.com:443"
+      - -test_zones={
+                      "us-central1-a":15,
+                      "us-central1-b":15,
+                      "us-central1-c":15,
+                      "us-central1-f":15,
+                      "us-west1-a":15,
+                      "us-west1-b":15,
+                      "us-west1-c":15,
+                      "us-east1-b":15,
+                      "us-east1-c":15,
+                      "us-east1-d":15,
+                      "asia-northeast1-a":15,
+                      "asia-northeast1-b":15,
+                      "asia-northeast1-c":15,
+                      "europe-north1-a":15,
+                      "europe-north1-b":15,
+                      "europe-north1-c":15,
+                      "europe-west1-d":15,
+                      "europe-west1-b":15,
+                      "europe-west1-c":15,
+                      "asia-east1-a":15,
+                      "asia-east1-b":15,
+                      "asia-east1-c":15
+                    }
+      env:
+      - name: GOOGLE_APPLICATION_CREDENTIALS
+        value: ''
 - name: osconfig-unstable
   cluster: gcp-guest
   decorate: true
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: osconfig-unstable
-  interval: 1h
+  interval: 4h
   agent: kubernetes
   spec:
     activeDeadlineSeconds: 7200
@@ -170,7 +219,7 @@ periodics:
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: osconfig-staging
-  interval: 3h
+  interval: 6h
   agent: kubernetes
   spec:
     activeDeadlineSeconds: 10000
@@ -215,7 +264,7 @@ periodics:
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: osconfig-stable
-  interval: 5h
+  interval: 8h
   agent: kubernetes
   spec:
     activeDeadlineSeconds: 14400
