@@ -12,15 +12,6 @@ presubmits:
         args:
         - -c
         - cd ./frontend && npm run test:ci:prow
-  - name: kubeflow-pipeline-backend-test
-    run_if_changed: "^(backend/.*)|(test/presubmit-backend-test.sh)$"
-    cluster: build-kubeflow
-    decorate: true
-    spec:
-      containers:
-      - image: golang:1.21-bullseye
-        command:
-        - ./test/presubmit-backend-test.sh
   - name: kubeflow-pipeline-e2e-test
     run_if_changed: "^(frontend/.*)|(backend/.*)|(proxy/.*)|(manifests/kustomize/.*)|(test/.*)|go.mod|go.sum$"
     cluster: build-kubeflow
