@@ -12,22 +12,6 @@ presubmits:
         args:
         - -c
         - cd ./frontend && npm run test:ci:prow
-  - name: kubeflow-pipeline-e2e-test
-    run_if_changed: "^(frontend/.*)|(backend/.*)|(proxy/.*)|(manifests/kustomize/.*)|(test/.*)|go.mod|go.sum$"
-    cluster: build-kubeflow
-    decorate: true
-    # TODO: temporarily make it optional due to https://github.com/kubeflow/pipelines/issues/10779 
-    optional: true
-    spec:
-      containers:
-      - image: gcr.io/k8s-testimages/kubekins-e2e:v20210113-cc576af-master
-        command:
-        - ./test/presubmit-tests-with-pipeline-deployment.sh
-        args:
-        - --workflow_file
-        - e2e_test_gke_v2.yaml
-        - --test_result_folder
-        - e2e_test
   - name: kubeflow-pipeline-mkp-test
     run_if_changed: "^(manifests/gcp_marketplace/.*)|(test/presubmit-tests-mkp.sh)|(test/tag_for_hosted.sh)|(test/cloudbuild/mkp_verify.yaml)$"
     cluster: build-kubeflow
