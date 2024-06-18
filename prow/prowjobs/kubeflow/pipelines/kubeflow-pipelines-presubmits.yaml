@@ -1,27 +1,5 @@
 presubmits:
   kubeflow/pipelines:
-  - name: kubeflow-pipeline-mkp-test
-    run_if_changed: "^(manifests/gcp_marketplace/.*)|(test/presubmit-tests-mkp.sh)|(test/tag_for_hosted.sh)|(test/cloudbuild/mkp_verify.yaml)$"
-    cluster: build-kubeflow
-    decorate: true
-    spec:
-      containers:
-      - image: gcr.io/k8s-testimages/kubekins-e2e:v20210113-cc576af-master
-        command:
-        - ./test/presubmit-tests-mkp.sh
-  - name: kubeflow-pipeline-mkp-snapshot-test
-    run_if_changed: "^(manifests/gcp_marketplace/.*)$"
-    cluster: build-kubeflow
-    decorate: true
-    spec:
-      containers:
-      - image: bash:alpine3.14
-        command:
-        - bash
-        args:
-        # We cannot call the shell script directly because the shebang in script is /bin/bash,
-        # but the bash:alpine3.14 image has its bash in /usr/local/bin/bash.
-        - ./manifests/gcp_marketplace/test/presubmit.sh 
   - name: kubeflow-pipeline-upgrade-test
     run_if_changed: "^(backend/.*)|(manifests/kustomize/.*)|(test/upgrade.*)$"
     cluster: build-kubeflow
