@@ -15,27 +15,3 @@ postsubmits:
       description: Postsubmit integration tests for kubeflow/pipeline.
       testgrid-alert-email: kubeflow-pipelines+test@google.com
       testgrid-num-failures-to-alert: "5"
-  - name: kubeflow-pipeline-postsubmit-mkp-e2e-test
-    cluster: build-kubeflow
-    branches:
-    - ^master|release-.+$
-    decorate: true
-    spec:
-      containers:
-      - image: gcr.io/k8s-testimages/kubekins-e2e:v20210113-cc576af-master
-        command:
-        - ./test/postsubmit-tests-with-pipeline-deployment.sh
-        args:
-        - --kfp_deployment
-        - mkp
-        - --workflow_file
-        - e2e_test_gke_v2.yaml
-        - --test_result_folder
-        - e2e_test
-        - --timeout
-        - "7200"
-    annotations:
-      testgrid-dashboards: googleoss-kubeflow-pipelines
-      description: Postsubmit tests for kubeflow/pipeline.
-      testgrid-alert-email: kubeflow-pipelines+test@google.com
-      testgrid-num-failures-to-alert: "5"
