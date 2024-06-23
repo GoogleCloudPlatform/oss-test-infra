@@ -1,19 +1,5 @@
 presubmits:
   kubeflow/pipelines:
-  - name: kubeflow-pipeline-upgrade-test
-    run_if_changed: "^(backend/.*)|(manifests/kustomize/.*)|(test/upgrade.*)$"
-    cluster: build-kubeflow
-    decorate: true
-    # TODO: temporarily make it optional due to https://github.com/kubeflow/pipelines/issues/10779 
-    optional: true
-    spec:
-      containers:
-      - image: gcr.io/k8s-testimages/kubekins-e2e:v20210113-cc576af-master
-        command:
-        - ./test/upgrade-tests.sh
-        args:
-        - --test_result_folder
-        - upgrade_test
   - name: kubeflow-pipeline-upgrade-test-v2
     run_if_changed: "^(backend/.*)|(manifests/kustomize/.*)|(test/upgrade.*)$"
     cluster: build-kubeflow
@@ -42,7 +28,7 @@ presubmits:
       - image: python:3.8
         command:
         - ./test/presubmit-tests-tfx.sh
-  
+
   - name: kubeflow-pipelines-samples-v2
     cluster: build-kubeflow
     decorate: true
