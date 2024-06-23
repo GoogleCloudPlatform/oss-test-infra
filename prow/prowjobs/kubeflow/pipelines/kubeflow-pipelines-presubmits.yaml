@@ -34,20 +34,6 @@ presubmits:
         # We cannot call the shell script directly because the shebang in script is /bin/bash,
         # but the bash:alpine3.14 image has its bash in /usr/local/bin/bash.
         - ./manifests/gcp_marketplace/test/presubmit.sh 
-  - name: kubeflow-pipeline-upgrade-test
-    run_if_changed: "^(backend/.*)|(manifests/kustomize/.*)|(test/upgrade.*)$"
-    cluster: build-kubeflow
-    decorate: true
-    # TODO: temporarily make it optional due to https://github.com/kubeflow/pipelines/issues/10779 
-    optional: true
-    spec:
-      containers:
-      - image: gcr.io/k8s-testimages/kubekins-e2e:v20210113-cc576af-master
-        command:
-        - ./test/upgrade-tests.sh
-        args:
-        - --test_result_folder
-        - upgrade_test
   - name: kubeflow-pipeline-upgrade-test-v2
     run_if_changed: "^(backend/.*)|(manifests/kustomize/.*)|(test/upgrade.*)$"
     cluster: build-kubeflow
