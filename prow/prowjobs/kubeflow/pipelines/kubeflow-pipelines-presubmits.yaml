@@ -205,17 +205,6 @@ presubmits:
       - image: python:3.8
         command:
         - ./test/presubmit-isort-sdk.sh
-  - name: kubeflow-pipelines-sdk-yapf
-    cluster: build-kubeflow
-    decorate: true
-    run_if_changed: "^(sdk/python/.*)|(test/presubmit-yapf-sdk.sh)$"
-    branches:
-    - master
-    spec:
-      containers:
-      - image: python:3.8
-        command:
-        - ./test/presubmit-yapf-sdk.sh
   - name: kubeflow-pipelines-sdk-docformatter
     cluster: build-kubeflow
     decorate: true
