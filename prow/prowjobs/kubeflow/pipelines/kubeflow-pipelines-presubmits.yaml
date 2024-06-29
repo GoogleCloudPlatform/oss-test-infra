@@ -1,17 +1,5 @@
 presubmits:
   kubeflow/pipelines:
-  - name: kubeflow-pipeline-frontend-test
-    run_if_changed: "^frontend/.*$"
-    cluster: build-kubeflow
-    decorate: true
-    spec:
-      containers:
-      - image: node:14
-        command:
-        - /bin/sh
-        args:
-        - -c
-        - cd ./frontend && npm run test:ci:prow
   - name: kubeflow-pipeline-mkp-test
     run_if_changed: "^(manifests/gcp_marketplace/.*)|(test/presubmit-tests-mkp.sh)|(test/tag_for_hosted.sh)|(test/cloudbuild/mkp_verify.yaml)$"
     cluster: build-kubeflow
