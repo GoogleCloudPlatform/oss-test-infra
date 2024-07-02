@@ -205,18 +205,7 @@ presubmits:
       - image: python:3.8
         command:
         - ./test/presubmit-docformatter-sdk.sh
-  - name: kubeflow-pipelines-sdk-execution-tests
-    cluster: build-kubeflow
-    decorate: true
-    run_if_changed: "^(sdk/python/.*)|(api/v2alpha1/.*)|(test/presubmit-sdk-execution-tests.sh)$"
-    branches:
-    - master
-    spec:
-      containers:
-      - image: python:3.8
-        command:
-        - ./test/presubmit-sdk-execution-tests.sh
-
+ 
 # kfp.kubernetes tests
   - name: kfp-kubernetes-test-python38
     cluster: build-kubeflow
