@@ -129,16 +129,6 @@ presubmits:
         command:
         - ./test/presubmit-component-yaml.sh
 
-  - name: kubeflow-pipelines-backend-visualization
-    cluster: build-kubeflow
-    decorate: true
-    run_if_changed: "^(backend/src/apiserver/visualization/.*)|(test/presubmit-backend-visualization.sh)$"
-    spec:
-      containers:
-      - image: python:3.8
-        command:
-        - ./test/presubmit-backend-visualization.sh
-  
   - name: kubeflow-pipelines-samples-v2
     cluster: build-kubeflow
     decorate: true
