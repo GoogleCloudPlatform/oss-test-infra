@@ -87,7 +87,7 @@ presubmits:
       - <<: *config-sync-e2e-container
         args:
         - make
-        - test-e2e-kind-multi-repo-test-group1
+        - test-e2e-kind-test-group1
   - <<: *config-sync-e2e-job
     name: kpt-config-sync-presubmit-e2e-multi-repo-test-group2
     spec:
@@ -96,7 +96,7 @@ presubmits:
       - <<: *config-sync-e2e-container
         args:
         - make
-        - test-e2e-kind-multi-repo-test-group2
+        - test-e2e-kind-test-group2
   - <<: *config-sync-e2e-job
     name: kpt-config-sync-presubmit-e2e-multi-repo-test-group3
     spec:
@@ -105,4 +105,4 @@ presubmits:
       - <<: *config-sync-e2e-container
         args:
         - make
-        - test-e2e-kind-multi-repo-test-group3
+        - test-e2e-kind-test-group3

@@ -128,7 +128,7 @@ periodics:
       - runner.sh
       args:
       - make
-      - test-e2e-kind-multi-repo
+      - test-e2e-kind
       - 'E2E_GIT_PROVIDER=local'
       - 'E2E_OCI_PROVIDER=local'
       - 'E2E_HELM_PROVIDER=local'
