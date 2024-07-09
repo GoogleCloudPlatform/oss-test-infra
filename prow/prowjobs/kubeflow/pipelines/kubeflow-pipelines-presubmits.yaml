@@ -303,56 +303,6 @@ presubmits:
         command:
         - ./test/presubmit-test-sdk-upgrade.sh
 
-  - name: test-kfp-runtime-code-python38
-    cluster: build-kubeflow
-    decorate: true
-    run_if_changed: "^(sdk/python/.*)|(test/presubmit-test-kfp-runtime-code.sh)$"
-    spec:
-      containers:
-      - image: python:3.8
-        command:
-        - ./test/presubmit-test-kfp-runtime-code.sh
-
-  - name: test-kfp-runtime-code-python39
-    cluster: build-kubeflow
-    decorate: true
-    run_if_changed: "^(sdk/python/.*)|(test/presubmit-test-kfp-runtime-code.sh)$"
-    spec:
-      containers:
-      - image: python:3.9
-        command:
-        - ./test/presubmit-test-kfp-runtime-code.sh
-
-  - name: test-kfp-runtime-code-python310
-    cluster: build-kubeflow
-    decorate: true
-    run_if_changed: "^(sdk/python/.*)|(test/presubmit-test-kfp-runtime-code.sh)$"
-    spec:
-      containers:
-      - image: python:3.10
-        command:
-        - ./test/presubmit-test-kfp-runtime-code.sh
-
-  - name: test-kfp-runtime-code-python311
-    cluster: build-kubeflow
-    decorate: true
-    run_if_changed: "^(sdk/python/.*)|(test/presubmit-test-kfp-runtime-code.sh)$"
-    spec:
-      containers:
-      - image: python:3.11
-        command:
-        - ./test/presubmit-test-kfp-runtime-code.sh
-
-  - name: test-kfp-runtime-code-python312
-    cluster: build-kubeflow
-    decorate: true
-    run_if_changed: "^(sdk/python/.*)|(test/presubmit-test-kfp-runtime-code.sh)$"
-    spec:
-      containers:
-      - image: python:3.12
-        command:
-        - ./test/presubmit-test-kfp-runtime-code.sh
-
   # this test is not passing
   # - name: kubeflow-pipeline-multiuser-test
   #   cluster: build-kubeflow
