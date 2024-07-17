@@ -24,7 +24,8 @@ prow_ignored:
           cpu: "4000m"
     nodeSelector:
       # This job requires 8vCPUs or less, so it is "small".
-      cloud.google.com/gke-nodepool: small-job-pool
+      kpt-config-sync/type: periodic
+      kpt-config-sync/size: small
 # Base job definition for standard jobs
 - &config-sync-standard-job
   <<: *config-sync-base-job
@@ -139,7 +140,8 @@ periodics:
           memory: "50Gi"
           cpu: "30000m"
     nodeSelector:
-      cloud.google.com/gke-nodepool: large-job-pool-periodic
+      kpt-config-sync/type: periodic
+      kpt-config-sync/size: large
 
 #### Begin GKE standard jobs
 - <<: *config-sync-standard-job
@@ -413,4 +415,5 @@ periodics:
           cpu: "250m"
     nodeSelector:
       # This job requires 8vCPUs or less, so it is "small".
-      cloud.google.com/gke-nodepool: small-job-pool
+      kpt-config-sync/type: periodic
+      kpt-config-sync/size: small

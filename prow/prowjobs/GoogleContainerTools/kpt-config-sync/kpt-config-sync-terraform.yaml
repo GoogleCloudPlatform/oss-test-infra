@@ -5,7 +5,8 @@ prow_ignored:
   spec: &config-sync-terraform-job-spec
     nodeSelector:
       # This job requires 8vCPUs or less, so it is "small".
-      cloud.google.com/gke-nodepool: small-job-pool
+      kpt-config-sync/type: presubmit
+      kpt-config-sync/size: small
     containers:
     - &config-sync-terraform-container
       image: gcr.io/k8s-testimages/gcloud-terraform:v20220913-3bc71e6c7a
