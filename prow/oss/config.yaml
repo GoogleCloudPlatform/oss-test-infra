@@ -298,6 +298,8 @@ presets:
   env:
   - name: DOCKER_IN_DOCKER_ENABLED
     value: "true"
+  - name: BOOTSTRAP_MTU_WORKAROUND
+    value: "true"
   volumes:
   - name: docker-graph
     emptyDir: {}
@@ -309,6 +311,8 @@ presets:
     preset-dind-enabled-memory: "true"
   env:
   - name: DOCKER_IN_DOCKER_ENABLED
+    value: "true"
+  - name: BOOTSTRAP_MTU_WORKAROUND
     value: "true"
   volumes:
   - name: docker-graph
