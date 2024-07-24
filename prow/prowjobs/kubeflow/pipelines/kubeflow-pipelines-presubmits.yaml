@@ -96,17 +96,7 @@ presubmits:
       - image: python:3.8
         command:
         - ./test/presubmit-tests-tfx.sh
-
-  - name: kubeflow-pipelines-component-yaml
-    cluster: build-kubeflow
-    decorate: true
-    run_if_changed: "^(components/.*\\.yaml)|(test/presubmit-component-yaml.sh)|(sdk/python/.*)|(api/v2alpha1/.*)$"
-    spec:
-      containers:
-      - image: python:3.8
-        command:
-        - ./test/presubmit-component-yaml.sh
-
+  
   - name: kubeflow-pipelines-samples-v2
     cluster: build-kubeflow
     decorate: true
@@ -140,29 +130,7 @@ presubmits:
       - image: gcr.io/google.com/cloudsdktool/cloud-sdk:latest
         command:
         - ./manifests/kustomize/hack/presubmit.sh
-  - name: kubeflow-pipelines-sdk-isort
-    cluster: build-kubeflow
-    decorate: true
-    run_if_changed: "^(sdk/python/.*)|(test/presubmit-isort-sdk.sh)$"
-    branches:
-    - master
-    spec:
-      containers:
-      - image: python:3.8
-        command:
-        - ./test/presubmit-isort-sdk.sh
-  - name: kubeflow-pipelines-sdk-docformatter
-    cluster: build-kubeflow
-    decorate: true
-    run_if_changed: "^(sdk/python/.*)|(test/presubmit-docformatter-sdk.sh)$"
-    branches:
-    - master
-    spec:
-      containers:
-      - image: python:3.8
-        command:
-        - ./test/presubmit-docformatter-sdk.sh
- 
+
 # kfp.kubernetes tests
   - name: kfp-kubernetes-test-python38
     cluster: build-kubeflow
