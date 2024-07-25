@@ -1,0 +1,14 @@
+presubmits:
+  GoogleCloudPlatform/gke-networking-api:
+  - name: pull-gke-networking-api-test
+    branches:
+    - main
+    always_run: true         # Run for every PR, or only when requested.
+    labels:
+      preset-service-account: "true"
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/k8s-staging-test-infra/kubekins-e2e:v20230324-c487e233e1-master
+        command:
+        - ./hack/verify-codegen.sh
