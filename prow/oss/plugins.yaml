@@ -220,6 +220,13 @@ plugins:
     - owners-label
     - size
     - verify-owners
+  GoogleCloudPlatform/gke-networking-api:
+    plugins:
+    - approve
+    - lgtm
+    - owners-label
+    - size
+    - verify-owners
   GoogleCloudPlatform/netd:
     plugins:
     - approve
