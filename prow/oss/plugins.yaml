@@ -280,11 +280,13 @@ plugins:
     #- assign
     #- hold
     #- label
+    #- trigger
     - approve
     - lgtm
     - lifecycle   # Close PRs with /close
     - verify-owners
     - wip
+    - override
 
   GoogleContainerTools/kpt-config-sync:
     plugins:
