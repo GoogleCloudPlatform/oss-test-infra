@@ -45,6 +45,7 @@ approve:
   - kubeflow/arena
   - kubeflow/blog
   - kubeflow/community
+  - kubeflow/dashboard
   - kubeflow/examples
   - kubeflow/internal-acls
   - kubeflow/katib
@@ -328,6 +329,7 @@ plugins:
     - approve   # Enable /approve and /assign commands.
     - assign
     - blunderbuss
+    - cherrypicker # Cherry pick PRs to the release branch.
     - golint
     - help
     - hold
@@ -338,6 +340,7 @@ plugins:
     - project # Lets issues be tagged into projects
     - size
     - skip  # Allows cleaning up stale commit statuses
+    - transfer-issue # Transfer issue to a different repo in the same org.
     - verify-owners   # Validates OWNERS file changes in PRs.
     - wip   # Applies a label to PRs with wip in the title to block merge
 
