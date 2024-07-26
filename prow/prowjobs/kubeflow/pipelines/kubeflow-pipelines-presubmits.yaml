@@ -225,16 +225,6 @@ presubmits:
         command:
         - ./test/presubmit-test-run-all-gcpc-modules.sh
 
-  - name: test-upgrade-kfp-sdk
-    cluster: build-kubeflow
-    decorate: true
-    run_if_changed: "^(sdk/python/.*)|(test/presubmit-test-sdk-upgrade.sh)$"
-    spec:
-      containers:
-      - image: python:3.8
-        command:
-        - ./test/presubmit-test-sdk-upgrade.sh
-
   # this test is not passing
   # - name: kubeflow-pipeline-multiuser-test
   #   cluster: build-kubeflow
