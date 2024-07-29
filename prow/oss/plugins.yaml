@@ -341,32 +341,9 @@ plugins:
     - size
     - skip  # Allows cleaning up stale commit statuses
     - transfer-issue # Transfer issue to a different repo in the same org.
+    - trigger # Enable /ok-to-test command to trigger GitHub actions with /rerun-all
     - verify-owners   # Validates OWNERS file changes in PRs.
     - wip   # Applies a label to PRs with wip in the title to block merge
-
-  kubeflow/community:
-    plugins:
-    - trigger
-
-  kubeflow/community-infra:
-    plugins:
-    - trigger
-
-  kubeflow/gcp-blueprints:
-    plugins:
-    - trigger
-
-  kubeflow/internal-acls:
-    plugins:
-    - trigger
-
-  kubeflow/pipelines:
-    plugins:
-    - trigger
-
-  kubeflow/website:
-    plugins:
-    - trigger
 
   # This is a gerrit repo so this config doesn't do anything. It is included
   # to satisfy the checkconfig tool which expects all repos that configure
