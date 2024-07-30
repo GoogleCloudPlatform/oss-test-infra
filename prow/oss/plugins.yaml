@@ -329,7 +329,6 @@ plugins:
     - approve   # Enable /approve and /assign commands.
     - assign
     - blunderbuss
-    - cherrypicker # Cherry pick PRs to the release branch.
     - golint
     - help
     - hold
@@ -396,3 +395,11 @@ plugins:
     - trigger
     - verify-owners
     - yuks
+
+external_plugins:
+  kubeflow:
+  - name: cherrypicker # Cherry pick PRs to the release branch.
+    events:
+    - issue_comment
+    - pull_request
+    endpoint: http://cherrypicker
