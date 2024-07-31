@@ -13,20 +13,6 @@ presubmits:
         command:
         - ./test/presubmit-tests-tfx.sh
 
-  - name: kubeflow-pipelines-samples-v2
-    cluster: build-kubeflow
-    decorate: true
-    run_if_changed: "^(samples/.*)|(backend/src/v2/.*)$"
-    # TODO(chensun): restore as required test once we migrated sample test to use v2 client.
-    optional: true
-    spec:
-      containers:
-      - image: python:3.8
-        command:
-        - ./backend/src/v2/test/sample-test.sh
-    skip_branches:
-    - ^sdk\/release-1.*$
-  
   - name: kubeflow-pipelines-integration-v2
     run_if_changed: "^(samples/core/(parameterized_tfx_oss|dataflow)/.*)$"
     cluster: build-kubeflow

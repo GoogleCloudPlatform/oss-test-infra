@@ -10,7 +10,7 @@ presubmits:
       description: "Generates docker images to deploy in e2e tests."
     spec:
       containers:
-      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240509-v2.46.0-18-g09b23cfa-master
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240727-v2.46.0-27-g6c21f955-master
         imagePullPolicy: Always
         command:
         - ./prow/gcpproxy-build.sh
@@ -36,7 +36,7 @@ presubmits:
       description: "Runs all unit and integration tests."
     spec:
       containers:
-      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240509-v2.46.0-18-g09b23cfa-master
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240727-v2.46.0-27-g6c21f955-master
         imagePullPolicy: Always
         command:
         - ./prow/gcpproxy-presubmit.sh
@@ -62,7 +62,7 @@ presubmits:
       description: "Runs all integration tests with latest envoy and old configmanager for api backward compatibility"
     spec:
       containers:
-      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240509-v2.46.0-18-g09b23cfa-master
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240727-v2.46.0-27-g6c21f955-master
         imagePullPolicy: Always
         command:
         - ./prow/gcpproxy-api-regression.sh
@@ -88,7 +88,7 @@ presubmits:
       description: "Runs all unit and integration tests with ASan."
     spec:
       containers:
-      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240509-v2.46.0-18-g09b23cfa-master
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240727-v2.46.0-27-g6c21f955-master
         imagePullPolicy: Always
         command:
         - ./prow/presubmit-asan.sh
@@ -114,7 +114,7 @@ presubmits:
       description: "Runs all unit and integration tests with TSan."
     spec:
       containers:
-      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240509-v2.46.0-18-g09b23cfa-master
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240727-v2.46.0-27-g6c21f955-master
         imagePullPolicy: Always
         command:
         - ./prow/presubmit-tsan.sh
@@ -140,7 +140,7 @@ presubmits:
       description: "Generates coverage report for a subset of presubmit tests."
     spec:
       containers:
-      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240509-v2.46.0-18-g09b23cfa-master
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240727-v2.46.0-27-g6c21f955-master
         imagePullPolicy: Always
         command:
         - ./prow/gcpproxy-coverage.sh
@@ -471,7 +471,7 @@ presubmits:
       description: "Runs e2e tests for Cloud Run."
     spec:
       containers:
-      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240509-v2.46.0-18-g09b23cfa-master
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240727-v2.46.0-27-g6c21f955-master
         imagePullPolicy: Always
         command:
         - ./prow/gcpproxy-e2e.sh
@@ -499,7 +499,7 @@ presubmits:
       description: "Runs e2e tests for Cloud Functions."
     spec:
       containers:
-      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240509-v2.46.0-18-g09b23cfa-master
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240727-v2.46.0-27-g6c21f955-master
         imagePullPolicy: Always
         command:
         - ./prow/gcpproxy-e2e.sh
@@ -527,7 +527,7 @@ presubmits:
       description: "Runs e2e tests for App Engine."
     spec:
       containers:
-      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240509-v2.46.0-18-g09b23cfa-master
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240727-v2.46.0-27-g6c21f955-master
         imagePullPolicy: Always
         command:
         - ./prow/gcpproxy-e2e.sh
@@ -555,7 +555,7 @@ presubmits:
       description: "Runs e2e tests for Cloud Run."
     spec:
       containers:
-      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240509-v2.46.0-18-g09b23cfa-master
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240727-v2.46.0-27-g6c21f955-master
         imagePullPolicy: Always
         command:
         - ./prow/gcpproxy-e2e.sh
@@ -583,7 +583,7 @@ presubmits:
       description: "Runs e2e test for gcloud_build_image script."
     spec:
       containers:
-      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240509-v2.46.0-18-g09b23cfa-master
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240727-v2.46.0-27-g6c21f955-master
         imagePullPolicy: Always
         command:
         - ./prow/e2e-gcloud-build-image.sh
@@ -612,7 +612,7 @@ postsubmits:
       description: "Generates docker images for potential release"
     spec:
       containers:
-      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240509-v2.46.0-18-g09b23cfa-master
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240727-v2.46.0-27-g6c21f955-master
         imagePullPolicy: Always
         command:
         - ./prow/gcpproxy-build.sh
@@ -644,7 +644,7 @@ periodics:
         base_ref: master
     spec:
       containers:
-      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240509-v2.46.0-18-g09b23cfa-master
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240727-v2.46.0-27-g6c21f955-master
         imagePullPolicy: Always
         command:
           - ./prow/continuous-build.sh
@@ -674,7 +674,7 @@ periodics:
         base_ref: master
     spec:
       containers:
-      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240509-v2.46.0-18-g09b23cfa-master
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240727-v2.46.0-27-g6c21f955-master
         imagePullPolicy: Always
         command:
           - ./prow/gcpproxy-presubmit.sh
@@ -704,7 +704,7 @@ periodics:
         base_ref: master
     spec:
       containers:
-      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240509-v2.46.0-18-g09b23cfa-master
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240727-v2.46.0-27-g6c21f955-master
         imagePullPolicy: Always
         command:
           - ./prow/presubmit-asan.sh
@@ -734,7 +734,7 @@ periodics:
         base_ref: master
     spec:
       containers:
-      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240509-v2.46.0-18-g09b23cfa-master
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240727-v2.46.0-27-g6c21f955-master
         imagePullPolicy: Always
         command:
           - ./prow/presubmit-tsan.sh
@@ -764,7 +764,7 @@ periodics:
       base_ref: master
     spec:
       containers:
-      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240509-v2.46.0-18-g09b23cfa-master
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240727-v2.46.0-27-g6c21f955-master
         imagePullPolicy: Always
         command:
         - ./prow/gcpproxy-coverage.sh
@@ -1126,7 +1126,7 @@ periodics:
         base_ref: master
     spec:
       containers:
-      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240509-v2.46.0-18-g09b23cfa-master
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240727-v2.46.0-27-g6c21f955-master
         imagePullPolicy: Always
         command:
           - ./prow/e2e-cloud-run-cloud-run-http-bookstore.sh
@@ -1158,7 +1158,7 @@ periodics:
         base_ref: master
     spec:
       containers:
-      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240509-v2.46.0-18-g09b23cfa-master
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240727-v2.46.0-27-g6c21f955-master
         imagePullPolicy: Always
         command:
           - ./prow/e2e-cloud-run-cloud-function-http-bookstore.sh
@@ -1190,7 +1190,7 @@ periodics:
       base_ref: master
     spec:
       containers:
-      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240509-v2.46.0-18-g09b23cfa-master
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240727-v2.46.0-27-g6c21f955-master
         imagePullPolicy: Always
         command:
         - ./prow/e2e-cloud-run-app-engine-http-bookstore.sh
@@ -1222,7 +1222,7 @@ periodics:
         base_ref: master
     spec:
       containers:
-      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240509-v2.46.0-18-g09b23cfa-master
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240727-v2.46.0-27-g6c21f955-master
         imagePullPolicy: Always
         command:
           - ./prow/e2e-cloud-run-cloud-run-grpc-echo.sh
@@ -1252,7 +1252,7 @@ periodics:
       base_ref: master
     spec:
       containers:
-      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240509-v2.46.0-18-g09b23cfa-master
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240727-v2.46.0-27-g6c21f955-master
         imagePullPolicy: Always
         command:
         - ./prow/e2e-gcloud-build-image.sh
@@ -1323,7 +1323,7 @@ periodics:
         base_ref: master
     spec:
       containers:
-      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240509-v2.46.0-18-g09b23cfa-master
+      - image: gcr.io/cloudesf-testing/gcpproxy-prow:v20240727-v2.46.0-27-g6c21f955-master
         imagePullPolicy: Always
         command:
           - ./prow/janitor.sh
