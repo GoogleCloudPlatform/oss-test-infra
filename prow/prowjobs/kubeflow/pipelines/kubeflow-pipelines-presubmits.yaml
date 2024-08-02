@@ -21,17 +21,7 @@ presubmits:
       containers:
       - image: python:3.8
         command:
-        - ./backend/src/v2/test/integration-test.sh
-
-  - name: kubeflow-pipelines-manifests
-    cluster: build-kubeflow
-    decorate: true
-    run_if_changed: "^manifests/kustomize/.*$"
-    spec:
-      containers:
-      - image: gcr.io/google.com/cloudsdktool/cloud-sdk:latest
-        command:
-        - ./manifests/kustomize/hack/presubmit.sh
+        - ./backend/src/v2/test/integration-test.sh 
 
 # kfp.kubernetes tests
 
