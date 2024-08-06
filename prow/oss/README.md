@@ -15,7 +15,7 @@ job.
 Please check recent [prow announcements](https://github.com/kubernetes/test-infra/tree/master/prow#announcements) before updating, if you are not already familiar with them.
 
 ```shell
-prow/bump.sh --auto
+prow/bump.sh --latest
 # commit change and merge PR
 make -C prow/oss deploy
 # kubectl get pods and watch for problems

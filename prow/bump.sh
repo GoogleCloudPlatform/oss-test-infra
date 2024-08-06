@@ -30,17 +30,6 @@ if ! (${SED} --version 2>&1 | grep -q GNU); then
   exit 1
 fi
 
-TAC=tac
-
-if command -v gtac &>/dev/null; then
-  TAC=gtac
-fi
-
-if ! command -v "${TAC}" &>/dev/null; then
-  echo "tac (reverse cat) required. If on OS X then 'brew install coreutils'." >&2
-  exit 1
-fi
-
 cd "$(git rev-parse --show-toplevel)"
 
 usage() {
@@ -60,11 +49,12 @@ if [[ $# != 0 ]]; then
   shift
 fi
 
-# List the $1 most recently pushed prow versions
+# List images with appropriate tags in the $1 most recently pushed prow versions
 list-options() {
   count="$1"
-  gcloud container images list-tags gcr.io/k8s-prow/plank --limit="${count}" --format='value(tags)' \
-      | grep -o -E 'v[^,]+' | "${TAC}"
+  gcloud artifacts docker images list us-central1-docker.pkg.dev/gob-prow/prow-images/prow-controller-manager \
+      --limit=${count} --include-tags --sort-by=~create_time --format='value(tags)' \
+      | grep -o -E 'v[^,]+' | uniq
 }
 
 upstream-version() {
@@ -121,8 +111,9 @@ elif [[ "${cmd}" == "--auto" ]]; then
 else
   usage
 fi
+echo "New Version: $new_version"
 
-${SED} -i "s/\(k8s-prow\/.\+:\)v[a-f0-9-]\+/\1${new_version}/I" \
+${SED} -i "s/\(prow-images\/.\+:\)v[a-f0-9-]\+/\1${new_version}/I" \
   prow/oss/config.yaml prow/oss/cluster/cluster.yaml \
   prow/oss/cluster/grandmatriarch_*.yaml \
   prow/prowjobs/GoogleCloudPlatform/oss-test-infra/gcp-oss-test-infra-config.yaml
