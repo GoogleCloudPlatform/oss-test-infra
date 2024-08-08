@@ -14,7 +14,7 @@ postsubmits:
     spec:
       serviceAccountName: prow-deployer
       containers:
-      - image: gcr.io/k8s-staging-test-infra/gcloud-in-go:v20220607-33951ed1ed
+      - image: gcr.io/k8s-staging-test-infra/gcloud-in-go:v20230111-cd1b3caf9c
         command:
         - make
         args:
