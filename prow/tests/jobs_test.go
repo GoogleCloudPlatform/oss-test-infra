@@ -138,12 +138,12 @@ func TestAllJobs(t *testing.T) {
 func TestPrivateJobs(t *testing.T) {
 	const (
 		private           = "private"
-		checkconfigPrefix = "gcr.io/k8s-prow/checkconfig:"
+		checkconfigPrefix = "us-central1-docker.pkg.dev/gob-prow/prow-images/checkconfig:"
 	)
 	trustedPath := path.Join(*jobConfigPath, "private-inrepoconfig-configcheck")
 
 	errorIfNotPermitted := func(t *testing.T, name, cluster string, spec *v1.PodSpec) {
-		if strings.Contains(cluster, private) && (len(spec.Containers) != 1 || !strings.HasPrefix(spec.Containers[0].Image, "gcr.io/k8s-prow/checkconfig:")) {
+		if strings.Contains(cluster, private) && (len(spec.Containers) != 1 || !strings.HasPrefix(spec.Containers[0].Image, "us-central1-docker.pkg.dev/gob-prow/prow-images/checkconfig:")) {
 			t.Errorf("%s: cannot use private cluster %s", name, cluster)
 		}
 	}
