@@ -23,16 +23,6 @@ presubmits:
         command:
         - ./backend/src/v2/test/integration-test.sh
 
-  - name: kubeflow-pipelines-manifests
-    cluster: build-kubeflow
-    decorate: true
-    run_if_changed: "^manifests/kustomize/.*$"
-    spec:
-      containers:
-      - image: gcr.io/google.com/cloudsdktool/cloud-sdk:latest
-        command:
-        - ./manifests/kustomize/hack/presubmit.sh
-
 # kfp.kubernetes tests
 
   - name: test-run-all-gcpc-modules
