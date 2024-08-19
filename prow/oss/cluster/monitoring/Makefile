@@ -18,12 +18,7 @@ PROJECT       ?= oss-prow
 ZONE          ?= us-west1-a
 CLUSTER       ?= prow
 
-apply-components: get-cluster-credentials
-	kubectl apply -f ./prometheus-operator-crds
+apply: get-cluster-credentials
 	kubectl apply -f .
 
-apply: apply-components
-	$(MAKE) -C ./mixins apply
-	./secrets/replace-secrets-from-gcp.sh ${PROJECT}
-
-.PHONY: apply-components apply
+.PHONY: apply
