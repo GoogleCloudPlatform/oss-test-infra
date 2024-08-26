@@ -13,16 +13,6 @@ presubmits:
         command:
         - ./test/presubmit-tests-tfx.sh
 
-  - name: kubeflow-pipelines-integration-v2
-    run_if_changed: "^(samples/core/(parameterized_tfx_oss|dataflow)/.*)$"
-    cluster: build-kubeflow
-    decorate: true
-    spec:
-      containers:
-      - image: python:3.8
-        command:
-        - ./backend/src/v2/test/integration-test.sh 
-
 # kfp.kubernetes tests
 
   - name: test-run-all-gcpc-modules
