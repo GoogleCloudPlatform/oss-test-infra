@@ -351,6 +351,22 @@ periodics:
       - 'E2E_ARGS=--gcenode'
 
 - <<: *config-sync-standard-job
+  name: kpt-config-sync-standard-regular-githubapp
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-main
+    testgrid-tab-name: standard-regular-githubapp
+  spec:
+    <<: *config-sync-standard-job-spec
+    containers:
+    - <<: *config-sync-standard-job-container
+      args:
+      - 'GCP_SUBNETWORK=prow-e2e-subnetwork-usw1-11'
+      - 'GKE_RELEASE_CHANNEL=regular'
+      - 'E2E_CLUSTER_PREFIX=standard-regular-githubapp'
+      - 'E2E_NUM_CLUSTERS=1'
+      - 'E2E_ARGS=--githubapp'
+
+- <<: *config-sync-standard-job
   name: kpt-config-sync-standard-rapid-latest-stress
   annotations:
     testgrid-dashboards: googleoss-kpt-config-sync-main
