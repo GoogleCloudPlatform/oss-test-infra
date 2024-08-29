@@ -20,7 +20,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
       - name: crier
-        image: us-central1-docker.pkg.dev/gob-prow/prow-images/crier:v20240626-70258ed34
+        image: us-central1-docker.pkg.dev/gob-prow/prow-images/crier:v20240812-2aa40812b
         args:
         - --blob-storage-workers=1
         - --config-path=/etc/config/config.yaml
