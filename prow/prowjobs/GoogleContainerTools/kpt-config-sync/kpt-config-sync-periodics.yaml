@@ -145,6 +145,7 @@ periodics:
 #### Begin GKE standard jobs
 - <<: *config-sync-standard-job
   name: kpt-config-sync-standard-regular
+  cron: 0 */2 * * *
   annotations:
     testgrid-dashboards: googleoss-kpt-config-sync-main
     testgrid-tab-name: standard-regular
@@ -219,6 +220,8 @@ periodics:
       - 'GKE_RELEASE_CHANNEL=regular'
       - 'E2E_CLUSTER_PREFIX=standard-regular-bitbucket'
       - 'E2E_GIT_PROVIDER=bitbucket'
+      - 'E2E_OCI_PROVIDER=local' # Use local to minimize AR quota usage
+      - 'E2E_HELM_PROVIDER=local'
 
 - <<: *config-sync-standard-job
   name: kpt-config-sync-standard-regular-gitlab
@@ -234,6 +237,8 @@ periodics:
       - 'GKE_RELEASE_CHANNEL=regular'
       - 'E2E_CLUSTER_PREFIX=standard-regular-gitlab'
       - 'E2E_GIT_PROVIDER=gitlab'
+      - 'E2E_OCI_PROVIDER=local' # Use local to minimize AR quota usage
+      - 'E2E_HELM_PROVIDER=local'
 
 - <<: *config-sync-standard-job
   name: kpt-config-sync-standard-regular-csr
@@ -249,11 +254,15 @@ periodics:
       - 'GKE_RELEASE_CHANNEL=regular'
       - 'E2E_CLUSTER_PREFIX=standard-regular-csr'
       - 'E2E_GIT_PROVIDER=csr'
+      - 'E2E_OCI_PROVIDER=local' # Use local to minimize AR quota usage
+      - 'E2E_HELM_PROVIDER=local'
+
 #### End git provider specific jobs
 #### Begin GKE autopilot jobs
 
 - <<: *config-sync-autopilot-job
   name: kpt-config-sync-autopilot-regular
+  cron: 0 1-23/2 * * *
   annotations:
     testgrid-dashboards: googleoss-kpt-config-sync-main
     testgrid-tab-name: autopilot-regular
@@ -333,6 +342,8 @@ periodics:
       - 'E2E_CLUSTER_PREFIX=standard-regular-kcc'
       - 'E2E_NUM_CLUSTERS=1'
       - 'E2E_ARGS=--kcc'
+      - 'E2E_OCI_PROVIDER=local' # Use local to minimize AR quota usage
+      - 'E2E_HELM_PROVIDER=local'
 
 - <<: *config-sync-standard-job
   name: kpt-config-sync-standard-regular-gcenode
@@ -349,6 +360,8 @@ periodics:
       - 'E2E_CLUSTER_PREFIX=standard-regular-gcenode'
       - 'E2E_NUM_CLUSTERS=1'
       - 'E2E_ARGS=--gcenode'
+      - 'E2E_OCI_PROVIDER=local' # Use local to minimize AR quota usage
+      - 'E2E_HELM_PROVIDER=local'
 
 - <<: *config-sync-standard-job
   name: kpt-config-sync-standard-regular-githubapp
@@ -365,6 +378,8 @@ periodics:
       - 'E2E_CLUSTER_PREFIX=standard-regular-githubapp'
       - 'E2E_NUM_CLUSTERS=1'
       - 'E2E_ARGS=--githubapp'
+      - 'E2E_OCI_PROVIDER=local' # Use local to minimize AR quota usage
+      - 'E2E_HELM_PROVIDER=local'
 
 - <<: *config-sync-standard-job
   name: kpt-config-sync-standard-rapid-latest-stress
