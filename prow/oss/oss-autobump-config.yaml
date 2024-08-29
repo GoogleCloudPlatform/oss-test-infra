@@ -9,6 +9,7 @@ gitHubRepo: "oss-test-infra"
 remoteName: "oss-test-infra"
 headBranchName: "autobump-oss-prow"
 upstreamURLBase: "https://raw.githubusercontent.com/kubernetes/test-infra/master"
+imageRegistryAuth: google
 includedConfigPaths:
   - "prow/oss/cluster"
   - "prow/prowjobs"
