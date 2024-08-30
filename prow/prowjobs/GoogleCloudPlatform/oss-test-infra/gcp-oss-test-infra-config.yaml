@@ -14,7 +14,7 @@ postsubmits:
     spec:
       serviceAccountName: prow-deployer
       containers:
-      - image: gcr.io/k8s-staging-test-infra/gcloud-in-go:v20220607-33951ed1ed
+      - image: gcr.io/k8s-staging-test-infra/gcloud-in-go:v20230111-cd1b3caf9c
         command:
         - make
         args:
@@ -93,7 +93,7 @@ periodics:
     testgrid-num-failures-to-alert: '3'
   spec:
     containers:
-    - image: us-central1-docker.pkg.dev/gob-prow/prow-images/generic-autobumper:v20240626-70258ed34
+    - image: us-central1-docker.pkg.dev/gob-prow/prow-images/generic-autobumper:v20240812-2aa40812b
       command:
       - generic-autobumper
       args:
@@ -130,7 +130,7 @@ periodics:
     testgrid-num-failures-to-alert: '1'
   spec:
     containers:
-    - image: us-central1-docker.pkg.dev/gob-prow/prow-images/generic-autobumper:v20240626-70258ed34
+    - image: us-central1-docker.pkg.dev/gob-prow/prow-images/generic-autobumper:v20240812-2aa40812b
       command:
       - generic-autobumper
       args:
