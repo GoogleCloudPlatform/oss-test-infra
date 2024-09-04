@@ -9,7 +9,7 @@ postsubmits:
     annotations:
       testgrid-dashboards: googleoss-test-infra
       testgrid-tab-name: prow-deploy
-      testgrid-alert-email: k8s-infra-oncall@google.com
+      testgrid-alert-email: prow-alert-pioneer@google.com
       testgrid-num-failures-to-alert: '2'
     spec:
       serviceAccountName: prow-deployer
@@ -35,7 +35,7 @@ postsubmits:
     annotations:
       testgrid-dashboards: googleoss-test-infra
       testgrid-tab-name: testgrid-gcs-upload
-      testgrid-alert-email: k8s-infra-oncall@google.com
+      testgrid-alert-email: prow-alert-pioneer@google.com
       testgrid-num-failures-to-alert: '1'
     spec:
       serviceAccountName: testgrid-config-updater
@@ -74,7 +74,7 @@ postsubmits:
       testgrid-num-failures-to-alert: '1'
       testgrid-dashboards: googleoss-test-infra
       testgrid-tab-name: postsubmit-gencred-refresh-kubeconfig
-      testgrid-alert-email: k8s-infra-oncall@google.com
+      testgrid-alert-email: prow-alert-pioneer@google.com
       description: Runs gencred to refresh generated kubeconfigs.
 
 periodics:
@@ -89,7 +89,7 @@ periodics:
   annotations:
     testgrid-dashboards: googleoss-test-infra
     testgrid-tab-name: autobump-prow
-    testgrid-alert-email: k8s-infra-oncall@google.com
+    testgrid-alert-email: prow-alert-pioneer@google.com
     testgrid-num-failures-to-alert: '3'
   spec:
     containers:
@@ -97,7 +97,7 @@ periodics:
       command:
       - generic-autobumper
       args:
-      - --config=prow/oss/oss-autobump-config.yaml
+      - --config=prow/oss/oss-prow-autobump-config.yaml
       volumeMounts:
       - name: github
         mountPath: /etc/github-token
@@ -112,11 +112,8 @@ periodics:
       secret:
         secretName: google-oss-robot-ssh-keys
         defaultMode: 0400
-- cron: "01 21 * * 1-5"  # Bump with label `skip-review`. Run at 13:01 PST (21:01 UTC, fall) Mon-Fri
-  # Save for daylight saving:
-  # (Could consider not to switch, since running at 14:01 PST is an acceptable time)
-  # cron: "01 20 * * 1-5"  # Bump with label `skip-review`. Run at 13:01 PST (20:01 UTC, spring) Mon-Fri
-  name: ci-oss-test-infra-autobump-prow-for-auto-deploy
+- cron: "30 * * * 1-5"  # Bump don't label `skip-review`. Run at :30 past every hour Mon-Fri
+  name: ci-oss-test-infra-autobump-misc
   cluster: test-infra-trusted
   decorate: true
   extra_refs:
@@ -125,18 +122,16 @@ periodics:
     base_ref: master
   annotations:
     testgrid-dashboards: googleoss-test-infra
-    testgrid-tab-name: autobump-prow-for-auto-deploy
-    testgrid-alert-email: k8s-infra-oncall@google.com
-    testgrid-num-failures-to-alert: '1'
+    testgrid-tab-name: autobump-misc
+    testgrid-alert-email: prow-alert-pioneer@google.com
+    testgrid-num-failures-to-alert: '3'
   spec:
     containers:
     - image: us-central1-docker.pkg.dev/gob-prow/prow-images/generic-autobumper:v20240626-70258ed34
       command:
       - generic-autobumper
       args:
-      - --config=prow/oss/oss-autobump-config.yaml
-      - --labels-override=skip-review # This label is used by tide for identifying trusted PR
-      - --skip-if-no-oncall # Only apply `skip-review` label when oncall is active
+      - --config=prow/oss/misc-images-autobump-config.yaml
       volumeMounts:
       - name: github
         mountPath: /etc/github-token
@@ -197,5 +192,5 @@ periodics:
     testgrid-alert-stale-results-hours: '12'
     testgrid-dashboards: googleoss-test-infra
     testgrid-tab-name: ci-gencred-refresh-kubeconfig
-    testgrid-alert-email: k8s-infra-oncall@google.com
+    testgrid-alert-email: prow-alert-pioneer@google.com
     description: Runs gencred to refresh generated kubeconfigs.
