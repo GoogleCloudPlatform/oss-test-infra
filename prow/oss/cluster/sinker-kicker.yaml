@@ -1,0 +1,58 @@
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: sinker-kicker
+  namespace: default
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: sinker-kicker
+  namespace: default
+rules:
+  - apiGroups: ["apps", "extensions"]
+    resources: ["deployments"]
+    resourceNames: ["sinker"]
+    verbs: ["get", "patch", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: sinker-kicker
+  namespace: default
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: sinker-kicker
+subjects:
+  - kind: ServiceAccount
+    name: sinker-kicker
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: sinker-kicker
+  namespace: default
+spec:
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 2
+  concurrencyPolicy: Forbid
+  schedule: "30 7 * * *" # Run at 07:30(UTC) every day.
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      activeDeadlineSeconds: 300
+      template:
+        spec:
+          serviceAccountName: sinker-kicker
+          restartPolicy: Never
+          containers:
+            - name: kubectl
+              image: gcr.io/k8s-staging-test-infra/gcloud-in-go:v20230111-cd1b3caf9c
+              command:
+                - "kubectl"
+                - "-n"
+                - "default"
+                - "rollout"
+                - "restart"
+                - "deployment/sinker"

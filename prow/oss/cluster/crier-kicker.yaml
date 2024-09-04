@@ -1,0 +1,58 @@
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: crier-kicker
+  namespace: default
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: crier-kicker
+  namespace: default
+rules:
+  - apiGroups: ["apps", "extensions"]
+    resources: ["deployments"]
+    resourceNames: ["crier"]
+    verbs: ["get", "patch", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: crier-kicker
+  namespace: default
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: crier-kicker
+subjects:
+  - kind: ServiceAccount
+    name: crier-kicker
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: crier-kicker
+  namespace: default
+spec:
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 2
+  concurrencyPolicy: Forbid
+  schedule: "0 8 * * *" # Run at 08:00(UTC) every day.
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      activeDeadlineSeconds: 300
+      template:
+        spec:
+          serviceAccountName: crier-kicker
+          restartPolicy: Never
+          containers:
+            - name: kubectl
+              image: gcr.io/k8s-staging-test-infra/gcloud-in-go:v20230111-cd1b3caf9c
+              command:
+                - "kubectl"
+                - "-n"
+                - "default"
+                - "rollout"
+                - "restart"
+                - "deployment/crier"
