@@ -28,14 +28,6 @@ prow_ignored:
       image: gcr.io/k8s-staging-test-infra/kubekins-e2e:v20240829-98143ff123-1.30
       command:
       - runner.sh
-      env:
-      # This is only used to tell the job where to store the images.
-      # It can be any non-empty value that is a valid gcr.io folder name.
-      - name: USER
-        value: "kpt-config-sync-e2e-go-ci"
-      # TODO: unset GCP_PROJECT once jobs can rely on resources in oss prow project
-      - name: GCP_PROJECT
-        value: "stolos-dev"
       securityContext:
         privileged: true
       resources:
