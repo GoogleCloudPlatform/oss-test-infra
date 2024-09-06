@@ -304,7 +304,7 @@ periodics:
       args:
       - 'GCP_SUBNETWORK=prow-e2e-subnetwork-9'
       - 'GKE_RELEASE_CHANNEL=rapid'
-      - 'E2E_CLUSTER_PREFIX=autopilot-rapid'
+      - 'E2E_CLUSTER_PREFIX=tmp-autopilot-rapid' # TODO: remove tmp- prefix after RCA is finished on old clusters
 
 - <<: *config-sync-autopilot-job
   name: kpt-config-sync-autopilot-rapid-latest-release
@@ -320,7 +320,7 @@ periodics:
       - 'GCP_SUBNETWORK=prow-e2e-subnetwork-10'
       - 'GKE_RELEASE_CHANNEL=rapid'
       - 'GKE_CLUSTER_VERSION=latest'
-      - 'E2E_CLUSTER_PREFIX=autopilot-rapid-latest'
+      - 'E2E_CLUSTER_PREFIX=tmp-autopilot-rapid-latest' # TODO: remove tmp- prefix after RCA is finished on old clusters
 
 #### End GKE autopilot jobs
 #### Begin one-off jobs
@@ -412,7 +412,7 @@ periodics:
       - 'GCP_SUBNETWORK=prow-e2e-subnetwork-11'
       - 'GKE_RELEASE_CHANNEL=rapid'
       - 'GKE_CLUSTER_VERSION=latest'
-      - 'E2E_CLUSTER_PREFIX=autopilot-rapid-latest-stress'
+      - 'E2E_CLUSTER_PREFIX=tmp-autopilot-rapid-latest-stress' # TODO: remove tmp- prefix after RCA is finished on old clusters
       - 'E2E_NUM_CLUSTERS=2' # autopilot uses more clusters to run more quickly
       - 'E2E_ARGS=--stress'
 
