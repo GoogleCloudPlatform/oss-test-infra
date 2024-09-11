@@ -112,7 +112,7 @@ presubmits:
       - image: gcr.io/gcp-guest/daisy-builder:latest
         command:
         - "/main.sh"
-        args: ["gcp-guest", "us-west1-a", "deb11,deb11_arm64,el8,el8_arm64,el9,el9_arm64,goo"]
+        args: ["gcp-guest", "us-west1-a", "deb11,el8,el8_arm64,el9,el9_arm64,goo"]
   - name: osconfig-presubmit-gocheck
     cluster: gcp-guest
     run_if_changed: '\.go$'
@@ -214,7 +214,7 @@ presubmits:
       - image: gcr.io/gcp-guest/daisy-builder:latest
         command:
         - "/main.sh"
-        args: ["gcp-guest", "us-west1-a", "deb11,deb11_arm64,el8,el8_arm64,el9,el9_arm64,goo"]
+        args: ["gcp-guest", "us-west1-a", "deb11,el8,el8_arm64,el9,el9_arm64,goo"]
 
   GoogleCloudPlatform/guest-logging-go:
   - name: guest-logging-presubmit-gocheck
@@ -270,7 +270,7 @@ presubmits:
       - image: gcr.io/gcp-guest/daisy-builder:latest
         command:
         - "/main.sh"
-        args: ["gcp-guest", "us-west1-a", "deb11,deb11_arm64,el8,el8_arm64,el9,el9_arm64"]
+        args: ["gcp-guest", "us-west1-a", "deb11,el8,el8_arm64,el9,el9_arm64"]
   - name: oslogin-presubmit-selinux-module
     cluster: gcp-guest
     run_if_changed: "policy/"
