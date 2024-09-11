@@ -19,6 +19,7 @@ triggers:
 - repos:
   - GoogleCloudPlatform/compute-daisy
   - GoogleCloudPlatform/cloud-image-tests
+  - GoogleCloudPlatform/galog
   trusted_apps:
     - copybara-service
 
@@ -169,6 +170,9 @@ plugins:
     - owners-label
     - size
     - verify-owners
+  GoogleCloudPlatform/galog:
+    plugins:
+    - size
   GoogleCloudPlatform/guest-agent:
     plugins:
     - approve
