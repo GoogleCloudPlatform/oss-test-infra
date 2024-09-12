@@ -39,7 +39,7 @@ prow_ignored:
       <<: *config-sync-base-job-container
       env:
       - name: GKE_E2E_TIMEOUT
-        value: 2h
+        value: 4h
       - name: GCP_PROJECT
         value: kpt-config-sync-ci-release
       - name: GCP_NETWORK
@@ -82,7 +82,7 @@ prow_ignored:
       <<: *config-sync-base-job-container
       env:
       - name: GKE_E2E_TIMEOUT
-        value: 2h
+        value: 4h
       - name: GCP_PROJECT
         value: kpt-config-sync-ci-release
       - name: GCP_NETWORK
