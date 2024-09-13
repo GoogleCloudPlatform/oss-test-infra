@@ -28,7 +28,7 @@ postsubmits:
   - name: push-testgrid-images
     cluster: test-infra-trusted
     branches:
-    - ^master$
+    - ^main$
     run_if_changed: '^([^c]|c[^l]|cl[^u]|clu[^s]|clus[^t]|clust[^e]|cluste[^r]).*$' # Anything outside cluster
     decorate: true
     annotations:
@@ -44,7 +44,7 @@ postsubmits:
   - name: post-testgrid-deploy-prod
     cluster: test-infra-trusted
     branches:
-    - ^master$
+    - ^main$
     run_if_changed: '^cluster/prod'
     decorate: true
     annotations:
@@ -62,7 +62,7 @@ postsubmits:
   - name: post-testgrid-deploy-canary
     cluster: test-infra-trusted
     branches:
-    - ^master$
+    - ^main$
     run_if_changed: '^cluster/canary'
     decorate: true
     annotations:
@@ -80,7 +80,7 @@ postsubmits:
   - name: testgrid-prod-autobump
     cluster: test-infra-trusted
     branches:
-    - ^master$
+    - ^main$
     run_if_changed: '^cluster/canary'
     decorate: true
     annotations:
@@ -118,7 +118,7 @@ periodics:
   extra_refs:
   - org: GoogleCloudPlatform
     repo: testgrid
-    base_ref: master
+    base_ref: main
   annotations:
     testgrid-dashboards: googleoss-test-infra
     testgrid-tab-name: autobump-testgrid-canary
