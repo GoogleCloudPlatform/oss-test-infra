@@ -13,19 +13,6 @@ presubmits:
         imagePullPolicy: Always
         command:
         - "/go/main.sh"
-  - name: galog-presubmit-gotest
-    cluster: gcp-guest
-    run_if_changed: '.*\.go$'
-    trigger: "(?m)^/gotest$"
-    rerun_command: "/gotest"
-    context: prow/presubmit/gotest
-    decorate: true
-    spec:
-      containers:
-      - image: gcr.io/gcp-guest/gotest:latest
-        imagePullPolicy: Always
-        command:
-        - "/go/main.sh"
   - name: galog-presubmit-gobuild
     cluster: gcp-guest
     run_if_changed: '.*\.go$'
