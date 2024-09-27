@@ -120,6 +120,8 @@ kind: ServiceAccount
 metadata:
   name: sinker
   namespace: default
+  annotations:
+    "iam.gke.io/gcp-service-account": "oss-prow@oss-prow.iam.gserviceaccount.com"
 ---
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
