@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: default
+  name: cherrypicker
+  labels:
+    app: cherrypicker
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: cherrypicker
+  template:
+    metadata:
+      labels:
+        app: cherrypicker
+    spec:
+      containers:
+      - name: cherrypicker
+        image: us-central1-docker.pkg.dev/gob-prow/prow-images/cherrypicker:v20240812-2aa40812b
+        args:
+        - --github-token-path=/etc/github/oauth
+        - --github-endpoint=http://ghproxy
+        - --github-endpoint=https://api.github.com
+        - --dry-run=false
+        ports:
+          - name: http
+            containerPort: 8888
+        volumeMounts:
+        - name: hmac
+          mountPath: /etc/webhook
+          readOnly: true
+        - name: github-token
+          mountPath: /etc/github
+          readOnly: true
+        - name: tmp
+          mountPath: /tmp
+      volumes:
+      - name: tmp
+        emptyDir: {}
+      - name: hmac
+        secret:
+          secretName: ghapp-hmac-token
+      - name: github-token
+        secret:
+          secretName: oauth-token-2
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cherrypicker
+  namespace: default
+spec:
+  selector:
+    app: cherrypicker
+  ports:
+  - port: 80
+    targetPort: 8888
+  type: ClusterIP

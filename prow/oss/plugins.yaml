@@ -401,3 +401,11 @@ plugins:
     - trigger
     - verify-owners
     - yuks
+
+external_plugins:
+  kubeflow:
+  - name: cherrypicker
+    events:
+    - issue_comment
+    - pull_request
+    endpoint: http://cherrypicker
