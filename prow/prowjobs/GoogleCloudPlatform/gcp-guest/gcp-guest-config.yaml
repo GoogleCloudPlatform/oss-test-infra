@@ -719,7 +719,7 @@ periodics:
       command:
       - "/manager"
       args:
-      - "-parallel_count=5"
+      - "-parallel_count=10"
       - "-project=gcp-guest"
       - "-zone=us-central1-b"
 # Please keep this field ordered by Server OS then client and order by OS version release within those families.
