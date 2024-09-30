@@ -22,4 +22,4 @@ prefixes:
     prefix: "gcr.io/k8s-staging-test-infra"
     repo: "https://github.com/kubernetes/test-infra"
     summarise: true
-    consistentImages: true
+    consistentImages: false
