@@ -110,6 +110,14 @@ tide:
     - do-not-merge/work-in-progress
     repos:
     - GoogleCloudPlatform/oss-test-infra
+  context_options:
+    orgs:
+      GoogleCloudPlatform:
+        repos:
+          gke-networking-api:
+            optional-contexts:
+              # The job is triggered only on dependabot PRs.
+              - regenerate-crds
 
 plank:
   job_url_prefix_config:
