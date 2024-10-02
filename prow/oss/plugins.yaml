@@ -20,6 +20,7 @@ triggers:
   - GoogleCloudPlatform/compute-daisy
   - GoogleCloudPlatform/cloud-image-tests
   - GoogleCloudPlatform/galog
+  - GoogleCloudPlatform/google-guest-agent
   trusted_apps:
     - copybara-service
 
@@ -171,6 +172,9 @@ plugins:
     - size
     - verify-owners
   GoogleCloudPlatform/galog:
+    plugins:
+    - size
+  GoogleCloudPlatform/google-guest-agent:
     plugins:
     - size
   GoogleCloudPlatform/guest-agent:
