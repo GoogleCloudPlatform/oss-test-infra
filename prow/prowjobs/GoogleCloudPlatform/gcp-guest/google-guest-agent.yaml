@@ -2,7 +2,7 @@ presubmits:
   GoogleCloudPlatform/google-guest-agent:
   - name: google-guest-agent-presubmit-gocheck
     cluster: gcp-guest
-    run_if_changed: '.*\.go$'
+    run_if_changed: '.*'
     trigger: "(?m)^/gocheck$"
     rerun_command: "/gocheck"
     context: prow/presubmit/gocheck
@@ -15,7 +15,7 @@ presubmits:
         - "/go/main.sh"
   - name: google-guest-agent-presubmit-gotest
     cluster: gcp-guest
-    run_if_changed: '.*\.go$'
+    run_if_changed: '.*'
     trigger: "(?m)^/gotest$"
     rerun_command: "/gotest"
     context: prow/presubmit/gotest
@@ -28,7 +28,7 @@ presubmits:
         - "/go/main.sh"
   - name: google-guest-agent-presubmit-gobuild
     cluster: gcp-guest
-    run_if_changed: '.*\.go$'
+    run_if_changed: '.*'
     trigger: "(?m)^/gobuild$"
     rerun_command: "/gobuild"
     context: prow/presubmit/gobuild
