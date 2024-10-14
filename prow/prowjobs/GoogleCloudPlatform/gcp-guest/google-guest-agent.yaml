@@ -14,6 +14,9 @@ presubmits:
         command:
         - "make"
         args: ["check"]
+        env:
+        - name: V
+          value: "1"
   - name: google-guest-agent-presubmit-gotest
     cluster: gcp-guest
     run_if_changed: '.*'
@@ -28,6 +31,9 @@ presubmits:
         command:
         - "make"
         args: ["test"]
+        env:
+        - name: V
+          value: "1"
   - name: google-guest-agent-presubmit-gobuild
     cluster: gcp-guest
     run_if_changed: '.*'
@@ -42,3 +48,6 @@ presubmits:
         command:
         - "make"
         args: ["build"]
+        env:
+        - name: V
+          value: "1"
