@@ -12,7 +12,8 @@ presubmits:
       - image: gcr.io/gcp-guest/gocheck:latest
         imagePullPolicy: Always
         command:
-        - "V=1 make check"
+        - "make"
+        args: ["check"]
   - name: google-guest-agent-presubmit-gotest
     cluster: gcp-guest
     run_if_changed: '.*'
@@ -25,7 +26,8 @@ presubmits:
       - image: gcr.io/gcp-guest/gotest:latest
         imagePullPolicy: Always
         command:
-        - "V=1 make test"
+        - "make"
+        args: ["test"]
   - name: google-guest-agent-presubmit-gobuild
     cluster: gcp-guest
     run_if_changed: '.*'
@@ -38,4 +40,5 @@ presubmits:
       - image: gcr.io/gcp-guest/gobuild:latest
         imagePullPolicy: Always
         command:
-        - "V=1 make build"
+        - "make"
+        args: ["build"]
