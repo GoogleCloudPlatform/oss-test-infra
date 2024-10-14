@@ -17,6 +17,25 @@ presubmits:
         env:
         - name: V
           value: "1"
+  - name: google-guest-agent-presubmit-gocheck-windows
+    cluster: gcp-guest
+    run_if_changed: '.*'
+    trigger: "(?m)^/gocheck$"
+    rerun_command: "/gocheck"
+    context: prow/presubmit/gocheck/windows
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gocheck:latest
+        imagePullPolicy: Always
+        command:
+        - "make"
+        args: ["check"]
+        env:
+        - name: V
+          value: "1"
+        - name: GOOS
+          value: "windows"
   - name: google-guest-agent-presubmit-gotest
     cluster: gcp-guest
     run_if_changed: '.*'
@@ -51,3 +70,22 @@ presubmits:
         env:
         - name: V
           value: "1"
+  - name: google-guest-agent-presubmit-gobuild-windows
+    cluster: gcp-guest
+    run_if_changed: '.*'
+    trigger: "(?m)^/gobuild$"
+    rerun_command: "/gobuild"
+    context: prow/presubmit/gobuild/windows
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gcp-guest/gobuild:latest
+        imagePullPolicy: Always
+        command:
+        - "make"
+        args: ["build"]
+        env:
+        - name: V
+          value: "1"
+        - name: GOOS
+          value: "windows"
