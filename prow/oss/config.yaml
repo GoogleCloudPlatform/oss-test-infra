@@ -89,6 +89,18 @@ tide:
     - do-not-merge/hold
     - do-not-merge/invalid-owners-file
     - do-not-merge/work-in-progress
+  - repos:
+    - kubeflow/pipelines
+    labels:
+    - lgtm
+    - approved
+    - ci-passed
+    missingLabels:
+    - do-not-merge
+    - do-not-merge/hold
+    - do-not-merge/invalid-owners-file
+    - do-not-merge/work-in-progress
+    - needs-rebase
   - orgs:
     - kubeflow
     labels:
