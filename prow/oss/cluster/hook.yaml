@@ -25,7 +25,7 @@ spec:
       terminationGracePeriodSeconds: 180
       containers:
       - name: hook
-        image: us-central1-docker.pkg.dev/gob-prow/prow-images/hook:v20240923-b7ec15522
+        image: us-central1-docker.pkg.dev/gob-prow/prow-images/hook:v20241022-f03d044a6
         imagePullPolicy: Always
         args:
         - --webhook-path=/ghapp-hook
