@@ -22,7 +22,7 @@ postsubmits:
       containers:
       # TODO: Switch back to a k8s-versioned release, once Go 1.21 is available there
       # https://github.com/kubernetes/test-infra/blob/master/images/kubekins-e2e/variants.yaml
-      - image: gcr.io/k8s-staging-test-infra/kubekins-e2e:v20240903-6a352c5344-go-canary
+      - image: gcr.io/k8s-staging-test-infra/kubekins-e2e:v20241021-d3a4913879-go-canary
         command:
         - runner.sh
         args:

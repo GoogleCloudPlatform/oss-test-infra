@@ -123,7 +123,7 @@ periodics:
   spec:
     containers:
     # https://github.com/kubernetes/test-infra/blob/master/images/kubekins-e2e/variants.yaml
-    - image: gcr.io/k8s-staging-test-infra/kubekins-e2e:v20240903-6a352c5344-1.30
+    - image: gcr.io/k8s-staging-test-infra/kubekins-e2e:v20241021-d3a4913879-1.30
       command:
       - runner.sh
       args:
