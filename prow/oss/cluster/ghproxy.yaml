@@ -31,7 +31,7 @@ spec:
     spec:
       containers:
       - name: ghproxy
-        image: us-central1-docker.pkg.dev/gob-prow/prow-images/ghproxy:v20240923-b7ec15522
+        image: us-central1-docker.pkg.dev/gob-prow/prow-images/ghproxy:v20241030-9bc838629
         args:
         - --cache-dir=/cache
         - --cache-sizeGB=49
