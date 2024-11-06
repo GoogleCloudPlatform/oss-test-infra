@@ -450,6 +450,31 @@ presubmits:
 
 
 periodics:
+- name: cit-periodics-accelerator-images
+  cluster: gcp-guest
+  decorate: true
+  decoration_config:
+    timeout: 6h
+  annotations:
+    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-tab-name: cit-periodics-accelerator-images
+  interval: 6h
+  spec:
+    containers:
+    - image: gcr.io/compute-image-tools/cloud-image-tests:latest
+      imagePullPolicy: Always
+      command:
+      - "/manager"
+      args:
+      - "-parallel_count=5"
+      - "-project=gcp-guest"
+      - "-zone=us-central1-b"
+# Please keep this field ordered by version order (eg 7 -> 8 -> 9). Arch should go (amd64 -> arm64).
+      - "-images=projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-accelerator-2204-amd64-with-nvidia-550,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-accelerator-2404-amd64-with-nvidia-550"
+# This project is allowlisted for some necessary quota. TODO: switch to a non -001 test pool. 001 is intended for humans.
+      - "-test_projects=compute-image-test-pool-001"
+      - "-filter=^(cvm|livemigrate|suspendresume|loadbalancer|guestagent|hostnamevalidation|imageboot|licensevalidation|network|security|hotattach|lssd|disk|packagevalidation|ssh|metadata|sql|vmspec)$"
+      - "-set_exit_status=false"
 - name: cit-periodics-almalinux
   cluster: gcp-guest
   decorate: true
