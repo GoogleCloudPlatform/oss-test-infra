@@ -466,15 +466,17 @@ periodics:
       command:
       - "/manager"
       args:
+# Don't copy+paste this! This has extra tests for accelerators. Use almalinux as a template.
       - "-parallel_count=5"
-      - "-project=gcp-guest"
+      - "-project=compute-image-test-pool-001"
       - "-zone=us-central1-b"
 # Please keep this field ordered by version order (eg 7 -> 8 -> 9). Arch should go (amd64 -> arm64).
-      - "-images=projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-accelerator-2204-amd64-with-nvidia-550,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-accelerator-2404-amd64-with-nvidia-550"
+      - "-images=projects/ubuntu-os-accelerator-images/global/images/family/ubuntu-accelerator-2204-amd64-with-nvidia-550,projects/ubuntu-os-accelerator-images/global/images/family/ubuntu-accelerator-2404-amd64-with-nvidia-550"
 # This project is allowlisted for some necessary quota. TODO: switch to a non -001 test pool. 001 is intended for humans.
       - "-test_projects=compute-image-test-pool-001"
-      - "-filter=^(cvm|livemigrate|suspendresume|loadbalancer|guestagent|hostnamevalidation|imageboot|licensevalidation|network|security|hotattach|lssd|disk|packagevalidation|ssh|metadata|sql|vmspec)$"
+      - "-filter=^(acceleratorrdma|acceleratorconfig|cvm|livemigrate|suspendresume|loadbalancer|guestagent|hostnamevalidation|imageboot|licensevalidation|network|security|hotattach|lssd|disk|packagevalidation|ssh|metadata|sql|vmspec)$"
       - "-set_exit_status=false"
+      - "-compute_endpoint_override=https://www.googleapis.com/compute/alpha/"
 - name: cit-periodics-almalinux
   cluster: gcp-guest
   decorate: true
