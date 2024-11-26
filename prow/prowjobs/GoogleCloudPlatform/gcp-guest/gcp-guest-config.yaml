@@ -477,6 +477,8 @@ periodics:
       - "-filter=^(acceleratorrdma|acceleratorconfig|cvm|livemigrate|suspendresume|loadbalancer|guestagent|hostnamevalidation|imageboot|licensevalidation|network|security|hotattach|lssd|disk|packagevalidation|ssh|metadata|sql|vmspec)$"
       - "-set_exit_status=false"
       - "-compute_endpoint_override=https://www.googleapis.com/compute/alpha/"
+      - "-use_reservations=true"
+      - "-reservation_urls=guestos-a3u-gsc"
 - name: cit-periodics-almalinux
   cluster: gcp-guest
   decorate: true
