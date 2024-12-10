@@ -16,6 +16,8 @@ triggers:
 - repos:
   - kubeflow
   join_org_url: "https://www.kubeflow.org/docs/about/contributing/"
+  only_org_members: true
+  trigger_github_workflows: true
 - repos:
   - GoogleCloudPlatform/compute-daisy
   - GoogleCloudPlatform/cloud-image-tests
@@ -347,6 +349,7 @@ plugins:
     - lifecycle   # Lets PRs & issues be flagged as stale
     - override
     - project # Lets issues be tagged into projects
+    - retitle
     - size
     - skip  # Allows cleaning up stale commit statuses
     - transfer-issue # Transfer issue to a different repo in the same org.
