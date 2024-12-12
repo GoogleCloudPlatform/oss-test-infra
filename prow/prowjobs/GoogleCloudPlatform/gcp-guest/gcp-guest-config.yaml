@@ -459,7 +459,7 @@ periodics:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: cit-periodics-accelerator-images-accelerator-tests
   # Run at 8PM every night to avoid conflicting with daily usage
-  cron: "00 20 * * *"
+  cron: "00 04 * * *"
   spec:
     containers:
     - image: gcr.io/compute-image-tools/cloud-image-tests:latest
