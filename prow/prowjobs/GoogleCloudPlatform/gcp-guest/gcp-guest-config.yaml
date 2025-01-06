@@ -479,7 +479,7 @@ periodics:
       - "-set_exit_status=false"
       - "-compute_endpoint_override=https://www.googleapis.com/compute/alpha/"
       - "-use_reservations=true"
-      - "-reservation_urls=guestos-a3u-gsc"
+      - "-reservation_urls=image-exfr-2"
 - name: cit-periodics-accelerator-images
   cluster: gcp-guest
   decorate: true
