@@ -347,6 +347,7 @@ plugins:
     - label
     - lgtm
     - lifecycle   # Lets PRs & issues be flagged as stale
+    - milestone # Applies a milestone for issues or PRs.
     - override
     - project # Lets issues be tagged into projects
     - retitle
