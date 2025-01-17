@@ -21,6 +21,7 @@ triggers:
 - repos:
   - GoogleCloudPlatform/compute-daisy
   - GoogleCloudPlatform/cloud-image-tests
+  - GoogleCloudPlatform/guest-configs
   - GoogleCloudPlatform/galog
   - GoogleCloudPlatform/google-guest-agent
   trusted_apps:
