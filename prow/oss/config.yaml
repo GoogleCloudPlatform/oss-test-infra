@@ -17,7 +17,6 @@ tide:
     GoogleCloudPlatform/compute-image-tools: squash
     GoogleCloudPlatform/compute-image-windows: squash
     GoogleCloudPlatform/guest-agent: squash
-    GoogleCloudPlatform/guest-configs: squash
     GoogleCloudPlatform/guest-diskexpand: squash
     GoogleCloudPlatform/guest-logging-go: squash
     GoogleCloudPlatform/guest-oslogin: squash
@@ -45,7 +44,6 @@ tide:
     - GoogleCloudPlatform/compute-image-tools
     - GoogleCloudPlatform/compute-image-windows
     - GoogleCloudPlatform/guest-agent
-    - GoogleCloudPlatform/guest-configs
     - GoogleCloudPlatform/guest-diskexpand
     - GoogleCloudPlatform/guest-logging-go
     - GoogleCloudPlatform/guest-oslogin
