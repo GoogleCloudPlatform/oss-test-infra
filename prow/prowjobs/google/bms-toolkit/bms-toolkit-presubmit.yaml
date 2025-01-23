@@ -9,7 +9,7 @@ presubmits:
     spec:
       hostNetwork: true
       containers:
-      - image: quay.io/ansible/ansible-runner:stable-2.9-latest
+      - image: quay.io/ansible/ansible-runner:stable-2.11-latest
         command:
         # . represents the base directory of the cloned bms-toolkit repo, which is bms-toolkit
         - ./presubmit_tests/test-pr-poc.sh
