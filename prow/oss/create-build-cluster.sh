@@ -39,4 +39,4 @@ export BILLING_ACCOUNT_ID="${BILLING_ACCOUNT_ID:-0123}"  # Find the billing acco
 # this value unless it's desired for our oncall team to help debug something.
 export ADMIN_IAM_MEMBER="${ADMIN_IAM_MEMBER:-group:mdb.cloud-kubernetes-engprod-oncall@google.com}"
 
-bash <(curl -sSfL https://raw.githubusercontent.com/kubernetes/test-infra/master/prow/create-build-cluster.sh) "$@"
+bash <(curl -sSfL https://raw.githubusercontent.com/kubernetes-sigs/prow/master/pkg/create-build-cluster.sh) "$@"
