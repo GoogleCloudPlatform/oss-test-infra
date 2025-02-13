@@ -37,7 +37,7 @@ spec:
         env:
         # Use KUBECONFIG envvar rather than --kubeconfig flag in order to provide multiple configs to merge.
         - name: KUBECONFIG
-          value: "/etc/kubeconfig/config-20240403:/etc/build-bms-oracle-team/kubeconfig:/etc/build-cloud-kubernetes-node-management-team/kubeconfig:/etc/build-kpt-config-sync/kubeconfig:/etc/build-compute-image-import/kubeconfig:/etc/build-blueprints/kubeconfig:/etc/build-elcarro/kubeconfig:/etc/build-kubeflow/kubeconfig:/etc/gke-gcloud-auth-plugin-based/kubeconfigs.yaml"
+          value: "/etc/kubeconfig/config-20240403:/etc/build-bms-oracle-team/kubeconfig:/etc/build-cloud-kubernetes-node-management-team/kubeconfig:/etc/build-kpt-config-sync/kubeconfig:/etc/build-compute-image-import/kubeconfig:/etc/build-blueprints/kubeconfig:/etc/build-elcarro/kubeconfig:/etc/gke-gcloud-auth-plugin-based/kubeconfigs.yaml"
         - name: GITHUB_APP_ID
           valueFrom:
             secretKeyRef:
@@ -125,10 +125,6 @@ spec:
         secret:
           defaultMode: 420
           secretName: kubeconfig
-      - name: build-kubeflow
-        secret:
-          defaultMode: 420
-          secretName: kubeconfig-build-kubeflow
       - name: ghapp-token
         secret:
           secretName: ghapp-token
