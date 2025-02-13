@@ -1,0 +1,19 @@
+
+periodics:
+- name: openshift-origin-base-test
+  cluster: espv2
+  cron: '0 0,12 * * *' # Run every 12 hours, starting at midnight.
+  decorate: true
+  annotations:
+    testgrid-tab-name: periodic
+    description: "Runs all unit Redhat Openshift Tests."
+  extra_refs:
+  - org: google
+    repo: http_pattern_matcher
+    base_ref: main
+  spec:
+    containers:
+    - name: web
+    - image: registry.redhat.io/openshift4/ose-tests
+      command:
+      - ./script/ci.sh
