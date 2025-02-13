@@ -77,9 +77,6 @@ spec:
         - name: kubeconfig
           mountPath: /etc/kubeconfig
           readOnly: true
-        - name: build-kubeflow
-          mountPath: /etc/build-kubeflow
-          readOnly: true
         - name: ghapp-token
           mountPath: /etc/github
           readOnly: true

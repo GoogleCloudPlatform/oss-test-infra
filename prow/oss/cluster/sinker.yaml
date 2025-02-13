@@ -59,9 +59,6 @@ spec:
         - mountPath: /etc/kubeconfig
           name: kubeconfig
           readOnly: true
-        - name: build-kubeflow
-          mountPath: /etc/build-kubeflow
-          readOnly: true
         - mountPath: /etc/gke-gcloud-auth-plugin-based
           name: kubeconfigs
           readOnly: true
