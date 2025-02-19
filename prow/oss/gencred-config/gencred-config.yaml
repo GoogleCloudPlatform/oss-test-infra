@@ -1,4 +1,10 @@
 clusters:
+- gke: projects/openshift-integration-testing/locations/us-east1-c/clusters/openshift-integration-testing
+  name: build-openshift-eng
+  duration: 48h
+  gsm:
+    name: prow_build_cluster_kubeconfig_build-openshift-eng
+    project: oss-prow
 - gke: projects/bmaas-testing/locations/southamerica-east1-b/clusters/bms-orcl-prow-sydrp
   name: build-bms-oracle-team
   duration: 48h
