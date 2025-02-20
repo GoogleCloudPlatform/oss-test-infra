@@ -238,7 +238,7 @@ function gencreds() {
   # Grant the Prow control plane access to the cluster.
   for i in ${CONTROL_PLANE_SA//,/ }
   do
-    gcloud projects add-iam-policy-binding "${PROJECT}" --member="${i}" --role="roles/container.developer"
+    gcloud projects add-iam-policy-binding "${PROJECT}" --member="serviceAccount:${i}" --role="roles/container.developer"
   done
 
   # Generate entries to add to the kubeconfigs.yaml file.
@@ -253,6 +253,7 @@ function gencreds() {
   grep -B 1 -A 2 certificate-authority-data "${KUBECONFIG}"
   echo
   echo "Append the following entry to the 'contexts' section: "
+  echo
   cat <<EOF
   - context:
       cluster: $(kubectl config current-context)
