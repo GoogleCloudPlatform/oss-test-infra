@@ -5,7 +5,6 @@
 # Usage: populate the parameters by setting them below or specifying environment variables then run
 # the script and follow the prompts.
 
-
 set -o errexit
 set -o nounset
 set -o pipefail
@@ -13,11 +12,8 @@ set -o pipefail
 # Specific to Prow instance, don't change these.
 export PROW_INSTANCE_NAME="${PROW_INSTANCE_NAME:-oss-prow}"
 export PROW_SERVICE_PROJECT="oss-prow"
-export PROW_SECRET_ACCESSOR_SA="gencred-refresher@oss-prow.iam.gserviceaccount.com"
 export PROW_DEPLOYMENT_DIR="./prow/oss/cluster" # From root of repo
 export CONTROL_PLANE_SA="oss-prow-public-deck@oss-prow.iam.gserviceaccount.com,oss-prow@oss-prow.iam.gserviceaccount.com"
-
-export GITHUB_CLONE_URI="git@github.com:GoogleCloudPlatform/oss-test-infra.git"
 
 # Specific to the build cluster
 export TEAM="${TEAM:-}"
@@ -27,53 +23,18 @@ export CLUSTER="${CLUSTER:-${PROJECT}}"
 export GCS_BUCKET="${GCS_BUCKET:-gs://${PROJECT}}"
 
 # Only needed for creating cluster
-export GITHUB_FORK_URI="${GITHUB_FORK_URI:-}"  # Set this to the URI of your personal fork of this repo. Similar to GITHUB_CLONE_URI.
 export MACHINE="${MACHINE:-n1-standard-8}"
 export NODECOUNT="${NODECOUNT:-5}"
 export DISKSIZE="${DISKSIZE:-100GB}"
 
 # Only needed for creating project
-export FOLDER_ID="${FOLDER_ID:-0123}"
-export BILLING_ACCOUNT_ID="${BILLING_ACCOUNT_ID:-0123}"  # Find the billing account ID in the cloud console.
+export FOLDER_ID="${FOLDER_ID:-}"
+export BILLING_ACCOUNT_ID="${BILLING_ACCOUNT_ID:-}"  # Find the billing account ID in the cloud console.
 # ADMIN_IAM_MEMBER will be set as the owner of the created project, override
 # this value unless it's desired for our oncall team to help debug something.
 export ADMIN_IAM_MEMBER="${ADMIN_IAM_MEMBER:-group:mdb.cloud-kubernetes-engprod-oncall@google.com}"
 
 # The following is based on / sourced from https://github.com/kubernetes-sigs/prow/blob/main/pkg/create-build-cluster.sh
-# Specific to Prow instance. Use "k8s-prow" if onboarding prow.k8s.io
-PROW_INSTANCE_NAME="${PROW_INSTANCE_NAME:-}"
-# Crier and deck needs to access the GCS bucket. Use
-# "control-plane@k8s-prow.iam.gserviceaccount.com" if onboarding prow.k8s.io
-CONTROL_PLANE_SA="${CONTROL_PLANE_SA:-}"
-
-PROW_SERVICE_PROJECT="${PROW_SERVICE_PROJECT:-k8s-prow}"
-PROW_SECRET_ACCESSOR_SA="${PROW_SECRET_ACCESSOR_SA:-gencred-refresher@k8s-prow.iam.gserviceaccount.com}"
-
-PROW_DEPLOYMENT_DIR="${PROW_DEPLOYMENT_DIR:-./config/prow/cluster}"
-# URI for cloning your fork locally, for example "git@github.com:chaodaiG/test-infra.git"
-GITHUB_FORK_URI="${GITHUB_FORK_URI:-}"
-GITHUB_CLONE_URI="${GITHUB_CLONE_URI:-git@github.com:kubernetes/test-infra}"
-
-# Specific to the build cluster
-TEAM="${TEAM:-}"
-PROJECT="${PROJECT:-${PROW_INSTANCE_NAME}-build-${TEAM}}"
-ZONE="${ZONE:-us-west1-b}"
-CLUSTER="${CLUSTER:-${PROJECT}}"
-GCS_BUCKET="${GCS_BUCKET:-gs://${PROJECT}}"
-
-# Only needed for creating cluster
-MACHINE="${MACHINE:-n1-standard-8}"
-NODECOUNT="${NODECOUNT:-5}"
-DISKSIZE="${DISKSIZE:-100GB}"
-
-# Only needed for creating project
-FOLDER_ID="${FOLDER_ID:-0123}"
-BILLING_ACCOUNT_ID="${BILLING_ACCOUNT_ID:-0123}"  # Find the billing account ID in the cloud console.
-ADMIN_IAM_MEMBER="${ADMIN_IAM_MEMBER:-group:mdb.cloud-kubernetes-engprod-oncall@google.com}"
-
-# Overriding output
-OUT_FILE="${OUT_FILE:-build-cluster-kubeconfig.yaml}"
-
 
 # Require bash version >= 4.4
 if ((${BASH_VERSINFO[0]}<4)) || ( ((${BASH_VERSINFO[0]}==4)) && ((${BASH_VERSINFO[1]}<4)) ); then
@@ -120,7 +81,7 @@ function main() {
 }
 # Prep and check args.
 function parseArgs() {
-  for var in TEAM PROJECT ZONE CLUSTER MACHINE NODECOUNT DISKSIZE FOLDER_ID BILLING_ACCOUNT_ID GITHUB_FORK_URI; do
+  for var in TEAM PROJECT ZONE CLUSTER MACHINE NODECOUNT DISKSIZE; do
     if [[ -z "${!var}" ]]; then
       echo "Must specify ${var} environment variable (or specify a default in the script)."
       exit 2
@@ -128,10 +89,6 @@ function parseArgs() {
     echo "${var}=${!var}"
   done
   if [[ "${PROW_INSTANCE_NAME}" != "k8s-prow" ]]; then
-    if [[ "${PROW_SECRET_ACCESSOR_SA}" == "gencred-refresher@k8s-prow.iam.gserviceaccount.com" ]]; then
-      echo "${PROW_SECRET_ACCESSOR_SA} is k8s-prow specific, must pass in the service account used by ${PROW_INSTANCE_NAME}"
-      exit 2
-    fi
     if [[ "${PROW_DEPLOYMENT_DIR}" == "./config/prow/cluster" ]]; then
       read -r -n1 -p "${PROW_DEPLOYMENT_DIR} is k8s-prow specific, are you sure this is the same for ${PROW_INSTANCE_NAME} ? [y/n] "
       if [[ ! $REPLY =~ ^[Yy]$ ]]; then
@@ -180,15 +137,16 @@ function ensureCluster() {
   if gcloud container clusters describe "${CLUSTER}" --project="${PROJECT}" --zone="${ZONE}" >/dev/null 2>&1; then
     echo "Cluster '${CLUSTER}' exists in zone '${ZONE}' in project '${PROJECT}', skip creating."
     return
+  else
+    prompt "Pressing Y/y to create the cluster" echo
+    echo "Creating cluster '${CLUSTER}' (this may take a few minutes)..."
+    echo "If this fails due to insufficient project quota, request more at https://console.cloud.google.com/iam-admin/quotas?project=${PROJECT}"
+    echo
+    gcloud container clusters create "${CLUSTER}" --project="${PROJECT}" --zone="${ZONE}" --machine-type="${MACHINE}" --num-nodes="${NODECOUNT}" --disk-size="${DISKSIZE}" --disk-type="pd-ssd" --enable-autoupgrade --enable-autorepair --workload-pool="${PROJECT}.svc.id.goog"
   fi
 
-  prompt "Pressing Y/y to create the cluster" echo
-  echo "Creating cluster '${CLUSTER}' (this may take a few minutes)..."
-  echo "If this fails due to insufficient project quota, request more at https://console.cloud.google.com/iam-admin/quotas?project=${PROJECT}"
-  echo
-  gcloud container clusters create "${CLUSTER}" --project="${PROJECT}" --zone="${ZONE}" --machine-type="${MACHINE}" --num-nodes="${NODECOUNT}" --disk-size="${DISKSIZE}" --disk-type="pd-ssd" --enable-autoupgrade --enable-autorepair --workload-pool="${PROJECT}.svc.id.goog"
   getClusterCreds
-  kubectl create namespace "test-pods"
+  kubectl create namespace "test-pods" --dry-run=client -o yaml | kubectl apply -f -
 }
 
 function createBucket() {
@@ -201,7 +159,7 @@ function createBucket() {
 
 function ensureBucket() {
   if ! gsutil ls "${GCS_BUCKET}"; then
-    prompt "The specified GCS bucket '${GCS_BUCKET}' cannot be located. This is expected if this is a shared default job result bucket. Otherwise press Y/y to create it." createBucket
+    createBucket
   else
     echo "Bucket '${GCS_BUCKET}' already exists, skip creation."
   fi
@@ -276,16 +234,32 @@ EOF
   pause
 }
 
-# generate a JWT kubeconfig file that we can merge into k8s-prow's kubeconfig
-# secret so that Prow can schedule pods. This operation is now handled by a prow
-# job runs gencred pediodically. So the only action from this function is
-# authorizing prow service account to access the build cluster.
 function gencreds() {
-  # The secret can be stored in prow service cluster
-  gcloud projects add-iam-policy-binding --member="serviceAccount:${PROW_SECRET_ACCESSOR_SA}" --role="roles/container.admin" "${PROJECT}" --condition=None
+  # Grant the Prow control plane access to the cluster.
+  for i in ${CONTROL_PLANE_SA//,/ }
+  do
+    gcloud projects add-iam-policy-binding "${PROJECT}" --member="${i}" --role="roles/container.developer"
+  done
 
-  prompt "Create CL for you" create_cl
+  # Generate entries to add to the kubeconfigs.yaml file.
+  local kubeconfigs="$(git rev-parse --show-toplevel)/${PROW_DEPLOYMENT_DIR}/kubeconfigs/kubeconfigs.yaml"
+  export KUBECONFIG="${tempdir}/kubeconfig.yaml" 
+  getClusterCreds
 
+  echo
+  echo "The following changes should be made to the Prow instance's kubeconfigs.yaml file (located at ${kubeconfigs})."
+  echo "Append the following entry to the 'clusters' section: "
+  echo
+  grep -B 1 -A 2 certificate-authority-data "${KUBECONFIG}"
+  echo
+  echo "Append the following entry to the 'contexts' section: "
+  cat <<EOF
+  - context:
+      cluster: $(kubectl config current-context)
+      user: gke-auth-plugin
+    name: $(cluster_alias)
+EOF
+  echo
   echo "ProwJobs that intend to use this cluster should specify 'cluster: $(cluster_alias)'" # TODO: color this
   echo
   echo "Press any key to acknowledge (this doesn't need to be completed to continue this script, but it needs to be done before Prow can schedule jobs to your cluster)..."
@@ -297,94 +271,6 @@ cluster_alias() {
 }
 gsm_secret_name() {
   echo "prow_build_cluster_kubeconfig_$(cluster_alias)"
-}
-
-create_cl() {
-  local cluster_alias
-  cluster_alias="$(cluster_alias)"
-  local gsm_secret_name
-  gsm_secret_name="$(gsm_secret_name)"
-  local build_cluster_kubeconfig_mount_path="/etc/${cluster_alias}"
-  local build_clster_secret_name_in_cluster="kubeconfig-build-${TEAM}"
-  cd "${ROOT_DIR}"
-  local fork
-  fork="$(echo "${GITHUB_FORK_URI}" | "$SED" -e "s;https://github.com/;;" -e "s;git@github.com:;;" -e "s;.git;;")"
-  
-  cd "${tempdir}"
-  git clone "${GITHUB_CLONE_URI}" forked-test-infra
-  cd forked-test-infra
-  git fetch
-
-  git checkout -b add-build-cluster-secret-${TEAM}
-
-  cat>>"${PROW_DEPLOYMENT_DIR}/kubernetes_external_secrets.yaml" <<EOF
----
-apiVersion: kubernetes-client.io/v1
-kind: ExternalSecret
-metadata:
-  name: ${build_clster_secret_name_in_cluster}
-  namespace: default
-spec:
-  backendType: gcpSecretsManager
-  projectId: ${PROW_SERVICE_PROJECT}
-  data:
-  - key: ${gsm_secret_name}
-    name: kubeconfig
-    version: latest
-EOF
-
-  # Also register this build cluster with gencred, so that the kubeconfig
-  # secrets can be rotated.
-  local gencred_config_file="${PROW_DEPLOYMENT_DIR}/../gencred-config/gencred-config.yaml"
-  "${SED}" -i "s;clusters:;clusters:\\
-- gke: projects/${PROJECT}/locations/${ZONE}/clusters/${CLUSTER}\\
-  name: ${cluster_alias}\\
-  duration: 48h\\
-  gsm:\\
-    name: ${gsm_secret_name}\\
-    project: ${PROW_SERVICE_PROJECT};" "${gencred_config_file}"
-
-  git add "${PROW_DEPLOYMENT_DIR}/kubernetes_external_secrets.yaml"
-  git add "${gencred_config_file}"
-  git commit -m "Add external secret from build cluster for ${TEAM}"
-  git push -f "${GITHUB_FORK_URI}" "HEAD:add-build-cluster-secret-${TEAM}"
-
-  git checkout -b use-build-cluster-${TEAM} master
-  
-  for app_deployment_file in ${PROW_DEPLOYMENT_DIR}/*.yaml; do
-    if ! grep "/etc/kubeconfig/config" "${app_deployment_file}">/dev/null 2>&1; then
-      if ! grep "name: KUBECONFIG" "${app_deployment_file}">/dev/null 2>&1; then
-        continue
-      fi
-    fi
-    "${SED}" -i "s;volumeMounts:;volumeMounts:\\
-        - mountPath: ${build_cluster_kubeconfig_mount_path}\\
-          name: ${cluster_alias}\\
-          readOnly: true;" "${app_deployment_file}"
-
-    "${SED}" -i "s;volumes:;volumes:\\
-      - name: ${cluster_alias}\\
-        secret:\\
-          defaultMode: 420\\
-          secretName: ${build_clster_secret_name_in_cluster};" "${app_deployment_file}"
-
-    # Appends to an existing value doesn't seem to be supported by kustomize, so
-    # using sed instead. `&` represents for regex matched part
-    "${SED}" -E -i "s;/etc/kubeconfig/config(-[0-9]+)?;&:${build_cluster_kubeconfig_mount_path}/kubeconfig;" "${app_deployment_file}"
-    git add "${app_deployment_file}"
-  done
-
-  git commit -m "Add build cluster kubeconfig for ${TEAM}
-
-Please submit this change after the previous PR was submitted and postsubmit job succeeded.
-Prow oncall: please don't submit this change until the secret is created successfully, which will be indicated by prow alerts in 2 minutes after the postsubmit job.
-"
-
-  git push -f "${GITHUB_FORK_URI}" "HEAD:use-build-cluster-${TEAM}"
-  echo
-  echo "Please open https://github.com/${fork}/pull/new/add-build-cluster-secret-${TEAM} and https://github.com/${fork}/pull/new/use-build-cluster-${TEAM}, creating PRs from both of them and assign to test-infra oncall for approval"
-  echo
-  pause
 }
 
 function cleanup() {
