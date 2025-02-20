@@ -1,4 +1,4 @@
-See [upstream prow](https://github.com/kubernetes/test-infra/tree/master/prow) documentation for more detailed and generic information about what prow is and how it works.
+See [upstream prow](https://github.com/kubernetes-sigs/prow) documentation for more detailed and generic information about what prow is and how it works.
 
 ## Onboarding
 
@@ -12,7 +12,7 @@ for ongoing/histories. This is configured as
 [`ci-oss-test-infra-autobump-prow`](https://github.com/GoogleCloudPlatform/oss-test-infra/blob/49cc9a1bff81427ea8f10b9625269be7a9cf3ae0/prow/prowjobs/GoogleCloudPlatform/oss-test-infra/gcp-oss-test-infra-config.yaml#L335)
 job.
 
-Please check recent [prow announcements](https://github.com/kubernetes/test-infra/tree/master/prow#announcements) before updating, if you are not already familiar with them.
+Please check recent [prow announcements](https://docs.prow.k8s.io/docs/announcements/) before updating, if you are not already familiar with them.
 
 ```shell
 prow/bump.sh --latest
@@ -103,4 +103,4 @@ kubectl --context=oss-prow create -f ~/foo.yaml
 Some of the prow secrets are managed by kubernetes external secrets, which
 allows prow cluster creating secrets based on values from google secret manager
 (Not necessarily the same GCP project where prow is located). See more detailed
-instruction at [Prow Secret](https://github.com/kubernetes/test-infra/blob/master/prow/prow_secrets.md).
+instruction at [Prow Secret](https://docs.prow.k8s.io/docs/prow-secrets/).
