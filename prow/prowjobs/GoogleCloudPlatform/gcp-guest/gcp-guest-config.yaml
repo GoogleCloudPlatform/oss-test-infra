@@ -480,6 +480,7 @@ periodics:
       - "-compute_endpoint_override=https://www.googleapis.com/compute/alpha/"
       - "-use_reservations=true"
       - "-reservation_urls=image-exfr-2"
+      - "-x86_shape=a3-ultragpu-8g"
 - name: cit-periodics-accelerator-images
   cluster: gcp-guest
   decorate: true
