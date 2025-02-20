@@ -97,8 +97,8 @@ https://docs.github.com/en/developers/overview/managing-deploy-keys#deploy-keys
 https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent
 [set up ssh key for cloning]: https://github.com/kubernetes/test-infra/blob/b86dee86579b993b54cb295cfd77feab129d15bb/prow/pod-utilities.md#how-to-configure
 [Prow config example PR]: https://github.com/GoogleCloudPlatform/oss-test-infra/pull/376
-[documented Prow config]: https://github.com/kubernetes/test-infra/blob/master/prow/config/prow-config-documented.yaml
+[documented Prow config]: https://github.com/kubernetes-sigs/prow/blob/e8fa16f56508b4209238eb956d0d02143dd0d56b/pkg/config/prow-config-documented.yaml#L4
 [prow job example pr]: https://github.com/GoogleCloudPlatform/oss-test-infra/pull/375
-[How to add new jobs]: https://github.com/kubernetes/test-infra/tree/master/prow/jobs.md#how-to-configure-new-jobs
-[Pod-utilities]: https://github.com/kubernetes/test-infra/blob/master/prow/pod-utilities.md
-[Testing prow jobs]: https://github.com/kubernetes/test-infra/blob/master/prow/build_test_update.md#How-to-test-a-ProwJob
+[How to add new jobs]: https://docs.prow.k8s.io/docs/jobs/#how-to-configure-new-jobs
+[Pod-utilities]: https://docs.prow.k8s.io/docs/components/pod-utilities/
+[Testing prow jobs]: https://docs.prow.k8s.io/docs/build-test-update/#how-to-test-a-prowjob

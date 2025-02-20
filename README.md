@@ -14,7 +14,7 @@ limitations under the License.
 
 # OSS PROW
 
-- OSS [prow](https://github.com/kubernetes/test-infra/tree/master/prow) config for google-owned OSS projects
+- OSS [prow](https://github.com/kubernetes-sigs/prow) config for google-owned OSS projects
 - See what jobs are running on the [Prow Deck](https://oss.gprow.dev/)
 - Please follow [onboarding.md](./prow/oss/onboarding.md) to onboard 
 - [Learn how to configure new Prow Jobs](https://docs.prow.k8s.io/docs/jobs/#how-to-configure-new-jobs) 
