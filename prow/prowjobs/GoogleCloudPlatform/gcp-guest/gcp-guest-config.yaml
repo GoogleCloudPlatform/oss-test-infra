@@ -481,6 +481,7 @@ periodics:
       - "-use_reservations=true"
       - "-reservation_urls=image-exfr-2"
       - "-x86_shape=a3-ultragpu-8g"
+      - "-zone=europe-west1-b"
 - name: cit-periodics-accelerator-images
   cluster: gcp-guest
   decorate: true
