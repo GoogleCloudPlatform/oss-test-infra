@@ -13,9 +13,10 @@ periodics:
     base_ref: master
   spec:
     containers:
-    - name: web
     - image: registry.redhat.io/openshift4/ose-tests
       # https://catalog.redhat.com/software/containers/openshift4/ose-tests/5cdacc3dd70cc57c44b1d01f?container-tabs=gti
+      command: ["openshift-tests run"]
+      args: ["dry-run"]
     imagePullSecrets:
       - name: 18851653-sapgcp-pull-secret
 
