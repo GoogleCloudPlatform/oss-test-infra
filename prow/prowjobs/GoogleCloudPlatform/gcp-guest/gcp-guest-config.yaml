@@ -482,6 +482,7 @@ periodics:
       - "-reservation_urls=image-exfr-2"
       - "-x86_shape=a3-ultragpu-8g"
       - "-zone=europe-west1-b"
+      - "-accelerator_type=nvidia-h200-141gb"
 - name: cit-periodics-accelerator-images
   cluster: gcp-guest
   decorate: true
