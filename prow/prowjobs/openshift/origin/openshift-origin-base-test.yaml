@@ -1,0 +1,23 @@
+
+periodics:
+- name: openshift-origin-base-test
+  cluster: build-openshift-eng
+  cron: '0 0,12 * * *' # Run every 12 hours, starting at midnight.
+  decorate: true
+  annotations:
+    testgrid-dashboards: googleoss-rhos-periodic
+    description: "Runs all unit Redhat Openshift Tests."
+  extra_refs:
+  - org: openshift
+    repo: origin
+    base_ref: master
+  spec:
+    containers:
+    - image: registry.redhat.io/openshift4/ose-tests
+      # https://catalog.redhat.com/software/containers/openshift4/ose-tests/5cdacc3dd70cc57c44b1d01f?container-tabs=gti
+      command: ["openshift-tests run"]
+      args: ["dry-run"]
+    imagePullSecrets:
+      - name: 18851653-sapgcp-pull-secret
+
+

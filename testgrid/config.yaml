@@ -15,6 +15,7 @@ dashboards:
 - name: googleoss-kpt-config-sync-release
 - name: googleoss-kpt-config-sync-misc
 - name: googleoss-jwt-verify-lib
+- name: googleoss-rhos-periodic
 
 dashboard_groups:
   - name: googleoss
