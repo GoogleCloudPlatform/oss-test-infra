@@ -5,7 +5,7 @@ periodics:
   cron: '0 0,12 * * *' # Run every 12 hours, starting at midnight.
   decorate: true
   annotations:
-    testgrid-tab-name: periodic
+    testgrid-dashboards: googleoss-rhos-periodic
     description: "Runs all unit Redhat Openshift Tests."
   extra_refs:
   - org: openshift
