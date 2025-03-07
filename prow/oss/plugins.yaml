@@ -47,24 +47,11 @@ approve:
 - repos:
   - GoogleCloudPlatform/k8s-config-connector
   - GoogleContainerTools
-  - kubeflow/arena
-  - kubeflow/blog
-  - kubeflow/community
-  - kubeflow/dashboard
-  - kubeflow/examples
-  - kubeflow/internal-acls
-  - kubeflow/katib
-  - kubeflow/kfp-tekton
-  - kubeflow/kubeflow
-  - kubeflow/manifests
-  - kubeflow/model-registry
-  - kubeflow/mpi-operator
-  - kubeflow/notebooks
-  - kubeflow/pipelines
-  - kubeflow/spark-operator
-  - kubeflow/testing
-  - kubeflow/trainer
-  - kubeflow/website
+  require_self_approval: true
+  commandHelpLink: https://oss.gprow.dev/command-help
+- repos:
+  - kubeflow
+  lgtm_acts_as_approve: false
   require_self_approval: true
   commandHelpLink: https://oss.gprow.dev/command-help
 
