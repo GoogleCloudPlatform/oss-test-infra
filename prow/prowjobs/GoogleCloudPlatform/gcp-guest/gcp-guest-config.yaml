@@ -450,14 +450,16 @@ presubmits:
 
 
 periodics:
-- name: cit-periodics-accelerator-images-accelerator-tests
+# Due to lack of hardware, A3U and A4 need specific reservations for tests.
+# TODO: Once reservations are no longer needed, combine them.
+- name: cit-periodics-accelerator-images-accelerator-tests-a3u
   cluster: gcp-guest
   decorate: true
   decoration_config:
     timeout: 6h
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
-    testgrid-tab-name: cit-periodics-accelerator-images-accelerator-tests
+    testgrid-tab-name: cit-periodics-accelerator-images-accelerator-tests-a3u
   # Run at 8PM every night to avoid conflicting with daily usage
   cron: "00 04 * * *"
   spec:
@@ -482,6 +484,38 @@ periodics:
       - "-reservation_urls=cloud-image-exfr-2"
       - "-x86_shape=a3-ultragpu-8g"
       - "-accelerator_type=nvidia-h200-141gb"
+- name: cit-periodics-accelerator-images-accelerator-tests-a4
+  cluster: gcp-guest
+  decorate: true
+  decoration_config:
+    timeout: 6h
+  annotations:
+    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-tab-name: cit-periodics-accelerator-images-accelerator-tests-a4
+  # Run at 8PM every night to avoid conflicting with daily usage
+  cron: "00 04 * * *"
+  spec:
+    containers:
+    - image: gcr.io/compute-image-tools/cloud-image-tests:latest
+      imagePullPolicy: Always
+      command:
+      - "/manager"
+      args:
+# Don't copy+paste this! This has extra tests for accelerators. Use a different periodic.
+      - "-parallel_count=1"
+      - "-project=compute-image-test-pool-001"
+      - "-zone=us-central1-b"
+# Please keep this field ordered by version order (eg 7 -> 8 -> 9). Arch should go (amd64 -> arm64).
+      - "-images=projects/rocky-linux-accelerator-cloud/global/images/family/rocky-linux-8-optimized-gcp-nvidia-latest,projects/rocky-linux-accelerator-cloud/global/images/family/rocky-linux-9-optimized-gcp-nvidia-latest"
+# This project is allowlisted for some necessary quota. TODO: switch to a non -001 test pool. 001 is intended for humans.
+      - "-test_projects=compute-image-test-pool-001"
+      - "-filter=^(acceleratorrdma|acceleratorconfig)$"
+      - "-set_exit_status=false"
+      - "-compute_endpoint_override=https://www.googleapis.com/compute/alpha/"
+      - "-use_reservations=true"
+      - "-reservation_urls=a4-exr-compute-image-test-pool-001"
+      - "-x86_shape=a4-highgpu-8g"
+      - "-accelerator_type=nvidia-b200"
 - name: cit-periodics-accelerator-images
   cluster: gcp-guest
   decorate: true
