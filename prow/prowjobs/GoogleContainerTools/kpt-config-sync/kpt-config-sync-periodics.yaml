@@ -399,6 +399,10 @@ periodics:
       - 'GKE_MACHINE_TYPE=n2-standard-4'
       - 'GKE_DISK_SIZE=25Gb'
       - 'E2E_ARGS=--stress'
+      resources:
+        requests:
+          memory: "24Gi" # Stress tests watch many large objects
+          cpu: "6000m"
 
 - <<: *config-sync-autopilot-job
   name: kpt-config-sync-autopilot-rapid-latest-stress
@@ -416,6 +420,10 @@ periodics:
       - 'E2E_CLUSTER_PREFIX=autopilot-rapid-latest-stress'
       - 'E2E_NUM_CLUSTERS=2' # autopilot uses more clusters to run more quickly
       - 'E2E_ARGS=--stress'
+      resources:
+        requests:
+          memory: "24Gi" # Stress tests watch many large objects
+          cpu: "6000m"
 
 #### End one-off jobs
 ### End new prowjob definitions
