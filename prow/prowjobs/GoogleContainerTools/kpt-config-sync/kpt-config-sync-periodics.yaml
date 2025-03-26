@@ -395,8 +395,8 @@ periodics:
       - 'GKE_CLUSTER_VERSION=latest'
       - 'E2E_CLUSTER_PREFIX=standard-rapid-latest-stress'
       - 'E2E_NUM_CLUSTERS=1'
-      - 'GKE_NUM_NODES=4' # Stress tests need more nodes for scheduling pods
-      - 'GKE_MACHINE_TYPE=n2-standard-4'
+      - 'GKE_NUM_NODES=5' # TestStressManyDeployments needs 50cpu & 51GiB for pods (13 nodes)
+      - 'GKE_MACHINE_TYPE=n2-standard-4' # 3.9cpu & 13.9GB allocatable
       - 'GKE_DISK_SIZE=25Gb'
       - 'E2E_ARGS=--stress'
       resources:
