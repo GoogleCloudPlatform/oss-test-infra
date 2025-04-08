@@ -1,7 +1,7 @@
 presubmits:
   google/oracle-toolkit:
   - name: oracle-toolkit-install
-    cluster: orcl-prow-build-cluster
+    cluster: build-gcp-oracle-team
     always_run: true
     # Introducing max_concurrency, as noted in the design doc (internal) comment thread: https://docs.google.com/document/d/1mv2nV0Cv6EKv-ZTScv59JdyqvmNfYeMojqFJdJVhdmk/edit?pli=1&disco=AAAAUQ1gyBE
     max_concurrency: 1
