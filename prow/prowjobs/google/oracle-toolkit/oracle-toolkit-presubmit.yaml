@@ -36,7 +36,7 @@ presubmits:
                 - key: asm_disk_config_nonrac_primary_sao1.json
                   path: nonrac-asm.json
           - configMap:
-              name: nonrac-datamounts-syd1
+              name: nonrac-datamounts-sao1
               items:
                 - key: data_mounts_config_nonrac_primary_sao1.json
                   path: nonrac-datamounts.json
