@@ -1,5 +1,15 @@
 presubmits:
   google/oracle-toolkit:
+  - name: pull-lint-validator
+    decorate: true
+    always_run: true
+    spec:
+      containers:
+        - image: cytopia/yamllint
+          imagePullPolicy: Always
+          command:
+            - yamllint
+            - .
   - name: oracle-toolkit-install
     cluster: build-gcp-oracle-team
     always_run: true
