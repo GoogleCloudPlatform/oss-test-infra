@@ -1,7 +1,7 @@
 presubmits:
   google/oracle-toolkit:
   - name: oracle-toolkit-install
-    cluster: build-bms-oracle-team
+    cluster: build-gcp-oracle-team
     always_run: true
     # Introducing max_concurrency, as noted in the design doc (internal) comment thread: https://docs.google.com/document/d/1mv2nV0Cv6EKv-ZTScv59JdyqvmNfYeMojqFJdJVhdmk/edit?pli=1&disco=AAAAUQ1gyBE
     max_concurrency: 1
@@ -25,25 +25,25 @@ presubmits:
         projected:
           sources:
           - secret:
-              name: id-rsa-bms-ansible9-syd1
+              name: ansible-ssh-private-key
               items:
-                - key: id_rsa_bms_tk_key
+                - key: ansible_ssh_private_key
                   path: id_rsa_bms_tk_key
                   mode: 0400
           - configMap:
-              name: nonrac-asm-syd1
+              name: nonrac-asm-sao1
               items:
-                - key: asm_disk_config_nonrac_primary_syd1.json
+                - key: asm_disk_config_nonrac_primary_sao1.json
                   path: nonrac-asm.json
           - configMap:
-              name: nonrac-datamounts-syd1
+              name: nonrac-datamounts-sao1
               items:
-                - key: data_mounts_config_nonrac_primary_syd1.json
+                - key: data_mounts_config_nonrac_primary_sao1.json
                   path: nonrac-datamounts.json
           - configMap:
-              name: nonrac-inventory-syd1
+              name: nonrac-inventory-sao1
               items:
-                - key: inventory_orcl_nonrac_primary_syd1
+                - key: inventory_orcl_nonrac_primary_sao1
                   path: nonrac-inv
           - configMap:
               name: google-cloud-sdk
