@@ -1,15 +1,16 @@
 presubmits:
   google/oracle-toolkit:
-  - name: pull-lint-validator
+  - name: ansible-lint-validator
     decorate: true
     always_run: true
+    optional: true
+    run_if_changed: '^.*\.ya?ml$'
     spec:
       containers:
-        - image: cytopia/yamllint
+        - image: cytopia/ansible-lint
           imagePullPolicy: Always
           command:
-            - yamllint
-            - .
+            - ansible-lint
   - name: oracle-toolkit-install
     cluster: build-gcp-oracle-team
     always_run: true
