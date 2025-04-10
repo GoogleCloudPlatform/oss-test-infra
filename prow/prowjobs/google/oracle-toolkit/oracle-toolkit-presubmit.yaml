@@ -2,7 +2,6 @@ presubmits:
   google/oracle-toolkit:
   - name: ansible-lint-validator
     decorate: true
-    always_run: true
     optional: true
     run_if_changed: '^.*\.ya?ml$'
     spec:
