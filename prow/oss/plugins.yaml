@@ -91,6 +91,15 @@ label:
   # This is used to triage issues in Kubeflow repositories.
   - lifecycle/needs-triage
 
+repo_milestone:
+  kubeflow/trainer:
+    maintainers_team: kubeflow-trainer-maintainers
+    maintainers_friendly_name: Kubeflow Trainer Maintainers
+
+milestone_applier:
+  kubeflow/trainer:
+    master: v2.0
+
 plugins:
   GoogleCloudPlatform:
     plugins:
@@ -344,6 +353,7 @@ plugins:
     - lgtm
     - lifecycle   # Lets PRs & issues be flagged as stale
     - milestone # Applies a milestone for issues or PRs.
+    - milestoneapplier
     - override
     - project # Lets issues be tagged into projects
     - retitle
