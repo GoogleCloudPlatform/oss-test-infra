@@ -53,6 +53,9 @@ approve:
   - kubeflow
   lgtm_acts_as_approve: false
   require_self_approval: true
+  # We treat GitHub approve as LGTM (not approve) to avoid accidental merges.
+  # Note, we set `review_acts_as_lgtm=true` in `lgtm` plugin.
+  ignore_review_state: true
   commandHelpLink: https://oss.gprow.dev/command-help
 
 blunderbuss:
@@ -73,6 +76,11 @@ lgtm:
   - GoogleCloudPlatform/testgrid
   review_acts_as_lgtm: true
   trusted_team_for_sticky_lgtm: 'TestGrid Admins'
+- repos:
+  - kubeflow
+  # We treat GitHub approve as LGTM (not approve) to avoid accidental merges.
+  # Note, we also set `ignore_review_state=true` in `approve` plugin.
+  review_acts_as_lgtm: true
 
 label:
   additional_labels:
