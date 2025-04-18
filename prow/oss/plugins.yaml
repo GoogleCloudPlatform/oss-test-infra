@@ -93,8 +93,8 @@ label:
 
 repo_milestone:
   kubeflow/trainer:
-    maintainers_team: kubeflow-trainer-maintainers
-    maintainers_friendly_name: Kubeflow Trainer Maintainers
+    maintainers_team: kubeflow-trainer-team
+    maintainers_friendly_name: Kubeflow Trainer Team
 
 milestone_applier:
   kubeflow/trainer:
