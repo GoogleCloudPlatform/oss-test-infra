@@ -41,20 +41,20 @@ presubmits:
                   path: id_rsa_bms_tk_key
                   mode: 0400
           - configMap:
-              name: nonrac-asm-sao1
+              name: rac-asm
               items:
-                - key: asm_disk_config_nonrac_primary_sao1.json
-                  path: nonrac-asm.json
+                - key: rac-asm.json
+                  path: rac-asm.json
           - configMap:
-              name: nonrac-datamounts-sao1
+              name: rac-data-mounts
               items:
-                - key: data_mounts_config_nonrac_primary_sao1.json
-                  path: nonrac-datamounts.json
+                - key: rac-data-mounts.json
+                  path: rac-data-mounts.json
           - configMap:
-              name: nonrac-inventory-sao1
+              name: rac-inventory
               items:
-                - key: inventory_orcl_nonrac_primary_sao1
-                  path: nonrac-inv
+                - key: rac-inventory
+                  path: rac-inventory
           - configMap:
               name: google-cloud-sdk
               items:
