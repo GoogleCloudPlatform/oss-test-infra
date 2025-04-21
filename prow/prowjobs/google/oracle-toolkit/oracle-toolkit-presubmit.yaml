@@ -56,6 +56,11 @@ presubmits:
                 - key: rac-inventory
                   path: rac-inventory
           - configMap:
+              name: rac-config
+              items:
+                - key: rac-config.json
+                  path: rac-config.json
+          - configMap:
               name: google-cloud-sdk
               items:
                 - key: google-cloud-sdk.repo
