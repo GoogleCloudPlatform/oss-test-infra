@@ -68,10 +68,6 @@ spec:
         secret:
           defaultMode: 420
           secretName: kubeconfig-build-openshift-eng
-      - name: build-bms-oracle-team
-        secret:
-          defaultMode: 420
-          secretName: kubeconfig-build-bms-oracle-team
       - name: build-cloud-kubernetes-node-management-team
         secret:
           defaultMode: 420

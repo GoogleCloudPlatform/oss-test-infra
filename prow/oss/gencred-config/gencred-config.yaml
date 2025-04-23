@@ -5,12 +5,6 @@ clusters:
   gsm:
     name: prow_build_cluster_kubeconfig_build-openshift-eng
     project: oss-prow
-- gke: projects/bmaas-testing/locations/southamerica-east1-b/clusters/bms-orcl-prow-sydrp
-  name: build-bms-oracle-team
-  duration: 48h
-  gsm:
-    name: prow_build_cluster_kubeconfig_build-bms-oracle-team
-    project: oss-prow
 - gke: projects/gke-accel-cntnr-ng-tests/locations/us-west1-b/clusters/gke-accel-cntnr-ng-tests
   name: build-cloud-kubernetes-node-management-team
   duration: 48h
