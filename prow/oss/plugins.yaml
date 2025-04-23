@@ -95,10 +95,15 @@ repo_milestone:
   kubeflow/trainer:
     maintainers_team: kubeflow-trainer-team
     maintainers_friendly_name: Kubeflow Trainer Team
+  kubeflow/sdk:
+    maintainers_team: kubeflow-trainer-team
+    maintainers_friendly_name: Kubeflow Trainer Team
 
 milestone_applier:
   kubeflow/trainer:
     master: v2.0
+  kubeflow/sdk:
+    main: v0.1
 
 plugins:
   GoogleCloudPlatform:
