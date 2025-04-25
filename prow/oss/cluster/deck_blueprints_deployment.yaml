@@ -44,7 +44,7 @@ spec:
         env:
         # Use KUBECONFIG envvar rather than --kubeconfig flag in order to provide multiple configs to merge.
         - name: KUBECONFIG
-          value: "/etc/kubeconfig/config-20240403:/etc/build-openshift-eng/kubeconfig:/etc/build-bms-oracle-team/kubeconfig:/etc/build-cloud-kubernetes-node-management-team/kubeconfig:/etc/build-kpt-config-sync/kubeconfig:/etc/build-compute-image-import/kubeconfig:/etc/build-blueprints/kubeconfig:/etc/build-elcarro/kubeconfig:/etc/build-kubeflow/kubeconfig:/etc/gke-gcloud-auth-plugin-based/kubeconfigs.yaml"
+          value: "/etc/kubeconfig/config-20240403:/etc/build-openshift-eng/kubeconfig:/etc/build-cloud-kubernetes-node-management-team/kubeconfig:/etc/build-kpt-config-sync/kubeconfig:/etc/build-compute-image-import/kubeconfig:/etc/build-blueprints/kubeconfig:/etc/build-elcarro/kubeconfig:/etc/build-kubeflow/kubeconfig:/etc/gke-gcloud-auth-plugin-based/kubeconfigs.yaml"
         ports:
         - name: http
           containerPort: 8080
@@ -53,9 +53,6 @@ spec:
         volumeMounts:
         - mountPath: /etc/build-openshift-eng
           name: build-openshift-eng
-          readOnly: true
-        - mountPath: /etc/build-bms-oracle-team
-          name: build-bms-oracle-team
           readOnly: true
         - mountPath: /etc/build-cloud-kubernetes-node-management-team
           name: build-cloud-kubernetes-node-management-team
@@ -161,10 +158,6 @@ spec:
         secret:
           defaultMode: 420
           secretName: kubeconfig-build-openshift-eng
-      - name: build-bms-oracle-team
-        secret:
-          defaultMode: 420
-          secretName: kubeconfig-build-bms-oracle-team
       - name: build-cloud-kubernetes-node-management-team
         secret:
           defaultMode: 420
