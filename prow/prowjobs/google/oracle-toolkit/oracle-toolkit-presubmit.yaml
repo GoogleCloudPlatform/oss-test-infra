@@ -5,6 +5,7 @@ presubmits:
     optional: true
     run_if_changed: '^.*\.ya?ml$'
     spec:
+      serviceAccountName: prowjob-default-sa
       containers:
         - image: cytopia/ansible-lint
           imagePullPolicy: Always
@@ -17,6 +18,7 @@ presubmits:
     max_concurrency: 1
     decorate: true
     spec:
+      serviceAccountName: prowjob-default-sa
       hostNetwork: true
       containers:
       - image: quay.io/ansible/ansible-runner:stable-2.9-latest
