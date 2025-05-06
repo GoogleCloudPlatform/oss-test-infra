@@ -396,7 +396,9 @@ periodics:
       - 'GKE_CLUSTER_VERSION=latest'
       - 'E2E_CLUSTER_PREFIX=standard-rapid-latest-stress'
       - 'E2E_NUM_CLUSTERS=1'
-      - 'GKE_MACHINE_TYPE=n2-standard-8' # stress test uses bigger nodes to run more quickly
+      - 'GKE_NUM_NODES=5' # Stress tests need more nodes for scheduling pods
+      - 'GKE_MACHINE_TYPE=n2-standard-4'
+      - 'GKE_DISK_SIZE=25Gb'
       - 'E2E_ARGS=--stress'
 
 - <<: *config-sync-autopilot-job
