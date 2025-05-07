@@ -19,7 +19,6 @@ presubmits:
     decorate: true
     spec:
       serviceAccountName: prowjob-default-sa
-      hostNetwork: true
       containers:
       - image: quay.io/ansible/ansible-runner:stable-2.9-latest
         command:
