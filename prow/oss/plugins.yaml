@@ -98,6 +98,9 @@ repo_milestone:
   kubeflow/sdk:
     maintainers_team: kubeflow-trainer-team
     maintainers_friendly_name: Kubeflow Trainer Team
+  kubeflow/community:
+    maintainers_team: kubeflow-outreach-committee
+    maintainers_friendly_name: Kubeflow Outreach Committee
 
 milestone_applier:
   kubeflow/trainer:
