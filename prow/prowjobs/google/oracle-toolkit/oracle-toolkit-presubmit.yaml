@@ -11,7 +11,7 @@ presubmits:
           imagePullPolicy: Always
           command:
             - ansible-lint
-  - name: oracle-toolkit-install
+  - name: oracle-toolkit-install-single-instance-on-bms
     cluster: build-gcp-oracle-team
     always_run: true
     # Introducing max_concurrency, as noted in the design doc (internal) comment thread: https://docs.google.com/document/d/1mv2nV0Cv6EKv-ZTScv59JdyqvmNfYeMojqFJdJVhdmk/edit?pli=1&disco=AAAAUQ1gyBE
@@ -23,7 +23,57 @@ presubmits:
       - image: quay.io/ansible/ansible-runner:stable-2.9-latest
         command:
         # . represents the base directory of the cloned oracle-toolkit repo, which is oracle-toolkit
-        - ./presubmit_tests/test-pr-poc.sh
+        - ./presubmit_tests/single-instance-on-bms.sh
+        resources:
+          requests:
+            memory: "2.0Gi"
+            cpu: "3.0"
+        volumeMounts:
+        - name: all-in-one
+          mountPath: /etc/files_needed_for_tk
+      volumes:
+      - name: all-in-one
+        projected:
+          sources:
+          - secret:
+              name: ansible-ssh-private-key
+              items:
+                - key: ansible_ssh_private_key
+                  path: id_rsa_bms_tk_key
+                  mode: 0400
+          - configMap:
+              name: single-instance-asm
+              items:
+                - key: single-instance-asm.json
+                  path: single-instance-asm.json
+          - configMap:
+              name: single-instance-data-mounts
+              items:
+                - key: single-instance-data-mounts.json
+                  path: single-instance-data-mounts.json
+          - configMap:
+              name: single-instance-inventory
+              items:
+                - key: single-instance-inventory
+                  path: single-instance-inventory
+          - configMap:
+              name: google-cloud-sdk
+              items:
+                - key: google-cloud-sdk.repo
+                  path: google-cloud-sdk.repo
+  - name: oracle-toolkit-install-rac-on-bms
+    cluster: build-gcp-oracle-team
+    always_run: true
+    # Introducing max_concurrency, as noted in the design doc (internal) comment thread: https://docs.google.com/document/d/1mv2nV0Cv6EKv-ZTScv59JdyqvmNfYeMojqFJdJVhdmk/edit?pli=1&disco=AAAAUQ1gyBE
+    max_concurrency: 1
+    decorate: true
+    spec:
+      serviceAccountName: prowjob-default-sa
+      containers:
+      - image: quay.io/ansible/ansible-runner:stable-2.9-latest
+        command:
+        # . represents the base directory of the cloned oracle-toolkit repo, which is oracle-toolkit
+        - ./presubmit_tests/rac-on-bms.sh
         resources:
           requests:
             memory: "2.0Gi"
