@@ -36,10 +36,10 @@ presubmits:
         projected:
           sources:
           - secret:
-              name: ansible-ssh-private-key
+              name: single-instance-ansible-private-ssh-key
               items:
-                - key: ansible_ssh_private_key
-                  path: id_rsa_bms_tk_key
+                - key: ansible_private_ssh_key
+                  path: ansible_private_ssh_key
                   mode: 0400
           - configMap:
               name: single-instance-asm
@@ -86,10 +86,10 @@ presubmits:
         projected:
           sources:
           - secret:
-              name: ansible-ssh-private-key
+              name: rac-ansible-private-ssh-key
               items:
-                - key: ansible_ssh_private_key
-                  path: id_rsa_bms_tk_key
+                - key: ansible_private_ssh_key
+                  path: ansible_private_ssh_key
                   mode: 0400
           - configMap:
               name: rac-asm
