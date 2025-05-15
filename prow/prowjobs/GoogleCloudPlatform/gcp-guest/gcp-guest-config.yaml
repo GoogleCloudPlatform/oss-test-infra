@@ -513,7 +513,7 @@ periodics:
       - "-set_exit_status=false"
       - "-compute_endpoint_override=https://www.googleapis.com/compute/alpha/"
       - "-use_reservations=true"
-      - "-reservation_urls=a4-exr-compute-image-test-pool-001"
+      - "-reservation_urls=nvidia-b200-6159kxj6a44qu"
       - "-x86_shape=a4-highgpu-8g"
       - "-accelerator_type=nvidia-b200"
 - name: cit-periodics-accelerator-images
