@@ -4,7 +4,7 @@ prow_ignored:
   skip_branches:
   - ^v1\.13$
   always_run: false
-  skip_if_only_changed: "^(docs|dashboard)/|\\.md$|^(LICENSE|OWNERS|OWNERS_ALIASES)$"
+  skip_if_only_changed: "^(docs|dashboard|.github)/|\\.md$|^(LICENSE|OWNERS|OWNERS_ALIASES)$"
   # Ensure that we don't try to schedule more than 5 jobs at a time. This means
   # we won't automatically get "Pods Unschedulable", but Prow will wait patiently
   # for other jobs to complete before running.
