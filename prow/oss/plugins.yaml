@@ -326,6 +326,7 @@ plugins:
     - verify-owners
     - yuks
     - wip
+    - hold
 
   google:
     plugins:
