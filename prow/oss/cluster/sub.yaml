@@ -24,7 +24,7 @@ spec:
       serviceAccountName: sub
       containers:
       - name: sub
-        image: us-central1-docker.pkg.dev/gob-prow/prow-images/sub:v20250509-70d51bf43
+        image: us-central1-docker.pkg.dev/gob-prow/prow-images/sub:v20250512-3d1ce8d5d
         args:
         - --config-path=/etc/config/config.yaml
         - --job-config-path=/etc/job-config
