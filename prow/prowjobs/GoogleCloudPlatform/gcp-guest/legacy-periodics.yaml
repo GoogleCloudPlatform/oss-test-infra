@@ -6,10 +6,10 @@ periodics:
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: cleanerupper
-  interval: 1h
+  interval: 2h
   agent: kubernetes
   spec:
-    activeDeadlineSeconds: 1800
+    activeDeadlineSeconds: 3600
     containers:
     - image: gcr.io/gcp-guest/cleanerupper:latest
       command:
