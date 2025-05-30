@@ -1,5 +1,6 @@
 presubmits:
   google/oracle-toolkit:
+
   - name: oracle-toolkit-install-single-instance-on-bms
     cluster: build-gcp-oracle-team
     always_run: true
@@ -50,6 +51,7 @@ presubmits:
               items:
                 - key: google-cloud-sdk.repo
                   path: google-cloud-sdk.repo
+
   - name: oracle-toolkit-install-rac-on-bms
     cluster: build-gcp-oracle-team
     always_run: true
@@ -105,3 +107,20 @@ presubmits:
               items:
                 - key: google-cloud-sdk.repo
                   path: google-cloud-sdk.repo
+
+  - name: oracle-toolkit-install-single-instance-on-gcp
+    cluster: build-gcp-oracle-team
+    always_run: false # Run only when requested
+    skip_report: true # Skip setting a status on GitHub
+    max_concurrency: 1
+    decorate: true
+    spec:
+      serviceAccountName: prowjob-default-sa
+      containers:
+      - image: gcr.io/google.com/cloudsdktool/google-cloud-cli:alpine
+        command:
+        - ./presubmit_tests/single-instance-on-gcp.sh
+        resources:
+          requests:
+            memory: "2.0Gi"
+            cpu: "3.0"
