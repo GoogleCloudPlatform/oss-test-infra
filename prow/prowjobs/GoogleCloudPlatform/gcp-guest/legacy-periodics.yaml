@@ -9,7 +9,7 @@ periodics:
   interval: 2h
   agent: kubernetes
   spec:
-    activeDeadlineSeconds: 3600
+    activeDeadlineSeconds: 6300
     containers:
     - image: gcr.io/gcp-guest/cleanerupper:latest
       command:
