@@ -1,6 +1,32 @@
 # Periodics from legacy prow cluster
 periodics:
-- name: cleanerupper
+- name: cleanerupper-cep
+  cluster: gcp-guest
+  decorate: true
+  annotations:
+    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-tab-name: cleanerupper
+  interval: 2h
+  agent: kubernetes
+  spec:
+    activeDeadlineSeconds: 6300
+    containers:
+    - image: gcr.io/gcp-guest/cleanerupper:latest
+      command:
+      - "/cleanerupper"
+      args:
+      - "-dry_run=false"
+      - "-duration=12h"
+      - "-instances=true"
+      - "-disks=true"
+      - "-images=true"
+      - "-machine_images=true"
+      - "-snapshots=true"
+      - "-projects=cloud-cluster-guest-kms-cep"
+      env:
+      - name: GOOGLE_APPLICATION_CREDENTIALS
+        value: ''
+- name: cleanerupper-compute-image-test-pools
   cluster: gcp-guest
   decorate: true
   annotations:
@@ -24,11 +50,39 @@ periodics:
       - "-load_balancers=true"
       - "-networks=true"
       - "-snapshots=true"
-      - "-projects=compute-image-test-pool-001,compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005,compute-image-osconfig-agent,compute-image-osconfig-agent-2,compute-image-test-custom-vpc,compute-image-test-pool-001-1,compute-image-test-pool-001-2,guestos-metadata-scanner,oslogin-cit"
+      - "-projects=compute-image-test-pool-001,compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005,compute-image-test-pool-001-1,compute-image-test-pool-001-2,compute-image-test-custom-vpc"
       env:
       - name: GOOGLE_APPLICATION_CREDENTIALS
         value: ''
 - name: cleanerupper-osconfig
+  cluster: gcp-guest
+  decorate: true
+  annotations:
+    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-tab-name: cleanerupper
+  interval: 2h
+  agent: kubernetes
+  spec:
+    activeDeadlineSeconds: 6300
+    containers:
+    - image: gcr.io/gcp-guest/cleanerupper:latest
+      command:
+      - "/cleanerupper"
+      args:
+      - "-dry_run=false"
+      - "-duration=12h"
+      - "-instances=true"
+      - "-disks=true"
+      - "-images=true"
+      - "-machine_images=true"
+      - "-load_balancers=true"
+      - "-networks=true"
+      - "-snapshots=true"
+      - "-projects=compute-image-osconfig-agent,compute-image-osconfig-agent-2,oslogin-cit"
+      env:
+      - name: GOOGLE_APPLICATION_CREDENTIALS
+        value: ''
+- name: cleanerupper-osconfig-policies
   cluster: gcp-guest
   decorate: true
   annotations:
@@ -47,7 +101,7 @@ periodics:
       - "-duration=12h"
       - "-guest_policies=true"
       - "-ospolicy_assignments=true"
-      - "-projects=compute-image-test-pool-001,compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005,compute-image-osconfig-agent,compute-image-osconfig-agent-2,compute-image-test-custom-vpc,compute-image-test-pool-001-1,compute-image-test-pool-001-2,guestos-metadata-scanner"
+      - "-projects=compute-image-test-pool-001,compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005,compute-image-osconfig-agent,compute-image-osconfig-agent-2,compute-image-test-custom-vpc,compute-image-test-pool-001-1,compute-image-test-pool-001-2"
       env:
       - name: GOOGLE_APPLICATION_CREDENTIALS
         value: ''
