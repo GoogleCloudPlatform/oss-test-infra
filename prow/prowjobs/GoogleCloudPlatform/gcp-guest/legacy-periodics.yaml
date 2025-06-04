@@ -54,7 +54,7 @@ periodics:
       env:
       - name: GOOGLE_APPLICATION_CREDENTIALS
         value: ''
-- name: cleanerupper-osconfig
+- name: cleanerupper-osconfig-projects
   cluster: gcp-guest
   decorate: true
   annotations:
