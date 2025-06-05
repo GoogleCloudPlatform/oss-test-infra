@@ -5,7 +5,7 @@ periodics:
   decorate: true
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
-    testgrid-tab-name: cleanerupper
+    testgrid-tab-name: cleanerupper-cep
   interval: 2h
   agent: kubernetes
   spec:
@@ -31,7 +31,7 @@ periodics:
   decorate: true
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
-    testgrid-tab-name: cleanerupper
+    testgrid-tab-name: cleanerupper-compute-image-test-pools
   interval: 2h
   agent: kubernetes
   spec:
@@ -59,7 +59,7 @@ periodics:
   decorate: true
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
-    testgrid-tab-name: cleanerupper
+    testgrid-tab-name: cleanerupper-osconfig-projects
   interval: 2h
   agent: kubernetes
   spec:
@@ -87,7 +87,7 @@ periodics:
   decorate: true
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
-    testgrid-tab-name: cleanerupper-osconfig
+    testgrid-tab-name: cleanerupper-osconfig-policies
   interval: 5h
   agent: kubernetes
   spec:
