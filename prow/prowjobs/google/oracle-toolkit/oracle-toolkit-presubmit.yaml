@@ -1,16 +1,5 @@
 presubmits:
   google/oracle-toolkit:
-  - name: ansible-lint-validator
-    decorate: true
-    optional: true
-    run_if_changed: '^.*\.ya?ml$'
-    spec:
-      serviceAccountName: prowjob-default-sa
-      containers:
-        - image: cytopia/ansible-lint
-          imagePullPolicy: Always
-          command:
-            - ansible-lint
   - name: oracle-toolkit-install-single-instance-on-bms
     cluster: build-gcp-oracle-team
     always_run: true
