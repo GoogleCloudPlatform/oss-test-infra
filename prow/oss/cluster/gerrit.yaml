@@ -20,7 +20,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
       - name: gerrit
-        image: us-central1-docker.pkg.dev/gob-prow/prow-images/gerrit:v20250528-e3aeaa344
+        image: us-central1-docker.pkg.dev/gob-prow/prow-images/gerrit:v20250616-91ec58f22
         args:
         - --config-path=/etc/config/config.yaml
         - --job-config-path=/etc/job-config
