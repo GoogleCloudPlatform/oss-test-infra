@@ -24,7 +24,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
       - name: deck-blueprints
-        image: us-central1-docker.pkg.dev/gob-prow/prow-images/deck:v20250528-e3aeaa344
+        image: us-central1-docker.pkg.dev/gob-prow/prow-images/deck:v20250616-91ec58f22
         args:
         - --config-path=/etc/config/config.yaml
         - --hook-url=http://hook:8888/plugin-help
