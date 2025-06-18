@@ -1,11 +1,11 @@
 # Periodics from legacy prow cluster
 periodics:
-- name: cleanerupper-cep
+- name: cleanerupper-cloud-cluster-guest-kms-cep
   cluster: gcp-guest
   decorate: true
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
-    testgrid-tab-name: cleanerupper-cep
+    testgrid-tab-name: cleanerupper-cloud-cluster-guest-kms-cep
   interval: 2h
   agent: kubernetes
   spec:
@@ -26,12 +26,12 @@ periodics:
       env:
       - name: GOOGLE_APPLICATION_CREDENTIALS
         value: ''
-- name: cleanerupper-compute-image-test-pools
+- name: cleanerupper-compute-image-test-pool-001
   cluster: gcp-guest
   decorate: true
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
-    testgrid-tab-name: cleanerupper-compute-image-test-pools
+    testgrid-tab-name: cleanerupper-compute-image-test-pool-001
   interval: 2h
   agent: kubernetes
   spec:
@@ -50,11 +50,207 @@ periodics:
       - "-load_balancers=true"
       - "-networks=true"
       - "-snapshots=true"
-      - "-projects=compute-image-test-pool-001,compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005,compute-image-test-pool-001-1,compute-image-test-pool-001-2,compute-image-test-custom-vpc"
+      - "-projects=compute-image-test-pool-001"
       env:
       - name: GOOGLE_APPLICATION_CREDENTIALS
         value: ''
-- name: cleanerupper-osconfig-projects
+- name: cleanerupper-compute-image-test-pool-002
+  cluster: gcp-guest
+  decorate: true
+  annotations:
+    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-tab-name: cleanerupper-compute-image-test-pool-002
+  interval: 2h
+  agent: kubernetes
+  spec:
+    activeDeadlineSeconds: 6300
+    containers:
+    - image: gcr.io/gcp-guest/cleanerupper:latest
+      command:
+      - "/cleanerupper"
+      args:
+      - "-dry_run=false"
+      - "-duration=12h"
+      - "-instances=true"
+      - "-disks=true"
+      - "-images=true"
+      - "-machine_images=true"
+      - "-load_balancers=true"
+      - "-networks=true"
+      - "-snapshots=true"
+      - "-projects=compute-image-test-pool-002"
+      env:
+      - name: GOOGLE_APPLICATION_CREDENTIALS
+        value: ''
+- name: cleanerupper-compute-image-test-pool-003
+  cluster: gcp-guest
+  decorate: true
+  annotations:
+    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-tab-name: cleanerupper-compute-image-test-pool-003
+  interval: 2h
+  agent: kubernetes
+  spec:
+    activeDeadlineSeconds: 6300
+    containers:
+    - image: gcr.io/gcp-guest/cleanerupper:latest
+      command:
+      - "/cleanerupper"
+      args:
+      - "-dry_run=false"
+      - "-duration=12h"
+      - "-instances=true"
+      - "-disks=true"
+      - "-images=true"
+      - "-machine_images=true"
+      - "-load_balancers=true"
+      - "-networks=true"
+      - "-snapshots=true"
+      - "-projects=compute-image-test-pool-003"
+      env:
+      - name: GOOGLE_APPLICATION_CREDENTIALS
+        value: ''
+- name: cleanerupper-compute-image-test-pool-004
+  cluster: gcp-guest
+  decorate: true
+  annotations:
+    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-tab-name: cleanerupper-compute-image-test-pool-004
+  interval: 2h
+  agent: kubernetes
+  spec:
+    activeDeadlineSeconds: 6300
+    containers:
+    - image: gcr.io/gcp-guest/cleanerupper:latest
+      command:
+      - "/cleanerupper"
+      args:
+      - "-dry_run=false"
+      - "-duration=12h"
+      - "-instances=true"
+      - "-disks=true"
+      - "-images=true"
+      - "-machine_images=true"
+      - "-load_balancers=true"
+      - "-networks=true"
+      - "-snapshots=true"
+      - "-projects=compute-image-test-pool-004"
+      env:
+      - name: GOOGLE_APPLICATION_CREDENTIALS
+        value: ''
+- name: cleanerupper-compute-image-test-pool-005
+  cluster: gcp-guest
+  decorate: true
+  annotations:
+    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-tab-name: cleanerupper-compute-image-test-pool-005
+  interval: 2h
+  agent: kubernetes
+  spec:
+    activeDeadlineSeconds: 6300
+    containers:
+    - image: gcr.io/gcp-guest/cleanerupper:latest
+      command:
+      - "/cleanerupper"
+      args:
+      - "-dry_run=false"
+      - "-duration=12h"
+      - "-instances=true"
+      - "-disks=true"
+      - "-images=true"
+      - "-machine_images=true"
+      - "-load_balancers=true"
+      - "-networks=true"
+      - "-snapshots=true"
+      - "-projects=compute-image-test-pool-005"
+      env:
+      - name: GOOGLE_APPLICATION_CREDENTIALS
+        value: ''
+- name: cleanerupper-compute-image-test-pool-001-1
+  cluster: gcp-guest
+  decorate: true
+  annotations:
+    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-tab-name: cleanerupper-compute-image-test-pool-001-1
+  interval: 2h
+  agent: kubernetes
+  spec:
+    activeDeadlineSeconds: 6300
+    containers:
+    - image: gcr.io/gcp-guest/cleanerupper:latest
+      command:
+      - "/cleanerupper"
+      args:
+      - "-dry_run=false"
+      - "-duration=12h"
+      - "-instances=true"
+      - "-disks=true"
+      - "-images=true"
+      - "-machine_images=true"
+      - "-load_balancers=true"
+      - "-networks=true"
+      - "-snapshots=true"
+      - "-projects=compute-image-test-pool-001-1"
+      env:
+      - name: GOOGLE_APPLICATION_CREDENTIALS
+        value: ''
+- name: cleanerupper-compute-image-test-pool-001-2
+  cluster: gcp-guest
+  decorate: true
+  annotations:
+    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-tab-name: cleanerupper-compute-image-test-pool-001-2
+  interval: 2h
+  agent: kubernetes
+  spec:
+    activeDeadlineSeconds: 6300
+    containers:
+    - image: gcr.io/gcp-guest/cleanerupper:latest
+      command:
+      - "/cleanerupper"
+      args:
+      - "-dry_run=false"
+      - "-duration=12h"
+      - "-instances=true"
+      - "-disks=true"
+      - "-images=true"
+      - "-machine_images=true"
+      - "-load_balancers=true"
+      - "-networks=true"
+      - "-snapshots=true"
+      - "-projects=compute-image-test-pool-001-2"
+      env:
+      - name: GOOGLE_APPLICATION_CREDENTIALS
+        value: ''
+- name: cleanerupper-compute-image-test-custom-vpc
+  cluster: gcp-guest
+  decorate: true
+  annotations:
+    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-tab-name: cleanerupper-compute-image-test-custom-vpc
+  interval: 2h
+  agent: kubernetes
+  spec:
+    activeDeadlineSeconds: 6300
+    containers:
+    - image: gcr.io/gcp-guest/cleanerupper:latest
+      command:
+      - "/cleanerupper"
+      args:
+      - "-dry_run=false"
+      - "-duration=12h"
+      - "-instances=true"
+      - "-disks=true"
+      - "-images=true"
+      - "-machine_images=true"
+      - "-load_balancers=true"
+      - "-networks=true"
+      - "-snapshots=true"
+      - "-projects=compute-image-test-custom-vpc"
+      env:
+      - name: GOOGLE_APPLICATION_CREDENTIALS
+        value: ''
+- name: cleanerupper-osconfig-agent
   cluster: gcp-guest
   decorate: true
   annotations:
@@ -78,7 +274,63 @@ periodics:
       - "-load_balancers=true"
       - "-networks=true"
       - "-snapshots=true"
-      - "-projects=compute-image-osconfig-agent,compute-image-osconfig-agent-2,oslogin-cit"
+      - "-projects=compute-image-osconfig-agent"
+      env:
+      - name: GOOGLE_APPLICATION_CREDENTIALS
+        value: ''
+- name: cleanerupper-osconfig-agent-2
+  cluster: gcp-guest
+  decorate: true
+  annotations:
+    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-tab-name: cleanerupper-osconfig-agent-2
+  interval: 2h
+  agent: kubernetes
+  spec:
+    activeDeadlineSeconds: 6300
+    containers:
+    - image: gcr.io/gcp-guest/cleanerupper:latest
+      command:
+      - "/cleanerupper"
+      args:
+      - "-dry_run=false"
+      - "-duration=12h"
+      - "-instances=true"
+      - "-disks=true"
+      - "-images=true"
+      - "-machine_images=true"
+      - "-load_balancers=true"
+      - "-networks=true"
+      - "-snapshots=true"
+      - "-projects=compute-image-osconfig-agent-2"
+      env:
+      - name: GOOGLE_APPLICATION_CREDENTIALS
+        value: ''
+- name: cleanerupper-oslogin-cit
+  cluster: gcp-guest
+  decorate: true
+  annotations:
+    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-tab-name: cleanerupper-oslogin-cit
+  interval: 2h
+  agent: kubernetes
+  spec:
+    activeDeadlineSeconds: 6300
+    containers:
+    - image: gcr.io/gcp-guest/cleanerupper:latest
+      command:
+      - "/cleanerupper"
+      args:
+      - "-dry_run=false"
+      - "-duration=12h"
+      - "-instances=true"
+      - "-disks=true"
+      - "-images=true"
+      - "-machine_images=true"
+      - "-load_balancers=true"
+      - "-networks=true"
+      - "-snapshots=true"
+      - "-projects=oslogin-cit"
       env:
       - name: GOOGLE_APPLICATION_CREDENTIALS
         value: ''
