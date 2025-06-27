@@ -361,6 +361,7 @@ plugins:
     - milestone # Applies a milestone for issues or PRs.
     - milestoneapplier
     - override
+    - owners-label
     - project # Lets issues be tagged into projects
     - retitle
     - size
