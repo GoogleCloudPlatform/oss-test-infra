@@ -680,7 +680,7 @@ periodics:
       - "-project=gcp-guest"
       - "-zone=us-central1-b"
 # Please keep this field ordered by version order (eg 7 -> 8 -> 9). Arch should go (amd64 -> arm64).
-      - "-images=projects/rhel-sap-cloud/global/images/family/rhel-8-4-sap-ha,projects/rhel-sap-cloud/global/images/family/rhel-8-6-sap-ha,projects/rhel-sap-cloud/global/images/family/rhel-8-8-sap-ha,projects/rhel-sap-cloud/global/images/family/rhel-8-10-sap-ha,projects/rhel-sap-cloud/global/images/family/rhel-9-0-sap-ha,projects/rhel-sap-cloud/global/images/family/rhel-9-2-sap-ha,projects/rhel-sap-cloud/global/images/family/rhel-9-4-sap-ha"
+      - "-images=projects/rhel-sap-cloud/global/images/family/rhel-8-6-sap-ha,projects/rhel-sap-cloud/global/images/family/rhel-8-8-sap-ha,projects/rhel-sap-cloud/global/images/family/rhel-8-10-sap-ha,projects/rhel-sap-cloud/global/images/family/rhel-9-0-sap-ha,projects/rhel-sap-cloud/global/images/family/rhel-9-2-sap-ha,projects/rhel-sap-cloud/global/images/family/rhel-9-4-sap-ha"
       - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
       - "-filter=^(cvm|livemigrate|suspendresume|loadbalancer|guestagent|hostnamevalidation|imageboot|licensevalidation|network|security|hotattach|lssd|disk|packagevalidation|ssh|metadata|sql|vmspec)$"
       - "-set_exit_status=false"
