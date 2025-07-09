@@ -1,5 +1,52 @@
 # Periodics from legacy prow cluster
 periodics:
+- name: cleanerupper-guest-package-builder
+  cluster: gcp-guest
+  decorate: true
+  annotations:
+    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-tab-name: cleanerupper-guest-package-builder
+  interval: 2h
+  agent: kubernetes
+  spec:
+    activeDeadlineSeconds: 6300
+    containers:
+    - image: gcr.io/gcp-guest/cleanerupper:latest
+      command:
+      - "/cleanerupper"
+      args:
+      - "-dry_run=false"
+      - "-duration=12h"
+      - "-instances=true"
+      - "-disks=true"
+      - "-machine_images=true"
+      - "-snapshots=true"
+      - "-projects=guest-package-builder"
+      env:
+      - name: GOOGLE_APPLICATION_CREDENTIALS
+        value: ''
+- name: cleanerupper-guest-package-builder-images
+  cluster: gcp-guest
+  decorate: true
+  annotations:
+    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-tab-name: cleanerupper-guest-package-builder
+  interval: 2h
+  agent: kubernetes
+  spec:
+    activeDeadlineSeconds: 6300
+    containers:
+    - image: gcr.io/gcp-guest/cleanerupper:latest
+      command:
+      - "/cleanerupper"
+      args:
+      - "-dry_run=false"
+      - "-duration=7d"
+      - "-images=true"
+      - "-projects=guest-package-builder"
+      env:
+      - name: GOOGLE_APPLICATION_CREDENTIALS
+        value: ''
 - name: cleanerupper-cloud-cluster-guest-kms-cep
   cluster: gcp-guest
   decorate: true
