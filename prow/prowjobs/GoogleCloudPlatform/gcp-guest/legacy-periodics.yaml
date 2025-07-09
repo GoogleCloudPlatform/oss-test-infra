@@ -30,7 +30,7 @@ periodics:
   decorate: true
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
-    testgrid-tab-name: cleanerupper-guest-package-builder
+    testgrid-tab-name: cleanerupper-images-guest-package-builder
   interval: 2h
   agent: kubernetes
   spec:
