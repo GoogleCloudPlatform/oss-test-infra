@@ -19,7 +19,7 @@ spec:
       serviceAccountName: prow-controller-manager
       containers:
       - name: prow-controller-manager
-        image: us-central1-docker.pkg.dev/gob-prow/prow-images/prow-controller-manager:v20250625-1a4e8292d
+        image: us-central1-docker.pkg.dev/gob-prow/prow-images/prow-controller-manager:v20250709-b7124da4f
         args:
         - --config-path=/etc/config/config.yaml
         - --dry-run=false
