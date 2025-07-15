@@ -41,7 +41,7 @@ periodics:
       - "/cleanerupper"
       args:
       - "-dry_run=false"
-      - "-duration=7d"
+      - "-duration=168h"
       - "-images=true"
       - "-projects=guest-package-builder"
       env:
