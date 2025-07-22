@@ -474,14 +474,14 @@ periodics:
       - "-project=compute-image-test-pool-001"
       - "-zone=europe-west1-b"
 # Please keep this field ordered by version order (eg 7 -> 8 -> 9). Arch should go (amd64 -> arm64).
-      - "-images=projects/rocky-linux-accelerator-cloud/global/images/family/rocky-linux-8-optimized-gcp-nvidia-latest,projects/rocky-linux-accelerator-cloud/global/images/family/rocky-linux-9-optimized-gcp-nvidia-latest,projects/ubuntu-os-accelerator-images/global/images/family/ubuntu-accelerator-2204-amd64-with-nvidia-550,projects/ubuntu-os-accelerator-images/global/images/family/ubuntu-accelerator-2404-amd64-with-nvidia-550"
+      - "-images=projects/rocky-linux-accelerator-cloud/global/images/family/rocky-linux-8-optimized-gcp-nvidia-latest,projects/rocky-linux-accelerator-cloud/global/images/family/rocky-linux-9-optimized-gcp-nvidia-latest,projects/ubuntu-os-accelerator-images/global/images/family/ubuntu-accelerator-2204-amd64-with-nvidia-570,projects/ubuntu-os-accelerator-images/global/images/family/ubuntu-accelerator-2404-amd64-with-nvidia-570"
 # This project is allowlisted for some necessary quota. TODO: switch to a non -001 test pool. 001 is intended for humans.
       - "-test_projects=compute-image-test-pool-001"
       - "-filter=^(acceleratorrdma|acceleratorconfig)$"
       - "-set_exit_status=false"
       - "-compute_endpoint_override=https://www.googleapis.com/compute/alpha/"
       - "-use_reservations=true"
-      - "-reservation_urls=cloud-image-exfr-2"
+      - "-reservation_urls=nvidia-h200-8mx2qd0luip8o"
       - "-x86_shape=a3-ultragpu-8g"
       - "-accelerator_type=nvidia-h200-141gb"
 - name: cit-periodics-accelerator-images-accelerator-tests-a4
@@ -506,7 +506,7 @@ periodics:
       - "-project=compute-image-test-pool-001"
       - "-zone=us-central1-b"
 # Please keep this field ordered by version order (eg 7 -> 8 -> 9). Arch should go (amd64 -> arm64).
-      - "-images=projects/rocky-linux-accelerator-cloud/global/images/family/rocky-linux-8-optimized-gcp-nvidia-latest,projects/rocky-linux-accelerator-cloud/global/images/family/rocky-linux-9-optimized-gcp-nvidia-latest"
+      - "-images=projects/rocky-linux-accelerator-cloud/global/images/family/rocky-linux-8-optimized-gcp-nvidia-latest,projects/rocky-linux-accelerator-cloud/global/images/family/rocky-linux-9-optimized-gcp-nvidia-latest,projects/ubuntu-os-accelerator-images/global/images/family/ubuntu-accelerator-2204-amd64-with-nvidia-570,projects/ubuntu-os-accelerator-images/global/images/family/ubuntu-accelerator-2404-amd64-with-nvidia-570"
 # This project is allowlisted for some necessary quota. TODO: switch to a non -001 test pool. 001 is intended for humans.
       - "-test_projects=compute-image-test-pool-001"
       - "-filter=^(acceleratorrdma|acceleratorconfig)$"
