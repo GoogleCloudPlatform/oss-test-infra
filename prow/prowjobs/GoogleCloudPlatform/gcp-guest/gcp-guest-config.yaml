@@ -535,6 +535,7 @@ periodics:
       - "-parallel_count=5"
       - "-project=gcp-guest"
       - "-zone=us-central1-b"
+      - "-timeout=20m"
 # Please keep this field ordered by version order (eg 7 -> 8 -> 9). Arch should go (amd64 -> arm64).
       - "-images=projects/rocky-linux-accelerator-cloud/global/images/family/rocky-linux-8-optimized-gcp-nvidia-latest,projects/rocky-linux-accelerator-cloud/global/images/family/rocky-linux-9-optimized-gcp-nvidia-latest,projects/ubuntu-os-accelerator-images/global/images/family/ubuntu-accelerator-2204-amd64-with-nvidia-550,projects/ubuntu-os-accelerator-images/global/images/family/ubuntu-accelerator-2404-amd64-with-nvidia-550"
       - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
