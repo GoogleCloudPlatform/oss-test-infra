@@ -112,8 +112,11 @@ presubmits:
     cluster: build-gcp-oracle-team
     always_run: false # Run only when requested
     skip_report: true # Skip setting a status on GitHub
-    max_concurrency: 1
+    max_concurrency: 3
     decorate: true
+    decoration_config:
+      timeout: 4h
+      grace_period: 5m
     spec:
       serviceAccountName: prowjob-default-sa
       containers:
