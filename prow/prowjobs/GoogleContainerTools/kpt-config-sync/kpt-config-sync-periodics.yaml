@@ -257,6 +257,23 @@ periodics:
       - 'E2E_OCI_PROVIDER=local' # Use local to minimize AR quota usage
       - 'E2E_HELM_PROVIDER=local'
 
+- <<: *config-sync-standard-job
+  name: kpt-config-sync-standard-regular-ssm
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-main
+    testgrid-tab-name: standard-regular-ssm
+  spec:
+    <<: *config-sync-standard-job-spec
+    containers:
+    - <<: *config-sync-standard-job-container
+      args:
+      - 'GCP_SUBNETWORK=prow-e2e-subnetwork-usw1-9'
+      - 'GKE_RELEASE_CHANNEL=regular'
+      - 'E2E_CLUSTER_PREFIX=standard-regular-ssm'
+      - 'E2E_GIT_PROVIDER=ssm'
+      - 'E2E_OCI_PROVIDER=local' # Use local to minimize AR quota usage
+      - 'E2E_HELM_PROVIDER=local'
+
 #### End git provider specific jobs
 #### Begin GKE autopilot jobs
 
