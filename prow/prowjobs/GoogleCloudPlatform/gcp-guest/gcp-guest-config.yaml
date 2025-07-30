@@ -456,7 +456,7 @@ periodics:
   cluster: gcp-guest
   decorate: true
   decoration_config:
-    timeout: 6h
+    timeout: 12h
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: cit-periodics-accelerator-images-accelerator-tests-a3u
@@ -488,7 +488,7 @@ periodics:
   cluster: gcp-guest
   decorate: true
   decoration_config:
-    timeout: 6h
+    timeout: 12h
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: cit-periodics-accelerator-images-accelerator-tests-a4
