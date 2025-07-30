@@ -3,7 +3,7 @@ presubmits:
 
   - name: oracle-toolkit-install-single-instance-on-bms
     cluster: build-gcp-oracle-team
-    always_run: true
+    always_run: false
     skip_if_only_changed: "^docs/|^terraform/|^tools/|\\.md$|^LICENSE$|^OWNERS$"
     # Introducing max_concurrency, as noted in the design doc (internal) comment thread: https://docs.google.com/document/d/1mv2nV0Cv6EKv-ZTScv59JdyqvmNfYeMojqFJdJVhdmk/edit?pli=1&disco=AAAAUQ1gyBE
     max_concurrency: 1
@@ -55,7 +55,7 @@ presubmits:
 
   - name: oracle-toolkit-install-rac-on-bms
     cluster: build-gcp-oracle-team
-    always_run: true
+    always_run: false
     skip_if_only_changed: "^docs/|^terraform/|^tools/|\\.md$|^LICENSE$|^OWNERS$"
     # Introducing max_concurrency, as noted in the design doc (internal) comment thread: https://docs.google.com/document/d/1mv2nV0Cv6EKv-ZTScv59JdyqvmNfYeMojqFJdJVhdmk/edit?pli=1&disco=AAAAUQ1gyBE
     max_concurrency: 1
@@ -112,8 +112,7 @@ presubmits:
 
   - name: oracle-toolkit-install-single-instance-on-gcp
     cluster: build-gcp-oracle-team
-    always_run: false # Run only when requested
-    skip_report: true # Skip setting a status on GitHub
+    always_run: false
     skip_if_only_changed: "^docs/|\\.md$|^LICENSE$|^OWNERS$"
     max_concurrency: 3
     decorate: true
