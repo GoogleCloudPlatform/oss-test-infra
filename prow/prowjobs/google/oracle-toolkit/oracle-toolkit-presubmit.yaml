@@ -121,8 +121,32 @@ presubmits:
       containers:
       - image: gcr.io/google.com/cloudsdktool/google-cloud-cli:alpine
         command:
-        - ./presubmit_tests/single-instance-on-gcp.sh
+        - ./presubmit_tests/gcp-test-runner.sh
+        args:
+        - single-instance
         resources:
           requests:
             memory: "2.0Gi"
             cpu: "3.0"
+
+  - name: oracle-toolkit-install-data-guard-on-gcp
+    cluster: build-gcp-oracle-team
+    always_run: true
+    max_concurrency: 3
+    decorate: true
+    decoration_config:
+      timeout: 4h
+      grace_period: 5m
+    spec:
+      serviceAccountName: prowjob-default-sa
+      containers:
+      - image: gcr.io/google.com/cloudsdktool/google-cloud-cli:alpine
+        command:
+        - ./presubmit_tests/gcp-test-runner.sh
+        args:
+        - data-guard
+        resources:
+          requests:
+            memory: "2.0Gi"
+            cpu: "3.0"
+
