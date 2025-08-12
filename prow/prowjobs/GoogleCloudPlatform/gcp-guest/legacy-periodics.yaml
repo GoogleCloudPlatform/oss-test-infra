@@ -16,11 +16,13 @@ periodics:
       - "/cleanerupper"
       args:
       - "-dry_run=false"
-      - "-duration=12h"
+      - "-duration=3h"
       - "-instances=true"
       - "-disks=true"
       - "-machine_images=true"
       - "-snapshots=true"
+      - "-load_balancers=true"
+      - "-networks=true"
       - "-projects=guest-package-builder"
       env:
       - name: GOOGLE_APPLICATION_CREDENTIALS
