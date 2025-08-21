@@ -10,7 +10,7 @@ prow_ignored:
   - &config-sync-ci-ref
     org: GoogleContainerTools
     repo: kpt-config-sync
-    base_ref: v1.21
+    base_ref: v1.22
   spec: &config-sync-base-job-spec
     serviceAccountName: e2e-test-runner
     containers:
@@ -258,6 +258,23 @@ periodics:
       - 'E2E_OCI_PROVIDER=local' # Use local to minimize AR quota usage
       - 'E2E_HELM_PROVIDER=local'
 
+- <<: *config-sync-standard-job
+  name: kpt-config-sync-standard-regular-ssm-release
+  annotations:
+    testgrid-dashboards: googleoss-kpt-config-sync-release
+    testgrid-tab-name: standard-regular-ssm
+  spec:
+    <<: *config-sync-standard-job-spec
+    containers:
+    - <<: *config-sync-standard-job-container
+      args:
+      - 'GCP_SUBNETWORK=prow-e2e-subnetwork-usw1-9'
+      - 'GKE_RELEASE_CHANNEL=regular'
+      - 'E2E_CLUSTER_PREFIX=standard-regular-ssm'
+      - 'E2E_GIT_PROVIDER=ssm'
+      - 'E2E_OCI_PROVIDER=local' # Use local to minimize AR quota usage
+      - 'E2E_HELM_PROVIDER=local'
+
 #### End git provider specific jobs
 #### Begin GKE autopilot jobs
 
@@ -396,8 +413,14 @@ periodics:
       - 'GKE_CLUSTER_VERSION=latest'
       - 'E2E_CLUSTER_PREFIX=standard-rapid-latest-stress'
       - 'E2E_NUM_CLUSTERS=1'
-      - 'GKE_MACHINE_TYPE=n2-standard-8' # stress test uses bigger nodes to run more quickly
+      - 'GKE_NUM_NODES=5' # TestStressManyDeployments needs 50cpu & 51GiB for pods (13 nodes)
+      - 'GKE_MACHINE_TYPE=n2-standard-4' # 3.9cpu & 13.9GB allocatable
+      - 'GKE_DISK_SIZE=25Gb'
       - 'E2E_ARGS=--stress'
+      resources:
+        requests:
+          memory: "24Gi" # Stress tests watch many large objects
+          cpu: "6000m"
 
 - <<: *config-sync-autopilot-job
   name: kpt-config-sync-autopilot-rapid-latest-stress-release
@@ -415,6 +438,10 @@ periodics:
       - 'E2E_CLUSTER_PREFIX=autopilot-rapid-latest-stress'
       - 'E2E_NUM_CLUSTERS=2' # autopilot uses more clusters to run more quickly
       - 'E2E_ARGS=--stress'
+      resources:
+        requests:
+          memory: "24Gi" # Stress tests watch many large objects
+          cpu: "6000m"
 
 #### End one-off jobs
 ### End new prowjob definitions
