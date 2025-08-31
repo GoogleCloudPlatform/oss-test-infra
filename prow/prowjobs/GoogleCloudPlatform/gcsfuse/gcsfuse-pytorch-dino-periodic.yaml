@@ -1,0 +1,33 @@
+periodics:
+- name: gcsfuse-pytorch-dino-periodic
+  cluster: gcsfuse-prow-test
+  interval: 180h
+  decorate: true
+  spec:
+    containers:
+    - name: pytorch-dino-model
+      image: us-west1-docker.pkg.dev/gcs-fuse-test-ml/test-images/pytorch-dino:latest
+      securityContext:
+        privileged: true
+      command:
+      - "/bin/sh"
+      - "-c"
+      - ./setup_container.sh;
+      resources:
+        limits:
+          cpu: "22"
+          memory: 120Gi
+          nvidia.com/gpu: "2"
+        requests:
+          cpu: "22"
+          memory: 120Gi
+          nvidia.com/gpu: "2"
+      volumeMounts:
+      - name: dshm
+        mountPath: /dev/shm
+    volumes:
+    - name: dshm
+      emptyDir:
+        medium: Memory
+        sizeLimit: 128Gi
+
