@@ -18,7 +18,7 @@ prow_ignored:
           cpu: "1000m"
 
 presubmits:
-  GoogleContainerTools/kpt-config-sync:
+  GoogleContainerTools/config-sync:
   - <<: *config-sync-terraform-job
     name: kpt-config-sync-terraform-presubmit
     run_if_changed: "^e2e/testinfra/terraform/"

@@ -44,7 +44,7 @@ prow_ignored:
 
 
 presubmits:
-  GoogleContainerTools/kpt-config-sync:
+  GoogleContainerTools/config-sync:
   - name: kpt-config-sync-presubmit
     cluster: build-kpt-config-sync
 #    branches: ["master"]

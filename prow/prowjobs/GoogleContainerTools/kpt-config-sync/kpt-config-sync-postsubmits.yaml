@@ -1,5 +1,5 @@
 postsubmits:
-  GoogleContainerTools/kpt-config-sync:
+  GoogleContainerTools/config-sync:
   # this postsubmit job publishes artifacts (images, manifests, etc) when a new ref is pushed.
   - name: kpt-config-sync-publish-artifacts
     annotations:
