@@ -70,7 +70,7 @@ lgtm:
   - grpc-ecosystem
   review_acts_as_lgtm: true
 - repos:
-  - GoogleContainerTools/kpt-config-sync
+  - GoogleContainerTools/config-sync
   review_acts_as_lgtm: false
 - repos:
   - GoogleCloudPlatform/testgrid
@@ -310,7 +310,7 @@ plugins:
     - verify-owners
     - wip
 
-  GoogleContainerTools/kpt-config-sync:
+  GoogleContainerTools/config-sync:
     plugins:
     - approve
     - assign

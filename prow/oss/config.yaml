@@ -26,7 +26,7 @@ tide:
     GoogleCloudPlatform/artifact-registry-yum-plugin: squash
     GoogleCloudPlatform/blueprints: squash
     GoogleCloudPlatform/compute-image-import: squash
-    GoogleContainerTools/kpt-config-sync: squash
+    GoogleContainerTools/config-sync: squash
     kubeflow: squash
     GoogleCloudPlatform/k8s-config-connector: merge
     GoogleCloudPlatform/gke-networking-api: merge
@@ -55,7 +55,7 @@ tide:
     - GoogleCloudPlatform/testgrid
     - GoogleCloudPlatform/k8s-cloud-provider
     - GoogleCloudPlatform/gke-networking-api
-    - GoogleContainerTools/kpt-config-sync
+    - GoogleContainerTools/config-sync
     - GoogleCloudPlatform/k8s-config-connector
     labels:
     - lgtm
