@@ -708,7 +708,7 @@ periodics:
       - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
       - "-filter=^(cvm|livemigrate|suspendresume|loadbalancer|guestagent|hostnamevalidation|imageboot|licensevalidation|network|security|hotattach|lssd|disk|packagevalidation|ssh|metadata|sql|vmspec)$"
       - "-set_exit_status=false"
-- name: cit-periodics-rocky-ciq-dev
+- name: cit-periodics-rocky-ciq-dev-x86
   cluster: gcp-guest
   decorate: true
   decoration_config:
@@ -726,9 +726,33 @@ periodics:
       args:
       - "-parallel_count=10"
       - "-project=gcp-guest"
-      - "-zone=us-central1-b"
-# Please keep this field ordered by version order and arch (eg 7 -> 8 amd64 -> 8 arm64 -> 9 amd64 -> 9 arm64).
-      - "-images=projects/gce-ciq-images/global/images/family/rocky-linux-8,projects/gce-ciq-images/global/images/family/rocky-linux-8-arm64,projects/gce-ciq-images/global/images/family/rocky-linux-8-optimized-gcp,projects/gce-ciq-images/global/images/family/rocky-linux-8-optimized-gcp-arm64,projects/gce-ciq-images/global/images/family/rocky-linux-8-optimized-gcp-nvidia-570,projects/gce-ciq-images/global/images/family/rocky-linux-8-optimized-gcp-nvidia-570-arm64,projects/gce-ciq-images/global/images/family/rocky-linux-8-optimized-gcp-nvidia-580,projects/gce-ciq-images/global/images/family/rocky-linux-8-optimized-gcp-nvidia-580-arm64,projects/gce-ciq-images/global/images/family/rocky-linux-8-optimized-gcp-nvidia-latest,projects/gce-ciq-images/global/images/family/rocky-linux-8-optimized-gcp-nvidia-latest-arm64,projects/gce-ciq-images/global/images/family/rocky-linux-9,projects/gce-ciq-images/global/images/family/rocky-linux-9-arm64,projects/gce-ciq-images/global/images/family/rocky-linux-9-optimized-gcp,projects/gce-ciq-images/global/images/family/rocky-linux-9-optimized-gcp-arm64,projects/gce-ciq-images/global/images/family/rocky-linux-9-optimized-gcp-nvidia-570,projects/gce-ciq-images/global/images/family/rocky-linux-9-optimized-gcp-nvidia-570-arm64,projects/gce-ciq-images/global/images/family/rocky-linux-9-optimized-gcp-nvidia-580,projects/gce-ciq-images/global/images/family/rocky-linux-9-optimized-gcp-nvidia-580-arm64,projects/gce-ciq-images/global/images/family/rocky-linux-9-optimized-gcp-nvidia-latest,projects/gce-ciq-images/global/images/family/rocky-linux-9-optimized-gcp-nvidia-latest-arm64,projects/gce-ciq-images/global/images/family/rocky-linux-10,projects/gce-ciq-images/global/images/family/rocky-linux-10-arm64,projects/gce-ciq-images/global/images/family/rocky-linux-10-optimized-gcp,projects/gce-ciq-images/global/images/family/rocky-linux-10-optimized-gcp-arm64,projects/gce-ciq-images/global/images/family/rocky-linux-10-optimized-gcp-nvidia-570,projects/gce-ciq-images/global/images/family/rocky-linux-10-optimized-gcp-nvidia-570-arm64,projects/gce-ciq-images/global/images/family/rocky-linux-10-optimized-gcp-nvidia-580,projects/gce-ciq-images/global/images/family/rocky-linux-10-optimized-gcp-nvidia-580-arm64,projects/gce-ciq-images/global/images/family/rocky-linux-10-optimized-gcp-nvidia-latest,projects/gce-ciq-images/global/images/family/rocky-linux-10-optimized-gcp-nvidia-latest-arm64"
+      - "-zones=us-west1-a,us-east1-b,us-west1-b,us-west1-c,us-east1-c,us-east1-d"
+# Please keep this field ordered by version order (eg. 8 > 9 > 10).
+      - "-images=projects/gce-ciq-images/global/images/family/rocky-linux-8,projects/gce-ciq-images/global/images/family/rocky-linux-8-optimized-gcp,projects/gce-ciq-images/global/images/family/rocky-linux-8-optimized-gcp-nvidia-570,projects/gce-ciq-images/global/images/family/rocky-linux-8-optimized-gcp-nvidia-580,projects/gce-ciq-images/global/images/family/rocky-linux-8-optimized-gcp-nvidia-latest,projects/gce-ciq-images/global/images/family/rocky-linux-9,projects/gce-ciq-images/global/images/family/rocky-linux-9-optimized-gcp,projects/gce-ciq-images/global/images/family/rocky-linux-9-optimized-gcp-nvidia-570,projects/gce-ciq-images/global/images/family/rocky-linux-9-optimized-gcp-nvidia-580,projects/gce-ciq-images/global/images/family/rocky-linux-9-optimized-gcp-nvidia-latest,projects/gce-ciq-images/global/images/family/rocky-linux-10,projects/gce-ciq-images/global/images/family/rocky-linux-10-optimized-gcp,projects/gce-ciq-images/global/images/family/rocky-linux-10-optimized-gcp-nvidia-570,projects/gce-ciq-images/global/images/family/rocky-linux-10-optimized-gcp-nvidia-580,projects/gce-ciq-images/global/images/family/rocky-linux-10-optimized-gcp-nvidia-latest"
+      - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
+      - "-filter=^(cvm|livemigrate|suspendresume|loadbalancer|guestagent|hostnamevalidation|imageboot|licensevalidation|network|security|hotattach|lssd|disk|packagevalidation|ssh|metadata|sql|vmspec)$"
+      - "-set_exit_status=false"
+- name: cit-periodics-rocky-ciq-dev-arm64
+  cluster: gcp-guest
+  decorate: true
+  decoration_config:
+    timeout: 8h
+  annotations:
+    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-tab-name: cit-periodics-rocky-ciq-dev
+  interval: 8h
+  spec:
+    containers:
+    - image: gcr.io/compute-image-tools/cloud-image-tests:latest
+      imagePullPolicy: Always
+      command:
+      - "/manager"
+      args:
+      - "-parallel_count=10"
+      - "-project=gcp-guest"
+      - "-zones=us-central1-a,us-central1-b,us-central1-f,europe-west4-a,europe-west4-b,europe-west4-c"
+# Please keep this field ordered by version order (eg. 8 > 9 > 10).
+      - "-images=projects/gce-ciq-images/global/images/family/rocky-linux-8-arm64,projects/gce-ciq-images/global/images/family/rocky-linux-8-optimized-gcp-arm64,projects/gce-ciq-images/global/images/family/rocky-linux-8-optimized-gcp-nvidia-570-arm64,projects/gce-ciq-images/global/images/family/rocky-linux-8-optimized-gcp-nvidia-580-arm64,projects/gce-ciq-images/global/images/family/rocky-linux-8-optimized-gcp-nvidia-latest-arm64,projects/gce-ciq-images/global/images/family/rocky-linux-9-arm64,projects/gce-ciq-images/global/images/family/rocky-linux-9-optimized-gcp-arm64,projects/gce-ciq-images/global/images/family/rocky-linux-9-optimized-gcp-nvidia-570-arm64,projects/gce-ciq-images/global/images/family/rocky-linux-9-optimized-gcp-nvidia-580-arm64,projects/gce-ciq-images/global/images/family/rocky-linux-9-optimized-gcp-nvidia-latest-arm64,projects/gce-ciq-images/global/images/family/rocky-linux-10-arm64,projects/gce-ciq-images/global/images/family/rocky-linux-10-optimized-gcp-arm64,projects/gce-ciq-images/global/images/family/rocky-linux-10-optimized-gcp-nvidia-570-arm64,projects/gce-ciq-images/global/images/family/rocky-linux-10-optimized-gcp-nvidia-580-arm64,projects/gce-ciq-images/global/images/family/rocky-linux-10-optimized-gcp-nvidia-latest-arm64"
       - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
       - "-filter=^(cvm|livemigrate|suspendresume|loadbalancer|guestagent|hostnamevalidation|imageboot|licensevalidation|network|security|hotattach|lssd|disk|packagevalidation|ssh|metadata|sql|vmspec)$"
       - "-set_exit_status=false"
