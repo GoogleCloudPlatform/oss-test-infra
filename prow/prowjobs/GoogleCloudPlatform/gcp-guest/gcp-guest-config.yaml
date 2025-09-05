@@ -715,7 +715,7 @@ periodics:
     timeout: 8h
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
-    testgrid-tab-name: cit-periodics-rocky-ciq-dev
+    testgrid-tab-name: cit-periodics-rocky-ciq-dev-amd64
   interval: 8h
   spec:
     containers:
@@ -739,7 +739,7 @@ periodics:
     timeout: 8h
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
-    testgrid-tab-name: cit-periodics-rocky-ciq-dev
+    testgrid-tab-name: cit-periodics-rocky-ciq-dev-arm64
   interval: 8h
   spec:
     containers:
