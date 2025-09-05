@@ -127,3 +127,22 @@ presubmits:
             memory: "2.0Gi"
             cpu: "3.0"
 
+  - name: oracle-toolkit-install-free-edition-on-gcp
+    cluster: build-gcp-oracle-team
+    always_run: false # Run only when requested
+    skip_report: true # Skip setting a status on GitHub
+    max_concurrency: 3
+    decorate: true
+    decoration_config:
+      timeout: 4h
+      grace_period: 5m
+    spec:
+      serviceAccountName: prowjob-default-sa
+      containers:
+      - image: gcr.io/google.com/cloudsdktool/google-cloud-cli:alpine
+        command:
+        - ./presubmit_tests/free-edition-on-gcp.sh
+        resources:
+          requests:
+            memory: "2.0Gi"
+            cpu: "3.0"
