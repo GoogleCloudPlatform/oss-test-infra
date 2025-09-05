@@ -724,7 +724,7 @@ periodics:
       command:
       - "/manager"
       args:
-      - "-parallel_count=5"
+      - "-parallel_count=10"
       - "-project=gcp-guest"
       - "-zone=us-central1-b"
 # Please keep this field ordered by version order and arch (eg 7 -> 8 amd64 -> 8 arm64 -> 9 amd64 -> 9 arm64).
