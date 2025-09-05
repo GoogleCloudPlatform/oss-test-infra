@@ -2,6 +2,6 @@
 # Adding OWNERS so BMS Oracle team can change the tests run
 
 approvers:
-- jcnars
 - mfielding
 - alexbasinov
+- sahsagar-google
