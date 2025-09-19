@@ -9,7 +9,7 @@ presubmits:
       base_ref: master
     spec:
       containers:
-      - image: us-central1-docker.pkg.dev/gob-prow/prow-images/checkconfig:v20250820-d166b9b31
+      - image: us-central1-docker.pkg.dev/gob-prow/prow-images/checkconfig:v20250919-1b27abd4a
         command:
         - checkconfig
         args:
@@ -90,7 +90,7 @@ postsubmits:
       testgrid-num-failures-to-alert: '3'
     spec:
       containers:
-      - image: us-central1-docker.pkg.dev/gob-prow/prow-images/generic-autobumper:v20250820-d166b9b31
+      - image: us-central1-docker.pkg.dev/gob-prow/prow-images/generic-autobumper:v20250919-1b27abd4a
         command:
         - generic-autobumper
         args:
@@ -126,7 +126,7 @@ periodics:
     testgrid-num-failures-to-alert: '3'
   spec:
     containers:
-    - image: us-central1-docker.pkg.dev/gob-prow/prow-images/generic-autobumper:v20250820-d166b9b31
+    - image: us-central1-docker.pkg.dev/gob-prow/prow-images/generic-autobumper:v20250919-1b27abd4a
       command:
       - generic-autobumper
       args:
