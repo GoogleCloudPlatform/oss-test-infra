@@ -1,4 +1,19 @@
 prow_ignored:
+- &config-sync-e2e-container
+  # https://github.com/kubernetes/test-infra/blob/master/images/kubekins-e2e/variants.yaml
+  image: gcr.io/k8s-staging-test-infra/kubekins-e2e:v20250527-1b2b10e804-1.33
+  command:
+  - runner.sh
+  securityContext:
+    privileged: true
+  resources:
+    requests:
+      memory: "50Gi"
+      # This value is experimentally determined.
+      # We know to increase this when CPU usage is reported as above 1.0
+      # and we observe randomly flaky tests. Check the nodes in our Prow CI
+      # cluster.
+      cpu: "26000m"
 - &config-sync-e2e-job
   cluster: build-kpt-config-sync
   skip_branches:
@@ -21,27 +36,10 @@ prow_ignored:
     # Tests usually finish in ~15 minutes, but this ensures we don't fail on the
     # odd test that takes much longer than normal.
     timeout: 60m
-  spec: &config-sync-e2e-job-spec
-    containers:
-    - &config-sync-e2e-container
-      # https://github.com/kubernetes/test-infra/blob/master/images/kubekins-e2e/variants.yaml
-      image: gcr.io/k8s-staging-test-infra/kubekins-e2e:v20250527-1b2b10e804-1.33
-      command:
-      - runner.sh
-      securityContext:
-        privileged: true
-      resources:
-        requests:
-          memory: "50Gi"
-          # This value is experimentally determined.
-          # We know to increase this when CPU usage is reported as above 1.0
-          # and we observe randomly flaky tests. Check the nodes in our Prow CI
-          # cluster.
-          cpu: "26000m"
-    nodeSelector:
-      kpt-config-sync/type: presubmit
-      kpt-config-sync/size: large
-
+- &config-sync-e2e-job-spec
+  nodeSelector:
+    kpt-config-sync/type: presubmit
+    kpt-config-sync/size: large
 
 presubmits:
   GoogleContainerTools/config-sync:
