@@ -376,8 +376,9 @@ periodics:
       - 'E2E_CLUSTER_PREFIX=standard-regular-gcenode'
       - 'E2E_NUM_CLUSTERS=1'
       - 'E2E_ARGS=--gcenode'
-      - 'E2E_OCI_PROVIDER=local' # Use local to minimize AR quota usage
-      - 'E2E_HELM_PROVIDER=local'
+      - 'E2E_GIT_PROVIDER=csr'
+      - 'E2E_OCI_PROVIDER=gar'
+      - 'E2E_HELM_PROVIDER=gar'
 
 - <<: *config-sync-standard-job
   name: kpt-config-sync-standard-regular-githubapp
