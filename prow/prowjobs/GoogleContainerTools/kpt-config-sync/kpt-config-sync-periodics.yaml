@@ -1,6 +1,46 @@
 # YAML anchors for reference elsewhere.
 # to view expanded yaml, run: `yq eval 'explode(.)' [file]`
 prow_ignored:
+- &config-sync-base-job-container
+  image: us-docker.pkg.dev/kpt-config-sync-ci-artifacts/test-infra/gke-e2e:v2.0.0-go1.24.3-gcloud513.0.0-docker20.10.14
+  command:
+  - make
+  - test-e2e-gke-ci
+- &config-sync-standard-job-container
+  <<: *config-sync-base-job-container
+  env:
+  - name: GKE_E2E_TIMEOUT
+    value: 4h
+  - name: GCP_PROJECT
+    value: kpt-config-sync-ci-main
+  - name: GCP_NETWORK
+    value: prow-e2e-network-1
+  # Use regional clusters to avoid capacity issues in a single zone
+  - name: GCP_ZONE
+    value: ""
+  - name: GCP_REGION
+    value: "us-west1"
+  - name: E2E_CREATE_CLUSTERS
+    value: "lazy"
+  # This can be set to true to destroy clusters after test execution
+  - name: E2E_DESTROY_CLUSTERS
+    value: "false"
+  - name: GKE_NUM_NODES
+    value: "1"
+  - name: GKE_MACHINE_TYPE
+    value: "n2-standard-4"
+  - name: GKE_DISK_TYPE
+    value: "pd-ssd"
+  - name: GKE_DISK_SIZE
+    value: "25Gb"
+  - name: E2E_GIT_PROVIDER
+    value: "local"
+  - name: E2E_OCI_PROVIDER
+    value: "gar"
+  - name: E2E_HELM_PROVIDER
+    value: "gar"
+  - name: E2E_NUM_CLUSTERS
+    value: "8"
 - &config-sync-base-job
   cluster: build-kpt-config-sync
   decorate: true
@@ -10,102 +50,56 @@ prow_ignored:
   - org: GoogleContainerTools
     repo: kpt-config-sync
     base_ref: main
-  spec: &config-sync-base-job-spec
-    serviceAccountName: e2e-test-runner
-    containers:
-    - &config-sync-base-job-container
-      image: us-docker.pkg.dev/kpt-config-sync-ci-artifacts/test-infra/gke-e2e:v2.0.0-go1.24.3-gcloud513.0.0-docker20.10.14
-      command:
-      - make
-      - test-e2e-gke-ci
-      resources:
-        requests:
-          memory: "8Gi"
-          cpu: "4000m"
-    nodeSelector:
-      # This job requires 8vCPUs or less, so it is "small".
-      kpt-config-sync/type: periodic
-      kpt-config-sync/size: small
+- &config-sync-base-job-spec
+  serviceAccountName: e2e-test-runner
+  nodeSelector:
+    # This job requires 8vCPUs or less, so it is "small".
+    kpt-config-sync/type: periodic
+    kpt-config-sync/size: small
+- &config-sync-base-job-spec-resources
+  requests:
+    memory: "8Gi"
+    cpu: "4000m"
 # Base job definition for standard jobs
 - &config-sync-standard-job
   <<: *config-sync-base-job
   # Run on even hours to stagger
   cron: 0 */2 * * *
-  spec: &config-sync-standard-job-spec
-    <<: *config-sync-base-job-spec
-    containers:
-    - &config-sync-standard-job-container
-      <<: *config-sync-base-job-container
-      env:
-      - name: GKE_E2E_TIMEOUT
-        value: 4h
-      - name: GCP_PROJECT
-        value: kpt-config-sync-ci-main
-      - name: GCP_NETWORK
-        value: prow-e2e-network-1
-      # Use regional clusters to avoid capacity issues in a single zone
-      - name: GCP_ZONE
-        value: ""
-      - name: GCP_REGION
-        value: "us-west1"
-      - name: E2E_CREATE_CLUSTERS
-        value: "lazy"
-      # This can be set to true to destroy clusters after test execution
-      - name: E2E_DESTROY_CLUSTERS
-        value: "false"
-      - name: GKE_NUM_NODES
-        value: "1"
-      - name: GKE_MACHINE_TYPE
-        value: "n2-standard-4"
-      - name: GKE_DISK_TYPE
-        value: "pd-ssd"
-      - name: GKE_DISK_SIZE
-        value: "25Gb"
-      - name: E2E_GIT_PROVIDER
-        value: "local"
-      - name: E2E_OCI_PROVIDER
-        value: "gar"
-      - name: E2E_HELM_PROVIDER
-        value: "gar"
-      - name: E2E_NUM_CLUSTERS
-        value: "8"
+
+- &config-sync-autopilot-job-container
+  <<: *config-sync-base-job-container
+  env:
+  - name: GKE_E2E_TIMEOUT
+    value: 4h
+  - name: GCP_PROJECT
+    value: kpt-config-sync-ci-main
+  - name: GCP_NETWORK
+    value: prow-e2e-network-1
+  # Autopilot clusters must be regional
+  - name: GCP_ZONE
+    value: ""
+  - name: GCP_REGION
+    value: "us-central1"
+  - name: E2E_CREATE_CLUSTERS
+    value: "lazy"
+  # This can be set to true to destroy clusters after test execution
+  - name: E2E_DESTROY_CLUSTERS
+    value: "false"
+  - name: E2E_GIT_PROVIDER
+    value: "local"
+  - name: E2E_OCI_PROVIDER
+    value: "gar"
+  - name: E2E_HELM_PROVIDER
+    value: "gar"
+  - name: E2E_NUM_CLUSTERS
+    value: "12"
+  - name: GKE_AUTOPILOT
+    value: "true"
 # Base job definition for autopilot jobs
 - &config-sync-autopilot-job
   <<: *config-sync-base-job
   # Run on odd hours to stagger
   cron: 0 1-23/2 * * *
-  spec: &config-sync-autopilot-job-spec
-    <<: *config-sync-base-job-spec
-    containers:
-    - &config-sync-autopilot-job-container
-      <<: *config-sync-base-job-container
-      env:
-      - name: GKE_E2E_TIMEOUT
-        value: 4h
-      - name: GCP_PROJECT
-        value: kpt-config-sync-ci-main
-      - name: GCP_NETWORK
-        value: prow-e2e-network-1
-      # Autopilot clusters must be regional
-      - name: GCP_ZONE
-        value: ""
-      - name: GCP_REGION
-        value: "us-central1"
-      - name: E2E_CREATE_CLUSTERS
-        value: "lazy"
-      # This can be set to true to destroy clusters after test execution
-      - name: E2E_DESTROY_CLUSTERS
-        value: "false"
-      - name: E2E_GIT_PROVIDER
-        value: "local"
-      - name: E2E_OCI_PROVIDER
-        value: "gar"
-      - name: E2E_HELM_PROVIDER
-        value: "gar"
-      - name: E2E_NUM_CLUSTERS
-        value: "12"
-      - name: GKE_AUTOPILOT
-        value: "true"
 
 periodics:
 # One-off KinD periodic job.
@@ -141,46 +135,48 @@ periodics:
     nodeSelector:
       kpt-config-sync/type: periodic
       kpt-config-sync/size: large
-
 #### Begin GKE standard jobs
 - <<: *config-sync-standard-job
   name: kpt-config-sync-standard-regular
-  cron: 0 */2 * * *
   annotations:
     testgrid-dashboards: googleoss-kpt-config-sync-main
     testgrid-tab-name: standard-regular
   spec:
-    <<: *config-sync-standard-job-spec
+    <<: *config-sync-base-job-spec
     containers:
     - <<: *config-sync-standard-job-container
       args:
       - 'GCP_SUBNETWORK=prow-e2e-subnetwork-usw1-1'
       - 'GKE_RELEASE_CHANNEL=regular'
       - 'E2E_CLUSTER_PREFIX=standard-regular'
+      resources:
+        <<: *config-sync-base-job-spec-resources
 
-- <<: *config-sync-standard-job
+- <<: *config-sync-base-job
   name: kpt-config-sync-standard-rapid
   cron: 30 */2 * * *
   annotations:
     testgrid-dashboards: googleoss-kpt-config-sync-main
     testgrid-tab-name: standard-rapid
   spec:
-    <<: *config-sync-standard-job-spec
+    <<: *config-sync-base-job-spec
     containers:
     - <<: *config-sync-standard-job-container
       args:
       - 'GCP_SUBNETWORK=prow-e2e-subnetwork-usw1-3'
       - 'GKE_RELEASE_CHANNEL=rapid'
       - 'E2E_CLUSTER_PREFIX=standard-rapid'
+      resources:
+        <<: *config-sync-base-job-spec-resources
 
-- <<: *config-sync-standard-job
+- <<: *config-sync-base-job
   name: kpt-config-sync-standard-rapid-latest
   cron: 45 */2 * * *
   annotations:
     testgrid-dashboards: googleoss-kpt-config-sync-main
     testgrid-tab-name: standard-rapid-latest
   spec:
-    <<: *config-sync-standard-job-spec
+    <<: *config-sync-base-job-spec
     containers:
     - <<: *config-sync-standard-job-container
       args:
@@ -188,21 +184,24 @@ periodics:
       - 'GKE_RELEASE_CHANNEL=rapid'
       - 'GKE_CLUSTER_VERSION=latest'
       - 'E2E_CLUSTER_PREFIX=standard-rapid-latest'
-
-- <<: *config-sync-standard-job
+      resources:
+        <<: *config-sync-base-job-spec-resources
+- <<: *config-sync-base-job
   name: kpt-config-sync-standard-stable
   cron: 15 */2 * * *
   annotations:
     testgrid-dashboards: googleoss-kpt-config-sync-main
     testgrid-tab-name: standard-stable
   spec:
-    <<: *config-sync-standard-job-spec
+    <<: *config-sync-base-job-spec
     containers:
     - <<: *config-sync-standard-job-container
       args:
       - 'GCP_SUBNETWORK=prow-e2e-subnetwork-usw1-5'
       - 'GKE_RELEASE_CHANNEL=stable'
       - 'E2E_CLUSTER_PREFIX=standard-stable'
+      resources:
+        <<: *config-sync-base-job-spec-resources
 
 #### End GKE standard jobs
 #### Begin git provider specific jobs
@@ -212,7 +211,7 @@ periodics:
     testgrid-dashboards: googleoss-kpt-config-sync-main
     testgrid-tab-name: standard-regular-bitbucket
   spec:
-    <<: *config-sync-standard-job-spec
+    <<: *config-sync-base-job-spec
     containers:
     - <<: *config-sync-standard-job-container
       args:
@@ -222,6 +221,8 @@ periodics:
       - 'E2E_GIT_PROVIDER=bitbucket'
       - 'E2E_OCI_PROVIDER=local' # Use local to minimize AR quota usage
       - 'E2E_HELM_PROVIDER=local'
+      resources:
+        <<: *config-sync-base-job-spec-resources
 
 - <<: *config-sync-standard-job
   name: kpt-config-sync-standard-regular-gitlab
@@ -229,7 +230,7 @@ periodics:
     testgrid-dashboards: googleoss-kpt-config-sync-main
     testgrid-tab-name: standard-regular-gitlab
   spec:
-    <<: *config-sync-standard-job-spec
+    <<: *config-sync-base-job-spec
     containers:
     - <<: *config-sync-standard-job-container
       args:
@@ -239,6 +240,8 @@ periodics:
       - 'E2E_GIT_PROVIDER=gitlab'
       - 'E2E_OCI_PROVIDER=local' # Use local to minimize AR quota usage
       - 'E2E_HELM_PROVIDER=local'
+      resources:
+        <<: *config-sync-base-job-spec-resources
 
 - <<: *config-sync-standard-job
   name: kpt-config-sync-standard-regular-csr
@@ -246,7 +249,7 @@ periodics:
     testgrid-dashboards: googleoss-kpt-config-sync-main
     testgrid-tab-name: standard-regular-csr
   spec:
-    <<: *config-sync-standard-job-spec
+    <<: *config-sync-base-job-spec
     containers:
     - <<: *config-sync-standard-job-container
       args:
@@ -256,6 +259,8 @@ periodics:
       - 'E2E_GIT_PROVIDER=csr'
       - 'E2E_OCI_PROVIDER=local' # Use local to minimize AR quota usage
       - 'E2E_HELM_PROVIDER=local'
+      resources:
+        <<: *config-sync-base-job-spec-resources
 
 - <<: *config-sync-standard-job
   name: kpt-config-sync-standard-regular-ssm
@@ -263,7 +268,7 @@ periodics:
     testgrid-dashboards: googleoss-kpt-config-sync-main
     testgrid-tab-name: standard-regular-ssm
   spec:
-    <<: *config-sync-standard-job-spec
+    <<: *config-sync-base-job-spec
     containers:
     - <<: *config-sync-standard-job-container
       args:
@@ -273,63 +278,69 @@ periodics:
       - 'E2E_GIT_PROVIDER=ssm'
       - 'E2E_OCI_PROVIDER=local' # Use local to minimize AR quota usage
       - 'E2E_HELM_PROVIDER=local'
+      resources:
+        <<: *config-sync-base-job-spec-resources
 
 #### End git provider specific jobs
 #### Begin GKE autopilot jobs
 
 - <<: *config-sync-autopilot-job
   name: kpt-config-sync-autopilot-regular
-  cron: 0 1-23/2 * * *
   annotations:
     testgrid-dashboards: googleoss-kpt-config-sync-main
     testgrid-tab-name: autopilot-regular
   spec:
-    <<: *config-sync-autopilot-job-spec
+    <<: *config-sync-base-job-spec
     containers:
     - <<: *config-sync-autopilot-job-container
       args:
       - 'GCP_SUBNETWORK=prow-e2e-subnetwork-2'
       - 'GKE_RELEASE_CHANNEL=regular'
       - 'E2E_CLUSTER_PREFIX=autopilot-regular'
+      resources:
+        <<: *config-sync-base-job-spec-resources
 
-- <<: *config-sync-autopilot-job
+- <<: *config-sync-base-job
   name: kpt-config-sync-autopilot-stable
   cron: 15 1-23/2 * * *
   annotations:
     testgrid-dashboards: googleoss-kpt-config-sync-main
     testgrid-tab-name: autopilot-stable
   spec:
-    <<: *config-sync-autopilot-job-spec
+    <<: *config-sync-base-job-spec
     containers:
     - <<: *config-sync-autopilot-job-container
       args:
       - 'GCP_SUBNETWORK=prow-e2e-subnetwork-8'
       - 'GKE_RELEASE_CHANNEL=stable'
       - 'E2E_CLUSTER_PREFIX=autopilot-stable'
+      resources:
+        <<: *config-sync-base-job-spec-resources
 
 - <<: *config-sync-autopilot-job
   name: kpt-config-sync-autopilot-rapid
-  cron: 30 1-23/2 * * *
   annotations:
     testgrid-dashboards: googleoss-kpt-config-sync-main
     testgrid-tab-name: autopilot-rapid
   spec:
-    <<: *config-sync-autopilot-job-spec
+    <<: *config-sync-base-job-spec
     containers:
     - <<: *config-sync-autopilot-job-container
       args:
       - 'GCP_SUBNETWORK=prow-e2e-subnetwork-9'
       - 'GKE_RELEASE_CHANNEL=rapid'
       - 'E2E_CLUSTER_PREFIX=autopilot-rapid'
+      resources:
+        <<: *config-sync-base-job-spec-resources
 
-- <<: *config-sync-autopilot-job
+- <<: *config-sync-base-job
   name: kpt-config-sync-autopilot-rapid-latest
   cron: 45 1-23/2 * * *
   annotations:
     testgrid-dashboards: googleoss-kpt-config-sync-main
     testgrid-tab-name: autopilot-rapid-latest
   spec:
-    <<: *config-sync-autopilot-job-spec
+    <<: *config-sync-base-job-spec
     containers:
     - <<: *config-sync-autopilot-job-container
       args:
@@ -337,6 +348,8 @@ periodics:
       - 'GKE_RELEASE_CHANNEL=rapid'
       - 'GKE_CLUSTER_VERSION=latest'
       - 'E2E_CLUSTER_PREFIX=autopilot-rapid-latest'
+      resources:
+        <<: *config-sync-base-job-spec-resources
 
 #### End GKE autopilot jobs
 #### Begin one-off jobs
@@ -349,7 +362,7 @@ periodics:
     testgrid-dashboards: googleoss-kpt-config-sync-main
     testgrid-tab-name: standard-regular-kcc
   spec:
-    <<: *config-sync-standard-job-spec
+    <<: *config-sync-base-job-spec
     containers:
     - <<: *config-sync-standard-job-container
       args:
@@ -360,6 +373,8 @@ periodics:
       - 'E2E_ARGS=--kcc'
       - 'E2E_OCI_PROVIDER=local' # Use local to minimize AR quota usage
       - 'E2E_HELM_PROVIDER=local'
+      resources:
+        <<: *config-sync-base-job-spec-resources
 
 - <<: *config-sync-standard-job
   name: kpt-config-sync-standard-regular-gcenode
@@ -367,7 +382,7 @@ periodics:
     testgrid-dashboards: googleoss-kpt-config-sync-main
     testgrid-tab-name: standard-regular-gcenode
   spec:
-    <<: *config-sync-standard-job-spec
+    <<: *config-sync-base-job-spec
     containers:
     - <<: *config-sync-standard-job-container
       args:
@@ -379,6 +394,8 @@ periodics:
       - 'E2E_GIT_PROVIDER=csr'
       - 'E2E_OCI_PROVIDER=gar'
       - 'E2E_HELM_PROVIDER=gar'
+      resources:
+        <<: *config-sync-base-job-spec-resources
 
 - <<: *config-sync-standard-job
   name: kpt-config-sync-standard-regular-githubapp
@@ -386,7 +403,7 @@ periodics:
     testgrid-dashboards: googleoss-kpt-config-sync-main
     testgrid-tab-name: standard-regular-githubapp
   spec:
-    <<: *config-sync-standard-job-spec
+    <<: *config-sync-base-job-spec
     containers:
     - <<: *config-sync-standard-job-container
       args:
@@ -397,6 +414,8 @@ periodics:
       - 'E2E_ARGS=--githubapp'
       - 'E2E_OCI_PROVIDER=local' # Use local to minimize AR quota usage
       - 'E2E_HELM_PROVIDER=local'
+      resources:
+        <<: *config-sync-base-job-spec-resources
 
 - <<: *config-sync-standard-job
   name: kpt-config-sync-standard-rapid-latest-stress
@@ -404,7 +423,7 @@ periodics:
     testgrid-dashboards: googleoss-kpt-config-sync-main
     testgrid-tab-name: standard-rapid-latest-stress
   spec:
-    <<: *config-sync-standard-job-spec
+    <<: *config-sync-base-job-spec
     containers:
     - <<: *config-sync-standard-job-container
       args:
@@ -428,7 +447,7 @@ periodics:
     testgrid-dashboards: googleoss-kpt-config-sync-main
     testgrid-tab-name: autopilot-rapid-latest-stress
   spec:
-    <<: *config-sync-autopilot-job-spec
+    <<: *config-sync-base-job-spec
     containers:
     - <<: *config-sync-autopilot-job-container
       args:
