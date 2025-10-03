@@ -474,7 +474,7 @@ periodics:
       - "-project=compute-image-test-pool-001"
       - "-zone=europe-west1-b"
 # Please keep this field ordered by version order (eg 7 -> 8 -> 9). Arch should go (amd64 -> arm64).
-      - "-images=projects/rocky-linux-accelerator-cloud/global/images/family/rocky-linux-8-optimized-gcp-nvidia-latest,projects/rocky-linux-accelerator-cloud/global/images/family/rocky-linux-9-optimized-gcp-nvidia-latest,projects/ubuntu-os-accelerator-images/global/images/family/ubuntu-accelerator-2204-amd64-with-nvidia-570,projects/ubuntu-os-accelerator-images/global/images/family/ubuntu-accelerator-2404-amd64-with-nvidia-570,projects/gce-ciq-images/global/images/family/rocky-linux-8-optimized-gcp-nvidia-570,projects/gce-ciq-images/global/images/family/rocky-linux-8-optimized-gcp-nvidia-580,projects/gce-ciq-images/global/images/family/rocky-linux-8-optimized-gcp-nvidia-latest,projects/gce-ciq-images/global/images/family/rocky-linux-9-optimized-gcp-nvidia-570,projects/gce-ciq-images/global/images/family/rocky-linux-9-optimized-gcp-nvidia-580,projects/gce-ciq-images/global/images/family/rocky-linux-9-optimized-gcp-nvidia-latest,projects/gce-ciq-images/global/images/family/rocky-linux-10-optimized-gcp-nvidia-570,projects/gce-ciq-images/global/images/family/rocky-linux-10-optimized-gcp-nvidia-580,projects/gce-ciq-images/global/images/family/rocky-linux-10-optimized-gcp-nvidia-latest"
+      - "-images=projects/rocky-linux-accelerator-cloud/global/images/family/rocky-linux-8-optimized-gcp-nvidia-570,projects/rocky-linux-accelerator-cloud/global/images/family/rocky-linux-8-optimized-gcp-nvidia-580,projects/rocky-linux-accelerator-cloud/global/images/family/rocky-linux-8-optimized-gcp-nvidia-latest,projects/rocky-linux-accelerator-cloud/global/images/family/rocky-linux-9-optimized-gcp-nvidia-570,projects/rocky-linux-accelerator-cloud/global/images/family/rocky-linux-9-optimized-gcp-nvidia-580,projects/rocky-linux-accelerator-cloud/global/images/family/rocky-linux-9-optimized-gcp-nvidia-latest,projects/ubuntu-os-accelerator-images/global/images/family/ubuntu-accelerator-2204-amd64-with-nvidia-570,projects/ubuntu-os-accelerator-images/global/images/family/ubuntu-accelerator-2204-amd64-with-nvidia-580,projects/ubuntu-os-accelerator-images/global/images/family/ubuntu-accelerator-2404-amd64-with-nvidia-570,projects/ubuntu-os-accelerator-images/global/images/family/ubuntu-accelerator-2404-amd64-with-nvidia-580"
 # This project is allowlisted for some necessary quota. TODO: switch to a non -001 test pool. 001 is intended for humans.
       - "-test_projects=compute-image-test-pool-001"
       - "-filter=^(acceleratorrdma|acceleratorconfig)$"
@@ -506,7 +506,7 @@ periodics:
       - "-project=compute-image-test-pool-001"
       - "-zone=us-central1-b"
 # Please keep this field ordered by version order (eg 7 -> 8 -> 9). Arch should go (amd64 -> arm64).
-      - "-images=projects/rocky-linux-accelerator-cloud/global/images/family/rocky-linux-8-optimized-gcp-nvidia-latest,projects/rocky-linux-accelerator-cloud/global/images/family/rocky-linux-9-optimized-gcp-nvidia-latest,projects/ubuntu-os-accelerator-images/global/images/family/ubuntu-accelerator-2204-amd64-with-nvidia-570,projects/ubuntu-os-accelerator-images/global/images/family/ubuntu-accelerator-2404-amd64-with-nvidia-570,projects/gce-ciq-images/global/images/family/rocky-linux-8-optimized-gcp-nvidia-570,projects/gce-ciq-images/global/images/family/rocky-linux-8-optimized-gcp-nvidia-580,projects/gce-ciq-images/global/images/family/rocky-linux-8-optimized-gcp-nvidia-latest,projects/gce-ciq-images/global/images/family/rocky-linux-9-optimized-gcp-nvidia-570,projects/gce-ciq-images/global/images/family/rocky-linux-9-optimized-gcp-nvidia-580,projects/gce-ciq-images/global/images/family/rocky-linux-9-optimized-gcp-nvidia-latest,projects/gce-ciq-images/global/images/family/rocky-linux-10-optimized-gcp-nvidia-570,projects/gce-ciq-images/global/images/family/rocky-linux-10-optimized-gcp-nvidia-580,projects/gce-ciq-images/global/images/family/rocky-linux-10-optimized-gcp-nvidia-latest"
+      - "-images=projects/rocky-linux-accelerator-cloud/global/images/family/rocky-linux-8-optimized-gcp-nvidia-570,projects/rocky-linux-accelerator-cloud/global/images/family/rocky-linux-8-optimized-gcp-nvidia-580,projects/rocky-linux-accelerator-cloud/global/images/family/rocky-linux-8-optimized-gcp-nvidia-latest,projects/rocky-linux-accelerator-cloud/global/images/family/rocky-linux-9-optimized-gcp-nvidia-570,projects/rocky-linux-accelerator-cloud/global/images/family/rocky-linux-9-optimized-gcp-nvidia-580,projects/rocky-linux-accelerator-cloud/global/images/family/rocky-linux-9-optimized-gcp-nvidia-latest,projects/ubuntu-os-accelerator-images/global/images/family/ubuntu-accelerator-2204-amd64-with-nvidia-570,projects/ubuntu-os-accelerator-images/global/images/family/ubuntu-accelerator-2204-amd64-with-nvidia-580,projects/ubuntu-os-accelerator-images/global/images/family/ubuntu-accelerator-2404-amd64-with-nvidia-570,projects/ubuntu-os-accelerator-images/global/images/family/ubuntu-accelerator-2404-amd64-with-nvidia-580"
 # This project is allowlisted for some necessary quota. TODO: switch to a non -001 test pool. 001 is intended for humans.
       - "-test_projects=compute-image-test-pool-001"
       - "-filter=^(acceleratorrdma|acceleratorconfig)$"
@@ -534,12 +534,13 @@ periodics:
       args:
       - "-parallel_count=5"
       - "-project=gcp-guest"
-      - "-zone=us-central1-b"
+      - "-zones=us-central1-a,us-central1-b,us-central1-c,us-central1-f"
 # Please keep this field ordered by version order (eg 7 -> 8 -> 9). Arch should go (amd64 -> arm64).
-      - "-images=projects/rocky-linux-accelerator-cloud/global/images/family/rocky-linux-8-optimized-gcp-nvidia-latest,projects/rocky-linux-accelerator-cloud/global/images/family/rocky-linux-9-optimized-gcp-nvidia-latest,projects/ubuntu-os-accelerator-images/global/images/family/ubuntu-accelerator-2204-amd64-with-nvidia-550,projects/ubuntu-os-accelerator-images/global/images/family/ubuntu-accelerator-2404-amd64-with-nvidia-550"
+      - "-images=projects/rocky-linux-accelerator-cloud/global/images/family/rocky-linux-8-optimized-gcp-nvidia-570,projects/rocky-linux-accelerator-cloud/global/images/family/rocky-linux-8-optimized-gcp-nvidia-580,projects/rocky-linux-accelerator-cloud/global/images/family/rocky-linux-8-optimized-gcp-nvidia-latest,projects/rocky-linux-accelerator-cloud/global/images/family/rocky-linux-9-optimized-gcp-nvidia-570,projects/rocky-linux-accelerator-cloud/global/images/family/rocky-linux-9-optimized-gcp-nvidia-580,projects/rocky-linux-accelerator-cloud/global/images/family/rocky-linux-9-optimized-gcp-nvidia-latest,projects/ubuntu-os-accelerator-images/global/images/family/ubuntu-accelerator-2204-amd64-with-nvidia-570,projects/ubuntu-os-accelerator-images/global/images/family/ubuntu-accelerator-2204-amd64-with-nvidia-580,projects/ubuntu-os-accelerator-images/global/images/family/ubuntu-accelerator-2404-amd64-with-nvidia-570,projects/ubuntu-os-accelerator-images/global/images/family/ubuntu-accelerator-2404-amd64-with-nvidia-580"
       - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
       - "-filter=^(cvm|livemigrate|suspendresume|loadbalancer|guestagent|hostnamevalidation|imageboot|licensevalidation|network|security|hotattach|lssd|disk|packagevalidation|ssh|metadata|sql|vmspec)$"
       - "-set_exit_status=false"
+      - "-x86_shape=c3-standard-4"
 - name: cit-periodics-almalinux
   cluster: gcp-guest
   decorate: true
@@ -558,7 +559,7 @@ periodics:
       args:
       - "-parallel_count=5"
       - "-project=gcp-guest"
-      - "-zone=us-central1-b"
+      - "-zones=us-central1-a,us-central1-b,us-central1-c,us-central1-f"
 # Please keep this field ordered by version order (eg 7 -> 8 -> 9). Arch should go (amd64 -> arm64).
       - "-images=projects/almalinux-cloud/global/images/family/almalinux-8,projects/almalinux-cloud/global/images/family/almalinux-9"
       - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
@@ -606,7 +607,7 @@ periodics:
       args:
       - "-parallel_count=5"
       - "-project=gcp-guest"
-      - "-zone=us-central1-b"
+      - "-zones=us-central1-a,us-central1-b,us-central1-c,us-central1-f"
 # Please keep this field ordered by version order and arch (eg 7 -> 8 amd64 -> 8 arm64 -> 9 amd64 -> 9 arm64).
       - "-images=projects/debian-cloud/global/images/family/debian-11,projects/debian-cloud/global/images/family/debian-12,projects/debian-cloud/global/images/family/debian-12-arm64,projects/debian-cloud/global/images/family/debian-13,projects/debian-cloud/global/images/family/debian-13-arm64"
       - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
@@ -654,9 +655,9 @@ periodics:
       args:
       - "-parallel_count=5"
       - "-project=gcp-guest"
-      - "-zone=us-central1-b"
+      - "-zones=us-central1-a,us-central1-b,us-central1-c,us-central1-f"
 # Please keep this field ordered by version order (eg 7 -> 8 -> 9). Arch should go (amd64 -> arm64).
-      - "-images=projects/rhel-cloud/global/images/family/rhel-8,projects/rhel-cloud/global/images/family/rhel-9,projects/rhel-cloud/global/images/family/rhel-9-arm64"
+      - "-images=projects/rhel-cloud/global/images/family/rhel-8,projects/rhel-cloud/global/images/family/rhel-9,projects/rhel-cloud/global/images/family/rhel-9-arm64,projects/rhel-cloud/global/images/family/rhel-10,projects/rhel-cloud/global/images/family/rhel-10-arm64"
       - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
       - "-filter=^(cvm|livemigrate|suspendresume|loadbalancer|guestagent|hostnamevalidation|imageboot|licensevalidation|network|security|hotattach|lssd|disk|packagevalidation|ssh|metadata|sql|vmspec)$"
       - "-set_exit_status=false"
@@ -678,9 +679,9 @@ periodics:
       args:
       - "-parallel_count=5"
       - "-project=gcp-guest"
-      - "-zone=us-central1-b"
+      - "-zones=us-central1-a,us-central1-b,us-central1-c,us-central1-f"
 # Please keep this field ordered by version order (eg 7 -> 8 -> 9). Arch should go (amd64 -> arm64).
-      - "-images=projects/rhel-sap-cloud/global/images/family/rhel-8-6-sap-ha,projects/rhel-sap-cloud/global/images/family/rhel-8-8-sap-ha,projects/rhel-sap-cloud/global/images/family/rhel-8-10-sap-ha,projects/rhel-sap-cloud/global/images/family/rhel-9-0-sap-ha,projects/rhel-sap-cloud/global/images/family/rhel-9-2-sap-ha,projects/rhel-sap-cloud/global/images/family/rhel-9-4-sap-ha"
+      - "-images=projects/rhel-sap-cloud/global/images/family/rhel-8-6-sap-ha,projects/rhel-sap-cloud/global/images/family/rhel-8-8-sap-ha,projects/rhel-sap-cloud/global/images/family/rhel-8-10-sap-ha,projects/rhel-sap-cloud/global/images/family/rhel-9-0-sap-ha,projects/rhel-sap-cloud/global/images/family/rhel-9-2-sap-ha,projects/rhel-sap-cloud/global/images/family/rhel-9-4-sap-ha,projects/rhel-sap-cloud/global/images/family/rhel-9-6-sap-ha"
       - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
       - "-filter=^(cvm|livemigrate|suspendresume|loadbalancer|guestagent|hostnamevalidation|imageboot|licensevalidation|network|security|hotattach|lssd|disk|packagevalidation|ssh|metadata|sql|vmspec)$"
       - "-set_exit_status=false"
@@ -702,9 +703,9 @@ periodics:
       args:
       - "-parallel_count=5"
       - "-project=gcp-guest"
-      - "-zone=us-central1-b"
+      - "-zones=us-central1-a,us-central1-b,us-central1-c,us-central1-f"
 # Please keep this field ordered by version order and arch (eg 7 -> 8 amd64 -> 8 arm64 -> 9 amd64 -> 9 arm64).
-      - "-images=projects/rocky-linux-cloud/global/images/family/rocky-linux-8,projects/rocky-linux-cloud/global/images/family/rocky-linux-8-optimized-gcp,projects/rocky-linux-cloud/global/images/family/rocky-linux-8-optimized-gcp-arm64,projects/rocky-linux-cloud/global/images/family/rocky-linux-9,projects/rocky-linux-cloud/global/images/family/rocky-linux-9-optimized-gcp,projects/rocky-linux-cloud/global/images/family/rocky-linux-9-arm64,projects/rocky-linux-cloud/global/images/family/rocky-linux-9-optimized-gcp-arm64"
+      - "-images=projects/rocky-linux-cloud/global/images/family/rocky-linux-8,projects/rocky-linux-cloud/global/images/family/rocky-linux-8-optimized-gcp,projects/rocky-linux-cloud/global/images/family/rocky-linux-8-optimized-gcp-arm64,projects/rocky-linux-cloud/global/images/family/rocky-linux-9,projects/rocky-linux-cloud/global/images/family/rocky-linux-9-optimized-gcp,projects/rocky-linux-cloud/global/images/family/rocky-linux-9-arm64,projects/rocky-linux-cloud/global/images/family/rocky-linux-9-optimized-gcp-arm64,projects/rocky-linux-cloud/global/images/family/rocky-linux-10,projects/rocky-linux-cloud/global/images/family/rocky-linux-10-optimized-gcp,projects/rocky-linux-cloud/global/images/family/rocky-linux-10-arm64,projects/rocky-linux-cloud/global/images/family/rocky-linux-10-optimized-gcp-arm64"
       - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
       - "-filter=^(cvm|livemigrate|suspendresume|loadbalancer|guestagent|hostnamevalidation|imageboot|licensevalidation|network|security|hotattach|lssd|disk|packagevalidation|ssh|metadata|sql|vmspec)$"
       - "-set_exit_status=false"
@@ -774,9 +775,9 @@ periodics:
       args:
       - "-parallel_count=5"
       - "-project=gcp-guest"
-      - "-zone=us-central1-b"
+      - "-zones=us-central1-a,us-central1-b,us-central1-c,us-central1-f"
 # Please keep this field ordered by version order and arch (eg 7 -> 8 amd64 -> 8 arm64 -> 9 amd64 -> 9 arm64).
-      - "-images=projects/suse-cloud/global/images/family/sles-12,projects/suse-cloud/global/images/family/sles-15-sp5,projects/suse-cloud/global/images/family/sles-15-sp5-arm64,projects/suse-cloud/global/images/family/sles-15,projects/suse-cloud/global/images/family/sles-15-arm64"
+      - "-images=projects/suse-cloud/global/images/family/sles-12,projects/suse-cloud/global/images/family/sles-15-sp5,projects/suse-cloud/global/images/family/sles-15-sp5-arm64,projects/suse-cloud/global/images/family/sles-15-sp6,projects/suse-cloud/global/images/family/sles-15-sp6-arm64,projects/suse-cloud/global/images/family/sles-15,projects/suse-cloud/global/images/family/sles-15-arm64"
       - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
       - "-filter=^(cvm|livemigrate|suspendresume|loadbalancer|guestagent|hostnamevalidation|imageboot|licensevalidation|network|security|hotattach|lssd|disk|packagevalidation|ssh|metadata|sql|vmspec)$"
       - "-set_exit_status=false"
@@ -798,7 +799,7 @@ periodics:
       args:
       - "-parallel_count=5"
       - "-project=gcp-guest"
-      - "-zone=us-central1-b"
+      - "-zones=us-central1-a,us-central1-b,us-central1-c,us-central1-f"
 # Please keep this field ordered by version order and arch (eg 7 -> 8 amd64 -> 8 arm64 -> 9 amd64 -> 9 arm64).
       - "-images=projects/ubuntu-os-cloud/global/images/family/ubuntu-2204-lts,projects/ubuntu-os-cloud/global/images/family/ubuntu-2204-lts-arm64,projects/ubuntu-os-cloud/global/images/family/ubuntu-2404-lts-amd64,projects/ubuntu-os-cloud/global/images/family/ubuntu-2404-lts-arm64"
       - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
@@ -848,7 +849,7 @@ periodics:
       - "-project=gcp-guest"
       - "-zone=us-central1-b"
 # Please keep this field ordered by Server OS then client and order by OS version release within those families.
-      - "-images=projects/gce-windows-client-images/global/images/family/windows-11-24h2-x64,projects/gce-windows-client-images/global/images/family/windows-11-23h2-x64,projects/gce-windows-client-images/global/images/family/windows-11-22h2-x64,projects/gce-windows-client-images/global/images/family/windows-11-21h2-x64,projects/gce-windows-client-images/global/images/family/windows-10-22h2-x64,projects/gce-windows-client-images/global/images/family/windows-10-21h2-x64"
+      - "-images=projects/gce-windows-client-images/global/images/family/windows-11-25h2-x64,projects/gce-windows-client-images/global/images/family/windows-11-24h2-x64,projects/gce-windows-client-images/global/images/family/windows-11-23h2-x64,projects/gce-windows-client-images/global/images/family/windows-11-22h2-x64,projects/gce-windows-client-images/global/images/family/windows-11-21h2-x64,projects/gce-windows-client-images/global/images/family/windows-10-22h2-x64,projects/gce-windows-client-images/global/images/family/windows-10-21h2-x64"
       - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
       - "-filter=^(cvm|livemigrate|suspendresume|loadbalancer|guestagent|hostnamevalidation|imageboot|licensevalidation|network|security|hotattach|lssd|disk|packagevalidation|ssh|metadata|sql|vmspec)$"
       - "-set_exit_status=false"
