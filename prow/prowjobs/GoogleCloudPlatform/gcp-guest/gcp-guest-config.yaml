@@ -565,6 +565,7 @@ periodics:
       - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
       - "-filter=^(cvm|livemigrate|suspendresume|loadbalancer|guestagent|hostnamevalidation|imageboot|licensevalidation|network|security|hotattach|lssd|disk|packagevalidation|ssh|metadata|sql|vmspec)$"
       - "-set_exit_status=false"
+      - "-arm64_shape=c4a-standard-1"
 - name: cit-periodics-centos
   cluster: gcp-guest
   decorate: true
@@ -589,6 +590,7 @@ periodics:
       - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
       - "-filter=^(cvm|livemigrate|suspendresume|loadbalancer|guestagent|hostnamevalidation|imageboot|licensevalidation|network|security|hotattach|lssd|disk|packagevalidation|ssh|metadata|sql|vmspec)$"
       - "-set_exit_status=false"
+      - "-arm64_shape=c4a-standard-1"
 - name: cit-periodics-debian
   cluster: gcp-guest
   decorate: true
@@ -613,6 +615,7 @@ periodics:
       - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
       - "-filter=^(cvm|livemigrate|suspendresume|loadbalancer|guestagent|hostnamevalidation|imageboot|licensevalidation|network|security|hotattach|lssd|disk|packagevalidation|ssh|metadata|sql|vmspec)$"
       - "-set_exit_status=false"
+      - "-arm64_shape=c4a-standard-1"
 - name: cit-periodics-opensuse
   cluster: gcp-guest
   decorate: true
@@ -637,6 +640,7 @@ periodics:
       - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
       - "-filter=^(cvm|livemigrate|suspendresume|loadbalancer|guestagent|hostnamevalidation|imageboot|licensevalidation|network|security|hotattach|lssd|disk|packagevalidation|ssh|metadata|sql|vmspec)$"
       - "-set_exit_status=false"
+      - "-arm64_shape=c4a-standard-1"
 - name: cit-periodics-rhel
   cluster: gcp-guest
   decorate: true
@@ -661,6 +665,7 @@ periodics:
       - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
       - "-filter=^(cvm|livemigrate|suspendresume|loadbalancer|guestagent|hostnamevalidation|imageboot|licensevalidation|network|security|hotattach|lssd|disk|packagevalidation|ssh|metadata|sql|vmspec)$"
       - "-set_exit_status=false"
+      - "-arm64_shape=c4a-standard-1"
 - name: cit-periodics-rhel-sap
   cluster: gcp-guest
   decorate: true
@@ -685,6 +690,7 @@ periodics:
       - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
       - "-filter=^(cvm|livemigrate|suspendresume|loadbalancer|guestagent|hostnamevalidation|imageboot|licensevalidation|network|security|hotattach|lssd|disk|packagevalidation|ssh|metadata|sql|vmspec)$"
       - "-set_exit_status=false"
+      - "-arm64_shape=c4a-standard-1"
 - name: cit-periodics-rocky
   cluster: gcp-guest
   decorate: true
@@ -709,6 +715,7 @@ periodics:
       - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
       - "-filter=^(cvm|livemigrate|suspendresume|loadbalancer|guestagent|hostnamevalidation|imageboot|licensevalidation|network|security|hotattach|lssd|disk|packagevalidation|ssh|metadata|sql|vmspec)$"
       - "-set_exit_status=false"
+      - "-arm64_shape=c4a-standard-1"
 - name: cit-periodics-rocky-ciq-dev-x86
   cluster: gcp-guest
   decorate: true
@@ -727,7 +734,7 @@ periodics:
       args:
       - "-parallel_count=10"
       - "-project=gcp-guest"
-      - "-zones=us-west1-a,us-east1-b,us-west1-b,us-west1-c,us-east1-c,us-east1-d"
+      - "-zones=us-west1-a,us-west1-b,us-west1-c"
 # Please keep this field ordered by version order (eg. 8 > 9 > 10).
       - "-images=projects/gce-ciq-images/global/images/family/rocky-linux-8,projects/gce-ciq-images/global/images/family/rocky-linux-8-optimized-gcp,projects/gce-ciq-images/global/images/family/rocky-linux-8-optimized-gcp-nvidia-570,projects/gce-ciq-images/global/images/family/rocky-linux-8-optimized-gcp-nvidia-580,projects/gce-ciq-images/global/images/family/rocky-linux-8-optimized-gcp-nvidia-latest,projects/gce-ciq-images/global/images/family/rocky-linux-9,projects/gce-ciq-images/global/images/family/rocky-linux-9-optimized-gcp,projects/gce-ciq-images/global/images/family/rocky-linux-9-optimized-gcp-nvidia-570,projects/gce-ciq-images/global/images/family/rocky-linux-9-optimized-gcp-nvidia-580,projects/gce-ciq-images/global/images/family/rocky-linux-9-optimized-gcp-nvidia-latest,projects/gce-ciq-images/global/images/family/rocky-linux-10,projects/gce-ciq-images/global/images/family/rocky-linux-10-optimized-gcp,projects/gce-ciq-images/global/images/family/rocky-linux-10-optimized-gcp-nvidia-570,projects/gce-ciq-images/global/images/family/rocky-linux-10-optimized-gcp-nvidia-580,projects/gce-ciq-images/global/images/family/rocky-linux-10-optimized-gcp-nvidia-latest"
       - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
@@ -757,6 +764,7 @@ periodics:
       - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
       - "-filter=^(cvm|livemigrate|suspendresume|loadbalancer|guestagent|hostnamevalidation|imageboot|licensevalidation|network|security|hotattach|lssd|disk|packagevalidation|ssh|metadata|sql|vmspec)$"
       - "-set_exit_status=false"
+      - "-arm64_shape=c4a-standard-1"
 - name: cit-periodics-sles
   cluster: gcp-guest
   decorate: true
@@ -781,6 +789,7 @@ periodics:
       - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
       - "-filter=^(cvm|livemigrate|suspendresume|loadbalancer|guestagent|hostnamevalidation|imageboot|licensevalidation|network|security|hotattach|lssd|disk|packagevalidation|ssh|metadata|sql|vmspec)$"
       - "-set_exit_status=false"
+      - "-arm64_shape=c4a-standard-1"
 - name: cit-periodics-ubuntu
   cluster: gcp-guest
   decorate: true
@@ -805,6 +814,7 @@ periodics:
       - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
       - "-filter=^(cvm|livemigrate|suspendresume|loadbalancer|guestagent|hostnamevalidation|imageboot|licensevalidation|network|security|hotattach|lssd|disk|packagevalidation|ssh|metadata|sql|vmspec)$"
       - "-set_exit_status=false"
+      - "-arm64_shape=c4a-standard-1"
 - name: cit-periodics-ubuntu-pro
   cluster: gcp-guest
   decorate: true
@@ -829,6 +839,7 @@ periodics:
       - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
       - "-filter=^(cvm|livemigrate|suspendresume|loadbalancer|guestagent|hostnamevalidation|imageboot|licensevalidation|network|security|hotattach|lssd|disk|packagevalidation|ssh|metadata|sql|vmspec)$"
       - "-set_exit_status=false"
+      - "-arm64_shape=c4a-standard-1"
 - name: cit-periodics-windows-client
   cluster: gcp-guest
   decorate: true
