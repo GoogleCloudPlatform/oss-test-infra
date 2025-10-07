@@ -484,6 +484,7 @@ periodics:
       - "-reservation_urls=nvidia-h200-8mx2qd0luip8o"
       - "-x86_shape=a3-ultragpu-8g"
       - "-accelerator_type=nvidia-h200-141gb"
+      - "-timeout=30m"
 - name: cit-periodics-accelerator-images-accelerator-tests-a4
   cluster: gcp-guest
   decorate: true
@@ -516,6 +517,7 @@ periodics:
       - "-reservation_urls=nvidia-b200-9r888mvujoxrz"
       - "-x86_shape=a4-highgpu-8g"
       - "-accelerator_type=nvidia-b200"
+      - "-timeout=30m"
 - name: cit-periodics-accelerator-images
   cluster: gcp-guest
   decorate: true
