@@ -221,6 +221,7 @@ periodics:
       - 'E2E_GIT_PROVIDER=bitbucket'
       - 'E2E_OCI_PROVIDER=local' # Use local to minimize AR quota usage
       - 'E2E_HELM_PROVIDER=local'
+      - 'E2E_ARGS="--test-features=sync-source-git"'
       resources:
         <<: *config-sync-base-job-spec-resources
 
@@ -240,6 +241,7 @@ periodics:
       - 'E2E_GIT_PROVIDER=gitlab'
       - 'E2E_OCI_PROVIDER=local' # Use local to minimize AR quota usage
       - 'E2E_HELM_PROVIDER=local'
+      - 'E2E_ARGS="--test-features=sync-source-git"'
       resources:
         <<: *config-sync-base-job-spec-resources
 
@@ -259,6 +261,7 @@ periodics:
       - 'E2E_GIT_PROVIDER=csr'
       - 'E2E_OCI_PROVIDER=local' # Use local to minimize AR quota usage
       - 'E2E_HELM_PROVIDER=local'
+      - 'E2E_ARGS="--test-features=sync-source-git"'
       resources:
         <<: *config-sync-base-job-spec-resources
 
@@ -278,6 +281,7 @@ periodics:
       - 'E2E_GIT_PROVIDER=ssm'
       - 'E2E_OCI_PROVIDER=local' # Use local to minimize AR quota usage
       - 'E2E_HELM_PROVIDER=local'
+      - 'E2E_ARGS="--test-features=sync-source-git"'
       resources:
         <<: *config-sync-base-job-spec-resources
 
