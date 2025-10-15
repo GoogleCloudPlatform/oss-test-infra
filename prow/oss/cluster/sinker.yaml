@@ -19,7 +19,7 @@ spec:
       serviceAccountName: sinker
       containers:
       - name: sinker
-        image: us-central1-docker.pkg.dev/gob-prow/prow-images/sinker:v20250930-95ca54a6d
+        image: us-central1-docker.pkg.dev/gob-prow/prow-images/sinker:v20251009-40e5530f5
         args:
         - --config-path=/etc/config/config.yaml
         - --job-config-path=/etc/job-config
