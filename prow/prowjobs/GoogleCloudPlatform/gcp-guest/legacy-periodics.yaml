@@ -27,6 +27,31 @@ periodics:
       env:
       - name: GOOGLE_APPLICATION_CREDENTIALS
         value: ''
+- name: cleanerupper-gce-image-builder
+  cluster: gcp-guest
+  decorate: true
+  annotations:
+    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-tab-name: cleanerupper-gce-image-builder
+  interval: 2h
+  agent: kubernetes
+  spec:
+    activeDeadlineSeconds: 6300
+    containers:
+    - image: gcr.io/gcp-guest/cleanerupper:latest
+      command:
+      - "/cleanerupper"
+      args:
+      - "-dry_run=false"
+      - "-duration=3h"
+      - "-instances=true"
+      - "-disks=true"
+      - "-images=true"
+      - "-snapshots=true"
+      - "-projects=gce-image-builder"
+      env:
+      - name: GOOGLE_APPLICATION_CREDENTIALS
+        value: ''
 - name: cleanerupper-guest-package-builder-images
   cluster: gcp-guest
   decorate: true
