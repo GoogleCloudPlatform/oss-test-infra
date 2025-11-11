@@ -787,7 +787,7 @@ periodics:
       - "-project=gcp-guest"
       - "-zones=us-central1-a,us-central1-b,us-central1-c,us-central1-f"
 # Please keep this field ordered by version order and arch (eg 7 -> 8 amd64 -> 8 arm64 -> 9 amd64 -> 9 arm64).
-      - "-images=projects/suse-cloud/global/images/family/sles-12,projects/suse-cloud/global/images/family/sles-15-sp5,projects/suse-cloud/global/images/family/sles-15-sp5-arm64,projects/suse-cloud/global/images/family/sles-15-sp6,projects/suse-cloud/global/images/family/sles-15-sp6-arm64,projects/suse-cloud/global/images/family/sles-15,projects/suse-cloud/global/images/family/sles-15-arm64"
+      - "-images=projects/suse-cloud/global/images/family/sles-12,projects/suse-cloud/global/images/family/sles-15-sp5,projects/suse-cloud/global/images/family/sles-15-sp5-arm64,projects/suse-cloud/global/images/family/sles-15-sp6,projects/suse-cloud/global/images/family/sles-15-sp6-arm64,projects/suse-cloud/global/images/family/sles-15,projects/suse-cloud/global/images/family/sles-15-arm64,projects/suse-cloud/global/images/family/sles-16-0-x86-64,projects/suse-cloud/global/images/family/sles-16-0-arm64"
       - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
       - "-filter=^(cvm|livemigrate|suspendresume|loadbalancer|guestagent|hostnamevalidation|imageboot|licensevalidation|network|security|hotattach|lssd|disk|packagevalidation|ssh|metadata|sql|vmspec)$"
       - "-set_exit_status=false"
