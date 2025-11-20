@@ -30,6 +30,7 @@ tide:
     kubeflow: squash
     GoogleCloudPlatform/k8s-config-connector: merge
     GoogleCloudPlatform/gke-networking-api: merge
+    GoogleCloudPlatform/gcs-fuse-csi-driver: merge
   squash_label: tide/merge-method-squash
   rebase_label: tide/merge-method-rebase
   merge_label: tide/merge-method-merge
@@ -57,6 +58,7 @@ tide:
     - GoogleCloudPlatform/gke-networking-api
     - GoogleContainerTools/config-sync
     - GoogleCloudPlatform/k8s-config-connector
+    - GoogleCloudPlatform/gcs-fuse-csi-driver
     labels:
     - lgtm
     - approved
@@ -191,6 +193,12 @@ plank:
     config:
       gcs_configuration:
         bucket: "gcp-oracle-prow-bucket"
+      default_service_account_name: "prowjob-default-sa" # Use workload identity
+      gcs_credentials_secret: ""                         # rather than service account key secret
+  - cluster: build-gcs-fuse-csi-driver
+    config:
+      gcs_configuration:
+        bucket: "oss-prow-gcsfuse-csi-driver-test"
       default_service_account_name: "prowjob-default-sa" # Use workload identity
       gcs_credentials_secret: ""                         # rather than service account key secret
 

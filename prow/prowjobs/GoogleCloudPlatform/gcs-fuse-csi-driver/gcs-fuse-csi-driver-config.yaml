@@ -1,0 +1,35 @@
+presubmits:
+  GoogleCloudPlatform/gcs-fuse-csi-driver:
+  - name: pull-gcs-fuse-csi-driver-e2e-test
+    branches:
+    - main
+    always_run: true         # Run for every PR, or only when requested.
+    labels:
+      preset-service-account: "true"
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/gke-test-infra/kubekins-e2e:v20250701-e9f8ea2e5a-master
+        command:
+        - runner.sh
+        args:
+        - test/e2e/run-e2e-ci.sh
+        securityContext:
+          privileged: true
+        resources:
+          requests:
+            memory: 9000Mi
+            cpu: 1000m
+          limits:
+            memory: 9000Mi
+        volumeMounts:
+      volumes:
+      - name: ssh
+        secret:
+          defaultMode: 256
+          secretName: ssh-key-secret
+          items:
+          - key: ssh-private
+            path: google_compute_engine
+          - key: ssh-public
+            path: google_compute_engine.pub
