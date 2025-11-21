@@ -195,12 +195,6 @@ plank:
         bucket: "gcp-oracle-prow-bucket"
       default_service_account_name: "prowjob-default-sa" # Use workload identity
       gcs_credentials_secret: ""                         # rather than service account key secret
-  - cluster: build-gcs-fuse-csi-driver
-    config:
-      gcs_configuration:
-        bucket: "oss-prow-gcsfuse-csi-driver-test"
-      default_service_account_name: "prowjob-default-sa" # Use workload identity
-      gcs_credentials_secret: ""                         # rather than service account key secret
 
 sinker:
   resync_period: 1m

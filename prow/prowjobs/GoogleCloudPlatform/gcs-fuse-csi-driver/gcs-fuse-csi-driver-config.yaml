@@ -1,7 +1,6 @@
 presubmits:
   GoogleCloudPlatform/gcs-fuse-csi-driver:
   - name: pull-gcs-fuse-csi-driver-e2e-test
-    cluster: build-gcs-fuse-csi-driver
     branches:
     - main
     always_run: true         # Run for every PR, or only when requested.
@@ -19,11 +18,11 @@ presubmits:
           privileged: true
         resources:
           requests:
-            memory: 256Mi
-            cpu: 500m
-            ephemeral-storage:  2Gi
+            memory: 100Mi
+            cpu: 100m
+            ephemeral-storage: 100Mi
           limits:
-            ephemeral-storage:  2Gi
+            ephemeral-storage: 100Mi
         volumeMounts:
       volumes:
       - name: ssh
