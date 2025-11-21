@@ -427,6 +427,12 @@ plugins:
     - verify-owners
     - yuks
 
+  GoogleCloudPlatform/gcs-fuse-csi-driver:
+    plugins:
+    - approve
+    - lgtm
+    - verify-owners
+
 external_plugins:
   kubeflow:
   - name: cherrypicker
