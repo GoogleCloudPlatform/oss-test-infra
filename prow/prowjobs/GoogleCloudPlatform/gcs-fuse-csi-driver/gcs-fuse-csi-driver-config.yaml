@@ -16,12 +16,6 @@ presubmits:
         - test/e2e/run-e2e-ci.sh
         securityContext:
           privileged: true
-        resources:
-          requests:
-            memory: 9000Mi
-            cpu: 1000m
-          limits:
-            memory: 9000Mi
         volumeMounts:
       volumes:
       - name: ssh
