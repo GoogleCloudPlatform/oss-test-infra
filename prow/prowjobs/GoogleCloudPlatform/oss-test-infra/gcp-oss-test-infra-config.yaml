@@ -93,7 +93,7 @@ periodics:
     testgrid-num-failures-to-alert: '3'
   spec:
     containers:
-    - image: us-central1-docker.pkg.dev/gob-prow/prow-images/generic-autobumper:v20251119-97cb31ede
+    - image: us-central1-docker.pkg.dev/gob-prow/prow-images/generic-autobumper:v20251120-1750cca09
       command:
       - generic-autobumper
       args:
@@ -127,7 +127,7 @@ periodics:
     testgrid-num-failures-to-alert: '3'
   spec:
     containers:
-    - image: us-central1-docker.pkg.dev/gob-prow/prow-images/generic-autobumper:v20251119-97cb31ede
+    - image: us-central1-docker.pkg.dev/gob-prow/prow-images/generic-autobumper:v20251120-1750cca09
       command:
       - generic-autobumper
       args:
