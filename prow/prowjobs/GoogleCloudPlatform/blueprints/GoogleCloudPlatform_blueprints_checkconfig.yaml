@@ -10,7 +10,7 @@ presubmits:
       base_ref: master
     spec:
       containers:
-      - image: us-central1-docker.pkg.dev/gob-prow/prow-images/checkconfig:v20251119-97cb31ede
+      - image: us-central1-docker.pkg.dev/gob-prow/prow-images/checkconfig:v20251120-1750cca09
         command:
         - checkconfig
         args:
