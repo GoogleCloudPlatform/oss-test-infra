@@ -50,7 +50,7 @@ prow_ignored:
   - &config-sync-ci-ref
     org: GoogleContainerTools
     repo: kpt-config-sync
-    base_ref: v1.22
+    base_ref: v1.23
 - &config-sync-base-job-spec
   serviceAccountName: e2e-test-runner
   nodeSelector:
@@ -223,6 +223,8 @@ periodics:
       - 'E2E_GIT_PROVIDER=bitbucket'
       - 'E2E_OCI_PROVIDER=local' # Use local to minimize AR quota usage
       - 'E2E_HELM_PROVIDER=local'
+      - 'E2E_ARGS="--test-features=sync-source-git"'
+      - 'E2E_NUM_CLUSTERS=2'
       resources:
         <<: *config-sync-base-job-spec-resources
 
@@ -242,6 +244,8 @@ periodics:
       - 'E2E_GIT_PROVIDER=gitlab'
       - 'E2E_OCI_PROVIDER=local' # Use local to minimize AR quota usage
       - 'E2E_HELM_PROVIDER=local'
+      - 'E2E_ARGS="--test-features=sync-source-git"'
+      - 'E2E_NUM_CLUSTERS=2'
       resources:
         <<: *config-sync-base-job-spec-resources
 
@@ -261,6 +265,8 @@ periodics:
       - 'E2E_GIT_PROVIDER=csr'
       - 'E2E_OCI_PROVIDER=local' # Use local to minimize AR quota usage
       - 'E2E_HELM_PROVIDER=local'
+      - 'E2E_ARGS="--test-features=sync-source-git"'
+      - 'E2E_NUM_CLUSTERS=2'
       resources:
         <<: *config-sync-base-job-spec-resources
 
@@ -280,6 +286,8 @@ periodics:
       - 'E2E_GIT_PROVIDER=ssm'
       - 'E2E_OCI_PROVIDER=local' # Use local to minimize AR quota usage
       - 'E2E_HELM_PROVIDER=local'
+      - 'E2E_ARGS="--test-features=sync-source-git"'
+      - 'E2E_NUM_CLUSTERS=2'
       resources:
         <<: *config-sync-base-job-spec-resources
 #### End git provider specific jobs
