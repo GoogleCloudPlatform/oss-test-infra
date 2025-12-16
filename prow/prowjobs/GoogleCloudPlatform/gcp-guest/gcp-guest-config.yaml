@@ -886,7 +886,7 @@ periodics:
       - "-project=gcp-guest"
       - "-zone=us-central1-b"
 # Please keep this field ordered by OS version. (2019 -> 2019 core -> 2022...)
-      - "-images=projects/windows-cloud/global/images/family/windows-2016,projects/windows-cloud/global/images/family/windows-2016-core,projects/windows-cloud/global/images/family/windows-2019,projects/windows-cloud/global/images/family/windows-2019-core,projects/windows-cloud/global/images/family/windows-2022,projects/windows-cloud/global/images/family/windows-2022-core,projects/bct-prod-images/global/images/family/windows-2025,projects/bct-prod-images/global/images/family/windows-2025-core"
+      - "-images=projects/windows-cloud/global/images/family/windows-2016,projects/windows-cloud/global/images/family/windows-2016-core,projects/windows-cloud/global/images/family/windows-2019,projects/windows-cloud/global/images/family/windows-2019-core,projects/windows-cloud/global/images/family/windows-2022,projects/windows-cloud/global/images/family/windows-2022-core,projects/windows-cloud/global/images/family/windows-2025,projects/windows-cloud/global/images/family/windows-2025-core"
       - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
       - "-filter=^(cvm|livemigrate|suspendresume|loadbalancer|guestagent|hostnamevalidation|imageboot|licensevalidation|network|security|hotattach|lssd|disk|packagevalidation|ssh|metadata|sql|vmspec)$"
       - "-set_exit_status=false"
