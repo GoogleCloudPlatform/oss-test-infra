@@ -643,6 +643,31 @@ periodics:
       - "-filter=^(cvm|livemigrate|suspendresume|loadbalancer|guestagent|hostnamevalidation|imageboot|licensevalidation|network|security|hotattach|lssd|disk|packagevalidation|ssh|metadata|sql|vmspec)$"
       - "-set_exit_status=false"
       - "-arm64_shape=c4a-standard-1"
+- name: cit-periodics-oracle-linux
+  cluster: gcp-guest
+  decorate: true
+  decoration_config:
+    timeout: 8h
+  annotations:
+    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-tab-name: cit-periodics-oracle-linux
+  interval: 8h
+  spec:
+    containers:
+    - image: gcr.io/compute-image-tools/cloud-image-tests:latest
+      imagePullPolicy: Always
+      command:
+      - "/manager"
+      args:
+      - "-parallel_count=5"
+      - "-project=gcp-guest"
+      - "-zones=us-central1-a,us-central1-b,us-central1-c,us-central1-f"
+      # Please keep this field ordered by version order (eg 8 -> 9 -> 10). Arch should go (amd64 -> arm64).
+      - "-images=projects/oracle-linux-cloud/global/images/family/oracle-linux-8,projects/oracle-linux-cloud/global/images/family/oracle-linux-8-arm64,projects/oracle-linux-cloud/global/images/family/oracle-linux-9,projects/oracle-linux-cloud/global/images/family/oracle-linux-9-arm64,projects/oracle-linux-cloud/global/images/family/oracle-linux-10,projects/oracle-linux-cloud/global/images/family/oracle-linux-10-arm64"
+      - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
+      - "-filter=^(cvm|livemigrate|suspendresume|loadbalancer|guestagent|hostnamevalidation|imageboot|licensevalidation|network|security|hotattach|lssd|disk|packagevalidation|ssh|metadata|sql|vmspec)$"
+      - "-set_exit_status=false"
+      - "-arm64_shape=c4a-standard-1"
 - name: cit-periodics-rhel
   cluster: gcp-guest
   decorate: true
