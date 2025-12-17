@@ -332,6 +332,15 @@ plugins:
     - wip
     - hold
 
+  GoogleCloudPlatform/gke-mcp:
+    plugins:
+    - approve
+    - blunderbuss
+    - lgtm
+    - owners-label
+    - size
+    - verify-owners
+
   google:
     plugins:
     - approve
