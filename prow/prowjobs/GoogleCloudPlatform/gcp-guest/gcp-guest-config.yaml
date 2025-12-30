@@ -690,7 +690,32 @@ periodics:
 # Please keep this field ordered by version order (eg 7 -> 8 -> 9). Arch should go (amd64 -> arm64).
       - "-images=projects/rhel-cloud/global/images/family/rhel-8,projects/rhel-cloud/global/images/family/rhel-9,projects/rhel-cloud/global/images/family/rhel-9-arm64,projects/rhel-cloud/global/images/family/rhel-10,projects/rhel-cloud/global/images/family/rhel-10-arm64"
       - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
-      - "-filter=^(cvm|livemigrate|suspendresume|loadbalancer|guestagent|hostnamevalidation|imageboot|licensevalidation|network|security|hotattach|lssd|disk|packagevalidation|ssh|metadata|sql|vmspec)$"
+      - "-filter=^(cvm|livemigrate|suspendresume|loadbalancer|guestagent|hostnamevalidation|imageboot|licensevalidation|network|security|hotattach|lssd|disk|packagevalidation|ssh|metadata|sql|vmspec|rhel)$"
+      - "-set_exit_status=false"
+      - "-arm64_shape=c4a-standard-1"
+- name: cit-periodics-rhel-eus
+  cluster: gcp-guest
+  decorate: true
+  decoration_config:
+    timeout: 8h
+  annotations:
+    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-tab-name: cit-periodics-rhel-eus
+  interval: 8h
+  spec:
+    containers:
+    - image: gcr.io/compute-image-tools/cloud-image-tests:latest
+      imagePullPolicy: Always
+      command:
+      - "/manager"
+      args:
+      - "-parallel_count=5"
+      - "-project=gcp-guest"
+      - "-zones=us-central1-a,us-central1-b,us-central1-c,us-central1-f"
+# Please keep this field ordered by version order (eg 9.4 -> 9.6 -> 9.8 -> 10.0). Arch should go (amd64 -> arm64).
+      - "-images=projects/rhel-cloud/global/images/family/rhel-9-4-eus,projects/rhel-cloud/global/images/family/rhel-9-4-eus-arm64,projects/rhel-cloud/global/images/family/rhel-9-6-eus,projects/rhel-cloud/global/images/family/rhel-9-6-eus-arm64,projects/rhel-cloud/global/images/family/rhel-10-0-eus,projects/rhel-cloud/global/images/family/rhel-10-0-eus-arm64"
+      - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
+      - "-filter=^(cvm|livemigrate|suspendresume|loadbalancer|guestagent|hostnamevalidation|imageboot|licensevalidation|network|security|hotattach|lssd|disk|packagevalidation|ssh|metadata|sql|vmspec|rhel)$"
       - "-set_exit_status=false"
       - "-arm64_shape=c4a-standard-1"
 - name: cit-periodics-rhel-sap
@@ -715,7 +740,7 @@ periodics:
 # Please keep this field ordered by version order (eg 7 -> 8 -> 9). Arch should go (amd64 -> arm64).
       - "-images=projects/rhel-sap-cloud/global/images/family/rhel-8-6-sap-ha,projects/rhel-sap-cloud/global/images/family/rhel-8-8-sap-ha,projects/rhel-sap-cloud/global/images/family/rhel-8-10-sap-ha,projects/rhel-sap-cloud/global/images/family/rhel-9-0-sap-ha,projects/rhel-sap-cloud/global/images/family/rhel-9-2-sap-ha,projects/rhel-sap-cloud/global/images/family/rhel-9-4-sap-ha,projects/rhel-sap-cloud/global/images/family/rhel-9-6-sap-ha"
       - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
-      - "-filter=^(cvm|livemigrate|suspendresume|loadbalancer|guestagent|hostnamevalidation|imageboot|licensevalidation|network|security|hotattach|lssd|disk|packagevalidation|ssh|metadata|sql|vmspec)$"
+      - "-filter=^(cvm|livemigrate|suspendresume|loadbalancer|guestagent|hostnamevalidation|imageboot|licensevalidation|network|security|hotattach|lssd|disk|packagevalidation|ssh|metadata|sql|vmspec|rhel)$"
       - "-set_exit_status=false"
       - "-arm64_shape=c4a-standard-1"
 - name: cit-periodics-rocky
