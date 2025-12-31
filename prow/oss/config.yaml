@@ -31,6 +31,7 @@ tide:
     GoogleCloudPlatform/k8s-config-connector: merge
     GoogleCloudPlatform/gke-networking-api: merge
     GoogleCloudPlatform/gcs-fuse-csi-driver: merge
+    GoogleCloudPlatform/gke-mcp: merge
   squash_label: tide/merge-method-squash
   rebase_label: tide/merge-method-rebase
   merge_label: tide/merge-method-merge
@@ -59,6 +60,7 @@ tide:
     - GoogleContainerTools/config-sync
     - GoogleCloudPlatform/k8s-config-connector
     - GoogleCloudPlatform/gcs-fuse-csi-driver
+    - GoogleCloudPlatform/gke-mcp
     labels:
     - lgtm
     - approved
