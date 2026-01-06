@@ -31,7 +31,7 @@ tide:
     GoogleCloudPlatform/k8s-config-connector: merge
     GoogleCloudPlatform/gke-networking-api: merge
     GoogleCloudPlatform/gcs-fuse-csi-driver: merge
-    GoogleCloudPlatform/gke-mcp: merge
+    GoogleCloudPlatform/gke-mcp: squash
   squash_label: tide/merge-method-squash
   rebase_label: tide/merge-method-rebase
   merge_label: tide/merge-method-merge
