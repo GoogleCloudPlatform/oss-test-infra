@@ -150,15 +150,15 @@ function ensureCluster() {
 }
 
 function createBucket() {
-  gsutil mb -p "${PROJECT}" -b on "${GCS_BUCKET}"
+  gcloud storage buckets create "${GCS_BUCKET}" --project="${PROJECT}" --uniform-bucket-level-access
   for i in ${CONTROL_PLANE_SA//,/ }
   do
-    gsutil iam ch "serviceAccount:${i}:roles/storage.objectAdmin" "${GCS_BUCKET}"
+    gcloud storage buckets add-iam-policy-binding "${GCS_BUCKET}" --member="serviceAccount:${i}" --role="roles/storage.objectAdmin"
   done
 }
 
 function ensureBucket() {
-  if ! gsutil ls "${GCS_BUCKET}"; then
+  if ! gcloud storage ls "${GCS_BUCKET}"; then
     createBucket
   else
     echo "Bucket '${GCS_BUCKET}' already exists, skip creation."
@@ -202,12 +202,12 @@ EOF
 
   # Try to authorize SA to upload to GCS_BUCKET. If this fails, the bucket if
   # probably a shared result bucket and oncall will need to handle.
-  if ! gsutil iam get "${GCS_BUCKET}" | grep "serviceAccount:${saFull}" >/dev/null 2>&1; then
-    if ! gsutil iam ch "serviceAccount:${saFull}:roles/storage.objectAdmin" "${GCS_BUCKET}"; then
+  if ! gcloud storage buckets get-iam-policy "${GCS_BUCKET}" | grep "serviceAccount:${saFull}" >/dev/null 2>&1; then
+    if ! gcloud storage buckets add-iam-policy-binding "${GCS_BUCKET}" --member="serviceAccount:${saFull}" --role="roles/storage.objectAdmin"; then
       echo
       echo "It doesn't look you have permission to authorize access to this bucket. This is expected for the default job result bucket."
       echo "If this is a default job result bucket, please ask the test-infra oncall (https://go.k8s.io/oncall) to run the following:"
-      echo "  gsutil iam ch \"serviceAccount:${saFull}:roles/storage.objectAdmin\" \"${GCS_BUCKET}\""
+      echo "  gcloud storage buckets add-iam-policy-binding \"${GCS_BUCKET}\" --member=\"serviceAccount:${saFull}\" --role=\"roles/storage.objectAdmin\""
       echo
       echo "Press any key to acknowledge (this doesn't need to be completed to continue this script, but it needs to be done before uploading will work)..."
       pause

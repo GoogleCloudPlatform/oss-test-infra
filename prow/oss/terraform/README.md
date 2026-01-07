@@ -18,8 +18,8 @@ This directory contains terrafrom configurations for provisioning monitoring and
 This is done once before initial provisioning of monitoring and alerting stacks.
 
 ```text
-    $ gsutil mb -p prow-metrics gs://prow-metrics-terraform
-    $ gsutil versioning set on gs://prow-metrics-terraform
+    $ gcloud storage buckets create --project prow-metrics gs://prow-metrics-terraform
+    $ gcloud storage buckets update --versioning gs://prow-metrics-terraform
 ```
 
 ### Provisioning
