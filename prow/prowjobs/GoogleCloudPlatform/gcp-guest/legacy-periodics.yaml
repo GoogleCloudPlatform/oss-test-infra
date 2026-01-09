@@ -4,7 +4,7 @@ periodics:
   cluster: gcp-guest
   decorate: true
   annotations:
-    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-dashboards: googleoss-gcp-guest-cleanerupper
     testgrid-tab-name: cleanerupper-guest-package-builder
   interval: 2h
   agent: kubernetes
@@ -31,7 +31,7 @@ periodics:
   cluster: gcp-guest
   decorate: true
   annotations:
-    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-dashboards: googleoss-gcp-guest-cleanerupper
     testgrid-tab-name: cleanerupper-gce-image-builder
   interval: 2h
   agent: kubernetes
@@ -56,7 +56,7 @@ periodics:
   cluster: gcp-guest
   decorate: true
   annotations:
-    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-dashboards: googleoss-gcp-guest-cleanerupper
     testgrid-tab-name: cleanerupper-images-guest-package-builder
   interval: 2h
   agent: kubernetes
@@ -78,7 +78,7 @@ periodics:
   cluster: gcp-guest
   decorate: true
   annotations:
-    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-dashboards: googleoss-gcp-guest-cleanerupper
     testgrid-tab-name: cleanerupper-cloud-cluster-guest-kms-cep
   interval: 2h
   agent: kubernetes
@@ -104,7 +104,7 @@ periodics:
   cluster: gcp-guest
   decorate: true
   annotations:
-    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-dashboards: googleoss-gcp-guest-cleanerupper
     testgrid-tab-name: cleanerupper-compute-image-test-pool-001
   interval: 2h
   agent: kubernetes
@@ -132,7 +132,7 @@ periodics:
   cluster: gcp-guest
   decorate: true
   annotations:
-    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-dashboards: googleoss-gcp-guest-cleanerupper
     testgrid-tab-name: cleanerupper-compute-image-test-pool-002
   interval: 2h
   agent: kubernetes
@@ -160,7 +160,7 @@ periodics:
   cluster: gcp-guest
   decorate: true
   annotations:
-    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-dashboards: googleoss-gcp-guest-cleanerupper
     testgrid-tab-name: cleanerupper-compute-image-test-pool-003
   interval: 2h
   agent: kubernetes
@@ -188,7 +188,7 @@ periodics:
   cluster: gcp-guest
   decorate: true
   annotations:
-    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-dashboards: googleoss-gcp-guest-cleanerupper
     testgrid-tab-name: cleanerupper-compute-image-test-pool-004
   interval: 2h
   agent: kubernetes
@@ -216,7 +216,7 @@ periodics:
   cluster: gcp-guest
   decorate: true
   annotations:
-    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-dashboards: googleoss-gcp-guest-cleanerupper
     testgrid-tab-name: cleanerupper-compute-image-test-pool-005
   interval: 2h
   agent: kubernetes
@@ -244,7 +244,7 @@ periodics:
   cluster: gcp-guest
   decorate: true
   annotations:
-    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-dashboards: googleoss-gcp-guest-cleanerupper
     testgrid-tab-name: cleanerupper-compute-image-test-pool-001-1
   interval: 2h
   agent: kubernetes
@@ -272,7 +272,7 @@ periodics:
   cluster: gcp-guest
   decorate: true
   annotations:
-    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-dashboards: googleoss-gcp-guest-cleanerupper
     testgrid-tab-name: cleanerupper-compute-image-test-pool-001-2
   interval: 2h
   agent: kubernetes
@@ -300,7 +300,7 @@ periodics:
   cluster: gcp-guest
   decorate: true
   annotations:
-    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-dashboards: googleoss-gcp-guest-cleanerupper
     testgrid-tab-name: cleanerupper-compute-image-test-custom-vpc
   interval: 2h
   agent: kubernetes
@@ -328,7 +328,7 @@ periodics:
   cluster: gcp-guest
   decorate: true
   annotations:
-    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-dashboards: googleoss-gcp-guest-cleanerupper
     testgrid-tab-name: cleanerupper-osconfig-projects
   interval: 2h
   agent: kubernetes
@@ -356,7 +356,7 @@ periodics:
   cluster: gcp-guest
   decorate: true
   annotations:
-    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-dashboards: googleoss-gcp-guest-cleanerupper
     testgrid-tab-name: cleanerupper-osconfig-agent-2
   interval: 2h
   agent: kubernetes
@@ -384,7 +384,7 @@ periodics:
   cluster: gcp-guest
   decorate: true
   annotations:
-    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-dashboards: googleoss-gcp-guest-cleanerupper
     testgrid-tab-name: cleanerupper-oslogin-cit
   interval: 2h
   agent: kubernetes
@@ -412,7 +412,7 @@ periodics:
   cluster: gcp-guest
   decorate: true
   annotations:
-    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-dashboards: googleoss-gcp-guest-cleanerupper
     testgrid-tab-name: cleanerupper-osconfig-policies
   interval: 5h
   agent: kubernetes
@@ -437,7 +437,7 @@ periodics:
   decoration_config:
     timeout: 11h
   annotations:
-    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-dashboards: googleoss-gcp-guest-cleanerupper
     testgrid-tab-name: ci-windows-upgrade-e2e-tests
   interval: 12h
   agent: kubernetes
