@@ -563,7 +563,7 @@ periodics:
       - "-project=gcp-guest"
       - "-zones=us-central1-a,us-central1-b,us-central1-c,us-central1-f"
 # Please keep this field ordered by version order (eg 7 -> 8 -> 9). Arch should go (amd64 -> arm64).
-      - "-images=projects/almalinux-cloud/global/images/family/almalinux-8,projects/almalinux-cloud/global/images/family/almalinux-9"
+      - "-images=projects/almalinux-cloud/global/images/family/almalinux-8,projects/almalinux-cloud/global/images/family/almalinux-8-arm,projects/almalinux-cloud/global/images/family/almalinux-9,projects/almalinux-cloud/global/images/family/almalinux-9-arm,projects/almalinux-cloud/global/images/family/almalinux-10,projects/almalinux-cloud/global/images/family/almalinux-10-arm"
       - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
       - "-filter=^(cvm|livemigrate|suspendresume|loadbalancer|guestagent|hostnamevalidation|imageboot|licensevalidation|network|security|hotattach|lssd|disk|packagevalidation|ssh|metadata|sql|vmspec)$"
       - "-set_exit_status=false"
