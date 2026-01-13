@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
       - name: cherrypicker
-        image: us-central1-docker.pkg.dev/gob-prow/prow-images/cherrypicker:v20251120-1750cca09
+        image: us-central1-docker.pkg.dev/gob-prow/prow-images/cherrypicker:v20260113-c5fc93a7d
         args:
         - --github-token-path=/etc/github/oauth
         - --github-endpoint=http://ghproxy
