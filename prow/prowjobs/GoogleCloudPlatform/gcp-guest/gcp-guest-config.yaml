@@ -1057,3 +1057,25 @@ periodics:
       - "-filter=shapevalidation"
       - "-shapevalidation_test_filter=(?i)^(([a-z][0-3])|n4)"
       - "-images=projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-2004-lts,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-2004-lts-arm64,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-2204-lts,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-2204-lts-arm64,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-2404-lts-amd64,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-2404-lts-arm64,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-minimal-2004-lts,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-minimal-2004-lts-arm64,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-minimal-2204-lts,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-minimal-2204-lts-arm64,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-minimal-2404-lts-amd64,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-minimal-2404-lts-arm64,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-minimal-2410-amd64,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-minimal-2410-arm64"
+- name: oslogin-daily-pre-release
+  cluster: gcp-guest
+  decorate: true
+  decoration_config:
+    timeout: 2h
+  annotations:
+    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-tab-name: oslogin-daily-pre-release
+  interval: 24h
+  spec:
+    containers:
+      - image: gcr.io/compute-image-tools/cloud-image-tests:latest
+        imagePullPolicy: Always
+        command:
+        - "/manager"
+        args:
+        - "-parallel_count=2"
+        - "-project=oslogin-cit"
+        - "-zones=us-central1-a,us-central1-b,us-central1-c,us-central1-f"
+        - "-images=projects/suse-cloud-testing/global/images/family/sles16-x86-64,projects/suse-cloud-testing/global/images/family/sles-15,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-2604-lts-amd64,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-2510-amd64,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-2504-amd64,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-2404-lts-amd64,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-2204-lts"
+        - "-filter=oslogin"
+        - "-set_exit_status=false"
