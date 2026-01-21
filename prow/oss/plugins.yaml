@@ -105,7 +105,8 @@ milestone_applier:
     release-2.1: v2.1
     release-2.0: v2.0
   kubeflow/sdk:
-    main: v0.3
+    main: v0.4
+    release-0.3: v0.3
     release-0.2: v0.2
     release-0.1: v0.1
 
