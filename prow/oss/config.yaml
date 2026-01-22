@@ -28,7 +28,6 @@ tide:
     GoogleCloudPlatform/compute-image-import: squash
     GoogleContainerTools/config-sync: squash
     kubeflow: squash
-    GoogleCloudPlatform/k8s-config-connector: merge
     GoogleCloudPlatform/gke-networking-api: merge
     GoogleCloudPlatform/gcs-fuse-csi-driver: merge
     GoogleCloudPlatform/gke-mcp: squash
@@ -58,7 +57,6 @@ tide:
     - GoogleCloudPlatform/k8s-cloud-provider
     - GoogleCloudPlatform/gke-networking-api
     - GoogleContainerTools/config-sync
-    - GoogleCloudPlatform/k8s-config-connector
     - GoogleCloudPlatform/gcs-fuse-csi-driver
     - GoogleCloudPlatform/gke-mcp
     labels:
