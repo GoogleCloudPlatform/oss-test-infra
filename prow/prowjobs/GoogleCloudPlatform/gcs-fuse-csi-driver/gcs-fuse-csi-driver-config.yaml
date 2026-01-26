@@ -9,7 +9,7 @@ presubmits:
     decorate: true
     spec:
       containers:
-      - image: gcr.io/gke-test-infra/kubekins-e2e:v20250701-e9f8ea2e5a-master
+      - image: gcr.io/k8s-staging-test-infra/kubekins-e2e:v20251209-13d7d11b0f-1.32
         command:
         - runner.sh
         args:
@@ -18,11 +18,9 @@ presubmits:
           privileged: true
         resources:
           requests:
-            memory: 100Mi
-            cpu: 100m
-            ephemeral-storage: 100Mi
+            ephemeral-storage: 5Gi
           limits:
-            ephemeral-storage: 100Mi
+            ephemeral-storage: 5Gi
         volumeMounts:
       volumes:
       - name: ssh
