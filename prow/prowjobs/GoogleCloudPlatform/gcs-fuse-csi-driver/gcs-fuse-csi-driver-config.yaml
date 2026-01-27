@@ -18,6 +18,7 @@ presubmits:
           privileged: true
         resources:
           requests:
+            memory: 1Gi
             ephemeral-storage: 5Gi
           limits:
             ephemeral-storage: 5Gi
