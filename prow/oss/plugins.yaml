@@ -443,6 +443,13 @@ plugins:
     - lgtm
     - verify-owners
 
+  GoogleCloudPlatform/gke-enterprise-mt:
+    plugins:
+    - approve
+    - help
+    - lgtm
+    - verify-owners
+
 external_plugins:
   kubeflow:
   - name: cherrypicker
