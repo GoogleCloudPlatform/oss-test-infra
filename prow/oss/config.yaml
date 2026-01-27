@@ -31,6 +31,7 @@ tide:
     GoogleCloudPlatform/gke-networking-api: merge
     GoogleCloudPlatform/gcs-fuse-csi-driver: merge
     GoogleCloudPlatform/gke-mcp: squash
+    GoogleCloudPlatform/gke-enterprise-mt: squash
   squash_label: tide/merge-method-squash
   rebase_label: tide/merge-method-rebase
   merge_label: tide/merge-method-merge
@@ -59,6 +60,7 @@ tide:
     - GoogleContainerTools/config-sync
     - GoogleCloudPlatform/gcs-fuse-csi-driver
     - GoogleCloudPlatform/gke-mcp
+    - GoogleCloudPlatform/gke-enterprise-mt
     labels:
     - lgtm
     - approved
@@ -295,6 +297,7 @@ in_repo_config:
     GoogleCloudPlatform/blueprints: true
     GoogleCloudPlatform/oss-test-infra: true
     GoogleCloudPlatform/testgrid: true
+    GoogleCloudPlatform/gke-enterprise-mt: true
 
   allowed_clusters:
     "*": []
@@ -302,6 +305,7 @@ in_repo_config:
     "GoogleCloudPlatform/blueprints": ["build-blueprints"]
     "GoogleCloudPlatform/oss-test-infra": ["default"]
     "GoogleCloudPlatform/testgrid": ["default"]
+    GoogleCloudPlatform/gke-enterprise-mt: ["default"]
 
 presets:
 # docker-in-docker preset
