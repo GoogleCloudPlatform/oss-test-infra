@@ -2,7 +2,7 @@
 # to view expanded yaml, run: `yq eval 'explode(.)' [file]`
 prow_ignored:
 - &config-sync-base-job-container
-  image: us-docker.pkg.dev/kpt-config-sync-ci-artifacts/test-infra/gke-e2e:v2.0.0-go1.24.11-gcloud513.0.0-docker20.10.14@sha256:21416480ed7ac16d0a5f042e03f4355b465e16ca16c3f2e32219d376a6bdf00f
+  image: us-docker.pkg.dev/kpt-config-sync-ci-artifacts/test-infra/gke-e2e:v2.0.0-go1.25.0-gcloud513.0.0-docker20.10.14
   command:
   - make
   - test-e2e-gke-ci
