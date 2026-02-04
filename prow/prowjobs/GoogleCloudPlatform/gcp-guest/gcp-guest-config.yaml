@@ -505,7 +505,7 @@ periodics:
 # Don't copy+paste this! This has extra tests for accelerators. Use a different periodic.
       - "-parallel_count=1"
       - "-project=compute-image-test-pool-001"
-      - "-zone=us-central1-b"
+      - "-zone=europe-west4-b"
 # Please keep this field ordered by version order (eg 7 -> 8 -> 9). Arch should go (amd64 -> arm64).
       - "-images=projects/gce-ciq-images/global/images/family/rocky-linux-8-optimized-gcp-nvidia-570,projects/gce-ciq-images/global/images/family/rocky-linux-8-optimized-gcp-nvidia-580,projects/gce-ciq-images/global/images/family/rocky-linux-8-optimized-gcp-nvidia-latest,projects/gce-ciq-images/global/images/family/rocky-linux-9-optimized-gcp-nvidia-570,projects/gce-ciq-images/global/images/family/rocky-linux-9-optimized-gcp-nvidia-580,projects/gce-ciq-images/global/images/family/rocky-linux-9-optimized-gcp-nvidia-latest,projects/gce-ciq-images/global/images/family/rocky-linux-10-optimized-gcp-nvidia-580,projects/gce-ciq-images/global/images/family/rocky-linux-10-optimized-gcp-nvidia-latest,projects/ubuntu-os-accelerator-images/global/images/family/ubuntu-accelerator-2204-amd64-with-nvidia-570,projects/ubuntu-os-accelerator-images/global/images/family/ubuntu-accelerator-2204-amd64-with-nvidia-580,projects/ubuntu-os-accelerator-images/global/images/family/ubuntu-accelerator-2404-amd64-with-nvidia-570,projects/ubuntu-os-accelerator-images/global/images/family/ubuntu-accelerator-2404-amd64-with-nvidia-580"
 # This project is allowlisted for some necessary quota. TODO: switch to a non -001 test pool. 001 is intended for humans.
@@ -514,7 +514,7 @@ periodics:
       - "-set_exit_status=false"
       - "-compute_endpoint_override=https://www.googleapis.com/compute/alpha/"
       - "-use_reservations=true"
-      - "-reservation_urls=nvidia-b200-9r888mvujoxrz"
+      - "-reservation_urls=nvidia-b200-5euqio348cftm"
       - "-x86_shape=a4-highgpu-8g"
       - "-accelerator_type=nvidia-b200"
       - "-timeout=30m"
