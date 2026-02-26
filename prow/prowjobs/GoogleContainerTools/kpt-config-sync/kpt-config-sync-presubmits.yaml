@@ -1,7 +1,7 @@
 prow_ignored:
 - &config-sync-e2e-container
   # https://github.com/kubernetes/test-infra/blob/master/images/kubekins-e2e/variants.yaml
-  image: gcr.io/k8s-staging-test-infra/kubekins-e2e:v20250527-1b2b10e804-1.33
+  image: gcr.io/k8s-staging-test-infra/kubekins-e2e:v20260217-29ba10ecec-1.33
   command:
   - runner.sh
   securityContext:
@@ -53,7 +53,7 @@ presubmits:
     spec:
       containers:
       # https://github.com/kubernetes/test-infra/blob/master/images/kubekins-e2e/variants.yaml
-      - image: gcr.io/k8s-staging-test-infra/kubekins-e2e:v20250527-1b2b10e804-1.33
+      - image: gcr.io/k8s-staging-test-infra/kubekins-e2e:v20260217-29ba10ecec-1.33
         command:
         - runner.sh
         args:
