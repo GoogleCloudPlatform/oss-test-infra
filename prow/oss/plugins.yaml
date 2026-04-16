@@ -81,6 +81,10 @@ lgtm:
   # We treat GitHub approve as LGTM (not approve) to avoid accidental merges.
   # Note, we also set `ignore_review_state=true` in `approve` plugin.
   review_acts_as_lgtm: true
+- repos:
+  - GoogleCloudPlatform/gke-mcp
+  review_acts_as_lgtm: true
+  trusted_team_for_sticky_lgtm: 'GKE MCP Contributors'
 
 label:
   additional_labels:
