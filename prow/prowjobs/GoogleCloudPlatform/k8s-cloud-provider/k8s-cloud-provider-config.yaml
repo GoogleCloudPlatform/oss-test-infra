@@ -9,7 +9,7 @@ presubmits:
     decorate: true
     spec:
       containers:
-      - image: gcr.io/k8s-staging-test-infra/kubekins-e2e:v20260410-1226423a7b-master
+      - image: gcr.io/k8s-staging-test-infra/kubekins-e2e:v20260427-56a97dfac3-master
         command:
         - make
         - --
