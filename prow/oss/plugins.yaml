@@ -342,7 +342,6 @@ plugins:
   GoogleCloudPlatform/gke-mcp:
     plugins:
     - approve
-    - blunderbuss
     - lgtm
     - owners-label
     - size
