@@ -132,6 +132,9 @@ tide:
             optional-contexts:
               # The job is triggered only on dependabot PRs.
               - regenerate-crds
+          gke-mcp:
+            optional-contexts:
+              - evaluate
 
 plank:
   job_url_prefix_config:
