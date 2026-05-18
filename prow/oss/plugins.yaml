@@ -94,6 +94,7 @@ label:
   - tide/merge-method-squash
   # This is used to triage issues in Kubeflow repositories.
   - lifecycle/needs-triage
+  - needs-triage
 
 repo_milestone:
   kubeflow/trainer:
