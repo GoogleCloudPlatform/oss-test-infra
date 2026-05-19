@@ -493,8 +493,8 @@ periodics:
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: cit-periodics-accelerator-images-accelerator-tests-a4
-  # Run at 8PM every night to avoid conflicting with daily usage
-  cron: "00 04 * * *"
+  # Run at 8:30PM every night to avoid conflicting with daily usage and a3u
+  cron: "30 04 * * *"
   spec:
     containers:
     - image: gcr.io/compute-image-tools/cloud-image-tests:latest
@@ -576,7 +576,8 @@ periodics:
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: cit-periodics-centos
-  interval: 8h
+  # Run every 8 hours at 00:00, 08:00, 16:00 UTC
+  cron: "0 0,8,16 * * *"
   spec:
     containers:
     - image: gcr.io/compute-image-tools/cloud-image-tests:latest
@@ -601,7 +602,8 @@ periodics:
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: cit-periodics-debian
-  interval: 8h
+  # Run every 8 hours at 01:00, 09:00, 17:00 UTC
+  cron: "0 1,9,17 * * *"
   spec:
     containers:
     - image: gcr.io/compute-image-tools/cloud-image-tests:latest
@@ -626,7 +628,8 @@ periodics:
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: cit-periodics-opensuse
-  interval: 8h
+  # Run every 8 hours at 02:00, 10:00, 18:00 UTC
+  cron: "0 2,10,18 * * *"
   spec:
     containers:
     - image: gcr.io/compute-image-tools/cloud-image-tests:latest
@@ -651,7 +654,8 @@ periodics:
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: cit-periodics-oracle-linux
-  interval: 8h
+  # Run every 8 hours at 03:00, 11:00, 19:00 UTC
+  cron: "0 3,11,19 * * *"
   spec:
     containers:
     - image: gcr.io/compute-image-tools/cloud-image-tests:latest
@@ -676,7 +680,8 @@ periodics:
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: cit-periodics-rhel
-  interval: 8h
+  # Run every 8 hours at 04:00, 12:00, 20:00 UTC
+  cron: "0 4,12,20 * * *"
   spec:
     containers:
     - image: gcr.io/compute-image-tools/cloud-image-tests:latest
@@ -701,7 +706,8 @@ periodics:
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: cit-periodics-rhel-lvm
-  interval: 8h
+  # Run every 8 hours at 05:00, 13:00, 21:00 UTC
+  cron: "0 5,13,21 * * *"
   spec:
     containers:
     - image: gcr.io/compute-image-tools/cloud-image-tests:latest
@@ -726,7 +732,8 @@ periodics:
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: cit-periodics-rhel-eus
-  interval: 8h
+  # Run every 8 hours at 06:00, 14:00, 22:00 UTC
+  cron: "0 6,14,22 * * *"
   spec:
     containers:
     - image: gcr.io/compute-image-tools/cloud-image-tests:latest
@@ -751,7 +758,8 @@ periodics:
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: cit-periodics-rhel-sap
-  interval: 8h
+  # Run every 8 hours at 07:00, 15:00, 23:00 UTC
+  cron: "0 7,15,23 * * *"
   spec:
     containers:
     - image: gcr.io/compute-image-tools/cloud-image-tests:latest
@@ -776,7 +784,8 @@ periodics:
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: cit-periodics-rocky
-  interval: 8h
+  # Run every 8 hours at 00:30, 08:30, 16:30 UTC
+  cron: "30 0,8,16 * * *"
   spec:
     containers:
     - image: gcr.io/compute-image-tools/cloud-image-tests:latest
@@ -801,7 +810,8 @@ periodics:
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: cit-periodics-rocky-ciq-dev-amd64
-  interval: 8h
+  # Run every 8 hours at 01:30, 09:30, 17:30 UTC
+  cron: "30 1,9,17 * * *"
   spec:
     containers:
     - image: gcr.io/compute-image-tools/cloud-image-tests:latest
@@ -825,7 +835,8 @@ periodics:
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: cit-periodics-rocky-ciq-dev-arm64
-  interval: 8h
+  # Run every 8 hours at 02:30, 10:30, 18:30 UTC
+  cron: "30 2,10,18 * * *"
   spec:
     containers:
     - image: gcr.io/compute-image-tools/cloud-image-tests:latest
@@ -850,7 +861,8 @@ periodics:
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: cit-periodics-sles
-  interval: 8h
+  # Run every 8 hours at 03:30, 11:30, 19:30 UTC
+  cron: "30 3,11,19 * * *"
   spec:
     containers:
     - image: gcr.io/compute-image-tools/cloud-image-tests:latest
@@ -875,7 +887,8 @@ periodics:
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: cit-periodics-ubuntu
-  interval: 8h
+  # Run every 8 hours at 04:30, 12:30, 20:30 UTC
+  cron: "30 4,12,20 * * *"
   spec:
     containers:
     - image: gcr.io/compute-image-tools/cloud-image-tests:latest
@@ -900,7 +913,8 @@ periodics:
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: cit-periodics-ubuntu-pro
-  interval: 8h
+  # Run every 8 hours at 05:30, 13:30, 21:30 UTC
+  cron: "30 5,13,21 * * *"
   spec:
     containers:
     - image: gcr.io/compute-image-tools/cloud-image-tests:latest
@@ -912,7 +926,7 @@ periodics:
       - "-project=gcp-guest"
       - "-zone=us-central1-b"
 # Please keep this field ordered by version order and arch (eg 7 -> 8 amd64 -> 8 arm64 -> 9 amd64 -> 9 arm64).
-      - "-images=projects/ubuntu-os-pro-cloud/global/images/family/ubuntu-pro-1604-lts,projects/ubuntu-os-pro-cloud/global/images/family/ubuntu-pro-1804-lts,projects/ubuntu-os-pro-cloud/global/images/family/ubuntu-pro-1804-lts,projects/ubuntu-os-pro-cloud/global/images/family/ubuntu-pro-1804-lts-arm64,projects/ubuntu-os-pro-cloud/global/images/family/ubuntu-pro-2004-lts,projects/ubuntu-os-pro-cloud/global/images/family/ubuntu-pro-2004-lts-arm64,projects/ubuntu-os-pro-cloud/global/images/family/ubuntu-pro-2204-lts,projects/ubuntu-os-pro-cloud/global/images/family/ubuntu-pro-2204-lts-arm64,projects/ubuntu-os-pro-cloud/global/images/family/ubuntu-pro-2404-lts-amd64,projects/ubuntu-os-pro-cloud/global/images/family/ubuntu-pro-2404-lts-arm64"
+      - "-images=projects/ubuntu-os-pro-cloud/global/images/family/ubuntu-pro-1604-lts,projects/ubuntu-os-pro-cloud/global/images/family/ubuntu-pro-1804-lts,projects/ubuntu-os-pro-cloud/global/images/family/ubuntu-pro-1804-lts-arm64,projects/ubuntu-os-pro-cloud/global/images/family/ubuntu-pro-2004-lts,projects/ubuntu-os-pro-cloud/global/images/family/ubuntu-pro-2004-lts-arm64,projects/ubuntu-os-pro-cloud/global/images/family/ubuntu-pro-2204-lts,projects/ubuntu-os-pro-cloud/global/images/family/ubuntu-pro-2204-lts-arm64,projects/ubuntu-os-pro-cloud/global/images/family/ubuntu-pro-2404-lts-amd64,projects/ubuntu-os-pro-cloud/global/images/family/ubuntu-pro-2404-lts-arm64"
       - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
       - "-filter=^(cvm|livemigrate|suspendresume|loadbalancer|guestagent|hostnamevalidation|imageboot|licensevalidation|network|security|hotattach|lssd|disk|packagevalidation|ssh|metadata|sql|vmspec)$"
       - "-set_exit_status=false"
@@ -925,7 +939,8 @@ periodics:
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: cit-periodics-windows-client
-  interval: 8h
+  # Run every 8 hours at 06:30, 14:30, 22:30 UTC
+  cron: "30 6,14,22 * * *"
   spec:
     containers:
     - image: gcr.io/compute-image-tools/cloud-image-tests:latest
@@ -949,7 +964,8 @@ periodics:
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: cit-periodics-windows-server
-  interval: 8h
+  # Run every 8 hours at 07:30, 15:30, 23:30 UTC
+  cron: "30 7,15,23 * * *"
   spec:
     containers:
     - image: gcr.io/compute-image-tools/cloud-image-tests:latest
@@ -984,7 +1000,7 @@ periodics:
         - "-project=oslogin-cit"
         - "-zone=us-central1-b"
 # Same as cit-periodics but without Windows
-        - "-images=projects/debian-cloud/global/images/family/debian-11,projects/debian-cloud/global/images/family/debian-12,projects/debian-cloud/global/images/family/debian-12-arm64,projects/debian-cloud/global/images/family/debian-13,projects/debian-cloud/global/images/family/debian-13-arm64,projects/centos-cloud/global/images/family/centos-stream-9,projects/centos-cloud/global/images/family/centos-stream-10,projects/centos-cloud/global/images/family/centos-stream-10-arm64,projects/rhel-cloud/global/images/family/rhel-8,projects/rhel-cloud/global/images/family/rhel-9,projects/rhel-cloud/global/images/family/rhel-9-arm64,projects/rhel-cloud/global/images/family/rhel-10,projects/rhel-cloud/global/images/family/rhel-10-arm64,projects/rocky-linux-cloud/global/images/family/rocky-linux-8,projects/rocky-linux-cloud/global/images/family/rocky-linux-8-optimized-gcp,projects/rocky-linux-cloud/global/images/family/rocky-linux-8-optimized-gcp-arm64,projects/rocky-linux-cloud/global/images/family/rocky-linux-9,projects/rocky-linux-cloud/global/images/family/rocky-linux-9-optimized-gcp,projects/rocky-linux-cloud/global/images/family/rocky-linux-9-arm64,projects/rocky-linux-cloud/global/images/family/rocky-linux-9-optimized-gcp-arm64,projects/almalinux-cloud/global/images/family/almalinux-8,projects/almalinux-cloud/global/images/family/almalinux-8-arm64,projects/almalinux-cloud/global/images/family/almalinux-9,projects/almalinux-cloud/global/images/family/almalinux-9-arm64,projects/almalinux-cloud/global/images/family/almalinux-10,projects/almalinux-cloud/global/images/family/almalinux-10-arm64,projects/opensuse-cloud/global/images/family/opensuse-leap,projects/opensuse-cloud/global/images/family/opensuse-leap-arm64,projects/suse-cloud/global/images/family/sles-12,projects/suse-cloud/global/images/family/sles-15,projects/suse-cloud/global/images/family/sles-15-arm64,projects/suse-cloud/global/images/family/sles-16-0-x86-64,projects/suse-cloud/global/images/family/sles-16-0-arm64,projects/ubuntu-os-pro-cloud/global/images/family/ubuntu-pro-1604-lts,projects/ubuntu-os-pro-cloud/global/images/family/ubuntu-pro-1804-lts,projects/ubuntu-os-pro-cloud/global/images/family/ubuntu-pro-1804-lts,projects/ubuntu-os-pro-cloud/global/images/family/ubuntu-pro-1804-lts-arm64,projects/ubuntu-os-cloud/global/images/family/ubuntu-2204-lts,projects/ubuntu-os-cloud/global/images/family/ubuntu-2204-lts-arm64,projects/ubuntu-os-cloud/global/images/family/ubuntu-2404-lts-amd64,projects/ubuntu-os-cloud/global/images/family/ubuntu-2404-lts-arm64,projects/oracle-linux-cloud/global/images/family/oracle-linux-8,projects/oracle-linux-cloud/global/images/family/oracle-linux-9,projects/oracle-linux-cloud/global/images/family/oracle-linux-10"
+        - "-images=projects/debian-cloud/global/images/family/debian-11,projects/debian-cloud/global/images/family/debian-12,projects/debian-cloud/global/images/family/debian-12-arm64,projects/debian-cloud/global/images/family/debian-13,projects/debian-cloud/global/images/family/debian-13-arm64,projects/centos-cloud/global/images/family/centos-stream-9,projects/centos-cloud/global/images/family/centos-stream-10,projects/centos-cloud/global/images/family/centos-stream-10-arm64,projects/rhel-cloud/global/images/family/rhel-8,projects/rhel-cloud/global/images/family/rhel-9,projects/rhel-cloud/global/images/family/rhel-9-arm64,projects/rhel-cloud/global/images/family/rhel-10,projects/rhel-cloud/global/images/family/rhel-10-arm64,projects/rocky-linux-cloud/global/images/family/rocky-linux-8,projects/rocky-linux-cloud/global/images/family/rocky-linux-8-optimized-gcp,projects/rocky-linux-cloud/global/images/family/rocky-linux-8-optimized-gcp-arm64,projects/rocky-linux-cloud/global/images/family/rocky-linux-9,projects/rocky-linux-cloud/global/images/family/rocky-linux-9-optimized-gcp,projects/rocky-linux-cloud/global/images/family/rocky-linux-9-arm64,projects/rocky-linux-cloud/global/images/family/rocky-linux-9-optimized-gcp-arm64,projects/almalinux-cloud/global/images/family/almalinux-8,projects/almalinux-cloud/global/images/family/almalinux-8-arm64,projects/almalinux-cloud/global/images/family/almalinux-9,projects/almalinux-cloud/global/images/family/almalinux-9-arm64,projects/almalinux-cloud/global/images/family/almalinux-10,projects/almalinux-cloud/global/images/family/almalinux-10-arm64,projects/opensuse-cloud/global/images/family/opensuse-leap,projects/opensuse-cloud/global/images/family/opensuse-leap-arm64,projects/suse-cloud/global/images/family/sles-12,projects/suse-cloud/global/images/family/sles-15,projects/suse-cloud/global/images/family/sles-15-arm64,projects/suse-cloud/global/images/family/sles-16-0-x86-64,projects/suse-cloud/global/images/family/sles-16-0-arm64,projects/ubuntu-os-pro-cloud/global/images/family/ubuntu-pro-1604-lts,projects/ubuntu-os-pro-cloud/global/images/family/ubuntu-pro-1804-lts,projects/ubuntu-os-pro-cloud/global/images/family/ubuntu-pro-1804-lts-arm64,projects/ubuntu-os-cloud/global/images/family/ubuntu-2204-lts,projects/ubuntu-os-cloud/global/images/family/ubuntu-2204-lts-arm64,projects/ubuntu-os-cloud/global/images/family/ubuntu-2404-lts-amd64,projects/ubuntu-os-cloud/global/images/family/ubuntu-2404-lts-arm64,projects/oracle-linux-cloud/global/images/family/oracle-linux-8,projects/oracle-linux-cloud/global/images/family/oracle-linux-9,projects/oracle-linux-cloud/global/images/family/oracle-linux-10"
         - "-filter=oslogin"
         - "-set_exit_status=false"
 - name: testingrepo-packageupgrade
