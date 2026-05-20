@@ -189,7 +189,7 @@ presubmits:
         command:
         - runner.sh
         - /workspace/scenarios/kubernetes_e2e.py
-        image: gcr.io/k8s-staging-test-infra/kubekins-e2e:latest-1.23
+        image: gcr.io/k8s-staging-test-infra/kubekins-e2e:latest-1.32
         env:
         - name: GOOGLE_APPLICATION_CREDENTIALS
           value: /etc/service-account/service-account.json
@@ -250,7 +250,7 @@ presubmits:
         command:
         - runner.sh
         - /workspace/scenarios/kubernetes_e2e.py
-        image: gcr.io/k8s-staging-test-infra/kubekins-e2e:latest-1.23
+        image: gcr.io/k8s-staging-test-infra/kubekins-e2e:latest-1.32
         env:
         - name: GOOGLE_APPLICATION_CREDENTIALS
           value: /etc/service-account/service-account.json
@@ -311,7 +311,7 @@ presubmits:
         command:
         - runner.sh
         - /workspace/scenarios/kubernetes_e2e.py
-        image: gcr.io/k8s-staging-test-infra/kubekins-e2e:latest-1.23
+        image: gcr.io/k8s-staging-test-infra/kubekins-e2e:latest-1.32
         env:
         - name: GOOGLE_APPLICATION_CREDENTIALS
           value: /etc/service-account/service-account.json
@@ -372,7 +372,7 @@ presubmits:
         command:
         - runner.sh
         - /workspace/scenarios/kubernetes_e2e.py
-        image: gcr.io/k8s-staging-test-infra/kubekins-e2e:latest-1.23
+        image: gcr.io/k8s-staging-test-infra/kubekins-e2e:latest-1.32
         env:
         - name: GOOGLE_APPLICATION_CREDENTIALS
           value: /etc/service-account/service-account.json
@@ -433,7 +433,7 @@ presubmits:
         command:
         - runner.sh
         - /workspace/scenarios/kubernetes_e2e.py
-        image: gcr.io/k8s-staging-test-infra/kubekins-e2e:latest-1.23
+        image: gcr.io/k8s-staging-test-infra/kubekins-e2e:latest-1.32
         env:
         - name: GOOGLE_APPLICATION_CREDENTIALS
           value: /etc/service-account/service-account.json
@@ -818,7 +818,7 @@ periodics:
           command:
             - runner.sh
             - /workspace/scenarios/kubernetes_e2e.py
-          image: gcr.io/k8s-staging-test-infra/kubekins-e2e:latest-1.23
+          image: gcr.io/k8s-staging-test-infra/kubekins-e2e:latest-1.32
           env:
             - name: GOOGLE_APPLICATION_CREDENTIALS
               value: /etc/service-account/service-account.json
@@ -884,7 +884,7 @@ periodics:
         command:
         - runner.sh
         - /workspace/scenarios/kubernetes_e2e.py
-        image: gcr.io/k8s-staging-test-infra/kubekins-e2e:latest-1.23
+        image: gcr.io/k8s-staging-test-infra/kubekins-e2e:latest-1.32
         env:
         - name: GOOGLE_APPLICATION_CREDENTIALS
           value: /etc/service-account/service-account.json
@@ -950,7 +950,7 @@ periodics:
           command:
             - runner.sh
             - /workspace/scenarios/kubernetes_e2e.py
-          image: gcr.io/k8s-staging-test-infra/kubekins-e2e:latest-1.23
+          image: gcr.io/k8s-staging-test-infra/kubekins-e2e:latest-1.32
           env:
             - name: GOOGLE_APPLICATION_CREDENTIALS
               value: /etc/service-account/service-account.json
@@ -1016,7 +1016,7 @@ periodics:
           command:
             - runner.sh
             - /workspace/scenarios/kubernetes_e2e.py
-          image: gcr.io/k8s-staging-test-infra/kubekins-e2e:latest-1.23
+          image: gcr.io/k8s-staging-test-infra/kubekins-e2e:latest-1.32
           env:
             - name: GOOGLE_APPLICATION_CREDENTIALS
               value: /etc/service-account/service-account.json
@@ -1082,7 +1082,7 @@ periodics:
           command:
             - runner.sh
             - /workspace/scenarios/kubernetes_e2e.py
-          image: gcr.io/k8s-staging-test-infra/kubekins-e2e:latest-1.23
+          image: gcr.io/k8s-staging-test-infra/kubekins-e2e:latest-1.32
           env:
             - name: GOOGLE_APPLICATION_CREDENTIALS
               value: /etc/service-account/service-account.json
@@ -1296,7 +1296,7 @@ periodics:
             - --age=5 # clean anything older than 5h
             - '--filter=name~^e2e-'
             - --verbose
-          image: gcr.io/k8s-staging-test-infra/kubekins-e2e:latest-1.23
+          image: gcr.io/k8s-staging-test-infra/kubekins-e2e:latest-1.32
           env:
           - name: GOOGLE_APPLICATION_CREDENTIALS
             value: /etc/cloudesf-testing-github-prow-service-account/service-account.json
