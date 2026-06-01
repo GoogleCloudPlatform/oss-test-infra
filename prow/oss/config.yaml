@@ -221,14 +221,35 @@ prowjob_default_entries:
 branch-protection:
   orgs:
     kubeflow:
-      protect: true
-      #required_status_checks:
-      #  contexts:
-      #  - cla/google
-      exclude:
-      - "^revert-" # don't protect revert branches
-      - "^dependabot/" # don't protect branches created by dependabot
-      - "-patch-" # don't protect branches created by editing on GitHub UI
+      repos:
+        pipelines:
+          protect: true
+          required_status_checks:
+            contexts:
+              - Frontend Tests
+              - KFP e2e tests
+              - k8s execution tests
+              - kfp-kubernetes library tests
+              - KFP Samples
+              - KFP Runtime Code Tests
+              - KFP SDK Tests
+              - KFP Manifests
+              - Periodic Functional Tests
+              - KFP Backend Tests
+              - KFP backend visualization tests
+              - KFP Tekton backend unit tests
+              - Re-Run PR tests
+              - KFP Component YAML Test
+              - KFP SDK Docformatter Test
+              - KFP SDK execution tests
+              - KFP SDK Isort Test
+              - KFP SDK Upgrade Test
+              - KFP SDK YAPF Tests
+              - KFP upgrade tests              
+          exclude:
+            - "^revert-" # don't protect revert branches
+            - "^dependabot/" # don't protect branches created by dependabot
+            - "-patch-" # don't protect branches created by editing on GitHub UI
 
 deck:
   google_analytics: G-NQ9CERRMYD
