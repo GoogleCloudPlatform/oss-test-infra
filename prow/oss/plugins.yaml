@@ -68,6 +68,7 @@ lgtm:
   - chaotoppicks
   - google
   - grpc-ecosystem
+  - gke-labs/kube-agents
   review_acts_as_lgtm: true
 - repos:
   - GoogleContainerTools/config-sync
@@ -341,6 +342,14 @@ plugins:
     - hold
 
   GoogleCloudPlatform/gke-mcp:
+    plugins:
+    - approve
+    - lgtm
+    - owners-label
+    - size
+    - verify-owners
+
+  gke-labs/kube-agents:
     plugins:
     - approve
     - lgtm

@@ -32,6 +32,7 @@ tide:
     GoogleCloudPlatform/gcs-fuse-csi-driver: merge
     GoogleCloudPlatform/gke-mcp: squash
     GoogleCloudPlatform/gke-enterprise-mt: squash
+    gke-labs/kube-agents: squash
   squash_label: tide/merge-method-squash
   rebase_label: tide/merge-method-rebase
   merge_label: tide/merge-method-merge
@@ -61,6 +62,7 @@ tide:
     - GoogleCloudPlatform/gcs-fuse-csi-driver
     - GoogleCloudPlatform/gke-mcp
     - GoogleCloudPlatform/gke-enterprise-mt
+    - gke-labs/kube-agents
     labels:
     - lgtm
     - approved
