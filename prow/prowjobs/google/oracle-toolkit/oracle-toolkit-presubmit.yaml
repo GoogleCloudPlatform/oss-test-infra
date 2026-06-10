@@ -164,3 +164,26 @@ presubmits:
           requests:
             memory: "2.0Gi"
             cpu: "3.0"
+  - name: oracle-toolkit-python-unit-tests
+    cluster: build-gcp-oracle-team
+    # Only triggers if files in the inventory_plugins directory are changed
+    run_if_changed: "^inventory_plugins/"
+    max_concurrency: 3
+    decorate: true
+    decoration_config:
+      timeout: 4h
+      grace_period: 5m
+    spec:
+      serviceAccountName: prowjob-default-sa
+      containers:
+      - image: quay.io/ansible/ansible-runner:stable-2.9-latest
+        command:
+         - /bin/sh
+         - -c
+         - |
+           pip install pytest
+           pytest inventory_plugins/
+        resources:
+          requests:
+            memory: "2.0Gi"
+            cpu: "3.0"
