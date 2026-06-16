@@ -352,10 +352,18 @@ plugins:
   gke-labs/kube-agents:
     plugins:
     - approve
+    - cat
+    - dog
+    - hold
+    - label
     - lgtm
     - owners-label
+    - pony
+    - shrug
     - size
+    - trigger
     - verify-owners
+    - yuks
 
   google:
     plugins:
