@@ -636,3 +636,29 @@ periodics:
         - "-images=projects/suse-cloud-testing/global/images/family/sles16-x86-64,projects/suse-cloud-testing/global/images/family/sles-15,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-2604-lts-amd64,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-2510-amd64,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-2504-amd64,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-2404-lts-amd64,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-2204-lts"
         - "-filter=oslogin"
         - "-set_exit_status=false"
+- name: cit-periodics-release-package-e2
+  cluster: gcp-guest
+  decorate: true
+  decoration_config:
+    timeout: 8h
+  annotations:
+    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-tab-name: cit-periodics-release-package-e2
+  # Run every 12 hours at 01:00, 13:00 UTC
+  cron: "0 1,13 * * *"
+  spec:
+    containers:
+    - image: gcr.io/compute-image-tools/cloud-image-tests:latest
+      imagePullPolicy: Always
+      command:
+      - "/manager"
+      args:
+      - "-parallel_count=5"
+      - "-project=gcp-guest"
+      - "-zones=us-central1-a,us-central1-b,us-central1-c,us-central1-f"
+      - "-all_image_families=gce-unstable-pkg-test-images"
+      - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
+      # Please keep filter list synced between all release package images. Edit only this list; copy/paste from this for all other configurations.
+      - "-filter=^(cvm|livemigrate|suspendresume|loadbalancer|guestagent|hostnamevalidation|imageboot|licensevalidation|network|security|hotattach|lssd|disk|packagevalidation|ssh|metadata|sql|vmspec)$"
+      - "-set_exit_status=false"
+      - "-x86_shape=e2-standard-2"
