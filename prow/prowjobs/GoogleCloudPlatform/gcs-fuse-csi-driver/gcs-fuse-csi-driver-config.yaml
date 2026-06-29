@@ -7,13 +7,18 @@ presubmits:
     labels:
       preset-service-account: "true"
     decorate: true
+    # cluster: build-gke-managed-storage // Uncomment this in followup PR once the cluster is registered in kubeconfigs.yaml as checkconfig validates live configs
     spec:
+      serviceAccountName: prowjob-default-sa
       containers:
       - image: gcr.io/k8s-staging-test-infra/kubekins-e2e:v20260316-e86cefa561-1.32
         command:
         - runner.sh
         args:
         - test/e2e/run-e2e-ci.sh
+        env:
+        - name: GCE_PD_BOSKOS_RESOURCE_TYPE
+          value: "oss-boskos-e2e-test-project"
         securityContext:
           privileged: true
         resources:
