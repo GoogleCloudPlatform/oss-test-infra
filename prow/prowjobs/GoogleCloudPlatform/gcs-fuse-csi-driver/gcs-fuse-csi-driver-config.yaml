@@ -23,11 +23,11 @@ presubmits:
           privileged: true
         resources:
           requests:
-            memory: 80Gi
-            ephemeral-storage: 70Gi
+            memory: 8Gi
+            ephemeral-storage: 4Gi
           limits:
-            memory: 80Gi
-            ephemeral-storage: 70Gi
+            memory: 8Gi
+            ephemeral-storage: 4Gi
         volumeMounts:
       volumes:
       - name: ssh
