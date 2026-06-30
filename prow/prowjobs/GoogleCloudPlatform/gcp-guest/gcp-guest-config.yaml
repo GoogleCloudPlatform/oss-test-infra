@@ -698,8 +698,8 @@ periodics:
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: cit-periodics-release-package-c4a
-  # Run every 12 hours at 04:00, 16:00 UTC / 09:00, 21:00 PDT
-  cron: "0 4,16 * * *"
+  # Run every 12 hours at 05:00, 17:00 UTC / 10:00, 22:00 PDT
+  cron: "0 5,17 * * *"
   spec:
     containers:
     - image: gcr.io/compute-image-tools/cloud-image-tests:latest
