@@ -742,5 +742,5 @@ periodics:
       # Please keep filter list synced between all release package images. Do not edit this list; copy/paste from line 1121 for any updates.
       - "-filter=^(cvm|livemigrate|suspendresume|loadbalancer|guestagent|hostnamevalidation|imageboot|licensevalidation|network|security|hotattach|lssd|disk|packagevalidation|ssh|metadata|sql|vmspec)$"
       - "-set_exit_status=false"
-      - "-arm64_shape=n4-standard-4"
+      - "-x86_shape=n4-standard-4"
       - "-architecture_type=x86"
