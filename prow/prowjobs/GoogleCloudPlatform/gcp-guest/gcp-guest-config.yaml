@@ -717,3 +717,30 @@ periodics:
       - "-set_exit_status=false"
       - "-arm64_shape=c4a-standard-4"
       - "-architecture_type=arm64"
+- name: cit-periodics-release-package-n4
+  cluster: gcp-guest
+  decorate: true
+  decoration_config:
+    timeout: 8h
+  annotations:
+    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-tab-name: cit-periodics-release-package-n4
+  # Run every 12 hours at 06:00, 18:00 UTC / 11:00, 23:00 PDT
+  cron: "0 6,18 * * *"
+  spec:
+    containers:
+    - image: gcr.io/compute-image-tools/cloud-image-tests:latest
+      imagePullPolicy: Always
+      command:
+      - "/manager"
+      args:
+      - "-parallel_count=5"
+      - "-project=gcp-guest"
+      - "-zones=us-central1-a,us-central1-b,us-central1-c,us-central1-f,us-west1-b,europe-west1-b,asia-east1-a"
+      - "-all_image_families=gce-unstable-pkg-test-images"
+      - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
+      # Please keep filter list synced between all release package images. Do not edit this list; copy/paste from line 1121 for any updates.
+      - "-filter=^(cvm|livemigrate|suspendresume|loadbalancer|guestagent|hostnamevalidation|imageboot|licensevalidation|network|security|hotattach|lssd|disk|packagevalidation|ssh|metadata|sql|vmspec)$"
+      - "-set_exit_status=false"
+      - "-arm64_shape=n4-standard-4"
+      - "-architecture_type=x86"
