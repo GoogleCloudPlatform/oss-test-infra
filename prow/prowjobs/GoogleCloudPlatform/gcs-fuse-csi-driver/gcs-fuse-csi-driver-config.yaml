@@ -7,7 +7,7 @@ presubmits:
     labels:
       preset-service-account: "true"
     decorate: true
-    # cluster: build-gke-managed-storage // Uncomment this in followup PR once the cluster is registered in kubeconfigs.yaml as checkconfig validates live configs
+    cluster: build-gke-managed-storage
     spec:
       serviceAccountName: prowjob-default-sa
       containers:
