@@ -662,6 +662,7 @@ periodics:
       - "-filter=^(cvm|livemigrate|suspendresume|loadbalancer|guestagent|hostnamevalidation|imageboot|licensevalidation|network|security|hotattach|lssd|disk|packagevalidation|ssh|metadata|sql|vmspec)$"
       - "-set_exit_status=false"
       - "-x86_shape=e2-standard-2"
+      - "-architecture_type=x86"
 - name: cit-periodics-release-package-c3
   cluster: gcp-guest
   decorate: true
@@ -687,4 +688,32 @@ periodics:
       # Please keep filter list synced between all release package images. Do not edit this list; copy/paste from line 1121 for any updates.
       - "-filter=^(cvm|livemigrate|suspendresume|loadbalancer|guestagent|hostnamevalidation|imageboot|licensevalidation|network|security|hotattach|lssd|disk|packagevalidation|ssh|metadata|sql|vmspec)$"
       - "-set_exit_status=false"
-      - "x86_shape=c3-standard-4"
+      - "-x86_shape=c3-standard-4"
+      - "-architecture_type=x86"
+- name: cit-periodics-release-package-c4a
+  cluster: gcp-guest
+  decorate: true
+  decoration_config:
+    timeout: 8h
+  annotations:
+    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-tab-name: cit-periodics-release-package-c4a
+  # Run every 12 hours at 05:00, 17:00 UTC / 10:00, 22:00 PDT
+  cron: "0 5,17 * * *"
+  spec:
+    containers:
+    - image: gcr.io/compute-image-tools/cloud-image-tests:latest
+      imagePullPolicy: Always
+      command:
+      - "/manager"
+      args:
+      - "-parallel_count=5"
+      - "-project=gcp-guest"
+      - "-zones=us-central1-a,us-central1-b,us-central1-c,us-central1-f,us-west1-b,europe-west1-b,asia-east1-a"
+      - "-all_image_families=gce-unstable-pkg-test-images"
+      - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
+      # Please keep filter list synced between all release package images. Do not edit this list; copy/paste from line 1121 for any updates.
+      - "-filter=^(cvm|livemigrate|suspendresume|loadbalancer|guestagent|hostnamevalidation|imageboot|licensevalidation|network|security|hotattach|lssd|disk|packagevalidation|ssh|metadata|sql|vmspec)$"
+      - "-set_exit_status=false"
+      - "-arm64_shape=c4a-standard-4"
+      - "-architecture_type=arm64"
