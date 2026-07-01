@@ -653,7 +653,7 @@ periodics:
       command:
       - "/manager"
       args:
-      - "-parallel_count=5"
+      - "-parallel_count=15"
       - "-project=gcp-guest"
       - "-zones=us-central1-a,us-central1-b,us-central1-c,us-central1-f,us-west1-b,europe-west1-b,asia-east1-a"
       - "-all_image_families=gce-unstable-pkg-test-images"
@@ -680,7 +680,7 @@ periodics:
       command:
       - "/manager"
       args:
-      - "-parallel_count=5"
+      - "-parallel_count=15"
       - "-project=gcp-guest"
       - "-zones=us-central1-a,us-central1-b,us-central1-c,us-central1-f,us-west1-b,europe-west1-b,asia-east1-a"
       - "-all_image_families=gce-unstable-pkg-test-images"
@@ -707,7 +707,7 @@ periodics:
       command:
       - "/manager"
       args:
-      - "-parallel_count=5"
+      - "-parallel_count=15"
       - "-project=gcp-guest"
       - "-zones=us-central1-a,us-central1-b,us-central1-c,us-central1-f,us-west1-b,europe-west1-b,asia-east1-a"
       - "-all_image_families=gce-unstable-pkg-test-images"
@@ -734,7 +734,7 @@ periodics:
       command:
       - "/manager"
       args:
-      - "-parallel_count=5"
+      - "-parallel_count=15"
       - "-project=gcp-guest"
       - "-zones=us-central1-a,us-central1-b,us-central1-c,us-central1-f,us-west1-b,europe-west1-b,asia-east1-a"
       - "-all_image_families=gce-unstable-pkg-test-images"
