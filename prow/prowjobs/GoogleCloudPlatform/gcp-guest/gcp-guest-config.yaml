@@ -640,7 +640,7 @@ periodics:
   cluster: gcp-guest
   decorate: true
   decoration_config:
-    timeout: 8h
+    timeout: 16h
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: cit-periodics-release-package-e2
@@ -667,7 +667,7 @@ periodics:
   cluster: gcp-guest
   decorate: true
   decoration_config:
-    timeout: 8h
+    timeout: 16h
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: cit-periodics-release-package-c3
@@ -694,7 +694,7 @@ periodics:
   cluster: gcp-guest
   decorate: true
   decoration_config:
-    timeout: 8h
+    timeout: 16h
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: cit-periodics-release-package-c4a
@@ -721,7 +721,7 @@ periodics:
   cluster: gcp-guest
   decorate: true
   decoration_config:
-    timeout: 8h
+    timeout: 16h
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: cit-periodics-release-package-n4
