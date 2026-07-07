@@ -644,8 +644,8 @@ periodics:
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: cit-periodics-release-package-e2
-  # Run every 12 hours at 01:00, 13:00 UTC
-  cron: "0 1,13 * * *"
+  # Run every 12 hours at 03:00, 15:00 UTC / 20:00, 08:00 PDT
+  cron: "0 3,15 * * *"
   spec:
     containers:
     - image: gcr.io/compute-image-tools/cloud-image-tests:latest
@@ -671,8 +671,8 @@ periodics:
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: cit-periodics-release-package-c3
-  # Run every 12 hours at 10:00, 22:00 UTC / 03:00, 15:00 PDT
-  cron: "0 10,22 * * *"
+  # Run every 12 hours at 03:30, 15:30 UTC / 20:30, 08:30 PDT
+  cron: "30 3,15 * * *"
   spec:
     containers:
     - image: gcr.io/compute-image-tools/cloud-image-tests:latest
@@ -698,8 +698,8 @@ periodics:
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: cit-periodics-release-package-c4a
-  # Run every 12 hours at 05:00, 17:00 UTC / 10:00, 22:00 PDT
-  cron: "0 5,17 * * *"
+  # Run every 12 hours at 04:00, 16:00 UTC / 21:00, 09:00 PDT
+  cron: "0 4,16 * * *"
   spec:
     containers:
     - image: gcr.io/compute-image-tools/cloud-image-tests:latest
@@ -725,8 +725,8 @@ periodics:
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: cit-periodics-release-package-n4
-  # Run every 12 hours at 06:00, 18:00 UTC / 11:00, 23:00 PDT
-  cron: "0 6,18 * * *"
+  # Run every 12 hours at 04:30, 16:30 UTC / 21:30, 09:30 PDT
+  cron: "30 4,16 * * *"
   spec:
     containers:
     - image: gcr.io/compute-image-tools/cloud-image-tests:latest
