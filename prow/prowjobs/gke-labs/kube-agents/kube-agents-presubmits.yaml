@@ -1,0 +1,18 @@
+presubmits:
+  gke-labs/kube-agents:
+  - name: pull-kube-agents-smoke-test
+    cluster: build-kube-agents
+    always_run: true
+    decorate: true
+    decoration_config:
+      timeout: 20m
+    spec:
+      serviceAccountName: prowjob-default-sa
+      containers:
+      - image: gcr.io/devops-bench-shared/devops-bench-harness:latest
+        command:
+        - ./hack/ci-connection-test.sh
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "500m"
