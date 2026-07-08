@@ -644,8 +644,8 @@ periodics:
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: cit-periodics-release-package-e2
-  # Run every 12 hours at 03:00, 15:00 UTC / 20:00, 08:00 PDT
-  cron: "0 3,15 * * *"
+  # Run every 12 hours at 08:00, 20:00 UTC / 1:00, 13:00 PDT
+  cron: "0 8,20 * * *"
   spec:
     containers:
     - image: gcr.io/compute-image-tools/cloud-image-tests:latest
@@ -671,8 +671,8 @@ periodics:
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: cit-periodics-release-package-c3
-  # Run every 12 hours at 03:30, 15:30 UTC / 20:30, 08:30 PDT
-  cron: "30 3,15 * * *"
+  # Run every 12 hours at 07:00, 19:00 UTC / 00:00, 12:00 PDT
+  cron: "0 7,19 * * *"
   spec:
     containers:
     - image: gcr.io/compute-image-tools/cloud-image-tests:latest
@@ -685,7 +685,7 @@ periodics:
       - "-zones=us-central1-a,us-central1-b,us-central1-c,us-central1-f,us-west1-b,europe-west1-b,asia-southeast1-a"
       - "-all_image_families=gce-unstable-pkg-test-images"
       - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
-      # Please keep filter list synced between all release package images. Do not edit this list; copy/paste from line 1121 for any updates.
+      # Please keep filter list synced between all release package images. Do not edit this list; copy/paste from line 661 for any updates.
       - "-filter=^(cvm|livemigrate|suspendresume|loadbalancer|guestagent|hostnamevalidation|imageboot|licensevalidation|network|security|hotattach|lssd|disk|packagevalidation|ssh|metadata|sql|vmspec)$"
       - "-set_exit_status=false"
       - "-x86_shape=c3-standard-4"
@@ -698,8 +698,8 @@ periodics:
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: cit-periodics-release-package-c4a
-  # Run every 12 hours at 04:00, 16:00 UTC / 21:00, 09:00 PDT
-  cron: "0 4,16 * * *"
+  # Run every 12 hours at 08:30, 20:30 UTC / 01:30, 13:30 PDT
+  cron: "30 8,20 * * *"
   spec:
     containers:
     - image: gcr.io/compute-image-tools/cloud-image-tests:latest
@@ -712,7 +712,7 @@ periodics:
       - "-zones=us-central1-a,us-central1-b,us-central1-c,us-central1-f,us-west1-a,europe-west1-b,asia-east1-a"
       - "-all_image_families=gce-unstable-pkg-test-images"
       - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
-      # Please keep filter list synced between all release package images. Do not edit this list; copy/paste from line 1121 for any updates.
+      # Please keep filter list synced between all release package images. Do not edit this list; copy/paste from line 661 for any updates.
       - "-filter=^(cvm|livemigrate|suspendresume|loadbalancer|guestagent|hostnamevalidation|imageboot|licensevalidation|network|security|hotattach|lssd|disk|packagevalidation|ssh|metadata|sql|vmspec)$"
       - "-set_exit_status=false"
       - "-arm64_shape=c4a-standard-4"
@@ -725,8 +725,8 @@ periodics:
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
     testgrid-tab-name: cit-periodics-release-package-n4
-  # Run every 12 hours at 04:30, 16:30 UTC / 21:30, 09:30 PDT
-  cron: "30 4,16 * * *"
+  # Run every 12 hours at 07:30, 19:30 UTC / 00:30, 12:30 PDT
+  cron: "30 7,19 * * *"
   spec:
     containers:
     - image: gcr.io/compute-image-tools/cloud-image-tests:latest
@@ -739,7 +739,7 @@ periodics:
       - "-zones=us-central1-a,us-central1-b,us-central1-c,us-central1-f,us-west1-b,europe-west1-b,asia-east1-a"
       - "-all_image_families=gce-unstable-pkg-test-images"
       - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
-      # Please keep filter list synced between all release package images. Do not edit this list; copy/paste from line 1121 for any updates.
+      # Please keep filter list synced between all release package images. Do not edit this list; copy/paste from line 661 for any updates.
       - "-filter=^(cvm|livemigrate|suspendresume|loadbalancer|guestagent|hostnamevalidation|imageboot|licensevalidation|network|security|hotattach|lssd|disk|packagevalidation|ssh|metadata|sql|vmspec)$"
       - "-set_exit_status=false"
       - "-x86_shape=n4-standard-4"
