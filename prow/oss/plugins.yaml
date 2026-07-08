@@ -26,6 +26,7 @@ triggers:
   - GoogleCloudPlatform/google-guest-agent
   trusted_apps:
     - copybara-service
+    - dependabot
 
 config_updater:
   maps:
