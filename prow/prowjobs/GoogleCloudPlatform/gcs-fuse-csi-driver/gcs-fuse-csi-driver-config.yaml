@@ -24,10 +24,10 @@ presubmits:
         resources:
           requests:
             memory: 8Gi
-            ephemeral-storage: 4Gi
+            ephemeral-storage: 6Gi
           limits:
             memory: 8Gi
-            ephemeral-storage: 4Gi
+            ephemeral-storage: 10Gi
         volumeMounts:
       volumes:
       - name: ssh
