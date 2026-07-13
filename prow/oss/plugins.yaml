@@ -19,6 +19,13 @@ triggers:
   only_org_members: true
   trigger_github_workflows: true
 - repos:
+  - kubeflow/pipelines
+  join_org_url: "https://www.kubeflow.org/docs/about/contributing/"
+  only_org_members: true
+  trigger_github_workflows: true
+  trusted_apps:
+    - dependabot
+- repos:
   - GoogleCloudPlatform/compute-daisy
   - GoogleCloudPlatform/cloud-image-tests
   - GoogleCloudPlatform/guest-configs
