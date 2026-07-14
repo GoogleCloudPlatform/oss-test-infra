@@ -19,6 +19,8 @@ presubmits:
         env:
         - name: GCE_PD_BOSKOS_RESOURCE_TYPE
           value: "oss-boskos-e2e-test-project"
+        - name: BOSKOS_URL
+          value: "http://boskos.boskos.svc.cluster.local"
         securityContext:
           privileged: true
         resources:
