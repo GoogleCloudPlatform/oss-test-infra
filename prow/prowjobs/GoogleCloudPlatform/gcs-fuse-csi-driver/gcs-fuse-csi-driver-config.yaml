@@ -6,6 +6,7 @@ presubmits:
     always_run: true         # Run for every PR, or only when requested.
     labels:
       preset-service-account: "true"
+      preset-dind-enabled: "true"
     decorate: true
     cluster: build-gke-managed-storage
     spec:
@@ -19,10 +20,15 @@ presubmits:
         env:
         - name: GCE_PD_BOSKOS_RESOURCE_TYPE
           value: "oss-boskos-e2e-test-project"
-        - name: USE_GKE_MANAGED_DRIVER                                                                                                                        
-          value: "false" 
+        - name: USE_GKE_MANAGED_DRIVER
+          value: "false"
         - name: BOSKOS_URL
           value: "http://boskos.boskos.svc.cluster.local"
+        - name: USER
+          value: "prow"
+        # Remove the "Feature" tag from the tests to run the tests in pre-submits. Once the tests are stable we can update the test-skip here
+        - name: TEST_SKIP
+          value: '"should.succeed.in.performance.test|Feature:.workload-identity-federation|Feature:.OIDC|Feature:.GCSFuse-PDCSI"'
         securityContext:
           privileged: true
         resources:
@@ -32,7 +38,6 @@ presubmits:
           limits:
             memory: 8Gi
             ephemeral-storage: 10Gi
-        volumeMounts:
       volumes:
       - name: ssh
         secret:
