@@ -1,6 +1,7 @@
 presubmits:
   gke-labs/kube-agents:
   - name: pull-kube-agents-smoke-test
+    max_concurrency: 1
     cluster: build-kube-agents
     always_run: false
     skip_report: true
@@ -10,9 +11,18 @@ presubmits:
     spec:
       serviceAccountName: prowjob-default-sa
       containers:
-      - image: gcr.io/devops-bench-shared/devops-bench-harness:latest
+      - image: us-central1-docker.pkg.dev/hangdng-gkedemos/kube-agents/devops-bench-harness:latest
         command:
-        - ./hack/ci-connection-test.sh
+        - /bin/bash
+        - -c
+        - |
+          set -euo pipefail
+          export GEMINI_API_KEY="$(gcloud secrets versions access latest --secret=kube-agents-gemini-api-key --project=hangdng-gkedemos 2>/dev/null || echo "${GEMINI_API_KEY:-}")"
+          trap './hack/ci-teardown.sh' EXIT
+          uv sync
+          ./hack/ci-connection-test.sh
+          ./hack/ci-deploy.sh
+          ./hack/ci-eval-pr.sh
         resources:
           requests:
             memory: "1Gi"
