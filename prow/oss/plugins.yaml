@@ -111,6 +111,9 @@ repo_milestone:
   kubeflow/sdk:
     maintainers_team: kubeflow-sdk-team
     maintainers_friendly_name: Kubeflow SDK Team
+  kubeflow/mcp-server:
+    maintainers_team: kubeflow-sdk-team
+    maintainers_friendly_name: Kubeflow SDK Team
 
 milestone_applier:
   kubeflow/trainer:
