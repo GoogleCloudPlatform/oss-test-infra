@@ -11,7 +11,7 @@ presubmits:
     spec:
       serviceAccountName: prowjob-default-sa
       containers:
-      - image: us-central1-docker.pkg.dev/hangdng-gkedemos/kube-agents/devops-bench-harness:latest
+      - image: us-central1-docker.pkg.dev/kube-agents-prow/kube-agents/devops-bench-harness:latest
         command:
         - /bin/bash
         - -c
