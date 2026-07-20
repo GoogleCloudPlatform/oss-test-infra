@@ -17,9 +17,8 @@ presubmits:
         - -c
         - |
           set -euo pipefail
-          export GEMINI_API_KEY="$(gcloud secrets versions access latest --secret=kube-agents-gemini-api-key --project=hangdng-gkedemos 2>/dev/null || echo "${GEMINI_API_KEY:-}")"
+          export GEMINI_API_KEY="$(cat /etc/gemini-secret/GEMINI_API_KEY)"
           trap './hack/ci-teardown.sh' EXIT
-          uv sync
           ./hack/ci-connection-test.sh
           ./hack/ci-deploy.sh
           ./hack/ci-eval-pr.sh
@@ -27,3 +26,11 @@ presubmits:
           requests:
             memory: "1Gi"
             cpu: "500m"
+        volumeMounts:
+        - name: gemini-secret
+          mountPath: /etc/gemini-secret
+          readOnly: true
+      volumes:
+      - name: gemini-secret
+        secret:
+          secretName: kube-agents-gemini-api-key
