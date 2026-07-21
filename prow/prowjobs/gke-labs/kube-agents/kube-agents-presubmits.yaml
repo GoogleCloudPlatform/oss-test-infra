@@ -17,6 +17,7 @@ presubmits:
         - -c
         - |
           set -euo pipefail
+          apt-get update && apt-get install -y --no-install-recommends make gettext-base
           export GEMINI_API_KEY="$(cat /etc/gemini-secret/GEMINI_API_KEY)"
           trap './hack/ci-teardown.sh' EXIT
           ./hack/ci-connection-test.sh
