@@ -8,6 +8,8 @@ presubmits:
       preset-service-account: "true"
       preset-dind-enabled: "true"
     decorate: true
+    decoration_config:
+      timeout: 4h
     cluster: build-gke-managed-storage
     spec:
       serviceAccountName: prowjob-default-sa
