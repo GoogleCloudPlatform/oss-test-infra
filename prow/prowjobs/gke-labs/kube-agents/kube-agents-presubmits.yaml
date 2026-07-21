@@ -7,7 +7,7 @@ presubmits:
     skip_report: true
     decorate: true
     decoration_config:
-      timeout: 20m
+      timeout: 2h
     spec:
       serviceAccountName: prowjob-default-sa
       containers:
