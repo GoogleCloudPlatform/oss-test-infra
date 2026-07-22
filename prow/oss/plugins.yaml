@@ -369,6 +369,7 @@ plugins:
     - hold
     - label
     - lgtm
+    - override
     - owners-label
     - pony
     - shrug
