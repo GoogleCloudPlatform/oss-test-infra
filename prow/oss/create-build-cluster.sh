@@ -18,7 +18,7 @@ export CONTROL_PLANE_SA="oss-prow-public-deck@oss-prow.iam.gserviceaccount.com,o
 # Specific to the build cluster
 export TEAM="${TEAM:-}"
 export PROJECT="${PROJECT:-${PROW_INSTANCE_NAME}-build-${TEAM}}"
-export ZONE="${ZONE:-us-west1-b}"
+export LOCATION="${LOCATION:-us-west1-b}"
 export CLUSTER="${CLUSTER:-${PROJECT}}"
 export GCS_BUCKET="${GCS_BUCKET:-gs://${PROJECT}}"
 
@@ -81,7 +81,7 @@ function main() {
 }
 # Prep and check args.
 function parseArgs() {
-  for var in TEAM PROJECT ZONE CLUSTER MACHINE NODECOUNT DISKSIZE; do
+  for var in TEAM PROJECT LOCATION CLUSTER MACHINE NODECOUNT DISKSIZE; do
     if [[ -z "${!var}" ]]; then
       echo "Must specify ${var} environment variable (or specify a default in the script)."
       exit 2
@@ -115,7 +115,7 @@ function pause() {
 authed=""
 function getClusterCreds() {
   if [[ -z "${authed}" ]]; then
-    gcloud container clusters get-credentials --project="${PROJECT}" --zone="${ZONE}" "${CLUSTER}"
+    gcloud container clusters get-credentials --project="${PROJECT}" --location="${LOCATION}" "${CLUSTER}"
     authed="true"
   fi
 }
@@ -134,15 +134,15 @@ function ensureProject() {
   gcloud projects add-iam-policy-binding "${PROJECT}" --member="${ADMIN_IAM_MEMBER}" --role="roles/owner"
 }
 function ensureCluster() {
-  if gcloud container clusters describe "${CLUSTER}" --project="${PROJECT}" --zone="${ZONE}" >/dev/null 2>&1; then
-    echo "Cluster '${CLUSTER}' exists in zone '${ZONE}' in project '${PROJECT}', skip creating."
+  if gcloud container clusters describe "${CLUSTER}" --project="${PROJECT}" --location="${LOCATION}" >/dev/null 2>&1; then
+    echo "Cluster '${CLUSTER}' exists in location '${LOCATION}' in project '${PROJECT}', skip creating."
     return
   else
     prompt "Pressing Y/y to create the cluster" echo
     echo "Creating cluster '${CLUSTER}' (this may take a few minutes)..."
     echo "If this fails due to insufficient project quota, request more at https://console.cloud.google.com/iam-admin/quotas?project=${PROJECT}"
     echo
-    gcloud container clusters create "${CLUSTER}" --project="${PROJECT}" --zone="${ZONE}" --machine-type="${MACHINE}" --num-nodes="${NODECOUNT}" --disk-size="${DISKSIZE}" --disk-type="pd-ssd" --enable-autoupgrade --enable-autorepair --workload-pool="${PROJECT}.svc.id.goog"
+    gcloud container clusters create "${CLUSTER}" --project="${PROJECT}" --location="${LOCATION}" --machine-type="${MACHINE}" --num-nodes="${NODECOUNT}" --disk-size="${DISKSIZE}" --disk-type="pd-ssd" --enable-autoupgrade --enable-autorepair --workload-pool="${PROJECT}.svc.id.goog"
   fi
 
   getClusterCreds
@@ -176,8 +176,8 @@ function ensureUploadSA() {
     echo "Service account '${sa}' already exists, skip creation."
   fi
   # Ensure workload identity is enabled on the cluster
-  if ! gcloud container clusters describe ${CLUSTER} --project=${PROJECT} --zone=${ZONE} | grep "${CLUSTER}.svc.id.goog" >/dev/null 2>&1; then
-    "${ROOT_DIR}/workload-identity/enable-workload-identity.sh" "${PROJECT}" "${ZONE}" "${CLUSTER}"
+  if ! gcloud container clusters describe ${CLUSTER} --project=${PROJECT} --location=${LOCATION} | grep "${CLUSTER}.svc.id.goog" >/dev/null 2>&1; then
+    "${ROOT_DIR}/workload-identity/enable-workload-identity.sh" "${PROJECT}" "${LOCATION}" "${CLUSTER}"
   else
     echo "Workload identity is enabled on cluster '${CLUSTER}', skip enabling."
   fi
@@ -197,7 +197,7 @@ EOF
 
   echo "Binding GCP service account with k8s service account via workload identity. Propagation and validation may take a few minutes..."
   if ! gcloud iam service-accounts get-iam-policy --project=gob-prow prowjob-default-sa@gob-prow.iam.gserviceaccount.com | grep "${CLUSTER}.svc.id.goog[test-pods/${saFull}]" >/dev/null 2>&1; then
-    "${ROOT_DIR}/workload-identity/bind-service-accounts.sh" "${PROJECT}" "${ZONE}" "${CLUSTER}" test-pods "${sa}" "${saFull}"
+    "${ROOT_DIR}/workload-identity/bind-service-accounts.sh" "${PROJECT}" "${LOCATION}" "${CLUSTER}" test-pods "${sa}" "${saFull}"
   fi
 
   # Try to authorize SA to upload to GCS_BUCKET. If this fails, the bucket if
