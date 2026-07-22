@@ -205,7 +205,7 @@ plank:
         bucket: "kube-agents-prow"
       default_service_account_name: "prowjob-default-sa" # Use workload identity
       gcs_credentials_secret: ""                         # rather than service account key secret
-  - cluster: build-gke-managed-storage
+  - cluster: build-gke-managed-storage-regional
     config:
       gcs_configuration:
         bucket: "oss-cloud-kubernetes-test"
