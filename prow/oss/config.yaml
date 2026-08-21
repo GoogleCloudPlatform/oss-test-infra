@@ -105,6 +105,17 @@ tide:
     - do-not-merge/invalid-owners-file
     - do-not-merge/work-in-progress
     - needs-rebase
+  - repos:
+    - kubeflow/pipelines
+    author: "dependabot[bot]"
+    labels:
+    - ci-passed
+    missingLabels:
+    - do-not-merge
+    - do-not-merge/hold
+    - do-not-merge/invalid-owners-file
+    - do-not-merge/work-in-progress
+    - needs-rebase
   - orgs:
     - kubeflow
     labels:
