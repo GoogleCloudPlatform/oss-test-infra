@@ -19,9 +19,13 @@ presubmits:
     # running it anyway spends two hours and a leased eval project to grade
     # behaviour the diff cannot reach. .md is root-anchored because
     # agents/**/*.md is prompt content shipped in the image
-    # (deploy/docker/Dockerfile). tests/ is not shipped at all. scripts/release/
-    # runs at release time, and this job never invokes the root installer
-    # entrypoints, so neither is in the path of the agent under test.
+    # (deploy/docker/Dockerfile). tests/ is not shipped at all, and neither are
+    # the unit tests beside the repository tooling, scripts/test_*.py: the
+    # Dockerfile copies agents/*/scripts/, not scripts/. scripts/ as a whole
+    # stays off the list because hack/ci-eval-pr.sh reads scripts/eval_dashboard/
+    # from the tree it runs in. scripts/release/ runs at release time, and this
+    # job never invokes the root installer entrypoints, so neither is in the
+    # path of the agent under test.
     #
     # bench/ must never appear here -- it is the eval harness itself, so a
     # change to it is exactly when the gate has to run -- and neither may
@@ -29,7 +33,7 @@ presubmits:
     # agent. The filter skips only when every changed file matches, so one
     # runtime file anywhere in a diff runs the full eval regardless: this
     # decides what triggers the job, never what the job checks.
-    skip_if_only_changed: '^(docs/|\.github/|examples/|tests/|scripts/release/)|^[^/]+\.md$|^(LICENSE|OWNERS|OWNERS_ALIASES|\.gitignore|install\.sh|upgrade\.sh|uninstall\.sh)$'
+    skip_if_only_changed: '^(docs/|\.github/|examples/|tests/|scripts/release/)|^scripts/test_[^/]+\.py$|^[^/]+\.md$|^(LICENSE|OWNERS|OWNERS_ALIASES|\.gitignore|install\.sh|upgrade\.sh|uninstall\.sh)$'
     # Merge-blocking since 2026-09: what blocks is not this flag alone but the
     # BOOTSTRAP_ADMITTED roster in the repo's hack/ci-eval-pr.sh -- only cases
     # named there can red a PR, and demoting a flaky case is a same-day edit
