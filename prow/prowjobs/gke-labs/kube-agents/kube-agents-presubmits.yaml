@@ -162,6 +162,11 @@ presubmits:
           BOSKOS_OWNER="${JOB_NAME}-${BUILD_ID}"
           BOSKOSCTL=(boskosctl --server-url="${BOSKOS_SERVER}" --owner-name="${BOSKOS_OWNER}")
 
+          # ci-kube-agents-pool-pressure parses these banners out of build-log.txt
+          # to time the Boskos acquire: it matches "=== [<timestamp>] <text> ==="
+          # and picks the first whose text contains "boskos", then measures to the
+          # next timestamped banner. Reword freely, but keep the timestamp and the
+          # word "boskos" or that segment stops being measured.
           echo "=== [$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Leasing GCP Project from Boskos ==="
           RESOURCE="$("${BOSKOSCTL[@]}" acquire --type="${BOSKOS_RESOURCE_TYPE}" \
             --state=free --target-state=busy --timeout=10m)"

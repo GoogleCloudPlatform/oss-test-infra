@@ -1,0 +1,65 @@
+periodics:
+- name: ci-kube-agents-pool-pressure
+  # Hourly, off the hour so the sweep does not start alongside the presubmit herd.
+  cron: "23 * * * *"
+  # Same cluster as pull-kube-agents-smoke-test. Boskos is ClusterIP-only, so
+  # --boskos-via http only resolves from inside it.
+  cluster: build-kube-agents
+  max_concurrency: 1
+  decorate: true
+  decoration_config:
+    # A 7-day sweep read 476 builds in 288s from this cluster on 2026-09-02 and
+    # build volume is climbing, so the ceiling is generous and the script's own
+    # --deadline-seconds stops it well before the pod is killed. A killed pod
+    # reds the tab without saying anything about the queue.
+    timeout: 30m
+  extra_refs:
+  - org: gke-labs
+    repo: kube-agents
+    base_ref: main
+  annotations:
+    testgrid-dashboards: googleoss-kube-agents
+    testgrid-tab-name: pool-pressure
+    testgrid-alert-email: hangdng@google.com
+    testgrid-num-failures-to-alert: '3'
+    testgrid-alert-stale-results-hours: '6'
+    # Prints the named property inside the result cells. One name for the whole
+    # test group, looked up per cell, so every row the check writes carries its
+    # own number under this name. Inert until the run writes a junit*.xml
+    # holding it -- a cell with no such property renders as it does today.
+    testgrid-in-cell-metric: value
+    description: >-
+      Measures how long kube-agents CI runs wait before their test can start and
+      fails when the pool runbook's thresholds trip. Leases nothing from Boskos.
+  spec:
+    serviceAccountName: prowjob-default-sa
+    containers:
+    - image: gcr.io/google.com/cloudsdktool/google-cloud-cli:alpine
+      command:
+      - /bin/sh
+      - -c
+      # The working directory after an extra_refs clone is the repo root.
+      # Exit 1 is a threshold breach and exit 2 is "could not measure"; both red
+      # the tab on purpose, because a check that goes green having read nothing
+      # is worse than no check. So the exit code is captured and re-raised at the
+      # end rather than being piped into another process, whose status would
+      # replace it.
+      #
+      # --json writes only JSON, with the human-readable report nested under
+      # "report". The artifact gets the JSON and the build log gets the report,
+      # because the build log is what a person opens from the TestGrid cell.
+      - |
+        set -eu
+        OUT="${ARTIFACTS:-/tmp}/pool-pressure.json"
+        rc=0
+        python3 scripts/pool_pressure.py \
+          --boskos-via http \
+          --deadline-seconds 1500 \
+          --json > "${OUT}" || rc=$?
+        python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["report"])' \
+          "${OUT}" || cat "${OUT}" || true
+        exit "${rc}"
+      resources:
+        requests:
+          cpu: 500m
+          memory: 1Gi
