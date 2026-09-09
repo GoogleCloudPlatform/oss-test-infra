@@ -124,6 +124,28 @@ presubmits:
           # which gke-labs/kube-agents already publishes.
           export EVAL_GITHUB_APP_ID="4675512"
           export REQUIRE_CACHE="true"
+          # The evidence a pull request is GRADED AGAINST. Read-only here.
+          #
+          # One variable carries both directions, so turning the store on takes
+          # two exports in two files, and this is the one that gets forgotten.
+          # The nightly recorder sets the same variable and appends to it
+          # (periodic-kube-agents-eval-baseline). Without this line the
+          # presubmit reads the empty directory checked into the repo, finds no
+          # case admitted, and reports a green with the collapse rung, the
+          # judged-regression rung and the suite aggregate all inert -- the
+          # rate-based half of the gate silently absent, while the absolute
+          # rungs still block so it looks like it is working.
+          #
+          # What keeps a pull request from writing the baseline it is judged
+          # against is IAM, not this line: prowjob-default-sa is granted
+          # roles/storage.objectViewer on the bucket and NOT objectCreator,
+          # which is why the grant must be exactly that pair of roles and why
+          # the bucket lives in kube-agents-prow, where this account holds no
+          # project-level role that would override it. gke-labs/kube-agents
+          # also refuses to write when JOB_TYPE is not periodic/postsubmit and
+          # when PULL_NUMBER is set, but those are edits away; the missing role
+          # is not.
+          export EVAL_BASELINE_STORE="gs://kube-agents-evals-bench/evidence"
           # ─── Ensure boskosctl is available (pinned version) ─────────────────────────
           # Named once, used by both the GCS fast path and the fallback below.
           BOSKOSCTL_VERSION="v0.0.0-20260730151943-11fb0c84248b"
