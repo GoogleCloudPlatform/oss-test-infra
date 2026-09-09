@@ -1,0 +1,365 @@
+postsubmits:
+  gke-labs/kube-agents:
+  - name: post-kube-agents-eval-rc
+    # The release-candidate eval (gke-labs/kube-agents#1024): checks the repo out
+    # at the commit a staging promotion just tagged, installs the images that
+    # were already PUBLISHED for it -- no rebuild -- and runs the eval catalog
+    # against them. Advisory: the verdict is reported and gates nothing, per that
+    # issue's "nothing this lane ships may block a release this week".
+    #
+    # This is the second of the "one job, two invocations" #1024 describes. The
+    # first is ci-kube-agents-eval-nightly, which measures main; this one measures
+    # the candidate. Almost everything below is copied from that job and from the
+    # pull-kube-agents-smoke-test presubmit -- same build cluster, same Boskos
+    # lease from the kube-agents-evals-project pool, same secrets, same heartbeat
+    # and cleanup handler. The differences are all in the step list and the three
+    # exports above it, and each one is commented where it appears.
+    #
+    # A POSTSUBMIT ON THE PROMOTION TAG, AND NOT A CRON. Prow fires postsubmits
+    # on tag pushes -- PushEvent.Branch strips refs/tags/ as well as refs/heads/
+    # -- and `branches` below is matched against that value.
+    #
+    # An earlier draft of this job was a cron, on the grounds that a tag trigger
+    # races the images: rc-release-pipeline.yml writes rc_<ts>_<sha> as its FIRST
+    # step, while the candidate's images come from docker-publish-ghcr.yml, a
+    # separate push-to-main workflow with a serialising concurrency group. At the
+    # instant an rc_ tag appears its images may still be queued behind earlier
+    # commits', and hack/resolve-rc-target.sh hard-fails on exactly that state by
+    # design. An rc_ tag fires the event at the moment the race is most likely to
+    # be lost.
+    #
+    # staging_ tags carry no such race, which is why the trigger is on them and
+    # not on rc_. nightly-pipeline.yml pushes one only from step-5, which needs
+    # step-3 -- the full E2E matrix -- to have passed, and step-1 ran
+    # scripts/release/verify_candidate_images.sh before any of that. By the time
+    # a staging_ tag exists, the candidate's images have been verified present in
+    # GHCR and then installed and exercised by the matrix. There is no window
+    # left for resolve-rc-target.sh's image gate to fire.
+    #
+    # What the cron bought and this does not is a second attempt: a tick asks
+    # again tomorrow, an event fires once. A run lost to infrastructure is re-run
+    # from Deck, and otherwise the next promotion measures the next candidate.
+    #
+    # And what it changes about coverage: the cron measured the newest candidate
+    # nightly whether or not anything had been promoted, so most candidates were
+    # never measured and some were measured twice. This measures every promotion
+    # and nothing else -- so it runs exactly as often as nightly-pipeline.yml
+    # promotes, which today is on workflow_dispatch only, that file having no
+    # cron yet. Turning its schedule on is what makes this job nightly.
+    cluster: build-kube-agents
+    # The staging promotion tag's exact shape, mirroring STAGING_TAG_SHAPE_REGEX
+    # in scripts/release/common.sh, and not the bare `staging_` prefix that
+    # staging-redeploy-*.yml triggers on. The prefix is a trigger anyone can push
+    # by hand; a `staging_hotfix` typed at a terminal would otherwise take a
+    # project out of a pool shared with the merge-blocking presubmit for hours.
+    # Only the tag nightly-pipeline.yml composes matches this.
+    branches:
+    - ^staging_[0-9]{10}_[0-9a-f]{7}$
+    # No run_if_changed: the promotion is the event, not a file change. A
+    # candidate that touched only documentation still gets measured, because what
+    # is being graded is the installed release, not the diff.
+    always_run: true
+    # Two promotions in quick succession -- a hand-dispatched nightly on top of a
+    # scheduled one -- must not stack a second lease and a second full
+    # provisioning behind the first.
+    max_concurrency: 1
+    decorate: true
+    decoration_config:
+      # ci-kube-agents-eval-nightly's budget, which is the presubmit's. This job
+      # runs the same catalog but skips the ~710s image build (hack/ci-deploy.sh
+      # takes the published-image path when RC_COMMIT_SHA is set), and spends a
+      # minute or two resolving and checking out the candidate instead. Near
+      # enough the same shape that copying the number is better than inventing
+      # one; the first real promotions are what should move it.
+      #
+      # A deadline kill here loses the summary artifact: the driver writes it
+      # after the eval returns, so a killed run leaves the build log and nothing
+      # else. That is an argument for raising this on evidence, not for lowering
+      # it.
+      timeout: 360m
+      grace_period: 5m
+    annotations:
+      # No gke-labs dashboard exists in testgrid/config.yaml yet; skip TestGrid
+      # (same pattern as louhi-echo-test-periodic).
+      testgrid-create-test-group: "false"
+      description: Advisory full-catalog eval of each kube-agents release candidate promoted to staging, non-gating (gke-labs/kube-agents#1024).
+    # NO extra_refs, and that is load-bearing rather than an omission. A
+    # postsubmit already has a primary ref -- gke-labs/kube-agents at the tag
+    # that triggered it -- which decoration clones and makes the working
+    # directory (DetermineWorkDir falls through to refs[0] when nothing claims
+    # workdir). Naming the same repo again in extra_refs does not add a second
+    # checkout: both refs resolve to the same path, neither sets a path_alias,
+    # and clonerefs' own Validate() returns an error rather than a warning when
+    # the colliding refs share an org and repo. That failure lands in the
+    # clonerefs init container, which checkconfig does not exercise, so the
+    # config would validate green and every promotion would die before the test
+    # container started.
+    #
+    # The earlier draft of this job was a periodic, which has no primary ref and
+    # so had to name one; it chose main over the candidate because the newest
+    # rc_ tag it picked up could be arbitrarily old, and main's copy of
+    # hack/ci-eval-rc.sh is the one that can say "this candidate is too old to
+    # measure" instead of "no such file". A promotion tag is minutes old by
+    # construction, so the tree that fires this job already carries a driver as
+    # new as main's, and the argument does not survive the move.
+    #
+    # The tag has to be fetchable for hack/resolve-rc-target.sh to peel it. That
+    # script calls release_fetch_tags itself, which is gated on CI being truthy
+    # -- satisfied here because Prow's decoration sets CI=true on every job
+    # (sigs.k8s.io/prow pkg/pod-utils/downwardapi).
+    spec:
+      serviceAccountName: prowjob-default-sa
+      containers:
+      - image: gcr.io/k8s-staging-test-infra/kubekins-e2e:latest-1.32
+        command:
+        - /bin/bash
+        - -c
+        - |
+          set -euo pipefail
+          # procps for pkill: cleanup() uses it to reap the heartbeat's
+          # boskosctl child, and its `|| true` would swallow a missing binary.
+          apt-get update && apt-get install -y --no-install-recommends gettext-base jq procps
+          command -v gke-gcloud-auth-plugin >/dev/null
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          export PATH="$HOME/.local/bin:$PATH"
+          curl --proto '=https' --tlsv1.2 -fsSL https://get.opentofu.org/install-opentofu.sh -o install-opentofu.sh && chmod +x install-opentofu.sh && ./install-opentofu.sh --install-method standalone
+          export GEMINI_API_KEY="$(cat /etc/gemini-secret/GEMINI_API_KEY)"
+          # The bench verifier reads back the GitHub ledger issue the run
+          # published and grades its contents; ledger_issue_contains has no
+          # other credential source, and the *-infra repos are private.
+          export BENCH_GITHUB_TOKEN="$(cat /etc/bench-github-token/BENCH_GITHUB_TOKEN)"
+          # hack/ci-eval-pr.sh mints a 1-hour installation token per
+          # devops-bench invocation and overwrites BENCH_GITHUB_TOKEN with it.
+          # App 4739812 is read-only and scoped to the *-infra repos.
+          # gke-labs/kube-agents#994.
+          export EVAL_LEDGER_APP_KEY_FILE="/etc/ledger-app-key/key.pem"
+          # Turns on the in-cluster token minter, which is what lets the agent
+          # write that issue. An App ID is an identifier, not a credential:
+          # minting requires signing a JWT with the App's private key, which
+          # is non-exportable inside each pool project's Cloud KMS. What bounds
+          # where a run can write is the App's installation list -- the
+          # *-infra repos, repository_selection: selected -- not this value,
+          # which gke-labs/kube-agents already publishes.
+          export EVAL_GITHUB_APP_ID="4675512"
+          # ─── The exports that make this the RC job ───────────────────────────
+          # Arms hack/ci-eval-rc.sh. Unset, it prints one skip line and exits 0,
+          # which is what it does everywhere else in the repository today. It
+          # also gates on JOB_TYPE and accepts `postsubmit` alongside `periodic`.
+          export RC_EVAL_ENABLED="1"
+          # RC_TAG pins the eval to the commit this promotion tagged, and it is
+          # required here rather than optional. Left unset, hack/resolve-rc-
+          # target.sh resolves "the newest rc_* candidate" -- right for a cron,
+          # wrong for an event: rc-scheduler.yml cuts a candidate every three
+          # hours, so between this tag being pushed and the job reaching that
+          # script a newer rc_ tag can appear, and the run would grade a commit
+          # nobody promoted while the artifact named the promotion.
+          #
+          # PULL_BASE_REF and not PULL_BASE_SHA. The promotion tags are annotated
+          # (ensure_git_tag in scripts/release/common.sh runs `git tag -a`), so
+          # the push event's SHA is the tag OBJECT's rather than the commit's --
+          # .github/workflows/staging-redeploy-agent.yml carries
+          # scripts/release/peel_tag_commit.sh for exactly this. Passing the tag
+          # NAME lets resolve-rc-target.sh peel it: it resolves
+          # `refs/tags/${RC_TAG}^{commit}`, anchored at refs/tags/ so the branch
+          # clonerefs creates under the same name cannot answer first.
+          #
+          # The guard runs before the Boskos lease, so a bad resolution costs no
+          # project. Failing loudly is the point: the silent alternative is a
+          # green run whose summary is about the wrong commit.
+          if [ -z "${PULL_BASE_REF:-}" ]; then
+            echo "ERROR: PULL_BASE_REF is empty, so the promoted tag is unknown. Refusing rather than falling back to the newest rc_* candidate, which would publish a verdict under a commit nobody promoted."
+            exit 1
+          fi
+          export RC_TAG="${PULL_BASE_REF}"
+          #
+          # EVAL_TIER is deliberately NOT set, though this run does measure the
+          # full nightly catalog. hack/ci-eval-rc.sh exports it itself, and
+          # exporting it here as well would put the value in two places that a
+          # future change could move apart -- with the job's copy silently
+          # winning. The nightly sets it because it invokes hack/ci-eval-pr.sh
+          # directly and there is no driver to own it.
+          #
+          # REQUIRE_CACHE is absent for a different reason: it has no effect on
+          # this path. hack/ci-deploy.sh reads it only in the branch that submits
+          # a Cloud Build, and RC_COMMIT_SHA skips that branch whole. Carrying it
+          # here would look like configuration and be dead.
+          # ─── Ensure boskosctl is available (pinned version) ─────────────────────────
+          # Named once, used by both the GCS fast path and the fallback below.
+          BOSKOSCTL_VERSION="v0.0.0-20260730151943-11fb0c84248b"
+          if ! command -v boskosctl >/dev/null; then
+            # Prefer a binary staged in a bucket we own. gke-labs/kube-agents#943
+            # died here: proxy.golang.org answered INTERNAL_ERROR and the job
+            # exited before it had leased a project, so no task ran at all and
+            # there was nothing for a rerun to repeat. A pinned binary does not
+            # need the public module proxy on the critical path of every run.
+            #
+            # NOTE: gs://kube-agents-prow/tools/boskosctl-* does not exist yet.
+            # Until somebody stages it, this copy always misses and the fallback
+            # is the real path -- which is why the fallback is retried.
+            if gsutil -q cp "gs://kube-agents-prow/tools/boskosctl-${BOSKOSCTL_VERSION}" /usr/local/bin/boskosctl; then
+              chmod +x /usr/local/bin/boskosctl
+              echo "✓ boskosctl ${BOSKOSCTL_VERSION} restored from GCS"
+            else
+              echo "boskosctl ${BOSKOSCTL_VERSION} not in GCS; falling back to the module proxy"
+              for attempt in 1 2 3; do
+                if GOBIN=/usr/local/bin go install "sigs.k8s.io/boskos/cmd/boskosctl@${BOSKOSCTL_VERSION}"; then
+                  break
+                fi
+                if [ "${attempt}" -eq 3 ]; then
+                  echo "ERROR: go install boskosctl failed 3 times; proxy.golang.org is the usual cause"
+                  exit 1
+                fi
+                echo "go install attempt ${attempt} failed; retrying in $((attempt * 15))s"
+                sleep "$((attempt * 15))"
+              done
+            fi
+          fi
+
+          # ─── Boskos Lease, Heartbeat & Cleanup Handler ──────────────────────────────
+          BOSKOS_SERVER="http://boskos.boskos.svc.cluster.local"
+          BOSKOS_RESOURCE_TYPE="kube-agents-evals-project"
+          BOSKOS_OWNER="${JOB_NAME}-${BUILD_ID}"
+          BOSKOSCTL=(boskosctl --server-url="${BOSKOS_SERVER}" --owner-name="${BOSKOS_OWNER}")
+
+          # An unscheduled job cannot sequence itself around the other two, so
+          # the 02:00-vs-08:00 spacing an earlier cron draft relied on to stay
+          # out of ci-kube-agents-eval-nightly's way is gone. What is left is
+          # this lease: all three jobs draw on the same 30-project pool, and a
+          # promotion landing on top of the nightly waits here for a project
+          # rather than colliding with it. It only fails if the pool is still
+          # empty ten minutes later.
+          echo "=== [$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Leasing GCP Project from Boskos ==="
+          RESOURCE="$("${BOSKOSCTL[@]}" acquire --type="${BOSKOS_RESOURCE_TYPE}" \
+            --state=free --target-state=busy --timeout=10m)"
+          LEASED_PROJECT="$(echo "${RESOURCE}" | jq -r .name)"
+          if [ -z "${LEASED_PROJECT}" ] || [ "${LEASED_PROJECT}" = "null" ]; then
+            echo "ERROR: could not parse leased project from: ${RESOURCE}"
+            exit 1
+          fi
+          export PROJECT_ID="${LEASED_PROJECT}"
+          echo "✓ Successfully leased project: ${PROJECT_ID}"
+
+          # Marks "teardown has begun" for the heartbeat's abort fallback. Its
+          # directory is created fresh by mktemp -d, so the sentinel provably
+          # does not exist until cleanup() creates it -- a fixed path could be
+          # left behind by an earlier run and would silence the abort for the
+          # whole job.
+          TEARDOWN_DIR="$(mktemp -d)"
+          TEARDOWN_SENTINEL="${TEARDOWN_DIR}/teardown-begun"
+
+          cleanup() {
+            local rc=$?
+            trap - EXIT INT TERM
+            # Before the kills, and this ordering is the point. If the
+            # heartbeat exhausts its retries in the window between `trap -`
+            # above and the subshell actually dying, its `kill -TERM $$`
+            # fallback lands with no handler installed and terminates this
+            # script mid-teardown -- before ci-teardown.sh finishes and before
+            # the Boskos release, leaking GKE resources into a project the next
+            # lease hands straight to somebody else. The sentinel silences the
+            # fallback for an expiry during intentional teardown only; a
+            # heartbeat that dies mid-eval still aborts the run.
+            touch "${TEARDOWN_SENTINEL}"
+            # boskosctl is a child of the subshell, not the subshell itself:
+            # the subshell body is a compound command, so bash does not
+            # exec-optimise it away. Killing only ${HEARTBEAT_PID} orphans a
+            # heartbeat that keeps beating a resource this cleanup is about to
+            # release, and Boskos answers 401 Unauthorized on the owner
+            # mismatch -- nine of them, matching --retries=8. That reads like a
+            # credential problem next to a Boskos release and is not one.
+            pkill -P "${HEARTBEAT_PID:-0}" 2>/dev/null || true
+            kill "${HEARTBEAT_PID:-}" 2>/dev/null || true
+            kill "${STEP_PID:-}" 2>/dev/null || true
+            # Runs unconditionally, whatever hack/ci-eval-rc.sh exited with --
+            # its header is explicit that teardown is the job config's job and
+            # not the driver's, because this lane borrows the presubmit's lease
+            # pool and a project handed back holding a live install costs the
+            # next run that gets it (gke-labs/kube-agents#1006).
+            #
+            # Note this is the CANDIDATE's ci-teardown.sh: the driver leaves the
+            # tree detached at the release candidate and does not restore it, by
+            # design. That is the right script to run, since it is the
+            # candidate's ci-deploy.sh that created what is being torn down.
+            echo "=== [$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Running CI Teardown ==="
+            ./hack/ci-teardown.sh || true
+            if [ -n "${LEASED_PROJECT:-}" ] && [ "${LEASED_PROJECT}" != "null" ]; then
+              echo "=== [$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Releasing Boskos Project: ${LEASED_PROJECT} ==="
+              "${BOSKOSCTL[@]}" release --name="${LEASED_PROJECT}" --target-state=free || true
+            fi
+            exit $rc
+          }
+          trap cleanup EXIT INT TERM
+
+          # The abort fallback fires only while the eval is still running. Once
+          # cleanup() has touched the sentinel the resource is on its way back
+          # to the pool, so an expiring heartbeat is expected and must not
+          # signal a script that is mid-teardown. `$$` is still this script's
+          # PID inside the subshell, which is what the comment below is about.
+          ( "${BOSKOSCTL[@]}" heartbeat --resource "${RESOURCE}" --period=30s --retries=8 \
+              || { [ -e "${TEARDOWN_SENTINEL}" ] || kill -TERM $$; } ) &
+          HEARTBEAT_PID=$!
+
+          # Every step runs in the background and is waited on, because bash
+          # defers a trapped signal until the *foreground* command completes.
+          # Run in the foreground, a heartbeat failure mid-eval would sit
+          # pending for the rest of the multi-hour step -- long past the 5m
+          # Boskos reaper window, so a concurrent run could lease the same
+          # project -- and if the step then exited 0, cleanup would capture
+          # rc=0 and the job would go green having never run the eval. `wait`
+          # is interruptible, so the trap fires immediately and cleanup sees
+          # 143.
+          #
+          # Signalling the process group (kill -TERM 0) also interrupts
+          # promptly, but prow's entrypoint starts the job without Setpgid
+          # (sigs.k8s.io/prow pkg/entrypoint/run.go), so the group includes the
+          # entrypoint itself: it would mark the job aborted and SIGKILL this
+          # script once grace_period expires, cutting teardown and the Boskos
+          # release short. This form does not depend on that topology.
+          run_step() { "$@" & STEP_PID=$!; wait "${STEP_PID}"; }
+
+          # Clean up any leftover state if a previous job was hard-killed
+          run_step ./hack/ci-teardown.sh || true
+          run_step ./hack/ci-connection-test.sh
+          # THREE steps and not the presubmit's four. hack/ci-eval-rc.sh is a
+          # driver: it resolves the candidate, checks the tree out at it, and
+          # then runs the candidate's own ci-deploy.sh and ci-eval-pr.sh itself.
+          # Invoking either of those here as well would deploy and grade the
+          # checkout before the candidate was ever resolved -- and because
+          # RC_COMMIT_SHA is only set by the driver, ci-deploy.sh would take
+          # its build path and spend ~710s rebuilding images that the
+          # promotion already published.
+          #
+          # `|| true` is where "non-gating" lives, and it is one line in a config
+          # on purpose -- hack/ci-eval-rc.sh preserves the real exit status
+          # rather than swallowing it, precisely so that the decision to ignore
+          # it is visible here instead of buried in the script. The cost is that
+          # this job's status says nothing, and as a postsubmit that status is
+          # also a commit status on the promoted commit: a RED candidate, a
+          # failed deploy and a broken driver all report success there. The
+          # verdict a reader wants is in the rc-eval-summary.md artifact, which
+          # the driver writes on every path including the failure ones.
+          run_step ./hack/ci-eval-rc.sh || true
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "500m"
+        volumeMounts:
+        - name: gemini-secret
+          mountPath: /etc/gemini-secret
+          readOnly: true
+        - name: bench-github-token
+          mountPath: /etc/bench-github-token
+          readOnly: true
+        - name: ledger-app-key
+          mountPath: /etc/ledger-app-key
+          readOnly: true
+      volumes:
+      - name: gemini-secret
+        secret:
+          secretName: kube-agents-gemini-api-key
+      - name: bench-github-token
+        secret:
+          secretName: kube-agents-bench-github-token
+      - name: ledger-app-key
+        secret:
+          secretName: kube-agents-evals-ledger-app-key

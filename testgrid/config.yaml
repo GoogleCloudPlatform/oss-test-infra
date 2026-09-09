@@ -17,6 +17,7 @@ dashboards:
 - name: googleoss-kpt-config-sync-misc
 - name: googleoss-jwt-verify-lib
 - name: googleoss-rhos-periodic
+- name: googleoss-kube-agents
 
 dashboard_groups:
   - name: googleoss
@@ -31,6 +32,7 @@ dashboard_groups:
     - googleoss-grpc-transcoder
     - googleoss-http-pattern-matcher
     - googleoss-jwt-verify-lib
+    - googleoss-kube-agents
   - name: googleoss-kubeflow
     dashboard_names:
     - googleoss-kubeflow-pipelines

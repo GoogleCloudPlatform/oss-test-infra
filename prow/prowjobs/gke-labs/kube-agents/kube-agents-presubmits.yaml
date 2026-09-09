@@ -2,10 +2,10 @@ presubmits:
   gke-labs/kube-agents:
   - name: pull-kube-agents-smoke-test
     # Boskos dynamically leases an evaluation project per run from the
-    # kube-agents-evals-project pool, which holds fifteen fully provisioned
-    # projects (kube-agents-evals through -15 — completed 2026-09-01).
+    # kube-agents-evals-project pool, which holds thirty fully provisioned
+    # projects (kube-agents-evals through -30 — completed 2026-09-03).
     # max_concurrency matches the pool size, so the pool runs saturated.
-    max_concurrency: 15
+    max_concurrency: 30
     # Boskos server, pool config and reaper for build-kube-agents:
     # gke-internal/test-infra deployments/gke-agentic-tooling-team/boskos
     # That pool is the ceiling and this is the tap: raising this past the
@@ -14,9 +14,22 @@ presubmits:
     cluster: build-kube-agents
     always_run: false
     skip_report: false
-    # .md is root-anchored: agents/**/*.md is prompt content shipped in the
-    # image (deploy/docker/Dockerfile), so those PRs must still run the eval.
-    skip_if_only_changed: '^(docs/|\.github/|examples/)|^[^/]+\.md$|^(LICENSE|OWNERS|OWNERS_ALIASES)$'
+    # Only paths that cannot change what the agent does at eval time belong
+    # here: a diff confined to them leaves the eval nothing to measure, and
+    # running it anyway spends two hours and a leased eval project to grade
+    # behaviour the diff cannot reach. .md is root-anchored because
+    # agents/**/*.md is prompt content shipped in the image
+    # (deploy/docker/Dockerfile). tests/ is not shipped at all. scripts/release/
+    # runs at release time, and this job never invokes the root installer
+    # entrypoints, so neither is in the path of the agent under test.
+    #
+    # bench/ must never appear here -- it is the eval harness itself, so a
+    # change to it is exactly when the gate has to run -- and neither may
+    # agents/, deploy/, charts/ or k8s-operator/, which all reach the running
+    # agent. The filter skips only when every changed file matches, so one
+    # runtime file anywhere in a diff runs the full eval regardless: this
+    # decides what triggers the job, never what the job checks.
+    skip_if_only_changed: '^(docs/|\.github/|examples/|tests/|scripts/release/)|^[^/]+\.md$|^(LICENSE|OWNERS|OWNERS_ALIASES|\.gitignore|install\.sh|upgrade\.sh|uninstall\.sh)$'
     # Merge-blocking since 2026-09: what blocks is not this flag alone but the
     # BOOTSTRAP_ADMITTED roster in the repo's hack/ci-eval-pr.sh -- only cases
     # named there can red a PR, and demoting a flaky case is a same-day edit
@@ -149,6 +162,11 @@ presubmits:
           BOSKOS_OWNER="${JOB_NAME}-${BUILD_ID}"
           BOSKOSCTL=(boskosctl --server-url="${BOSKOS_SERVER}" --owner-name="${BOSKOS_OWNER}")
 
+          # ci-kube-agents-pool-pressure parses these banners out of build-log.txt
+          # to time the Boskos acquire: it matches "=== [<timestamp>] <text> ==="
+          # and picks the first whose text contains "boskos", then measures to the
+          # next timestamped banner. Reword freely, but keep the timestamp and the
+          # word "boskos" or that segment stops being measured.
           echo "=== [$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Leasing GCP Project from Boskos ==="
           RESOURCE="$("${BOSKOSCTL[@]}" acquire --type="${BOSKOS_RESOURCE_TYPE}" \
             --state=free --target-state=busy --timeout=10m)"
