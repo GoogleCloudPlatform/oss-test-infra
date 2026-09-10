@@ -79,24 +79,32 @@ periodics:
   # evidence store once EVAL_BASELINE_STORE below is armed), which is what
   # fills the admission window the #925 gate machinery reads.
   cluster: build-kube-agents
-  # 08:00 UTC is midnight US Pacific: the pool's low-traffic hour, so the
-  # nightly's lease does not contend with the working day's presubmits.
+  # 08:00 UTC (00:00 PST / 01:00 PDT, 03:00 EST / 04:00 EDT): the pool's
+  # low-traffic hour, so the nightly's lease does not contend with the
+  # working day's presubmit herd. ci-kube-agents-pool-pressure above fires
+  # at :23 and leases nothing from Boskos, so the two never contend.
   cron: "0 8 * * *"
   # A slow nightly must skip the next tick, not stack a second lease and a
   # second full provisioning behind it.
   max_concurrency: 1
   decorate: true
   decoration_config:
-    # The presubmit's 360m budget, for a bigger matrix: its twenty tasks
-    # measured ~317min SERIAL (gke-labs/kube-agents build 2094442155576659968
-    # plus the measured cost of the twentieth), and the five nightly-only
-    # cases add ~190min serial on their 2026-08-26 measurements. What makes
-    # 360m plausible is the repo script's task fan-out (EVAL_TASK_PARALLELISM
-    # defaults to 4): it needs to realise ~1.4x against the model quota,
-    # which the first scheduled runs measure. A deadline kill here is a
-    # truncated night, not a broken one -- the script's EXIT trap still
-    # records and reports every completed unit -- so raise this only on
-    # evidence from those runs.
+    # The presubmit's 360m budget, for a bigger matrix. Priced from the
+    # NIGHTLY_TASKS comment in hack/ci-eval-pr.sh as of 2026-09-10: the
+    # eighteen presubmit tasks are ~211min SERIAL (the twenty-task ~317min
+    # of build 2094442155576659968 less the ~106min #1218 moved out), and
+    # the eight nightly-only entries add ~321-341min (five recast cases
+    # ~190min, the two tofu incumbents ~106min, knowledge-grounding
+    # ~25-45min): twenty-six tasks, ~532-552min serial at three repetitions.
+    # Against 360m less the ~16min fixed term that needs the repo script's
+    # fan-out (EVAL_TASK_PARALLELISM defaults to 4) to realise ~1.5x. The
+    # presubmit's parallel runs on 2026-09-10 realised ~1.15x (177-217min
+    # whole-job for the ~211min-serial matrix) under the daytime herd's
+    # model-quota contention; the nightly runs alone, so it may do better,
+    # but at 1.15x it projects to ~470-490min and the first nights will be
+    # truncated. That is survivable by design -- the script's EXIT trap
+    # still records and reports every completed unit -- so raise this only
+    # on evidence from those runs, not on this arithmetic.
     timeout: 360m
     grace_period: 5m
   annotations:
