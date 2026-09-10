@@ -431,6 +431,33 @@ periodics:
       env:
       - name: GOOGLE_APPLICATION_CREDENTIALS
         value: ''
+- name: cleanerupper-gce-unstable-pkg-test-images
+  cluster: gcp-guest
+  decorate: true
+  annotations:
+    testgrid-dashboards: googleoss-gcp-guest-cleanerupper
+    testgrid-tab-name: cleanerupper-gce-unstable-pkg-test-images
+  interval: 6h
+  agent: kubernetes
+  spec:
+    activeDeadlineSeconds: 6300
+    containers:
+    - image: gcr.io/gcp-guest/cleanerupper:latest
+      command:
+      - "/cleanerupper"
+      args:
+      - "-dry_run=false"
+      - "-duration=12h"
+      - "-instances=true"
+      - "-disks=true"
+      - "-machine_images=true"
+      - "-load_balancers=true"
+      - "-networks=true"
+      - "-snapshots=true"
+      - "-projects=gce-unstable-pkg-test-images"
+      env:
+      - name: GOOGLE_APPLICATION_CREDENTIALS
+        value: ''
 - name: ci-windows-upgrade-e2e-tests
   cluster: gcp-guest
   decorate: true
