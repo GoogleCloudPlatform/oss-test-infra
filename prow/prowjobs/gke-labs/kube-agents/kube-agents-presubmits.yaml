@@ -34,11 +34,13 @@ presubmits:
     # runtime file anywhere in a diff runs the full eval regardless: this
     # decides what triggers the job, never what the job checks.
     skip_if_only_changed: '^(docs/|\.github/|examples/|tests/|scripts/release/)|^scripts/test_[^/]+\.py$|^[^/]+\.md$|^(LICENSE|OWNERS|OWNERS_ALIASES|\.gitignore|install\.sh|upgrade\.sh|uninstall\.sh)$'
-    # Merge-blocking since 2026-09: what blocks is not this flag alone but the
-    # BOOTSTRAP_ADMITTED roster in the repo's hack/ci-eval-pr.sh -- only cases
-    # named there can red a PR, and demoting a flaky case is a same-day edit
-    # on the kube-agents side, not a change here. Repetition collapse (a case
-    # fails only when all 3 repetitions fail) and the harness's infra
+    # Merge-blocking since 2026-09: what blocks is not this flag alone but
+    # admission on the kube-agents side -- a case's record in the evidence
+    # store once it holds a full window at the current version key, and the
+    # BOOTSTRAP_ADMITTED roster in hack/ci-eval-pr.sh until then. Only an
+    # admitted case can red a PR on a graded failure, and demoting a flaky
+    # case is a same-day edit there, not a change here. Repetition collapse
+    # (a case fails only when all 3 repetitions fail) and the harness's infra
     # classification absorb single-rep flake and endpoint saturation.
     optional: false
     decorate: true
@@ -128,6 +130,18 @@ presubmits:
           # which gke-labs/kube-agents already publishes.
           export EVAL_GITHUB_APP_ID="4675512"
           export REQUIRE_CACHE="true"
+          # ─── Baseline evidence store: read-only ─────────────────────────────
+          # The same variable ci-kube-agents-eval-nightly
+          # (kube-agents-periodics.yaml) exports to APPEND; here it is READ.
+          # prowjob-default-sa holds objectViewer only on this bucket, so a
+          # pull request cannot write the baseline it is judged against even
+          # if hack/ci-eval-pr.sh's JOB_TYPE guard were edited away. The
+          # grant is a prerequisite (docs/designs/eval-scorer.md,
+          # "Provisioning it", in gke-labs/kube-agents); without it the read
+          # 403s and the gate degrades to advisory with a banner on every
+          # run. Unset, the presubmit reads the empty checked-in directory
+          # and the rate-based rungs stay inert with no signal that they are.
+          export EVAL_BASELINE_STORE="gs://kube-agents-evals-bench/evidence"
           # ─── Ensure boskosctl is available (pinned version) ─────────────────────────
           # Named once, used by both the GCS fast path and the fallback below.
           BOSKOSCTL_VERSION="v0.0.0-20260730151943-11fb0c84248b"

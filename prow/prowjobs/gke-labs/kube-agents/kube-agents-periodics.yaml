@@ -121,7 +121,15 @@ periodics:
     base_ref: main
     workdir: true
   spec:
-    serviceAccountName: prowjob-default-sa
+    # NOT prowjob-default-sa, which the presubmit runs as. The read/write
+    # split on the evidence bucket -- this job appends, a pull request only
+    # reads -- is expressible only across two identities, because one account
+    # cannot both hold and be denied objectCreator (docs/designs/eval-scorer.md,
+    # "Two conditions that guard depends on", in gke-labs/kube-agents). The KSA
+    # test-pods/eval-baseline-recorder and its Workload Identity binding to
+    # eval-baseline-recorder@kube-agents-prow.iam.gserviceaccount.com are
+    # prerequisites of this file: without them this pod does not schedule.
+    serviceAccountName: eval-baseline-recorder
     containers:
     - image: gcr.io/k8s-staging-test-infra/kubekins-e2e:latest-1.32
       command:
@@ -163,19 +171,25 @@ periodics:
         # Wider fan-out than the presubmit's 4: the nightly runs alone on the
         # model quota at this hour (see the timeout comment above).
         export EVAL_TASK_PARALLELISM="6"
-        # ─── Baseline evidence store: NOT ARMED YET ──────────────────────────
-        # The bucket does not exist. Uncomment when it does -- the placeholder
-        # below is the one bench/baselines/README.md documents, not a live
-        # bucket -- and remember the contract in hack/ci-eval-pr.sh's
-        # EVAL_BASELINE_STORE comment: turning the store on is TWO Prow
-        # exports, not one. This nightly gets the variable with objectViewer
-        # AND objectCreator on the bucket (it appends); the presubmit gets the
-        # SAME variable with objectViewer only (it reads), and forgetting the
+        # ─── Baseline evidence store: ARMED ──────────────────────────────────
+        # The bucket, the eval-baseline-recorder identity this job runs as,
+        # and the grants on both are prerequisites -- docs/designs/
+        # eval-scorer.md, "Provisioning it", in gke-labs/kube-agents. The
+        # contract from hack/ci-eval-pr.sh's EVAL_BASELINE_STORE comment:
+        # turning the store on is TWO Prow exports, not one. This nightly
+        # holds objectViewer AND objectCreator on the bucket (it appends one
+        # immutable object per case per night); the presubmit exports the
+        # SAME variable with objectViewer only (it reads). Forgetting the
         # presubmit half is silent -- it keeps reading the empty checked-in
         # directory and reports a legitimate green with the rate-based rungs
-        # inert. Until armed, every nightly still emits baseline-append.jsonl
-        # as a Prow artifact for landing by hand.
-        # export EVAL_BASELINE_STORE="gs://kube-agents-evals-bench/evidence"
+        # inert. baseline-append.jsonl still rides as an artifact.
+        #
+        # EVAL_REPETITIONS stays at the script's default 3: at that count a
+        # case reaches the 20-run admission bar after seven nights, and the
+        # matrix already projects past this job's 360m at three (see the
+        # timeout comment above). Raise it here on measured wall clock from
+        # the first nights, not on arithmetic.
+        export EVAL_BASELINE_STORE="gs://kube-agents-evals-bench/evidence"
         # ─── Ensure boskosctl is available (pinned version) ─────────────────────────
         # Named once, used by both the GCS fast path and the fallback below.
         BOSKOSCTL_VERSION="v0.0.0-20260730151943-11fb0c84248b"
