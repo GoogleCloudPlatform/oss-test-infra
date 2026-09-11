@@ -79,11 +79,13 @@ periodics:
   # evidence store once EVAL_BASELINE_STORE below is armed), which is what
   # fills the admission window the #925 gate machinery reads.
   cluster: build-kube-agents
-  # 08:00 UTC (00:00 PST / 01:00 PDT, 03:00 EST / 04:00 EDT): the pool's
-  # low-traffic hour, so the nightly's lease does not contend with the
-  # working day's presubmit herd. ci-kube-agents-pool-pressure above fires
-  # at :23 and leases nothing from Boskos, so the two never contend.
-  cron: "0 8 * * *"
+  # 00:00 UTC (8 PM EDT / 7 PM EST; 5 PM / 4 PM Pacific): after the working
+  # day's presubmit herd in the team's Eastern time zone, so the nightly's
+  # lease and its model-quota draw do not contend with pull requests, and the
+  # night is over before the next morning's 9 AM ET digest reports it.
+  # ci-kube-agents-pool-pressure above fires at :23 and leases nothing from
+  # Boskos, so the two never contend.
+  cron: "0 0 * * *"
   # A slow nightly must skip the next tick, not stack a second lease and a
   # second full provisioning behind it.
   max_concurrency: 1
@@ -96,16 +98,16 @@ periodics:
     # the eight nightly-only entries add ~321-341min (five recast cases
     # ~190min, the two tofu incumbents ~106min, knowledge-grounding
     # ~25-45min): twenty-six tasks, ~532-552min serial at three repetitions.
-    # Against 360m less the ~16min fixed term that needs the repo script's
-    # fan-out (EVAL_TASK_PARALLELISM defaults to 4) to realise ~1.5x. The
-    # presubmit's parallel runs on 2026-09-10 realised ~1.15x (177-217min
-    # whole-job for the ~211min-serial matrix) under the daytime herd's
-    # model-quota contention; the nightly runs alone, so it may do better,
-    # but at 1.15x it projects to ~470-490min and the first nights will be
-    # truncated. That is survivable by design -- the script's EXIT trap
-    # still records and reports every completed unit -- so raise this only
-    # on evidence from those runs, not on this arithmetic.
-    timeout: 360m
+    # The presubmit's parallel runs on 2026-09-10 realised ~1.15x at
+    # EVAL_TASK_PARALLELISM=4 (177-217min whole-job for the ~211min-serial
+    # matrix) under the daytime herd's model-quota contention; at that rate
+    # the nightly projects to ~470-490min, which 360m would truncate most
+    # nights. 480m fits with margin, and this job is non-gating, so a long
+    # night costs a lease and nothing else (gke-labs/kube-agents#1491). The
+    # nightly also runs at EVAL_TASK_PARALLELISM=6 (exported below): it is
+    # alone on the quota at this hour. Measure the first three nights and
+    # tune both numbers on evidence, not on this arithmetic.
+    timeout: 480m
     grace_period: 5m
   annotations:
     # No TestGrid tab on purpose: the team reads this run through the eval
@@ -158,6 +160,9 @@ periodics:
         # not recognise. This export is the whole difference between this job
         # and the presubmit's eval step.
         export EVAL_TIER="nightly"
+        # Wider fan-out than the presubmit's 4: the nightly runs alone on the
+        # model quota at this hour (see the timeout comment above).
+        export EVAL_TASK_PARALLELISM="6"
         # ─── Baseline evidence store: NOT ARMED YET ──────────────────────────
         # The bucket does not exist. Uncomment when it does -- the placeholder
         # below is the one bench/baselines/README.md documents, not a live
