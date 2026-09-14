@@ -1,6 +1,43 @@
 presubmits:
   kubeflow/pipelines:
 
+  # Tide reruns this required presubmit against the latest base before merging.
+  # Keep it compile-only so refreshing the base does not repeat the Actions matrix.
+  - name: kubeflow-pipelines-driver-compile
+    cluster: build-kubeflow
+    decorate: true
+    always_run: true
+    optional: false
+    branches:
+    - ^master$
+    decoration_config:
+      timeout: 10m
+    spec:
+      containers:
+      - image: golang:1.27.1-bookworm@sha256:648f440f42a0958804efb24df176f806f9d353b41f1c0627f666428e40310f6b
+        command:
+        - bash
+        - -ec
+        - |
+          export GOTOOLCHAIN="$(awk '/^go / {version = "go" $2} /^toolchain go/ {version = $2} END {print version}' go.mod)"
+          go version
+          go build -mod=readonly -tags netgo -o /tmp/kfp-driver ./backend/src/v2/cmd/driver
+        env:
+        - name: CGO_ENABLED
+          value: "0"
+        - name: GOOS
+          value: linux
+        - name: GOWORK
+          value: "off"
+        - name: GOMAXPROCS
+          value: "4"
+        resources:
+          requests:
+            cpu: "4"
+            memory: 4Gi
+          limits:
+            memory: 8Gi
+
   - name: kubeflow-pipelines-tfx-python37
     cluster: build-kubeflow
     decorate: true
