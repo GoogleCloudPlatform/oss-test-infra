@@ -333,12 +333,37 @@ postsubmits:
           # on purpose -- hack/ci-eval-rc.sh preserves the real exit status
           # rather than swallowing it, precisely so that the decision to ignore
           # it is visible here instead of buried in the script. The cost is that
-          # this job's status says nothing, and as a postsubmit that status is
-          # also a commit status on the promoted commit: a RED candidate, a
-          # failed deploy and a broken driver all report success there. The
-          # verdict a reader wants is in the rc-eval-summary.md artifact, which
-          # the driver writes on every path including the failure ones.
+          # the verdict no longer reaches this job's status, and as a postsubmit
+          # that status is also a commit status on the promoted commit: a RED
+          # candidate and a failed deploy both report success there. The verdict
+          # a reader wants is in the rc-eval-summary.md artifact.
           run_step ./hack/ci-eval-rc.sh || true
+          # Advisory on the VERDICT, not on the plumbing.
+          #
+          # The driver writes rc-eval-summary.md once it has a candidate
+          # deployed, or a deploy failure to report about one -- and NOT before.
+          # It exits ahead of the summary on all four of its early guards: a
+          # resolve failure (the tag will not peel, or the candidate's images
+          # are not in GHCR), a dirty tree, a failed checkout, and the marker
+          # refusal on a candidate too old to measure. Every one of those is the
+          # job's own machinery failing rather than a judgement on the release.
+          #
+          # Left to `|| true` alone they are indistinguishable from a good run:
+          # green status, no verdict, and an empty rc-target.env as the only
+          # artifact. A resolver broken for a month would look like a month of
+          # green. So the presence of the summary is what this job gates on --
+          # the one thing that separates "measured it, here is the answer" from
+          # "never got far enough to measure anything".
+          #
+          # A deploy failure still writes a NOT RUN summary and still reports
+          # success, which is the design. This only fires when the artifact is
+          # absent. `set -e` at the top of this script turns the exit below into
+          # a red job, and the EXIT trap still runs cleanup, so the Boskos lease
+          # goes back either way.
+          if [ ! -f "${ARTIFACTS}/rc-eval-summary.md" ]; then
+            echo "ERROR: hack/ci-eval-rc.sh produced no rc-eval-summary.md, so it exited before it had a candidate to report on -- a resolve failure, a dirty tree, a failed checkout, or the marker refusal. The build log above says which. Failing the job: a green status with no verdict is indistinguishable from a run that worked." >&2
+            exit 1
+          fi
         resources:
           requests:
             memory: "1Gi"
