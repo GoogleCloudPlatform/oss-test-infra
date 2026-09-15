@@ -109,6 +109,22 @@ periodics:
     # tune both numbers on evidence, not on this arithmetic.
     timeout: 480m
     grace_period: 5m
+    # Logs and artifacts go to a bucket kube-agents owns, NOT the cluster
+    # default gs://kube-agents-prow (prow/oss/config.yaml, build-kube-agents).
+    # This job runs as eval-baseline-recorder (see serviceAccountName below),
+    # and that identity has no write on kube-agents-prow, which the oss-prow
+    # team owns: night one died in initupload with a 403 on
+    # storage.objects.create before the test container ever started (build
+    # 2099649477534027776). Rather than ask for a grant on a bucket that is
+    # not ours, the nightly uploads to one that is. Granted on it: this job's
+    # identity and crier (oss-prow@oss-prow) as objectAdmin; Deck
+    # (oss-prow-public-deck@oss-prow) and the ci-health collector
+    # (github-actions@kube-agents-prow) as objectViewer. Only the bucket is
+    # overridden: path_strategy and Workload Identity credentials come from
+    # the cluster default, which Prow merges under a job-level override field
+    # by field.
+    gcs_configuration:
+      bucket: kube-agents-evals-nightly-logs
   annotations:
     # No TestGrid tab on purpose: the team reads this run through the eval
     # dashboard (gke-labs/kube-agents#1335) rather than a second UI, so the
