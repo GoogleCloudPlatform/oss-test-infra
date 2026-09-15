@@ -636,14 +636,14 @@ periodics:
         - "-images=projects/suse-cloud-testing/global/images/family/sles16-x86-64,projects/suse-cloud-testing/global/images/family/sles-15,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-2604-lts-amd64,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-2510-amd64,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-2504-amd64,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-2404-lts-amd64,projects/ubuntu-os-cloud-devel/global/images/family/ubuntu-2204-lts"
         - "-filter=oslogin"
         - "-set_exit_status=false"
-- name: cit-periodics-release-package-c3
+- name: cit-periodics-release-package-c3-machine
   cluster: gcp-guest
   decorate: true
   decoration_config:
     timeout: 12h
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
-    testgrid-tab-name: cit-periodics-release-package-c3
+    testgrid-tab-name: cit-periodics-release-package-c3-machine
   # Run every 12 hours at 07:00, 19:00 UTC / 00:00, 12:00 PDT
   cron: "0 7,19 * * *"
   spec:
@@ -657,20 +657,74 @@ periodics:
       - "-parallel_stagger=30s"
       - "-project=gcp-guest"
       - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
-      - "-zones=us-central1-a,us-central1-b,us-central1-c,us-central1-f,us-east4-c,us-west1-a,us-west1-b,us-west1-c,europe-west1-b,europe-west1-c,europe-west4-a,europe-west4-b,europe-west4-c,asia-southeast1-a,asia-southeast1-b,asia-southeast1-c,asia-northeast1-b"
+      - "-zones=us-central1-a,us-central1-b,us-central1-c,us-central1-f,us-east4-c,us-west1-a,us-west1-c,europe-west1-b,europe-west1-c,europe-west4-a,europe-west4-b,europe-west4-c,asia-southeast1-a,asia-southeast1-b,asia-southeast1-c,asia-northeast1-b,asia-south1-b"
       - "-all_image_families=gce-unstable-pkg-test-images"
-      - "-filter=^(cvm|disk|guestagent|hostnamevalidation|hotattach|imageboot|loadbalancer|lssd|metadata|network|packagevalidation|ssh|vmspec)$"
+      - "-filter=^(cvm|disk|hotattach|imageboot|lssd|vmspec)$"
       - "-set_exit_status=false"
       - "-x86_shape=c3-standard-4"
       - "-architecture_type=x86"
-- name: cit-periodics-release-package-c4a
+- name: cit-periodics-release-package-c3-guest
+  cluster: gcp-guest
+  decorate: true
+  decoration_config:
+    timeout: 12h
+  annotations:
+    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-tab-name: cit-periodics-release-package-c3-guest
+  # Run every 12 hours at 07:00, 19:00 UTC / 00:00, 12:00 PDT
+  cron: "0 7,19 * * *"
+  spec:
+    containers:
+    - image: gcr.io/compute-image-tools/cloud-image-tests:latest
+      imagePullPolicy: Always
+      command:
+      - "/manager"
+      args:
+      - "-parallel_count=20"
+      - "-parallel_stagger=30s"
+      - "-project=gcp-guest"
+      - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
+      - "-zones=us-central1-a,us-central1-b,us-central1-c,us-central1-f,us-east4-c,us-west1-a,us-west1-c,europe-west1-b,europe-west1-c,europe-west4-a,europe-west4-b,europe-west4-c,asia-southeast1-a,asia-southeast1-b,asia-southeast1-c,asia-northeast1-b,asia-south1-b"
+      - "-all_image_families=gce-unstable-pkg-test-images"
+      - "-filter=^(guestagent|hostnamevalidation|metadata|ssh)$"
+      - "-set_exit_status=false"
+      - "-x86_shape=c3-standard-4"
+      - "-architecture_type=x86"
+- name: cit-periodics-release-package-c3-ossetup
+  cluster: gcp-guest
+  decorate: true
+  decoration_config:
+    timeout: 12h
+  annotations:
+    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-tab-name: cit-periodics-release-package-c3-ossetup
+  # Run every 12 hours at 07:00, 19:00 UTC / 00:00, 12:00 PDT
+  cron: "0 7,19 * * *"
+  spec:
+    containers:
+    - image: gcr.io/compute-image-tools/cloud-image-tests:latest
+      imagePullPolicy: Always
+      command:
+      - "/manager"
+      args:
+      - "-parallel_count=20"
+      - "-parallel_stagger=30s"
+      - "-project=gcp-guest"
+      - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
+      - "-zones=us-central1-a,us-central1-b,us-central1-c,us-central1-f,us-east4-c,us-west1-a,us-west1-c,europe-west1-b,europe-west1-c,europe-west4-a,europe-west4-b,europe-west4-c,asia-southeast1-a,asia-southeast1-b,asia-southeast1-c,asia-northeast1-b,asia-south1-b"
+      - "-all_image_families=gce-unstable-pkg-test-images"
+      - "-filter=^(loadbalancer|network|packagevalidation|security)$"
+      - "-set_exit_status=false"
+      - "-x86_shape=c3-standard-4"
+      - "-architecture_type=x86"
+- name: cit-periodics-release-package-c4a-machine
   cluster: gcp-guest
   decorate: true 
   decoration_config:
     timeout: 12h
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
-    testgrid-tab-name: cit-periodics-release-package-c4a
+    testgrid-tab-name: cit-periodics-release-package-c4a-machine
   # Run every 12 hours at 08:30, 20:30 UTC / 01:30, 13:30 PDT
   cron: "30 8,20 * * *"
   spec:
@@ -686,18 +740,72 @@ periodics:
       - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
       - "-zones=us-central1-a,us-central1-b,us-central1-c,us-central1-f,us-east4-c,us-west1-a,us-west1-c,europe-west1-b,europe-west1-c,europe-west4-a,europe-west4-b,asia-east1-a,asia-east1-b,asia-east1-c,asia-southeast1-a,asia-southeast1-b"
       - "-all_image_families=gce-unstable-pkg-test-images"
-      - "-filter=^(cvm|disk|guestagent|hostnamevalidation|hotattach|imageboot|loadbalancer|metadata|network|packagevalidation|ssh|vmspec)$"
+      - "-filter=^(disk|hotattach|imageboot)$"
       - "-set_exit_status=false"
       - "-arm64_shape=c4a-standard-4"
       - "-architecture_type=arm64"
-- name: cit-periodics-release-package-e2
+- name: cit-periodics-release-package-c4a-guest
+  cluster: gcp-guest
+  decorate: true 
+  decoration_config:
+    timeout: 12h
+  annotations:
+    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-tab-name: cit-periodics-release-package-c4a-guest
+  # Run every 12 hours at 08:30, 20:30 UTC / 01:30, 13:30 PDT
+  cron: "30 8,20 * * *"
+  spec:
+    containers:
+    - image: gcr.io/compute-image-tools/cloud-image-tests:latest
+      imagePullPolicy: Always
+      command:
+      - "/manager"
+      args:
+      - "-parallel_count=20"
+      - "-parallel_stagger=30s"
+      - "-project=gcp-guest"
+      - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
+      - "-zones=us-central1-a,us-central1-b,us-central1-c,us-central1-f,us-east4-c,us-west1-a,us-west1-c,europe-west1-b,europe-west1-c,europe-west4-a,europe-west4-b,asia-east1-a,asia-east1-b,asia-east1-c,asia-southeast1-a,asia-southeast1-b"
+      - "-all_image_families=gce-unstable-pkg-test-images"
+      - "-filter=^(guestagent|hostnamevalidation|metadata|ssh)$"
+      - "-set_exit_status=false"
+      - "-arm64_shape=c4a-standard-4"
+      - "-architecture_type=arm64"
+- name: cit-periodics-release-package-c4a-ossetup
+  cluster: gcp-guest
+  decorate: true 
+  decoration_config:
+    timeout: 12h
+  annotations:
+    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-tab-name: cit-periodics-release-package-c4a-ossetup
+  # Run every 12 hours at 08:30, 20:30 UTC / 01:30, 13:30 PDT
+  cron: "30 8,20 * * *"
+  spec:
+    containers:
+    - image: gcr.io/compute-image-tools/cloud-image-tests:latest
+      imagePullPolicy: Always
+      command:
+      - "/manager"
+      args:
+      - "-parallel_count=20"
+      - "-parallel_stagger=30s"
+      - "-project=gcp-guest"
+      - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
+      - "-zones=us-central1-a,us-central1-b,us-central1-c,us-central1-f,us-east4-c,us-west1-a,us-west1-c,europe-west1-b,europe-west1-c,europe-west4-a,europe-west4-b,asia-east1-a,asia-east1-b,asia-east1-c,asia-southeast1-a,asia-southeast1-b"
+      - "-all_image_families=gce-unstable-pkg-test-images"
+      - "-filter=^(loadbalancer|network|packagevalidation|security)$"
+      - "-set_exit_status=false"
+      - "-arm64_shape=c4a-standard-4"
+      - "-architecture_type=arm64"
+- name: cit-periodics-release-package-e2-machine
   cluster: gcp-guest
   decorate: true
   decoration_config:
     timeout: 12h
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
-    testgrid-tab-name: cit-periodics-release-package-e2
+    testgrid-tab-name: cit-periodics-release-package-e2-machine
   # Run every 12 hours at 08:00, 20:00 UTC / 01:00, 13:00 PDT
   cron: "0 8,20 * * *"
   spec:
@@ -711,20 +819,74 @@ periodics:
       - "-parallel_stagger=30s"
       - "-project=gcp-guest"
       - "-test_projects=gce-unstable-pkg-test-images"
-      - "-zones=us-central1-a,us-central1-b,us-central1-c,us-central1-f,us-east4-c,us-west1-a,us-west1-b,us-west1-c,europe-west1-b,europe-west1-c,europe-west1-d,europe-west4-a,europe-west4-b,europe-west4-c,asia-east1-a,asia-east1-b,asia-east1-c,asia-northeast1-a,asia-northeast1-b,asia-southeast1-a"
+      - "-zones=us-central1-a,us-central1-b,us-central1-c,us-central1-f,us-east4-c,us-west1-a,us-west1-c,europe-west1-b,europe-west1-c,europe-west1-d,europe-west4-a,europe-west4-b,europe-west4-c,asia-northeast1-b,asia-southeast1-a,asia-south1-b"
       - "-all_image_families=gce-unstable-pkg-test-images"
-      - "-filter=^(cvm|disk|guestagent|hostnamevalidation|hotattach|imageboot|loadbalancer|metadata|network|packagevalidation|ssh|vmspec)$"
+      - "-filter=^(cvm|disk|hotattach|imageboot|vmspec)$"
       - "-set_exit_status=false"
       - "-x86_shape=e2-standard-4"
       - "-architecture_type=x86"
-- name: cit-periodics-release-package-n4
+- name: cit-periodics-release-package-e2-guest
   cluster: gcp-guest
   decorate: true
   decoration_config:
     timeout: 12h
   annotations:
     testgrid-dashboards: googleoss-gcp-guest
-    testgrid-tab-name: cit-periodics-release-package-n4
+    testgrid-tab-name: cit-periodics-release-package-e2-guest
+  # Run every 12 hours at 08:00, 20:00 UTC / 01:00, 13:00 PDT
+  cron: "0 8,20 * * *"
+  spec:
+    containers:
+    - image: gcr.io/compute-image-tools/cloud-image-tests:latest
+      imagePullPolicy: Always
+      command:
+      - "/manager"
+      args:
+      - "-parallel_count=20"
+      - "-parallel_stagger=30s"
+      - "-project=gcp-guest"
+      - "-test_projects=gce-unstable-pkg-test-images"
+      - "-zones=us-central1-a,us-central1-b,us-central1-c,us-central1-f,us-east4-c,us-west1-a,us-west1-c,europe-west1-b,europe-west1-c,europe-west1-d,europe-west4-a,europe-west4-b,europe-west4-c,asia-northeast1-b,asia-southeast1-a,asia-south1-b"
+      - "-all_image_families=gce-unstable-pkg-test-images"
+      - "-filter=^(guestagent|hostnamevalidation|metadata|ssh)$"
+      - "-set_exit_status=false"
+      - "-x86_shape=e2-standard-4"
+      - "-architecture_type=x86"
+- name: cit-periodics-release-package-e2-ossetup
+  cluster: gcp-guest
+  decorate: true
+  decoration_config:
+    timeout: 12h
+  annotations:
+    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-tab-name: cit-periodics-release-package-e2-ossetup
+  # Run every 12 hours at 08:00, 20:00 UTC / 01:00, 13:00 PDT
+  cron: "0 8,20 * * *"
+  spec:
+    containers:
+    - image: gcr.io/compute-image-tools/cloud-image-tests:latest
+      imagePullPolicy: Always
+      command:
+      - "/manager"
+      args:
+      - "-parallel_count=20"
+      - "-parallel_stagger=30s"
+      - "-project=gcp-guest"
+      - "-test_projects=gce-unstable-pkg-test-images"
+      - "-zones=us-central1-a,us-central1-b,us-central1-c,us-central1-f,us-east4-c,us-west1-a,us-west1-c,europe-west1-b,europe-west1-c,europe-west1-d,europe-west4-a,europe-west4-b,europe-west4-c,asia-northeast1-b,asia-southeast1-a,asia-south1-b"
+      - "-all_image_families=gce-unstable-pkg-test-images"
+      - "-filter=^(loadbalancer|network|packagevalidation|security)$"
+      - "-set_exit_status=false"
+      - "-x86_shape=e2-standard-4"
+      - "-architecture_type=x86"
+- name: cit-periodics-release-package-n4-machine
+  cluster: gcp-guest
+  decorate: true
+  decoration_config:
+    timeout: 12h
+  annotations:
+    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-tab-name: cit-periodics-release-package-n4-machine
   # Run every 12 hours at 07:30, 19:30 UTC / 00:30, 12:30 PDT
   cron: "30 7,19 * * *"
   spec:
@@ -738,9 +900,63 @@ periodics:
       - "-parallel_stagger=30s"
       - "-project=gcp-guest"
       - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
-      - "-zones=us-central1-a,us-central1-b,us-central1-c,us-central1-f,us-east4-b,us-west1-a,us-west1-b,us-west1-c,europe-west1-b,europe-west1-c,europe-west3-a,europe-west4-a,europe-west4-b,europe-west4-c,asia-east1-a,asia-east1-c,asia-northeast1-a,asia-northeast1-b,asia-southeast1-b"
+      - "-zones=us-central1-a,us-central1-b,us-central1-c,us-central1-f,us-east4-b,us-west1-a,us-west1-c,europe-west1-b,europe-west1-c,europe-west3-a,europe-west4-a,europe-west4-b,europe-west4-c,asia-northeast1-b,asia-southeast1-b,asia-south1-c"
       - "-all_image_families=gce-unstable-pkg-test-images"
-      - "-filter=^(cvm|disk|guestagent|hostnamevalidation|hotattach|imageboot|loadbalancer|metadata|network|packagevalidation|ssh|vmspec)$"
+      - "-filter=^(cvm|disk|hotattach|imageboot|vmspec)$"
+      - "-set_exit_status=false"
+      - "-x86_shape=n4-standard-4"
+      - "-architecture_type=x86"
+- name: cit-periodics-release-package-n4-guest
+  cluster: gcp-guest
+  decorate: true
+  decoration_config:
+    timeout: 12h
+  annotations:
+    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-tab-name: cit-periodics-release-package-n4-guest
+  # Run every 12 hours at 07:30, 19:30 UTC / 00:30, 12:30 PDT
+  cron: "30 7,19 * * *"
+  spec:
+    containers:
+    - image: gcr.io/compute-image-tools/cloud-image-tests:latest
+      imagePullPolicy: Always
+      command:
+      - "/manager"
+      args:
+      - "-parallel_count=20"
+      - "-parallel_stagger=30s"
+      - "-project=gcp-guest"
+      - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
+      - "-zones=us-central1-a,us-central1-b,us-central1-c,us-central1-f,us-east4-b,us-west1-a,us-west1-c,europe-west1-b,europe-west1-c,europe-west3-a,europe-west4-a,europe-west4-b,europe-west4-c,asia-northeast1-b,asia-southeast1-b,asia-south1-c"
+      - "-all_image_families=gce-unstable-pkg-test-images"
+      - "-filter=^(guestagent|hostnamevalidation|metadata|ssh)$"
+      - "-set_exit_status=false"
+      - "-x86_shape=n4-standard-4"
+      - "-architecture_type=x86"
+- name: cit-periodics-release-package-n4-ossetup
+  cluster: gcp-guest
+  decorate: true
+  decoration_config:
+    timeout: 12h
+  annotations:
+    testgrid-dashboards: googleoss-gcp-guest
+    testgrid-tab-name: cit-periodics-release-package-n4-ossetup
+  # Run every 12 hours at 07:30, 19:30 UTC / 00:30, 12:30 PDT
+  cron: "30 7,19 * * *"
+  spec:
+    containers:
+    - image: gcr.io/compute-image-tools/cloud-image-tests:latest
+      imagePullPolicy: Always
+      command:
+      - "/manager"
+      args:
+      - "-parallel_count=20"
+      - "-parallel_stagger=30s"
+      - "-project=gcp-guest"
+      - "-test_projects=compute-image-test-pool-002,compute-image-test-pool-003,compute-image-test-pool-004,compute-image-test-pool-005"
+      - "-zones=us-central1-a,us-central1-b,us-central1-c,us-central1-f,us-east4-b,us-west1-a,us-west1-c,europe-west1-b,europe-west1-c,europe-west3-a,europe-west4-a,europe-west4-b,europe-west4-c,asia-northeast1-b,asia-southeast1-b,asia-south1-c"
+      - "-all_image_families=gce-unstable-pkg-test-images"
+      - "-filter=^(loadbalancer|network|packagevalidation)$"
       - "-set_exit_status=false"
       - "-x86_shape=n4-standard-4"
       - "-architecture_type=x86"
