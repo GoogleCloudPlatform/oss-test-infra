@@ -13,6 +13,17 @@
 # limitations under the License.
 
 tide:
+  github_merge_blocks_policy:
+    # Eject GitHub-BLOCKED pull requests from the kube-agents merge pool
+    # instead of silently retrying ("permit", the default). Observed twice:
+    # 2026-09-01, one PR accumulated 231 silent merge attempts over 5h46m
+    # behind an unresolved-comments ruleset; 2026-09-05, tide batched the
+    # only two GitHub-BLOCKED PRs in the pool (heads missing now-required
+    # checks) and the batch-capture rule held ~13 mergeable PRs hostage
+    # behind the unmergeable pair. With "block", such PRs leave the pool
+    # with an explicit status message until their GitHub-side blocker is
+    # fixed. Evidence: GoogleCloudPlatform/oss-test-infra#2687.
+    gke-labs/kube-agents: block
   merge_method:
     GoogleCloudPlatform/compute-image-tools: squash
     GoogleCloudPlatform/compute-image-windows: squash
