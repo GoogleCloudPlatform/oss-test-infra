@@ -292,3 +292,267 @@ presubmits:
       - name: ledger-app-key
         secret:
           secretName: kube-agents-evals-ledger-app-key
+  - name: pull-kube-agents-smoke-test-next
+    # The next-mode lane (gke-labs/kube-agents#2007, "Three speeds of
+    # evaluation", speed 2): pull-kube-agents-smoke-test's matrix, lease,
+    # deploy and teardown, run against an install flipped to `spec.mode: next`
+    # by the EVAL_MODE_NEXT=1 export in the script below. It exists to prove a
+    # fix to the next stack against a real pool project rather than a dev
+    # install, and to show the code that can break next its own result on its
+    # own pull requests. Its record is its own: builds land under this job's
+    # name in GCS, the dashboard collector and the pool-pressure sweep read
+    # the sibling's name only, and prowjob-default-sa can only read the
+    # evidence store, so nothing here reaches today's record.
+    #
+    # Optional, and it stays optional until #2007's parity phase is done:
+    # the next stack has holes independent of any pull request (#1660, #1700,
+    # #1701, #1702, #1557), so a blocking lane would red changes that did not
+    # cause them. Not always_run for the same reason and for cost: the matrix
+    # is the sibling's, so an unrelated pull request would pay a second lease
+    # to measure the same thing twice.
+    #
+    # Runs on its own when a pull request touches the bus or the operator's
+    # A2A reconciliation (run_if_changed below), and on demand on any pull
+    # request:
+    #   /test pull-kube-agents-smoke-test-next
+    # That is Prow's default trigger for the job name; `/test all` runs it only
+    # when run_if_changed matches, and `/retest` re-runs it only after a
+    # failure. Neither command matches the sibling's name.
+    #
+    # Pool cost: one kube-agents-evals-project lease for about ninety minutes
+    # per run (#2007, after gke-labs/kube-agents#1922), from the same
+    # thirty-project pool the sibling saturates at max_concurrency 30. At
+    # max_concurrency 1 a second trigger queues behind the first rather than
+    # taking a second project from pull requests; raise it on evidence from
+    # ci-kube-agents-pool-pressure, not ahead of it.
+    max_concurrency: 1
+    cluster: build-kube-agents
+    always_run: false
+    skip_report: false
+    # run_if_changed and skip_if_only_changed are mutually exclusive in Prow's
+    # job validation, so this job carries the former where the sibling carries
+    # the latter. Like the sibling's list, this decides only what triggers the
+    # job, never what it checks: a change anywhere else still gets the full
+    # matrix on /test. a2a/ is the bus (gateway, callout, worker adapter,
+    # bridge, Dockerfiles); the operator prefix is every file that renders the
+    # A2A objects under mode: next.
+    run_if_changed: '^a2a/|^k8s-operator/internal/controller/platformagent_a2a_'
+    optional: true
+    decorate: true
+    decoration_config:
+      # The sibling's budget, unchanged. The matrix is the same, and the flip
+      # adds the A2A image builds and the mode-next rollout gates (the
+      # provisioning Job alone has been measured at 19.5 minutes under adverse
+      # conditions) to a run #2007 puts at about ninety minutes; 360m is the
+      # sibling's ceiling for its own worst case, not a number re-derived for
+      # this one. Revisit on this job's first runs.
+      timeout: 360m
+      grace_period: 5m
+    spec:
+      serviceAccountName: prowjob-default-sa
+      containers:
+      - image: gcr.io/k8s-staging-test-infra/kubekins-e2e:latest-1.32
+        command:
+        - /bin/bash
+        - -c
+        - |
+          set -euo pipefail
+          # procps for pkill: cleanup() uses it to reap the heartbeat's
+          # boskosctl child, and its `|| true` would swallow a missing binary.
+          apt-get update && apt-get install -y --no-install-recommends gettext-base jq procps
+          command -v gke-gcloud-auth-plugin >/dev/null
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          export PATH="$HOME/.local/bin:$PATH"
+          curl --proto '=https' --tlsv1.2 -fsSL https://get.opentofu.org/install-opentofu.sh -o install-opentofu.sh && chmod +x install-opentofu.sh && ./install-opentofu.sh --install-method standalone
+          export GEMINI_API_KEY="$(cat /etc/gemini-secret/GEMINI_API_KEY)"
+          # The bench verifier reads back the GitHub ledger issue the run
+          # published and grades its contents; ledger_issue_contains has no
+          # other credential source, and the *-infra repos are private.
+          export BENCH_GITHUB_TOKEN="$(cat /etc/bench-github-token/BENCH_GITHUB_TOKEN)"
+          # hack/ci-eval-pr.sh mints a 1-hour installation token per
+          # devops-bench invocation and overwrites BENCH_GITHUB_TOKEN with it.
+          # App 4739812 is read-only and scoped to the *-infra repos.
+          # gke-labs/kube-agents#994.
+          export EVAL_LEDGER_APP_KEY_FILE="/etc/ledger-app-key/key.pem"
+          # Turns on the in-cluster token minter, which is what lets the agent
+          # write that issue. An App ID is an identifier, not a credential:
+          # minting requires signing a JWT with the App's private key, which
+          # is non-exportable inside each pool project's Cloud KMS. What bounds
+          # where a run can write is the App's installation list -- the
+          # *-infra repos, repository_selection: selected -- not this value,
+          # which gke-labs/kube-agents already publishes.
+          export EVAL_GITHUB_APP_ID="4675512"
+          export REQUIRE_CACHE="true"
+          # ─── The next-mode lane ───────────────────────────────────────────────
+          # EVAL_MODE_NEXT=1 is the whole difference between this job's script
+          # and pull-kube-agents-smoke-test's. hack/ci-deploy.sh reads it after
+          # the today-mode install has passed its own gates: it builds the A2A
+          # and bridge images in the same Cloud Build step, patches the CR to
+          # spec.mode: next, gates the NATS StatefulSet, the callout, the
+          # provisioning Job and the agent Deployment, and hack/ci-eval-pr.sh
+          # then runs the same matrix over the inject transport
+          # (gke-labs/kube-agents#1686, PR #1694). Unset, both scripts are
+          # byte-for-byte what the sibling runs.
+          export EVAL_MODE_NEXT="1"
+          # ─── Baseline evidence store: read-only ─────────────────────────────
+          # The same variable ci-kube-agents-eval-nightly
+          # (kube-agents-periodics.yaml) exports to APPEND; here it is READ.
+          # prowjob-default-sa holds objectViewer only on this bucket, so a
+          # pull request cannot write the baseline it is judged against even
+          # if hack/ci-eval-pr.sh's JOB_TYPE guard were edited away. The
+          # grant is a prerequisite (docs/designs/eval-scorer.md,
+          # "Provisioning it", in gke-labs/kube-agents); without it the read
+          # 403s and the gate degrades to advisory with a banner on every
+          # run. Unset, the presubmit reads the empty checked-in directory
+          # and the rate-based rungs stay inert with no signal that they are.
+          export EVAL_BASELINE_STORE="gs://kube-agents-evals-bench/evidence"
+          # ─── Ensure boskosctl is available (pinned version) ─────────────────────────
+          # Named once, used by both the GCS fast path and the fallback below.
+          BOSKOSCTL_VERSION="v0.0.0-20260730151943-11fb0c84248b"
+          if ! command -v boskosctl >/dev/null; then
+            # Prefer a binary staged in a bucket we own. gke-labs/kube-agents#943
+            # died here: proxy.golang.org answered INTERNAL_ERROR and the job
+            # exited before it had leased a project, so no task ran at all and
+            # there was nothing for a rerun to repeat. A pinned binary does not
+            # need the public module proxy on the critical path of every run.
+            #
+            # NOTE: gs://kube-agents-prow/tools/boskosctl-* does not exist yet.
+            # Until somebody stages it, this copy always misses and the fallback
+            # is the real path -- which is why the fallback is retried.
+            if gsutil -q cp "gs://kube-agents-prow/tools/boskosctl-${BOSKOSCTL_VERSION}" /usr/local/bin/boskosctl; then
+              chmod +x /usr/local/bin/boskosctl
+              echo "✓ boskosctl ${BOSKOSCTL_VERSION} restored from GCS"
+            else
+              echo "boskosctl ${BOSKOSCTL_VERSION} not in GCS; falling back to the module proxy"
+              for attempt in 1 2 3; do
+                if GOBIN=/usr/local/bin go install "sigs.k8s.io/boskos/cmd/boskosctl@${BOSKOSCTL_VERSION}"; then
+                  break
+                fi
+                if [ "${attempt}" -eq 3 ]; then
+                  echo "ERROR: go install boskosctl failed 3 times; proxy.golang.org is the usual cause"
+                  exit 1
+                fi
+                echo "go install attempt ${attempt} failed; retrying in $((attempt * 15))s"
+                sleep "$((attempt * 15))"
+              done
+            fi
+          fi
+
+          # ─── Boskos Lease, Heartbeat & Cleanup Handler ──────────────────────────────
+          BOSKOS_SERVER="http://boskos.boskos.svc.cluster.local"
+          BOSKOS_RESOURCE_TYPE="kube-agents-evals-project"
+          BOSKOS_OWNER="${JOB_NAME}-${BUILD_ID}"
+          BOSKOSCTL=(boskosctl --server-url="${BOSKOS_SERVER}" --owner-name="${BOSKOS_OWNER}")
+
+          # ci-kube-agents-pool-pressure parses these banners out of build-log.txt
+          # to time the Boskos acquire: it matches "=== [<timestamp>] <text> ==="
+          # and picks the first whose text contains "boskos", then measures to the
+          # next timestamped banner. Reword freely, but keep the timestamp and the
+          # word "boskos" or that segment stops being measured.
+          echo "=== [$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Leasing GCP Project from Boskos ==="
+          RESOURCE="$("${BOSKOSCTL[@]}" acquire --type="${BOSKOS_RESOURCE_TYPE}" \
+            --state=free --target-state=busy --timeout=10m)"
+          LEASED_PROJECT="$(echo "${RESOURCE}" | jq -r .name)"
+          if [ -z "${LEASED_PROJECT}" ] || [ "${LEASED_PROJECT}" = "null" ]; then
+            echo "ERROR: could not parse leased project from: ${RESOURCE}"
+            exit 1
+          fi
+          export PROJECT_ID="${LEASED_PROJECT}"
+          echo "✓ Successfully leased project: ${PROJECT_ID}"
+
+          # Marks "teardown has begun" for the heartbeat's abort fallback. Its
+          # directory is created fresh by mktemp -d, so the sentinel provably
+          # does not exist until cleanup() creates it -- a fixed path could be
+          # left behind by an earlier run and would silence the abort for the
+          # whole job.
+          TEARDOWN_DIR="$(mktemp -d)"
+          TEARDOWN_SENTINEL="${TEARDOWN_DIR}/teardown-begun"
+
+          cleanup() {
+            local rc=$?
+            trap - EXIT INT TERM
+            # Before the kills, and this ordering is the point. If the
+            # heartbeat exhausts its retries in the window between `trap -`
+            # above and the subshell actually dying, its `kill -TERM $$`
+            # fallback lands with no handler installed and terminates this
+            # script mid-teardown -- before ci-teardown.sh finishes and before
+            # the Boskos release, leaking GKE resources into a project the next
+            # lease hands straight to somebody else. The sentinel silences the
+            # fallback for an expiry during intentional teardown only; a
+            # heartbeat that dies mid-eval still aborts the run.
+            touch "${TEARDOWN_SENTINEL}"
+            # boskosctl is a child of the subshell, not the subshell itself:
+            # the subshell body is a compound command, so bash does not
+            # exec-optimise it away. Killing only ${HEARTBEAT_PID} orphans a
+            # heartbeat that keeps beating a resource this cleanup is about to
+            # release, and Boskos answers 401 Unauthorized on the owner
+            # mismatch -- nine of them, matching --retries=8. That reads like a
+            # credential problem next to a Boskos release and is not one.
+            pkill -P "${HEARTBEAT_PID:-0}" 2>/dev/null || true
+            kill "${HEARTBEAT_PID:-}" 2>/dev/null || true
+            kill "${STEP_PID:-}" 2>/dev/null || true
+            echo "=== [$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Running CI Teardown ==="
+            ./hack/ci-teardown.sh || true
+            if [ -n "${LEASED_PROJECT:-}" ] && [ "${LEASED_PROJECT}" != "null" ]; then
+              echo "=== [$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Releasing Boskos Project: ${LEASED_PROJECT} ==="
+              "${BOSKOSCTL[@]}" release --name="${LEASED_PROJECT}" --target-state=free || true
+            fi
+            exit $rc
+          }
+          trap cleanup EXIT INT TERM
+
+          # The abort fallback fires only while the eval is still running. Once
+          # cleanup() has touched the sentinel the resource is on its way back
+          # to the pool, so an expiring heartbeat is expected and must not
+          # signal a script that is mid-teardown. `$$` is still this script's
+          # PID inside the subshell, which is what the comment below is about.
+          ( "${BOSKOSCTL[@]}" heartbeat --resource "${RESOURCE}" --period=30s --retries=8 \
+              || { [ -e "${TEARDOWN_SENTINEL}" ] || kill -TERM $$; } ) &
+          HEARTBEAT_PID=$!
+
+          # Every step runs in the background and is waited on, because bash
+          # defers a trapped signal until the *foreground* command completes.
+          # Run in the foreground, a heartbeat failure mid-eval would sit
+          # pending for the rest of the ~40m step -- long past the 5m Boskos
+          # reaper window, so a concurrent run could lease the same project --
+          # and if the step then exited 0, cleanup would capture rc=0 and the
+          # job would go green having never run the eval. `wait` is
+          # interruptible, so the trap fires immediately and cleanup sees 143.
+          #
+          # Signalling the process group (kill -TERM 0) also interrupts
+          # promptly, but prow's entrypoint starts the job without Setpgid
+          # (sigs.k8s.io/prow pkg/entrypoint/run.go), so the group includes the
+          # entrypoint itself: it would mark the job aborted and SIGKILL this
+          # script once grace_period expires, cutting teardown and the Boskos
+          # release short. This form does not depend on that topology.
+          run_step() { "$@" & STEP_PID=$!; wait "${STEP_PID}"; }
+
+          # Clean up any leftover state if a previous job was hard-killed
+          run_step ./hack/ci-teardown.sh || true
+          run_step ./hack/ci-connection-test.sh
+          run_step ./hack/ci-deploy.sh
+          run_step ./hack/ci-eval-pr.sh
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "500m"
+        volumeMounts:
+        - name: gemini-secret
+          mountPath: /etc/gemini-secret
+          readOnly: true
+        - name: bench-github-token
+          mountPath: /etc/bench-github-token
+          readOnly: true
+        - name: ledger-app-key
+          mountPath: /etc/ledger-app-key
+          readOnly: true
+      volumes:
+      - name: gemini-secret
+        secret:
+          secretName: kube-agents-gemini-api-key
+      - name: bench-github-token
+        secret:
+          secretName: kube-agents-bench-github-token
+      - name: ledger-app-key
+        secret:
+          secretName: kube-agents-evals-ledger-app-key
