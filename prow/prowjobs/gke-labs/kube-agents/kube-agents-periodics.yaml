@@ -106,9 +106,13 @@ periodics:
     # the nightly projects to ~470-490min, which 360m would truncate most
     # nights. 480m fits with margin, and this job is non-gating, so a long
     # night costs a lease and nothing else (gke-labs/kube-agents#1491). The
-    # nightly also runs at EVAL_TASK_PARALLELISM=6 (exported below): it is
-    # alone on the quota at this hour. Measure the first three nights and
-    # tune both numbers on evidence, not on this arithmetic.
+    # nightly also runs at EVAL_TASK_PARALLELISM=8 (exported below): it is
+    # alone on the quota at this hour. Measured over the first six nights
+    # (2026-09-16..21, gke-labs/kube-agents#1491): the matrix grew to 41
+    # cases / 123 units and spent 1734-2693 serial minutes a night; at
+    # parallelism 6 the fan-out realised 5.4-5.8x, so three of six nights ran
+    # to this deadline and recorded nothing. At 8 the worst night so far fits
+    # in ~6h; the budget stays 480m.
     timeout: 480m
     grace_period: 5m
     # Logs and artifacts go to a bucket kube-agents owns, NOT the cluster
@@ -187,8 +191,9 @@ periodics:
         # and the presubmit's eval step.
         export EVAL_TIER="nightly"
         # Wider fan-out than the presubmit's 4: the nightly runs alone on the
-        # model quota at this hour (see the timeout comment above).
-        export EVAL_TASK_PARALLELISM="6"
+        # model quota at this hour. 6 -> 8 on 2026-09-22 after six measured
+        # nights (see the timeout comment above).
+        export EVAL_TASK_PARALLELISM="8"
         # ─── Baseline evidence store: ARMED ──────────────────────────────────
         # The bucket, the eval-baseline-recorder identity this job runs as,
         # and the grants on both are prerequisites -- docs/designs/
