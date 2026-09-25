@@ -39,6 +39,8 @@ tide:
   merge_commit_template:
     kubeflow:
       title: "{{ .Title }} (#{{ .Number }})"
+  github_merge_blocks_policy:
+    "kubeflow/pipelines": block
   target_urls:
     "*": https://oss.gprow.dev/tide
     "GoogleCloudPlatform/blueprints": https://prow.infra.cft.dev/tide
@@ -98,16 +100,18 @@ tide:
     labels:
     - lgtm
     - approved
-    - ci-passed
     missingLabels:
     - do-not-merge
     - do-not-merge/hold
     - do-not-merge/invalid-owners-file
     - do-not-merge/work-in-progress
     - needs-rebase
+    - needs-ok-to-test
   - repos:
     - kubeflow/pipelines
     author: "dependabot[bot]"
+    includedBranches:
+    - master
     # The ci-passed label is informational for this path: merge is gated by
     # the required 'ci-passed' commit status in branch protection below.
     missingLabels:
@@ -116,6 +120,7 @@ tide:
     - do-not-merge/invalid-owners-file
     - do-not-merge/work-in-progress
     - needs-rebase
+    - needs-ok-to-test
   - orgs:
     - kubeflow
     labels:
@@ -127,6 +132,7 @@ tide:
     - do-not-merge/invalid-owners-file
     - do-not-merge/work-in-progress
     - needs-rebase
+    - needs-ok-to-test
   - author: google-oss-robot
     labels: # google-oss-robot should only create autobump PR with this label
     - skip-review
@@ -252,12 +258,15 @@ branch-protection:
       #  - cla/google
       repos:
         pipelines:
-          # Required merge gate (kubeflow/pipelines#14111): the ci-passed
-          # commit status is published on the verified head SHA only after
-          # the CI Check poll passes, so the label can remain informational.
-          required_status_checks:
-            contexts:
-            - ci-passed
+          branches:
+            master:
+              # Required merge gate (kubeflow/pipelines#14111): the ci-passed
+              # commit status is published on the verified head SHA only after
+              # the CI Check poll passes, so the label can remain informational.
+              required_status_checks:
+                contexts:
+                - ci-passed
+                strict: true
       exclude:
       - "^revert-" # don't protect revert branches
       - "^dependabot/" # don't protect branches created by dependabot
