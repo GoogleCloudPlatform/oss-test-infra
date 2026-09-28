@@ -117,6 +117,112 @@ periodics:
         requests:
           cpu: 250m
           memory: 512Mi
+- name: ci-kube-agents-fleet-reconcile
+  # Hourly: re-apply bench/tf/fleet in the pool projects the CI health bot's
+  # fixture-state scan reports drifted (kube-agents docs/ci-pool-projects.md
+  # 6.2), and nothing else. The scan publishes at the top of the hour; the
+  # offset lets it land first.
+  cron: "20 * * * *"
+  # Same cluster as the presubmit: Boskos is ClusterIP-only, and each project
+  # is held through it (free -> reconciling -> free) for its one apply.
+  cluster: build-kube-agents
+  max_concurrency: 1
+  decorate: true
+  decoration_config:
+    timeout: 45m
+    # Above the script's 120 s tofu interrupt grace: entrypoint sends SIGINT,
+    # the script forwards it to tofu, and tofu releases its state lock
+    # before the pod is killed.
+    grace_period: 3m
+  extra_refs:
+  - org: gke-labs
+    repo: kube-agents
+    base_ref: main
+  annotations:
+    testgrid-dashboards: googleoss-kube-agents
+    testgrid-tab-name: fleet-reconcile
+    testgrid-alert-email: hangdng@google.com
+    testgrid-num-failures-to-alert: '3'
+    testgrid-alert-stale-results-hours: '3'
+    description: >-
+      Re-applies the seeded fleet stack in the pool projects the health bot's
+      scan reports drifted, one at a time under a Boskos lease, refusing any
+      plan that destroys or replaces. Runs main only, never pull-request code,
+      which is why it and not the presubmit holds a credential that can
+      rewrite the fleet. Red is a project it could not reconcile or a plan it
+      refused, named on stderr.
+  spec:
+    # Its own identity, never the presubmit's: seeded-fleet-reconciler holds
+    # container.admin and project IAM admin on every pool project, and no job
+    # that runs pull-request code may run as it.
+    serviceAccountName: seeded-fleet-reconciler
+    containers:
+    - image: gcr.io/k8s-staging-test-infra/kubekins-e2e:latest-1.32
+      command:
+      - /bin/bash
+      - -c
+      # The same image and OpenTofu install as the presubmit; the stack's
+      # kubernetes provider needs gke-gcloud-auth-plugin, which the image has.
+      - |
+        set -euo pipefail
+        command -v gke-gcloud-auth-plugin >/dev/null
+        curl --proto '=https' --tlsv1.2 -fsSL https://get.opentofu.org/install-opentofu.sh -o install-opentofu.sh && chmod +x install-opentofu.sh && ./install-opentofu.sh --install-method standalone
+        python3 hack/fleet_reconcile.py --drifted \
+          --boskos-server http://boskos.boskos.svc.cluster.local \
+          --boskos-owner "${JOB_NAME}-${BUILD_ID}"
+      resources:
+        requests:
+          cpu: 500m
+          memory: 1Gi
+- name: ci-kube-agents-fleet-reconcile-all
+  # Weekly, Tuesday 13:00 UTC (9 AM Eastern, a weekday morning so a red has
+  # someone to read it): every project Boskos reports free. This pass is what
+  # rolls seeded-b's NO_MINOR_UPGRADES maintenance exclusion forward; nothing
+  # else renews it, and a lapsed exclusion lets GKE heal the planted lag.
+  cron: "0 13 * * 2"
+  cluster: build-kube-agents
+  max_concurrency: 1
+  decorate: true
+  decoration_config:
+    # Sequential over ~35 projects, a few minutes each on an ordinary week; a
+    # project the deadline cuts off keeps last week's stamp, which the
+    # 90-day exclusion window absorbs.
+    timeout: 4h
+    grace_period: 3m
+  extra_refs:
+  - org: gke-labs
+    repo: kube-agents
+    base_ref: main
+  annotations:
+    testgrid-dashboards: googleoss-kube-agents
+    testgrid-tab-name: fleet-reconcile-all
+    testgrid-alert-email: hangdng@google.com
+    testgrid-num-failures-to-alert: '1'
+    testgrid-alert-stale-results-hours: '192'
+    description: >-
+      Re-applies the seeded fleet stack in every free pool project once a
+      week, under a Boskos lease per project, refusing any plan that destroys
+      or replaces. Rolls seeded-b's maintenance exclusion forward. Red is a
+      project it could not reconcile or a plan it refused, named on stderr;
+      a project a run held is skipped, not red.
+  spec:
+    serviceAccountName: seeded-fleet-reconciler
+    containers:
+    - image: gcr.io/k8s-staging-test-infra/kubekins-e2e:latest-1.32
+      command:
+      - /bin/bash
+      - -c
+      - |
+        set -euo pipefail
+        command -v gke-gcloud-auth-plugin >/dev/null
+        curl --proto '=https' --tlsv1.2 -fsSL https://get.opentofu.org/install-opentofu.sh -o install-opentofu.sh && chmod +x install-opentofu.sh && ./install-opentofu.sh --install-method standalone
+        python3 hack/fleet_reconcile.py --all \
+          --boskos-server http://boskos.boskos.svc.cluster.local \
+          --boskos-owner "${JOB_NAME}-${BUILD_ID}"
+      resources:
+        requests:
+          cpu: 500m
+          memory: 1Gi
 - name: ci-kube-agents-eval-nightly
   # The nightly catch-all (gke-labs/kube-agents#1021): runs the FULL eval
   # catalog against main -- every case the pull-kube-agents-smoke-test
