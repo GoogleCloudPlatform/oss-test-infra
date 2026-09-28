@@ -167,7 +167,10 @@ periodics:
         set -euo pipefail
         command -v gke-gcloud-auth-plugin >/dev/null
         curl --proto '=https' --tlsv1.2 -fsSL https://get.opentofu.org/install-opentofu.sh -o install-opentofu.sh && chmod +x install-opentofu.sh && ./install-opentofu.sh --install-method standalone
-        python3 hack/fleet_reconcile.py --drifted \
+        # --dry-run for the first week: the real lease, heartbeat and plan on
+        # every project it targets, and red on a refused plan, with no apply.
+        # A follow-up drops the flag once a week of logs reads clean.
+        python3 hack/fleet_reconcile.py --drifted --dry-run \
           --boskos-server http://boskos.boskos.svc.cluster.local \
           --boskos-owner "${JOB_NAME}-${BUILD_ID}"
       resources:
@@ -216,7 +219,10 @@ periodics:
         set -euo pipefail
         command -v gke-gcloud-auth-plugin >/dev/null
         curl --proto '=https' --tlsv1.2 -fsSL https://get.opentofu.org/install-opentofu.sh -o install-opentofu.sh && chmod +x install-opentofu.sh && ./install-opentofu.sh --install-method standalone
-        python3 hack/fleet_reconcile.py --all \
+        # --dry-run for the first week: the real lease, heartbeat and plan on
+        # every free project, and red on a refused plan, with no apply.
+        # A follow-up drops the flag once a week of logs reads clean.
+        python3 hack/fleet_reconcile.py --all --dry-run \
           --boskos-server http://boskos.boskos.svc.cluster.local \
           --boskos-owner "${JOB_NAME}-${BUILD_ID}"
       resources:
