@@ -178,11 +178,11 @@ periodics:
           cpu: 500m
           memory: 1Gi
 - name: ci-kube-agents-fleet-reconcile-all
-  # Weekly, Tuesday 13:00 UTC (9 AM Eastern, a weekday morning so a red has
+  # Weekly, Wednesday 13:00 UTC (9 AM Eastern, a weekday morning so a red has
   # someone to read it): every project Boskos reports free. This pass is what
   # rolls seeded-b's NO_MINOR_UPGRADES maintenance exclusion forward; nothing
   # else renews it, and a lapsed exclusion lets GKE heal the planted lag.
-  cron: "0 13 * * 2"
+  cron: "0 13 * * 3"
   cluster: build-kube-agents
   max_concurrency: 1
   decorate: true
