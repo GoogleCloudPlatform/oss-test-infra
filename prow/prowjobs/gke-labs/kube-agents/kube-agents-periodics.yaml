@@ -86,9 +86,6 @@ periodics:
   annotations:
     testgrid-dashboards: googleoss-kube-agents
     testgrid-tab-name: pull-sweep
-    testgrid-alert-email: hangdng@google.com
-    testgrid-num-failures-to-alert: '3'
-    testgrid-alert-stale-results-hours: '1'
     description: >-
       Closes the pull requests the eval agent left open in free pool projects,
       signing the agent's own GitHub App through each project's KMS key. Runs
@@ -141,9 +138,6 @@ periodics:
   annotations:
     testgrid-dashboards: googleoss-kube-agents
     testgrid-tab-name: fleet-reconcile
-    testgrid-alert-email: hangdng@google.com
-    testgrid-num-failures-to-alert: '3'
-    testgrid-alert-stale-results-hours: '3'
     description: >-
       Re-applies the seeded fleet stack in the pool projects the health bot's
       scan reports drifted, one at a time under a Boskos lease, refusing any
@@ -167,10 +161,11 @@ periodics:
         set -euo pipefail
         command -v gke-gcloud-auth-plugin >/dev/null
         curl --proto '=https' --tlsv1.2 -fsSL https://get.opentofu.org/install-opentofu.sh -o install-opentofu.sh && chmod +x install-opentofu.sh && ./install-opentofu.sh --install-method standalone
-        # --dry-run for the first week: the real lease, heartbeat and plan on
-        # every project it targets, and red on a refused plan, with no apply.
-        # A follow-up drops the flag once a week of logs reads clean.
-        python3 hack/fleet_reconcile.py --drifted --dry-run \
+        # Applies. The first week ran with --dry-run; the CI health bot reads each
+        # run's finished.json and artifact and posts a failed or overdue one to the
+        # Chat space (kube-agents docs/ci-health.md, "The watched periodics"), so
+        # the TestGrid tabs carry no alert email.
+        python3 hack/fleet_reconcile.py --drifted \
           --boskos-server http://boskos.boskos.svc.cluster.local \
           --boskos-owner "${JOB_NAME}-${BUILD_ID}"
       resources:
@@ -216,10 +211,11 @@ periodics:
         set -euo pipefail
         command -v gke-gcloud-auth-plugin >/dev/null
         curl --proto '=https' --tlsv1.2 -fsSL https://get.opentofu.org/install-opentofu.sh -o install-opentofu.sh && chmod +x install-opentofu.sh && ./install-opentofu.sh --install-method standalone
-        # --dry-run for the first week: the real lease, heartbeat and plan on
-        # every free project, and red on a refused plan, with no apply.
-        # A follow-up drops the flag once a week of logs reads clean.
-        python3 hack/fleet_reconcile.py --all --dry-run \
+        # Applies. The first week ran with --dry-run; the CI health bot reads each
+        # run's finished.json and artifact and posts a failed or overdue one to the
+        # Chat space (kube-agents docs/ci-health.md, "The watched periodics"), so
+        # the TestGrid tabs carry no alert email.
+        python3 hack/fleet_reconcile.py --all \
           --boskos-server http://boskos.boskos.svc.cluster.local \
           --boskos-owner "${JOB_NAME}-${BUILD_ID}"
       resources:
