@@ -20,9 +20,9 @@ periodics:
   annotations:
     testgrid-dashboards: googleoss-kube-agents
     testgrid-tab-name: pool-pressure
-    testgrid-alert-email: hangdng@google.com
-    testgrid-num-failures-to-alert: '3'
-    testgrid-alert-stale-results-hours: '6'
+    # No alert email: the CI health bot reads this job's artifact every hour
+    # and posts a breach as its rule 8 note and a reading older than three
+    # hours as a stale note (kube-agents docs/ci-health.md).
     # Prints the named property inside the result cells. One name for the whole
     # test group, looked up per cell, so every row the check writes carries its
     # own number under this name. The run writes it through --junit below, one
@@ -90,9 +90,6 @@ periodics:
   annotations:
     testgrid-dashboards: googleoss-kube-agents
     testgrid-tab-name: pull-sweep
-    testgrid-alert-email: hangdng@google.com
-    testgrid-num-failures-to-alert: '3'
-    testgrid-alert-stale-results-hours: '1'
     description: >-
       Closes the pull requests the eval agent left open in free pool projects,
       signing the agent's own GitHub App through each project's KMS key. Runs
@@ -121,26 +118,32 @@ periodics:
         requests:
           cpu: 250m
           memory: 512Mi
-- name: ci-kube-agents-fleet-reconcile
-  # Hourly: re-apply bench/tf/fleet in the pool projects the CI health bot's
-  # fixture-state scan reports drifted (kube-agents docs/ci-pool-projects.md
-  # 6.2), and nothing else. The scan publishes at the top of the hour; the
-  # offset lets it land first.
-  cron: "20 * * * *"
-  # Same cluster as the presubmit: Boskos is ClusterIP-only, and each project
-  # is held through it (free -> reconciling -> free) for its one apply.
+- name: ci-kube-agents-fleet-reconcile-daily
+  # Daily, 08:30 UTC (4:30 AM Eastern, before the 9 AM digest that reports
+  # it): every mapped pool project, asked for by name and held through Boskos
+  # (free -> reconciling -> free) for its one apply, the leased ones asked for
+  # again until the budget is spent. This pass catches what the on-merge run
+  # (post-kube-agents-fleet-reconcile) did not reach, repairs what the CI
+  # health bot's scan found drifted or absent, and rolls seeded-b's
+  # NO_MINOR_UPGRADES maintenance exclusion forward; nothing else renews it,
+  # and a lapsed exclusion lets GKE heal the planted lag.
+  cron: "30 8 * * *"
+  # Same cluster as the presubmit: Boskos is ClusterIP-only.
   cluster: build-kube-agents
   max_concurrency: 1
   decorate: true
   decoration_config:
-    timeout: 45m
+    # The run's own budget below is 5h30m: no project starts with less than
+    # its 60-minute ceiling left, so the last one ends by the budget plus the
+    # script's 120 s interrupt grace, and this ceiling is never what stops it.
+    timeout: 6h
     # Logs go to a bucket kube-agents owns: this job runs under its own
     # identity, which cannot write the cluster default gs://kube-agents-prow.
     gcs_configuration:
       bucket: kube-agents-periodic-logs
-    # Above the script's 120 s tofu interrupt grace: entrypoint sends SIGINT,
-    # the script forwards it to tofu, and tofu releases its state lock
-    # before the pod is killed.
+    # Above the script's 150 s worker drain (its 120 s tofu interrupt grace
+    # and a margin): entrypoint sends SIGINT, the script forwards it to every
+    # running tofu, and each releases its state lock before the pod is killed.
     grace_period: 3m
   extra_refs:
   - org: gke-labs
@@ -148,17 +151,17 @@ periodics:
     base_ref: main
   annotations:
     testgrid-dashboards: googleoss-kube-agents
-    testgrid-tab-name: fleet-reconcile
-    testgrid-alert-email: hangdng@google.com
-    testgrid-num-failures-to-alert: '3'
-    testgrid-alert-stale-results-hours: '3'
+    testgrid-tab-name: fleet-reconcile-daily
+    # No alert email: the CI health bot reads each run's finished.json and
+    # report and posts a failed or overdue one to the Chat space (kube-agents
+    # docs/ci-health.md, "The watched periodics").
     description: >-
-      Re-applies the seeded fleet stack in the pool projects the health bot's
-      scan reports drifted, one at a time under a Boskos lease, refusing any
-      plan that destroys or replaces. Runs main only, never pull-request code,
-      which is why it and not the presubmit holds a credential that can
-      rewrite the fleet. Red is a project it could not reconcile or a plan it
-      refused, named on stderr.
+      Applies the seeded fleet stack (bench/tf/fleet at main) in every pool
+      project once a day, four at a time under a Boskos lease each, refusing
+      any delete or replace reconcile-allow.json does not list, and stopping
+      with the rest not reached once main's fleet tree moves under it. Rolls
+      seeded-b's maintenance exclusion forward. Red is a project it could not
+      reconcile or a plan it refused, named in fleet-reconcile.json.
   spec:
     # Its own identity, never the presubmit's: seeded-fleet-reconciler holds
     # container.admin and project IAM admin on every pool project, and no job
@@ -175,63 +178,13 @@ periodics:
         set -euo pipefail
         command -v gke-gcloud-auth-plugin >/dev/null
         curl --proto '=https' --tlsv1.2 -fsSL https://get.opentofu.org/install-opentofu.sh -o install-opentofu.sh && chmod +x install-opentofu.sh && ./install-opentofu.sh --install-method standalone
-        # --dry-run for the first week: the real lease, heartbeat and plan on
-        # every project it targets, and red on a refused plan, with no apply.
-        # A follow-up drops the flag once a week of logs reads clean.
-        python3 hack/fleet_reconcile.py --drifted --dry-run \
-          --boskos-server http://boskos.boskos.svc.cluster.local \
-          --boskos-owner "${JOB_NAME}-${BUILD_ID}"
-      resources:
-        requests:
-          cpu: 500m
-          memory: 1Gi
-- name: ci-kube-agents-fleet-reconcile-all
-  # Weekly, Wednesday 19:00 UTC (3 PM Eastern, a weekday afternoon so a red
-  # has someone to read it): every project Boskos reports free. This pass is what
-  # rolls seeded-b's NO_MINOR_UPGRADES maintenance exclusion forward; nothing
-  # else renews it, and a lapsed exclusion lets GKE heal the planted lag.
-  cron: "0 19 * * 3"
-  cluster: build-kube-agents
-  max_concurrency: 1
-  decorate: true
-  decoration_config:
-    # Sequential over ~35 projects, a few minutes each on an ordinary week; a
-    # project the deadline cuts off keeps last week's stamp, which the
-    # 90-day exclusion window absorbs.
-    timeout: 4h
-    # Logs go to a bucket kube-agents owns: this job runs under its own
-    # identity, which cannot write the cluster default gs://kube-agents-prow.
-    gcs_configuration:
-      bucket: kube-agents-periodic-logs
-    grace_period: 3m
-  extra_refs:
-  - org: gke-labs
-    repo: kube-agents
-    base_ref: main
-  annotations:
-    testgrid-dashboards: googleoss-kube-agents
-    testgrid-tab-name: fleet-reconcile-all
-    description: >-
-      Re-applies the seeded fleet stack in every free pool project once a
-      week, under a Boskos lease per project, refusing any plan that destroys
-      or replaces. Rolls seeded-b's maintenance exclusion forward. Red is a
-      project it could not reconcile or a plan it refused, named on stderr;
-      a project a run held is skipped, not red.
-  spec:
-    serviceAccountName: seeded-fleet-reconciler
-    containers:
-    - image: gcr.io/k8s-staging-test-infra/kubekins-e2e:latest-1.32
-      command:
-      - /bin/bash
-      - -c
-      - |
-        set -euo pipefail
-        command -v gke-gcloud-auth-plugin >/dev/null
-        curl --proto '=https' --tlsv1.2 -fsSL https://get.opentofu.org/install-opentofu.sh -o install-opentofu.sh && chmod +x install-opentofu.sh && ./install-opentofu.sh --install-method standalone
-        # --dry-run for the first week: the real lease, heartbeat and plan on
-        # every free project, and red on a refused plan, with no apply.
-        # A follow-up drops the flag once a week of logs reads clean.
-        python3 hack/fleet_reconcile.py --all --dry-run \
+        # clonerefs builds the checkout with `git init` and a fetch by URL, so
+        # it has no remote; --stop-when-moved fetches `origin main` by name and
+        # refuses to start without it.
+        git remote add origin https://github.com/gke-labs/kube-agents.git
+        python3 hack/fleet_reconcile.py --all --workers 4 \
+          --budget-seconds 19800 --project-ceiling-seconds 3600 \
+          --stop-when-moved origin/main \
           --boskos-server http://boskos.boskos.svc.cluster.local \
           --boskos-owner "${JOB_NAME}-${BUILD_ID}"
       resources:

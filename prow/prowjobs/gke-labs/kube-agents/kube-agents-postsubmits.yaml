@@ -485,3 +485,60 @@ postsubmits:
       - name: ledger-app-key
         secret:
           secretName: kube-agents-evals-ledger-app-key
+  - name: post-kube-agents-fleet-reconcile
+    # On every merge to main that changes the seeded fleet stack: merging
+    # puts nothing on any cluster by itself, and this run is what plants the
+    # change in every pool project (kube-agents docs/ci-pool-projects.md 6.2).
+    # The daily (ci-kube-agents-fleet-reconcile-daily in the periodics file)
+    # catches what this run did not reach; the health bot retires this job's
+    # failure once a later daily at the same fleet tree has.
+    branches:
+    - ^main$
+    run_if_changed: '^bench/tf/fleet/.*\.(tf|hcl)$|^bench/tf/fleet/reconcile-allow\.json$'
+    cluster: build-kube-agents
+    # Two fleet merges close together queue: the second run would otherwise
+    # find every project busy under the first, and the first would be stopped
+    # by main moving under it.
+    max_concurrency: 1
+    decorate: true
+    decoration_config:
+      # The same window and budget as the daily (its comment says why).
+      timeout: 6h
+      gcs_configuration:
+        bucket: kube-agents-periodic-logs
+      grace_period: 3m
+    annotations:
+      testgrid-dashboards: googleoss-kube-agents
+      testgrid-tab-name: fleet-reconcile-on-merge
+      description: >-
+        Applies the merged seeded fleet stack (bench/tf/fleet) in every pool
+        project, four at a time under a Boskos lease each, refusing any delete
+        or replace reconcile-allow.json does not list, and stopping with the
+        rest not reached once main moves again. Red is a project it could not
+        reconcile or a plan it refused, named in fleet-reconcile.json.
+    # No extra_refs: a postsubmit's primary ref is gke-labs/kube-agents at the
+    # merged commit, which decoration clones and makes the working directory.
+    spec:
+      serviceAccountName: seeded-fleet-reconciler
+      containers:
+      - image: gcr.io/k8s-staging-test-infra/kubekins-e2e:latest-1.32
+        command:
+        - /bin/bash
+        - -c
+        - |
+          set -euo pipefail
+          command -v gke-gcloud-auth-plugin >/dev/null
+          curl --proto '=https' --tlsv1.2 -fsSL https://get.opentofu.org/install-opentofu.sh -o install-opentofu.sh && chmod +x install-opentofu.sh && ./install-opentofu.sh --install-method standalone
+          # clonerefs builds the checkout with `git init` and a fetch by URL,
+          # so it has no remote; --stop-when-moved fetches `origin main` by
+          # name and refuses to start without it.
+          git remote add origin https://github.com/gke-labs/kube-agents.git
+          python3 hack/fleet_reconcile.py --all --workers 4 \
+            --budget-seconds 19800 --project-ceiling-seconds 3600 \
+            --stop-when-moved origin/main \
+            --boskos-server http://boskos.boskos.svc.cluster.local \
+            --boskos-owner "${JOB_NAME}-${BUILD_ID}"
+        resources:
+          requests:
+            cpu: 500m
+            memory: 1Gi
