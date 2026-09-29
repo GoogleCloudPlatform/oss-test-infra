@@ -199,9 +199,6 @@ periodics:
   annotations:
     testgrid-dashboards: googleoss-kube-agents
     testgrid-tab-name: fleet-reconcile-all
-    testgrid-alert-email: hangdng@google.com
-    testgrid-num-failures-to-alert: '1'
-    testgrid-alert-stale-results-hours: '192'
     description: >-
       Re-applies the seeded fleet stack in every free pool project once a
       week, under a Boskos lease per project, refusing any plan that destroys
