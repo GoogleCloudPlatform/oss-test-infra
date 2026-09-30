@@ -39,8 +39,6 @@ tide:
   merge_commit_template:
     kubeflow:
       title: "{{ .Title }} (#{{ .Number }})"
-  github_merge_blocks_policy:
-    "kubeflow/pipelines": block
   target_urls:
     "*": https://oss.gprow.dev/tide
     "GoogleCloudPlatform/blueprints": https://prow.infra.cft.dev/tide
@@ -106,7 +104,6 @@ tide:
     - do-not-merge/invalid-owners-file
     - do-not-merge/work-in-progress
     - needs-rebase
-    - needs-ok-to-test
   - repos:
     - kubeflow/pipelines
     author: "dependabot[bot]"
@@ -133,7 +130,6 @@ tide:
     - do-not-merge/invalid-owners-file
     - do-not-merge/work-in-progress
     - needs-rebase
-    - needs-ok-to-test
   - author: google-oss-robot
     labels: # google-oss-robot should only create autobump PR with this label
     - skip-review
