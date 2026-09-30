@@ -79,6 +79,10 @@ periodics:
   decorate: true
   decoration_config:
     timeout: 15m
+    # Logs go to a bucket kube-agents owns: this job runs under its own
+    # identity, which cannot write the cluster default gs://kube-agents-prow.
+    gcs_configuration:
+      bucket: kube-agents-periodic-logs
   extra_refs:
   - org: gke-labs
     repo: kube-agents
@@ -130,6 +134,10 @@ periodics:
   decorate: true
   decoration_config:
     timeout: 45m
+    # Logs go to a bucket kube-agents owns: this job runs under its own
+    # identity, which cannot write the cluster default gs://kube-agents-prow.
+    gcs_configuration:
+      bucket: kube-agents-periodic-logs
     # Above the script's 120 s tofu interrupt grace: entrypoint sends SIGINT,
     # the script forwards it to tofu, and tofu releases its state lock
     # before the pod is killed.
@@ -178,11 +186,11 @@ periodics:
           cpu: 500m
           memory: 1Gi
 - name: ci-kube-agents-fleet-reconcile-all
-  # Weekly, Wednesday 13:00 UTC (9 AM Eastern, a weekday morning so a red has
-  # someone to read it): every project Boskos reports free. This pass is what
+  # Weekly, Wednesday 19:00 UTC (3 PM Eastern, a weekday afternoon so a red
+  # has someone to read it): every project Boskos reports free. This pass is what
   # rolls seeded-b's NO_MINOR_UPGRADES maintenance exclusion forward; nothing
   # else renews it, and a lapsed exclusion lets GKE heal the planted lag.
-  cron: "0 13 * * 3"
+  cron: "0 19 * * 3"
   cluster: build-kube-agents
   max_concurrency: 1
   decorate: true
@@ -191,6 +199,10 @@ periodics:
     # project the deadline cuts off keeps last week's stamp, which the
     # 90-day exclusion window absorbs.
     timeout: 4h
+    # Logs go to a bucket kube-agents owns: this job runs under its own
+    # identity, which cannot write the cluster default gs://kube-agents-prow.
+    gcs_configuration:
+      bucket: kube-agents-periodic-logs
     grace_period: 3m
   extra_refs:
   - org: gke-labs
