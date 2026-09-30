@@ -14,7 +14,8 @@ presubmits:
     spec:
       serviceAccountName: prowjob-default-sa
       containers:
-      - image: gcr.io/k8s-staging-test-infra/kubekins-e2e:v20260316-e86cefa561-1.32
+      - image: gcr.io/k8s-staging-test-infra/kubekins-e2e:latest-master
+        imagePullPolicy: Always
         command:
         - runner.sh
         args:
