@@ -2,10 +2,10 @@ presubmits:
   gke-labs/kube-agents:
   - name: pull-kube-agents-smoke-test
     # Boskos dynamically leases an evaluation project per run from the
-    # kube-agents-evals-project pool, which holds thirty fully provisioned
-    # projects (kube-agents-evals through -30 — completed 2026-09-03).
+    # kube-agents-evals-project pool, which holds thirty-five fully provisioned
+    # projects (kube-agents-evals through -35 — completed 2026-09-25).
     # max_concurrency matches the pool size, so the pool runs saturated.
-    max_concurrency: 30
+    max_concurrency: 35
     # Boskos server, pool config and reaper for build-kube-agents:
     # gke-internal/test-infra deployments/gke-agentic-tooling-team/boskos
     # That pool is the ceiling and this is the tap: raising this past the
@@ -321,7 +321,7 @@ presubmits:
     #
     # Pool cost: one kube-agents-evals-project lease for about ninety minutes
     # per run (#2007, after gke-labs/kube-agents#1922), from the same
-    # thirty-project pool the sibling saturates at max_concurrency 30. At
+    # thirty-five-project pool the sibling saturates at max_concurrency 35. At
     # max_concurrency 1 a second trigger queues behind the first rather than
     # taking a second project from pull requests; raise it on evidence from
     # ci-kube-agents-pool-pressure, not ahead of it.

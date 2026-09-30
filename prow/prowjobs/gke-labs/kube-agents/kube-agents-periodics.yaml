@@ -554,7 +554,7 @@ periodics:
   decorate: true
   decoration_config:
     # The presubmit's budget. Four runs a day at ~90 minutes is six hours of
-    # lease a day from a thirty-project pool; a run that hits the ceiling costs
+    # lease a day from a thirty-five-project pool; a run that hits the ceiling costs
     # a lease and nothing else, as the job is non-gating.
     timeout: 360m
     grace_period: 5m
