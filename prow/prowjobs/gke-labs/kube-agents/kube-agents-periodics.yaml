@@ -79,16 +79,36 @@ periodics:
   decorate: true
   decoration_config:
     timeout: 15m
+    # Logs and artifacts go to a bucket kube-agents owns, NOT the cluster
+    # default gs://kube-agents-prow (prow/oss/config.yaml, build-kube-agents).
+    # This job runs as eval-pull-sweeper (serviceAccountName below), and that
+    # identity has no write on kube-agents-prow, which the oss-prow team owns:
+    # every one of its 267 builds from 2026-09-28 17:50Z to 2026-09-30 14:10Z
+    # died in initupload with a 403 on storage.objects.create before the test
+    # container ever started (first 2104629847945908224, latest read
+    # 2105299288547397632; podinfo.json carries the error), so the sweep has
+    # never run and the pool's leftover pull requests were never closed
+    # (gke-labs/kube-agents#2016). Same fix as the nightly (#2702): upload to
+    # the bucket that is ours. Granted on it for this job: eval-pull-sweeper
+    # as objectAdmin, beside eval-baseline-recorder; crier (oss-prow@oss-prow)
+    # and Deck (oss-prow-public-deck@oss-prow) already hold their roles there.
+    # Only the bucket is overridden: path_strategy and Workload Identity
+    # credentials come from the cluster default, which Prow merges under a
+    # job-level override field by field.
+    gcs_configuration:
+      bucket: kube-agents-evals-nightly-logs
   extra_refs:
   - org: gke-labs
     repo: kube-agents
     base_ref: main
   annotations:
-    testgrid-dashboards: googleoss-kube-agents
-    testgrid-tab-name: pull-sweep
-    testgrid-alert-email: hangdng@google.com
-    testgrid-num-failures-to-alert: '3'
-    testgrid-alert-stale-results-hours: '1'
+    # No TestGrid tab for now, as the nightly: TestGrid reads
+    # gs://kube-agents-prow and has no reader on the bucket above, so a tab
+    # pointed at it would stay STALE. The pull-sweep tab this replaced was
+    # STALE with no completed results anyway, since the job never produced
+    # one. hangdng (the alert owner it carried) can restore the tab and alert
+    # once TestGrid's reader identity holds objectViewer on the bucket.
+    testgrid-create-test-group: "false"
     description: >-
       Closes the pull requests the eval agent left open in free pool projects,
       signing the agent's own GitHub App through each project's KMS key. Runs
