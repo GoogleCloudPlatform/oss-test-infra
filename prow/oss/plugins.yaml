@@ -97,6 +97,15 @@ lgtm:
   review_acts_as_lgtm: true
   trusted_team_for_sticky_lgtm: 'Googlers'
 
+owners:
+  # gke-labs/kube-agents takes lgtm only from the accounts its OWNERS files
+  # name. Its approvers' own pull requests self-approve, so an lgtm from any
+  # collaborator was the whole human gate on those, and its contributor agents
+  # are ordinary user accounts holding triage, which prow cannot tell from a
+  # person.
+  skip_collaborators:
+  - gke-labs/kube-agents
+
 label:
   additional_labels:
   # These labels are used to make Tide merge with a non-default merge method
