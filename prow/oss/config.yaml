@@ -98,7 +98,6 @@ tide:
     labels:
     - lgtm
     - approved
-    - ci-passed
     missingLabels:
     - do-not-merge
     - do-not-merge/hold
@@ -108,14 +107,18 @@ tide:
   - repos:
     - kubeflow/pipelines
     author: "dependabot[bot]"
-    # The ci-passed label is informational for this path: merge is gated by
-    # the required 'ci-passed' commit status in branch protection below.
+    includedBranches:
+    - master
+    # Merge is gated by the required 'ci-passed' commit status in
+    # context_options below (branch-protection is inert here: no
+    # branchprotector is deployed in oss-test-infra).
     missingLabels:
     - do-not-merge
     - do-not-merge/hold
     - do-not-merge/invalid-owners-file
     - do-not-merge/work-in-progress
     - needs-rebase
+    - needs-ok-to-test
   - orgs:
     - kubeflow
     labels:
@@ -145,6 +148,17 @@ tide:
             optional-contexts:
               # The job is triggered only on dependabot PRs.
               - regenerate-crds
+      kubeflow:
+        repos:
+          pipelines:
+            # kubeflow/pipelines runs GitHub Actions, not Prow, so 'ci-passed'
+            # is a plain commit status (not a Prow job). It is published by the
+            # repo's CI Check workflow on the verified head SHA. Listing it as
+            # required makes Tide block until it reports success.
+            branches:
+              master:
+                required-contexts:
+                  - ci-passed
 
 plank:
   job_url_prefix_config:
@@ -242,26 +256,6 @@ prowjob_default_entries:
     repo: '*'
     config:
       tenant_id: 'blueprints'
-
-branch-protection:
-  orgs:
-    kubeflow:
-      protect: true
-      #required_status_checks:
-      #  contexts:
-      #  - cla/google
-      repos:
-        pipelines:
-          # Required merge gate (kubeflow/pipelines#14111): the ci-passed
-          # commit status is published on the verified head SHA only after
-          # the CI Check poll passes, so the label can remain informational.
-          required_status_checks:
-            contexts:
-            - ci-passed
-      exclude:
-      - "^revert-" # don't protect revert branches
-      - "^dependabot/" # don't protect branches created by dependabot
-      - "-patch-" # don't protect branches created by editing on GitHub UI
 
 deck:
   google_analytics: G-NQ9CERRMYD
