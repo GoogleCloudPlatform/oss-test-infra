@@ -104,6 +104,35 @@ presubmits:
         - -c
         - |
           set -euo pipefail
+          # ─── Step 0, before the lease: reuse a verdict this run could only repeat ──
+          # hack/ci-revalidate.sh (gke-labs/kube-agents) exits 0 when every pull
+          # request this job tests -- the one in PULL_NUMBER, or each of a Tide
+          # batch's in PULL_REFS -- already holds a green build of this job at
+          # its head, attested by the Prow-posted success status on that head,
+          # or one at an earlier head with only inert changes since. Tide
+          # credits a presubmit only against the base it ran on, so every merge
+          # to main retests or batches every other green pull request whose
+          # head has not changed: over the three weeks to 2026-10-05 that was
+          # 150 Tide-started runs of this job against 831 merges, and batches
+          # held the pool for 53 hours with nothing merging while one was in
+          # flight (gke-labs/kube-agents#1202). Run here, ahead of the Boskos
+          # lease, the tool installs, the image build and the deploy, a reused
+          # verdict costs the pod and the clone; ci-eval-pr.sh runs the same
+          # script first as well, which is what carried this before the hoist
+          # and still covers it for a run that reaches that far. The script
+          # fails closed -- any doubt is exit 1 and the full run below -- and
+          # the guard keeps a branch that predates it on the full run too; it
+          # is run through bash rather than by mode so a lost executable bit
+          # cannot send every run full in silence. Only the token is read
+          # early: the attestation is a GitHub API read, and an anonymous one
+          # shares the build cluster's rate limit.
+          # EVAL_SKIP_REVALIDATION=1 in this env forces a full run.
+          if [ -f ./hack/ci-revalidate.sh ]; then
+            BENCH_GITHUB_TOKEN="$(cat /etc/bench-github-token/BENCH_GITHUB_TOKEN)" bash ./hack/ci-revalidate.sh && {
+              echo "=== [$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Verdict reused; no project leased, no eval run ==="
+              exit 0
+            }
+          fi
           # procps for pkill: cleanup() uses it to reap the heartbeat's
           # boskosctl child, and its `|| true` would swallow a missing binary.
           apt-get update && apt-get install -y --no-install-recommends gettext-base jq procps
@@ -357,6 +386,35 @@ presubmits:
         - -c
         - |
           set -euo pipefail
+          # ─── Step 0, before the lease: reuse a verdict this run could only repeat ──
+          # hack/ci-revalidate.sh (gke-labs/kube-agents) exits 0 when every pull
+          # request this job tests -- the one in PULL_NUMBER, or each of a Tide
+          # batch's in PULL_REFS -- already holds a green build of this job at
+          # its head, attested by the Prow-posted success status on that head,
+          # or one at an earlier head with only inert changes since. Tide
+          # credits a presubmit only against the base it ran on, so every merge
+          # to main retests or batches every other green pull request whose
+          # head has not changed: over the three weeks to 2026-10-05 that was
+          # 150 Tide-started runs of this job against 831 merges, and batches
+          # held the pool for 53 hours with nothing merging while one was in
+          # flight (gke-labs/kube-agents#1202). Run here, ahead of the Boskos
+          # lease, the tool installs, the image build and the deploy, a reused
+          # verdict costs the pod and the clone; ci-eval-pr.sh runs the same
+          # script first as well, which is what carried this before the hoist
+          # and still covers it for a run that reaches that far. The script
+          # fails closed -- any doubt is exit 1 and the full run below -- and
+          # the guard keeps a branch that predates it on the full run too; it
+          # is run through bash rather than by mode so a lost executable bit
+          # cannot send every run full in silence. Only the token is read
+          # early: the attestation is a GitHub API read, and an anonymous one
+          # shares the build cluster's rate limit.
+          # EVAL_SKIP_REVALIDATION=1 in this env forces a full run.
+          if [ -f ./hack/ci-revalidate.sh ]; then
+            BENCH_GITHUB_TOKEN="$(cat /etc/bench-github-token/BENCH_GITHUB_TOKEN)" bash ./hack/ci-revalidate.sh && {
+              echo "=== [$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Verdict reused; no project leased, no eval run ==="
+              exit 0
+            }
+          fi
           # procps for pkill: cleanup() uses it to reap the heartbeat's
           # boskosctl child, and its `|| true` would swallow a missing binary.
           apt-get update && apt-get install -y --no-install-recommends gettext-base jq procps
