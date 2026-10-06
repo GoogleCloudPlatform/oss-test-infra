@@ -454,6 +454,7 @@ periodics:
       - "-load_balancers=true"
       - "-networks=true"
       - "-snapshots=true"
+      - "-deprecated_images=true"
       - "-projects=gce-unstable-pkg-test-images"
       env:
       - name: GOOGLE_APPLICATION_CREDENTIALS
