@@ -104,7 +104,9 @@ presubmits:
         - -c
         - |
           set -euo pipefail
-          # ─── Step 0, before the lease: reuse a verdict this run could only repeat ──
+          # ─── Step 0, before the lease: reuse this head's earlier green verdict ──
+          # Trade, not equivalence: a reused verdict does not test this head on the
+          # current main (or a batch's pulls together). The nightly eval on main does.
           # hack/ci-revalidate.sh (gke-labs/kube-agents) exits 0 when every pull
           # request this job tests -- the one in PULL_NUMBER, or each of a Tide
           # batch's in PULL_REFS -- already holds a green build of this job at
@@ -391,7 +393,9 @@ presubmits:
         - -c
         - |
           set -euo pipefail
-          # ─── Step 0, before the lease: reuse a verdict this run could only repeat ──
+          # ─── Step 0, before the lease: reuse this head's earlier green verdict ──
+          # Trade, not equivalence: a reused verdict does not test this head on the
+          # current main (or a batch's pulls together). The nightly eval on main does.
           # hack/ci-revalidate.sh (gke-labs/kube-agents) exits 0 when every pull
           # request this job tests -- the one in PULL_NUMBER, or each of a Tide
           # batch's in PULL_REFS -- already holds a green build of this job at
