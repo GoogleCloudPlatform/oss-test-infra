@@ -123,12 +123,17 @@ presubmits:
           # fails closed -- any doubt is exit 1 and the full run below -- and
           # the guard keeps a branch that predates it on the full run too; it
           # is run through bash rather than by mode so a lost executable bit
-          # cannot send every run full in silence. Only the token is read
-          # early: the attestation is a GitHub API read, and an anonymous one
-          # shares the build cluster's rate limit.
+          # cannot send every run full in silence. Only the App key's path is
+          # handed over early: the attestation is a GitHub API read, and the
+          # script mints its own one-hour token from that key, the way
+          # ci-eval-pr.sh does for grading, narrowed to metadata: read, which
+          # lists a public repository's statuses on the App's own rate limit
+          # rather than the build cluster's anonymous one. The PAT under
+          # /etc/bench-github-token is not read here; a mint that fails is a
+          # full run, not an anonymous read.
           # EVAL_SKIP_REVALIDATION=1 in this env forces a full run.
           if [ -f ./hack/ci-revalidate.sh ]; then
-            BENCH_GITHUB_TOKEN="$(cat /etc/bench-github-token/BENCH_GITHUB_TOKEN)" bash ./hack/ci-revalidate.sh && {
+            EVAL_LEDGER_APP_KEY_FILE=/etc/ledger-app-key/key.pem bash ./hack/ci-revalidate.sh && {
               echo "=== [$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Verdict reused; no project leased, no eval run ==="
               exit 0
             }
@@ -405,12 +410,17 @@ presubmits:
           # fails closed -- any doubt is exit 1 and the full run below -- and
           # the guard keeps a branch that predates it on the full run too; it
           # is run through bash rather than by mode so a lost executable bit
-          # cannot send every run full in silence. Only the token is read
-          # early: the attestation is a GitHub API read, and an anonymous one
-          # shares the build cluster's rate limit.
+          # cannot send every run full in silence. Only the App key's path is
+          # handed over early: the attestation is a GitHub API read, and the
+          # script mints its own one-hour token from that key, the way
+          # ci-eval-pr.sh does for grading, narrowed to metadata: read, which
+          # lists a public repository's statuses on the App's own rate limit
+          # rather than the build cluster's anonymous one. The PAT under
+          # /etc/bench-github-token is not read here; a mint that fails is a
+          # full run, not an anonymous read.
           # EVAL_SKIP_REVALIDATION=1 in this env forces a full run.
           if [ -f ./hack/ci-revalidate.sh ]; then
-            BENCH_GITHUB_TOKEN="$(cat /etc/bench-github-token/BENCH_GITHUB_TOKEN)" bash ./hack/ci-revalidate.sh && {
+            EVAL_LEDGER_APP_KEY_FILE=/etc/ledger-app-key/key.pem bash ./hack/ci-revalidate.sh && {
               echo "=== [$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Verdict reused; no project leased, no eval run ==="
               exit 0
             }
