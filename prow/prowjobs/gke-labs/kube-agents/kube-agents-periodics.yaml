@@ -94,14 +94,16 @@ periodics:
     testgrid-num-failures-to-alert: '3'
     testgrid-alert-stale-results-hours: '1'
     description: >-
-      Closes the pull requests the eval agent left open in free pool projects,
-      signing the agent's own GitHub App through each project's KMS key. Runs
-      main only, never pull-request code, which is why it and not the
-      presubmit holds a write credential.
+      Closes the pull requests and merge requests the eval agent left open in
+      free pool projects: on GitHub by signing the agent's own App through each
+      project's KMS key, on GitLab with the pool's token from Secret Manager,
+      whose expiry this job also watches. Runs main only, never pull-request
+      code, which is why it and not the presubmit holds a write credential.
   spec:
     # Its own identity, never the presubmit's: eval-pull-sweeper is the one
-    # service account with signer rights on the pool's minter keys, and no job
-    # that runs pull-request code may run as it.
+    # service account with signer rights on the pool's minter keys and read on
+    # the pool's GitLab tokens in kube-agents-prow, and no job that runs
+    # pull-request code may run as it.
     serviceAccountName: eval-pull-sweeper
     containers:
     - image: gcr.io/google.com/cloudsdktool/google-cloud-cli:alpine
@@ -112,11 +114,22 @@ periodics:
       # script takes only what Boskos hands out as free and releases every
       # project it takes, so a red here is a repository it could not sweep, not
       # a project it holds; exit 1 names the projects on stderr.
+      # Two passes, GitHub then GitLab (kube-agents#2394), each over the free
+      # projects with its own credential and its own report (pull-sweep.json,
+      # pull-sweep-gitlab.json). Both run whatever the first returns, and the
+      # job fails if either did: the GitLab pass also fails from 30 days before
+      # the pool's GitLab token expires, naming it, which is how the yearly
+      # rotation is announced.
       - |
-        set -eu
+        set -u
+        rc=0
         python3 hack/ci_sweep_agent_pulls.py --pool \
           --boskos-server http://boskos.boskos.svc.cluster.local \
-          --boskos-owner "${JOB_NAME}-${BUILD_ID}"
+          --boskos-owner "${JOB_NAME}-${BUILD_ID}" || rc=$?
+        python3 hack/ci_sweep_agent_pulls.py --pool --forge gitlab \
+          --boskos-server http://boskos.boskos.svc.cluster.local \
+          --boskos-owner "${JOB_NAME}-${BUILD_ID}-gitlab" || rc=$?
+        exit "${rc}"
       resources:
         requests:
           cpu: 250m
