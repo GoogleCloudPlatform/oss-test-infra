@@ -486,7 +486,7 @@ postsubmits:
         secret:
           secretName: kube-agents-evals-ledger-app-key
   - name: post-kube-agents-fleet-reconcile
-    # On every merge to main that changes the seeded fleet stack: merging
+    # On every merge to main that touches bench/tf/fleet: merging
     # puts nothing on any cluster by itself, and this run is what plants the
     # change in every pool project (kube-agents docs/ci-pool-projects.md 6.2).
     # The daily (ci-kube-agents-fleet-reconcile-daily in the periodics file)
@@ -494,7 +494,11 @@ postsubmits:
     # failure once a later daily at the same fleet tree has.
     branches:
     - ^main$
-    run_if_changed: '^bench/tf/fleet/.*\.(tf|hcl)$|^bench/tf/fleet/reconcile-allow\.json$'
+    # The tree --stop-when-moved compares (FLEET_SUBDIR in hack/fleet_reconcile.py):
+    # a README or fixtures.json merge halts a running reconcile, so it must also
+    # start the one that finishes the rest. Such a run leases and plans every
+    # project (under a minute each, four at a time) and applies nothing.
+    run_if_changed: '^bench/tf/fleet/'
     cluster: build-kube-agents
     # Two fleet merges close together queue: the second run would otherwise
     # find every project busy under the first, and the first would be stopped
