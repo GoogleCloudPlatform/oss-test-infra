@@ -1057,12 +1057,17 @@ periodics:
   max_concurrency: 1
   decorate: true
   decoration_config:
-    # The full catalog at EVAL_TASK_PARALLELISM=6. The Gemini nightly took
-    # 424-482m for it at 8 in the week of 2026-10-06; 6 is the ceiling under
-    # next (the bridge's reserve no longer fits the bus's task stream at 8)
-    # and the today-mode twin matches it, so the two take comparable time.
-    # Re-size from the first runs.
-    timeout: 600m
+    # The full catalog at EVAL_TASK_PARALLELISM=6, the ceiling under next
+    # (the bridge's reserve no longer fits the bus's task stream at 8), which
+    # this today-mode twin matches. First runs, 2026-10-08, 75 cases: this
+    # job 558m (deploy 19m, fan-out 464m, then the 15 pull-request units one
+    # at a time 73m), the next twin 481m (22m, 356m, 100m). 900m is 61% over
+    # the slower twin's 558m: room for the matrix to grow and for the next
+    # lane's move to the bridge's api executor. Both twins keep the same
+    # budget, so a slow mode is measured rather than cut off. A
+    # deadline-length run still ends by 21:05 UTC, before
+    # ci-kube-agents-eval-nightly's 00:00 start.
+    timeout: 900m
     grace_period: 5m
   annotations:
     # No TestGrid tab, as the nightly: the team reads this run through the
@@ -1314,12 +1319,18 @@ periodics:
   max_concurrency: 1
   decorate: true
   decoration_config:
-    # The full catalog at EVAL_TASK_PARALLELISM=6. The Gemini nightly took
-    # 424-482m for it at 8 in the week of 2026-10-06; 6 is the ceiling under
-    # next (the bridge's reserve no longer fits the bus's task stream at 8)
-    # and the today-mode twin matches it, so the two take comparable time.
-    # Re-size from the first runs.
-    timeout: 600m
+    # The full catalog at EVAL_TASK_PARALLELISM=6, the ceiling under next
+    # (the bridge's reserve no longer fits the bus's task stream at 8), which
+    # the today-mode twin matches. First runs, 2026-10-08, 75 cases: this job
+    # 481m (deploy 22m, fan-out 356m, then the 15 pull-request units one at a
+    # time 100m), the today twin 558m (19m, 464m, 73m). 900m is 61% over the
+    # slower twin's 558m: room for the matrix to grow and for this lane's
+    # move to the bridge's api executor, which routes through the Planning
+    # Agent and is expected to run slower. Both twins keep the same budget,
+    # so a slow mode is measured rather than cut off. A deadline-length run
+    # still ends by 21:05 UTC, before ci-kube-agents-eval-nightly's 00:00
+    # start.
+    timeout: 900m
     grace_period: 5m
   annotations:
     # No TestGrid tab, as the nightly: the team reads this run through the
