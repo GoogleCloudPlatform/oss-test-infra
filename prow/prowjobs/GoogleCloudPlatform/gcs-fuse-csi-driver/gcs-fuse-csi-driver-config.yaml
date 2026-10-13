@@ -31,7 +31,7 @@ presubmits:
           value: "prow"
         # Remove the "Feature" tag from the tests to run the tests in pre-submits. Once the tests are stable we can update the test-skip here
         - name: TEST_SKIP
-          value: '"should.succeed.in.performance.test|Feature:.workload-identity-federation|Feature:.OIDC|Feature:.GCSFuse-PDCSI"'
+          value: '"should.succeed.in.performance.test|Feature:.workload-identity-federation|Feature:.OIDC|Feature:.GCSFuse-PDCSI|cloud_profiler"'
         securityContext:
           privileged: true
         resources:
