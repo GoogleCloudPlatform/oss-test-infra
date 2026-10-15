@@ -1092,28 +1092,27 @@ periodics:
     - name: ledger-app-key
       secret:
         secretName: kube-agents-evals-ledger-app-key
-- name: ci-kube-agents-eval-next
-  # The next-mode lane on main (gke-labs/kube-agents#2007, "Three speeds of
-  # evaluation", speed 3): pull-kube-agents-smoke-test-next's spec, copied
-  # verbatim, run against main every six hours for the parity record. The
-  # phase 2 exit in #2007 is read off this job: fourteen consecutive green
-  # runs at three repetitions on the platform executor's own record (decided
-  # on gke-labs/kube-agents#2037: through the inject door the lane grades the
-  # platform persona, not the Planning Agent today's presubmit reaches), every
-  # case the lane grades at 3/3, zero catastrophic safeguards tripped. Kept
-  # after cutover as the today lane, when the two presubmits swap. Not a
-  # daily job and not a permanent fixture before the stack is worth watching,
-  # which is why it is an interval and not a cron: it starts counting from
-  # whenever it lands, and it is removed when the window closes.
+- name: ci-kube-agents-eval-today
+  # The today lane on main (gke-labs/kube-agents#2007, "The cutover itself":
+  # the two lanes swap, and this six-hourly slot, ci-kube-agents-eval-next
+  # until then, is kept as the today lane because something has to prove the
+  # rollback path). pull-kube-agents-smoke-test grades spec.mode next, the mode
+  # a new install gets, on every pull request; this job grades today, what a
+  # rollback lands on, on main. Its spec is pull-kube-agents-smoke-test-today's:
+  # EVAL_MODE_NEXT=1 and EVAL_ROLLBACK_LANE=1, so the deploy brings the install
+  # up under next, hack/ci-eval-pr.sh runs hack/rollback-roundtrip.sh with
+  # ROLLBACK_END_MODE=today before the matrix (next -> today -> next -> today,
+  # the JetStream PVC and the bus creds Secret kept throughout: cutover
+  # condition 6, run every six hours), and the matrix then runs over the agent
+  # API on the rolled-back install. A rollback that fails reds the run; until
+  # the swap it was reported beside the next lane's verdict and changed
+  # nothing.
   #
-  # Switch-on condition, not a date: two consecutive green on-demand runs of
-  # pull-kube-agents-smoke-test-next, plus the gke-labs/kube-agents change
-  # that lets EVAL_MODE_NEXT=1 run on a Prow job with no PULL_NUMBER when the
-  # job is on the next lane's allow-list (this job's name is on it). Until
-  # that change is on main, this job reds every six hours at the deploy
-  # script's refusal and proves nothing, which is why it lands held. The
-  # scorer already skips the baseline append for every case the lane grades
-  # differently, so a run here cannot write next's samples under today's key.
+  # The deploy admits EVAL_MODE_NEXT=1 on this job, which has no PULL_NUMBER,
+  # by name (EVAL_MODE_NEXT_JOB_NAMES in hack/ci-deploy.sh), and
+  # hack/ci-eval-pr.sh keeps a flagged run out of the baseline recorder and the
+  # dashboard publisher, so a rolled-back install's samples never land in the
+  # window the presubmit is compared with.
   cluster: build-kube-agents
   # Every six hours from the moment it lands. This overlaps
   # ci-kube-agents-eval-nightly (00:00 UTC, up to 480m at EVAL_TASK_PARALLELISM
@@ -1126,9 +1125,11 @@ periodics:
   max_concurrency: 1
   decorate: true
   decoration_config:
-    # The presubmit's budget. Four runs a day at ~90 minutes is six hours of
-    # lease a day from a thirty-five-project pool; a run that hits the ceiling costs
-    # a lease and nothing else, as the job is non-gating.
+    # The presubmit's budget. Four runs a day at about two hours (the next
+    # lane's runs in this slot took 107 minutes before the swap, of which the
+    # round trip was four) is eight hours of lease a day from a
+    # thirty-five-project pool; a run that hits the ceiling costs a lease and
+    # nothing else, as the job is non-gating.
     timeout: 360m
     grace_period: 5m
   annotations:
@@ -1137,7 +1138,7 @@ periodics:
     # (scripts/eval_dashboard/collect.py in gke-labs/kube-agents reads the
     # sibling jobs' names only today).
     testgrid-create-test-group: "false"
-    description: Six-hourly kube-agents eval on main under spec.mode next, for the parity record (gke-labs/kube-agents#2007).
+    description: Six-hourly kube-agents eval on main under spec.mode today after a scripted rollback from next, proving the rollback path (gke-labs/kube-agents#2007).
   extra_refs:
   - org: gke-labs
     repo: kube-agents
@@ -1146,8 +1147,8 @@ periodics:
   spec:
     # prowjob-default-sa, the presubmit's identity, NOT the nightly's
     # eval-baseline-recorder. This identity holds objectViewer only on
-    # gs://kube-agents-evals-bench, so a next-mode run reads today's window for
-    # its advisory comparison and cannot append to it. Prow sets
+    # gs://kube-agents-evals-bench, so a run reads the window for its advisory
+    # comparison and cannot append to it. Prow sets
     # JOB_TYPE=periodic with no PULL_NUMBER here, which arms the recorder path
     # in hack/ci-eval-pr.sh exactly as it does on the nightly; the append is
     # refused by IAM, logged as a WARNING per case, and the verdict is
@@ -1191,17 +1192,14 @@ periodics:
         # which gke-labs/kube-agents already publishes.
         export EVAL_GITHUB_APP_ID="4675512"
         export REQUIRE_CACHE="true"
-        # ─── The next-mode lane ───────────────────────────────────────────────
-        # EVAL_MODE_NEXT=1 is the whole difference between this job's script
-        # and pull-kube-agents-smoke-test's. hack/ci-deploy.sh reads it after
-        # the today-mode install has passed its own gates: it builds the A2A
-        # and bridge images in the same Cloud Build step, patches the CR to
-        # spec.mode: next, gates the NATS StatefulSet, the callout, the
-        # provisioning Job and the agent Deployment, and hack/ci-eval-pr.sh
-        # then runs the same matrix over the inject transport
-        # (gke-labs/kube-agents#1686, merged as PR #1694). Unset, both scripts are
-        # byte-for-byte what the sibling runs.
+        # ─── The today lane ──────────────────────────────────────────────────
+        # pull-kube-agents-smoke-test-today's two exports: the deploy brings the
+        # install up under next (EVAL_MODE_NEXT=1), and hack/ci-eval-pr.sh rolls
+        # it back to today before the matrix and grades it over the agent API
+        # (EVAL_ROLLBACK_LANE=1). The deploy refuses the second without the
+        # first.
         export EVAL_MODE_NEXT="1"
+        export EVAL_ROLLBACK_LANE="1"
         # ─── Baseline evidence store: read-only ─────────────────────────────
         # The same variable ci-kube-agents-eval-nightly
         # (kube-agents-periodics.yaml) exports to APPEND; here it is READ.
