@@ -62,7 +62,21 @@ tide:
     - GoogleCloudPlatform/gcs-fuse-csi-driver
     - GoogleCloudPlatform/gke-mcp
     - GoogleCloudPlatform/gke-enterprise-mt
+    labels:
+    - lgtm
+    - approved
+    missingLabels:
+    - do-not-merge
+    - do-not-merge/hold
+    - do-not-merge/invalid-owners-file
+    - do-not-merge/work-in-progress
+  # gke-labs/kube-agents tests a GitHub merge queue on merge-queue-dry-run
+  # (gke-labs/kube-agents#1363, phase 3). That branch has a queue ruleset, so
+  # Tide must not try to merge into it. Otherwise the same query as above.
+  - repos:
     - gke-labs/kube-agents
+    excludedBranches:
+    - merge-queue-dry-run
     labels:
     - lgtm
     - approved
