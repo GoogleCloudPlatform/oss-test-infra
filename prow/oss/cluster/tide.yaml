@@ -19,7 +19,7 @@ spec:
       serviceAccountName: tide
       containers:
       - name: tide
-        image: us-central1-docker.pkg.dev/gob-prow/prow-images/tide:v20260812-b5681a827
+        image: us-central1-docker.pkg.dev/gob-prow/prow-images/tide:v20261013-95ea2ce97
         args:
         - --config-path=/etc/config/config.yaml
         - --job-config-path=/etc/job-config
