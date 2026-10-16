@@ -74,6 +74,6 @@ spec:
       serviceAccountName: grandmatriarch
       containers:
       - name: bakery
-        image: us-central1-docker.pkg.dev/gob-prow/prow-images/grandmatriarch:v20260812-b5681a827
+        image: us-central1-docker.pkg.dev/gob-prow/prow-images/grandmatriarch:v20261013-95ea2ce97
         args:
         - http-cookiefile
