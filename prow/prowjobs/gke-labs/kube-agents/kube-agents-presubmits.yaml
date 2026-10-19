@@ -143,6 +143,14 @@ presubmits:
           # /etc/bench-github-token is not read here; a mint that fails is a
           # full run, not an anonymous read.
           # EVAL_SKIP_REVALIDATION=1 in this env forces a full run.
+          # ─── The swap window: no reused verdicts ────────────────────────────
+          # Every green this job posted before it graded spec.mode next graded
+          # today, and step 0 would carry it to the merge at an unchanged head.
+          # Off until the open queue has run under next (gke-labs/kube-agents's
+          # docs/pull-request-workflow.md, "How a change merges", with the
+          # SMOKE_PIN_NOT_BEFORE repository variable for the re-pin); a
+          # follow-up drops this line, about a week after the swap.
+          export EVAL_SKIP_REVALIDATION="1"
           if [ -f ./hack/ci-revalidate.sh ]; then
             EVAL_LEDGER_APP_KEY_FILE=/etc/ledger-app-key/key.pem bash ./hack/ci-revalidate.sh && {
               echo "=== [$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Verdict reused; no project leased, no eval run ==="
@@ -298,8 +306,17 @@ presubmits:
           # to the pool, so an expiring heartbeat is expected and must not
           # signal a script that is mid-teardown. `$$` is still this script's
           # PID inside the subshell, which is what the comment below is about.
-          ( "${BOSKOSCTL[@]}" heartbeat --resource "${RESOURCE}" --period=30s --retries=8 \
-              || { [ -e "${TEARDOWN_SENTINEL}" ] || kill -TERM $$; } ) &
+          #
+          # --timeout outlives the job, and ANY exit of the heartbeat aborts the
+          # run, exit 0 included. boskosctl stops beating at its --timeout (5h by
+          # default) and exits 0; four kube-agents smoke runs held past that point
+          # on 2026-10-14 lost their leases while still running, the reaper handed
+          # their projects to other runs, and at the ceiling their teardowns
+          # uninstalled the new tenants (gke-labs/kube-agents#3129). This job's
+          # timeout is 360m, so a heartbeat that stops before then means the
+          # project is about to be taken away, whatever its exit status says.
+          ( "${BOSKOSCTL[@]}" heartbeat --resource "${RESOURCE}" --period=30s --retries=8 --timeout=380m || true
+            [ -e "${TEARDOWN_SENTINEL}" ] || kill -TERM $$ ) &
           HEARTBEAT_PID=$!
 
           # Every step runs in the background and is waited on, because bash
@@ -651,8 +668,17 @@ presubmits:
           # to the pool, so an expiring heartbeat is expected and must not
           # signal a script that is mid-teardown. `$$` is still this script's
           # PID inside the subshell, which is what the comment below is about.
-          ( "${BOSKOSCTL[@]}" heartbeat --resource "${RESOURCE}" --period=30s --retries=8 \
-              || { [ -e "${TEARDOWN_SENTINEL}" ] || kill -TERM $$; } ) &
+          #
+          # --timeout outlives the job, and ANY exit of the heartbeat aborts the
+          # run, exit 0 included. boskosctl stops beating at its --timeout (5h by
+          # default) and exits 0; four kube-agents smoke runs held past that point
+          # on 2026-10-14 lost their leases while still running, the reaper handed
+          # their projects to other runs, and at the ceiling their teardowns
+          # uninstalled the new tenants (gke-labs/kube-agents#3129). This job's
+          # timeout is 360m, so a heartbeat that stops before then means the
+          # project is about to be taken away, whatever its exit status says.
+          ( "${BOSKOSCTL[@]}" heartbeat --resource "${RESOURCE}" --period=30s --retries=8 --timeout=380m || true
+            [ -e "${TEARDOWN_SENTINEL}" ] || kill -TERM $$ ) &
           HEARTBEAT_PID=$!
 
           # Every step runs in the background and is waited on, because bash
@@ -831,13 +857,23 @@ presubmits:
           export EVAL_GITHUB_APP_ID="4675512"
           export REQUIRE_CACHE="true"
           # ─── The today lane ──────────────────────────────────────────────────
-          # EVAL_ROLLBACK_LANE=1 is the whole difference between this job's
-          # script and pull-kube-agents-smoke-test's. Both deploy under
-          # EVAL_MODE_NEXT=1; on this lane hack/ci-eval-pr.sh rolls the install
-          # back to today before the matrix and grades it over the agent API.
-          # The deploy refuses EVAL_ROLLBACK_LANE=1 without EVAL_MODE_NEXT=1.
+          # EVAL_ROLLBACK_LANE=1 is what makes this the today lane. Both this job
+          # and pull-kube-agents-smoke-test deploy under EVAL_MODE_NEXT=1; on this
+          # lane hack/ci-eval-pr.sh rolls the install back to today before the
+          # matrix and grades it over the agent API. The deploy refuses
+          # EVAL_ROLLBACK_LANE=1 without EVAL_MODE_NEXT=1. No step 0 window
+          # here: the job is optional, so a reused verdict merges nothing.
           export EVAL_MODE_NEXT="1"
           export EVAL_ROLLBACK_LANE="1"
+          # ─── The agent model: Claude on Vertex AI ───────────────────────────
+          # The same model as the nightlies whose record this lane is compared
+          # with (oss-test-infra#2736) and as the blocking job once #2737 lands.
+          # hack/ci-deploy.sh reads the first two, hack/ci-eval-pr.sh stamps
+          # records with the third; set all three or the record names a model
+          # the install is not serving. The judge stays on Gemini.
+          export MODEL_PROVIDER="vertex_ai"
+          export MODEL_DEFAULT_NAME="claude-opus-5-5"
+          export AGENT_MODEL_OVERRIDE="claude-opus-5-5"
           # ─── Baseline evidence store: read-only ─────────────────────────────
           # The same variable ci-kube-agents-eval-nightly
           # (kube-agents-periodics.yaml) exports to APPEND; here it is READ.
@@ -950,8 +986,17 @@ presubmits:
           # to the pool, so an expiring heartbeat is expected and must not
           # signal a script that is mid-teardown. `$$` is still this script's
           # PID inside the subshell, which is what the comment below is about.
-          ( "${BOSKOSCTL[@]}" heartbeat --resource "${RESOURCE}" --period=30s --retries=8 \
-              || { [ -e "${TEARDOWN_SENTINEL}" ] || kill -TERM $$; } ) &
+          #
+          # --timeout outlives the job, and ANY exit of the heartbeat aborts the
+          # run, exit 0 included. boskosctl stops beating at its --timeout (5h by
+          # default) and exits 0; four kube-agents smoke runs held past that point
+          # on 2026-10-14 lost their leases while still running, the reaper handed
+          # their projects to other runs, and at the ceiling their teardowns
+          # uninstalled the new tenants (gke-labs/kube-agents#3129). This job's
+          # timeout is 360m, so a heartbeat that stops before then means the
+          # project is about to be taken away, whatever its exit status says.
+          ( "${BOSKOSCTL[@]}" heartbeat --resource "${RESOURCE}" --period=30s --retries=8 --timeout=380m || true
+            [ -e "${TEARDOWN_SENTINEL}" ] || kill -TERM $$ ) &
           HEARTBEAT_PID=$!
 
           # Every step runs in the background and is waited on, because bash
