@@ -342,8 +342,11 @@ periodics:
         # with the third; set all three or the record names a model the install
         # is not serving. The judge stays on Gemini (JUDGE_MODEL in the script).
         export MODEL_PROVIDER="vertex_ai"
-        export MODEL_DEFAULT_NAME="claude-opus-5"
-        export AGENT_MODEL_OVERRIDE="claude-opus-5"
+        # claude-opus-5-5 answers on the global endpoint in every pool project
+        # (kube-agents-evals-2 to -35, probed 2026-10-19); the four Claude jobs
+        # here use it, so the today/next comparison stays on one model.
+        export MODEL_DEFAULT_NAME="claude-opus-5-5"
+        export AGENT_MODEL_OVERRIDE="claude-opus-5-5"
         # The main part: everything but the cases that request a pull
         # request, which ci-kube-agents-eval-nightly-writers below runs on a
         # second leased project (gke-labs/kube-agents#2467). Those run one
@@ -668,8 +671,8 @@ periodics:
         # with the third; set all three or the record names a model the install
         # is not serving. The judge stays on Gemini (JUDGE_MODEL in the script).
         export MODEL_PROVIDER="vertex_ai"
-        export MODEL_DEFAULT_NAME="claude-opus-5"
-        export AGENT_MODEL_OVERRIDE="claude-opus-5"
+        export MODEL_DEFAULT_NAME="claude-opus-5-5"
+        export AGENT_MODEL_OVERRIDE="claude-opus-5-5"
         # The GitLab lane (gke-labs/kube-agents#2394, #2832): hack/ci-deploy.sh deploys
         # against the leased project's GitLab repository and hack/ci-eval-pr.sh runs
         # hack/eval/gitlab-cases.txt, the forge-grading cases, with the pool's
@@ -973,8 +976,8 @@ periodics:
         # with the third; set all three or the record names a model the install
         # is not serving. The judge stays on Gemini (JUDGE_MODEL in the script).
         export MODEL_PROVIDER="vertex_ai"
-        export MODEL_DEFAULT_NAME="claude-opus-5"
-        export AGENT_MODEL_OVERRIDE="claude-opus-5"
+        export MODEL_DEFAULT_NAME="claude-opus-5-5"
+        export AGENT_MODEL_OVERRIDE="claude-opus-5-5"
         # This job's part: only the cases that request a pull request.
         export EVAL_NIGHTLY_PART="writers"
         # Wider fan-out than the presubmit's 4: the nightly runs alone on the
@@ -1547,8 +1550,8 @@ periodics:
         # two, hack/ci-eval-pr.sh stamps records with the third; set all three
         # or the record names a model the install is not serving.
         export MODEL_PROVIDER="vertex_ai"
-        export MODEL_DEFAULT_NAME="claude-opus-5"
-        export AGENT_MODEL_OVERRIDE="claude-opus-5"
+        export MODEL_DEFAULT_NAME="claude-opus-5-5"
+        export AGENT_MODEL_OVERRIDE="claude-opus-5-5"
         # The full catalog: hack/eval/nightly-cases.txt on top of the presubmit's.
         export EVAL_TIER="nightly"
         export EVAL_TASK_PARALLELISM="6"
