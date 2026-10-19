@@ -251,7 +251,13 @@ periodics:
     # parallelism 6 the fan-out realised 5.4-5.8x, so three of six nights ran
     # to this deadline and recorded nothing. At 8 the worst night so far fits
     # in ~6h; the budget stays 480m.
-    timeout: 480m
+    # 480m -> 720m with the move to Claude (gke-labs/kube-agents#3384): the
+    # main part on claude-opus-5 at parallelism 8 replays to a median of
+    # 426min and a maximum of 528min over the nine Claude nights 10-08..16,
+    # so 480m would cut about one night in nine, and the Gemini nightly
+    # already ran to 485m on 10-09, 10-14 and 10-16. A run cut at 720m
+    # still ends by 12:00 UTC, before the 13:00 UTC digest reads it.
+    timeout: 720m
     grace_period: 5m
     # Logs and artifacts go to a bucket kube-agents owns, NOT the cluster
     # default gs://kube-agents-prow (prow/oss/config.yaml, build-kube-agents).
