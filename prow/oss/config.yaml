@@ -172,10 +172,10 @@ plank:
       timeout: 7200000000000 # 2h
       grace_period: 15000000000 # 15s
       utility_images:
-        clonerefs: "us-central1-docker.pkg.dev/gob-prow/prow-images/clonerefs:v20260812-b5681a827"
-        initupload: "us-central1-docker.pkg.dev/gob-prow/prow-images/initupload:v20260812-b5681a827"
-        entrypoint: "us-central1-docker.pkg.dev/gob-prow/prow-images/entrypoint:v20260812-b5681a827"
-        sidecar: "us-central1-docker.pkg.dev/gob-prow/prow-images/sidecar:v20260812-b5681a827"
+        clonerefs: "us-central1-docker.pkg.dev/gob-prow/prow-images/clonerefs:v20261013-95ea2ce97"
+        initupload: "us-central1-docker.pkg.dev/gob-prow/prow-images/initupload:v20261013-95ea2ce97"
+        entrypoint: "us-central1-docker.pkg.dev/gob-prow/prow-images/entrypoint:v20261013-95ea2ce97"
+        sidecar: "us-central1-docker.pkg.dev/gob-prow/prow-images/sidecar:v20261013-95ea2ce97"
       gcs_configuration:
         bucket: "oss-prow"
         path_strategy: "explicit"
