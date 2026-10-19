@@ -367,8 +367,17 @@ postsubmits:
           # to the pool, so an expiring heartbeat is expected and must not
           # signal a script that is mid-teardown. `$$` is still this script's
           # PID inside the subshell, which is what the comment below is about.
-          ( "${BOSKOSCTL[@]}" heartbeat --resource "${RESOURCE}" --period=30s --retries=8 \
-              || { [ -e "${TEARDOWN_SENTINEL}" ] || kill -TERM $$; } ) &
+          #
+          # --timeout outlives the job, and ANY exit of the heartbeat aborts the
+          # run, exit 0 included. boskosctl stops beating at its --timeout (5h by
+          # default) and exits 0; four kube-agents smoke runs held past that point
+          # on 2026-10-14 lost their leases while still running, the reaper handed
+          # their projects to other runs, and at the ceiling their teardowns
+          # uninstalled the new tenants (gke-labs/kube-agents#3129). This job's
+          # timeout is 360m, so a heartbeat that stops before then means the
+          # project is about to be taken away, whatever its exit status says.
+          ( "${BOSKOSCTL[@]}" heartbeat --resource "${RESOURCE}" --period=30s --retries=8 --timeout=380m || true
+            [ -e "${TEARDOWN_SENTINEL}" ] || kill -TERM $$ ) &
           HEARTBEAT_PID=$!
 
           # Every step runs in the background and is waited on, because bash
