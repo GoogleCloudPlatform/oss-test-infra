@@ -131,6 +131,71 @@ periodics:
         requests:
           cpu: 250m
           memory: 512Mi
+- name: ci-kube-agents-compute-sweep
+  # Hourly: the script deletes only plants older than 4 hours
+  # (DEFAULT_MAX_AGE_HOURS in hack/ci_sweep_compute_plants.py), so a shorter
+  # interval deletes nothing more, and hourly deletes a leftover at most one
+  # hour after it becomes old enough. Minute 45 is five minutes from each
+  # pull-sweep start and away from pool-pressure at :23, and a run that finds
+  # nothing ends before the nightlies lease their projects at :00.
+  cron: "45 * * * *"
+  # Same cluster as the presubmit: Boskos is ClusterIP-only, and the sweep
+  # holds each free project through it while it lists and deletes.
+  cluster: build-kube-agents
+  max_concurrency: 1
+  decorate: true
+  decoration_config:
+    # Below the hourly interval. The script takes the 40 pool projects one at
+    # a time. A project with no plant costs three gcloud list calls (about
+    # 15 s, estimated), so a clean run takes about 10 minutes. Each plant adds
+    # five deletes (three addresses, a subnet, a VPC), about 2 minutes. A run
+    # that this ceiling stops releases its project on SIGTERM.
+    timeout: 45m
+    # Logs go to a bucket kube-agents owns: this job runs under its own
+    # identity, which cannot write the cluster default gs://kube-agents-prow.
+    gcs_configuration:
+      bucket: kube-agents-periodic-logs
+  extra_refs:
+  - org: gke-labs
+    repo: kube-agents
+    base_ref: main
+  annotations:
+    testgrid-dashboards: googleoss-kube-agents
+    testgrid-tab-name: compute-sweep
+    description: >-
+      Deletes the Compute networks, subnets and addresses that killed bench
+      runs left in free pool projects: only resources whose description starts
+      with "kube-agents-bench plant", and only when their VPC is older than 4
+      hours. Runs main only, never pull-request code, which is why it and not
+      the presubmit can delete Compute resources.
+  spec:
+    # Its own identity, never the presubmit's: eval-compute-sweeper can list
+    # and delete networks, subnets and addresses on every pool project, and no
+    # job that runs pull-request code may run as it. It is not
+    # eval-pull-sweeper or seeded-fleet-reconciler, so neither of those gets
+    # Compute delete rights it does not need.
+    serviceAccountName: eval-compute-sweeper
+    containers:
+    # A pinned version, not :alpine. From 589.0.0 (2026-10-13) the alpine
+    # image has no python3 on PATH; 588.0.0 has /usr/local/bin/python3.
+    - image: gcr.io/google.com/cloudsdktool/google-cloud-cli:588.0.0-alpine
+      command:
+      - /bin/sh
+      - -c
+      # The working directory after an extra_refs clone is the repo root. The
+      # script takes only what Boskos hands out as free and releases every
+      # project it takes, so a leased project is never touched. A red here is
+      # a project it could not sweep fully; compute-sweep.json in the
+      # artifacts names it and the resources it could not delete.
+      - |
+        set -eu
+        python3 hack/ci_sweep_compute_plants.py --pool \
+          --boskos-server http://boskos.boskos.svc.cluster.local \
+          --boskos-owner "${JOB_NAME}-${BUILD_ID}"
+      resources:
+        requests:
+          cpu: 250m
+          memory: 512Mi
 - name: ci-kube-agents-fleet-reconcile-daily
   # Daily, 08:30 UTC (4:30 AM Eastern, before the 9 AM digest that reports
   # it): every mapped pool project, asked for by name and held through Boskos
