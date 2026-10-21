@@ -43,6 +43,15 @@ presubmits:
     # (a case fails only when all 3 repetitions fail) and the harness's infra
     # classification absorb single-rep flake and endpoint saturation.
     optional: false
+    # Grades spec.mode next, the mode a new kube-agents install gets
+    # (gke-labs/kube-agents#2007, "The cutover itself"), through the gateway's
+    # inject door: the EVAL_MODE_NEXT=1 export in the script below. Today mode,
+    # what a rollback lands on, moved to the optional
+    # pull-kube-agents-smoke-test-today and the six-hourly
+    # ci-kube-agents-eval-today (kube-agents-periodics.yaml), which roll a next
+    # install back to today before grading it. The job keeps its name, so the
+    # required context, Tide's history, step 0's verdict reuse and the
+    # kube-agents dashboard and health readers that key on it are unchanged.
     decorate: true
     decoration_config:
       # 85m was ~2x the ~43min this job averaged when it made two devops-bench
@@ -134,6 +143,14 @@ presubmits:
           # /etc/bench-github-token is not read here; a mint that fails is a
           # full run, not an anonymous read.
           # EVAL_SKIP_REVALIDATION=1 in this env forces a full run.
+          # ─── The swap window: no reused verdicts ────────────────────────────
+          # Every green this job posted before it graded spec.mode next graded
+          # today, and step 0 would carry it to the merge at an unchanged head.
+          # Off until the open queue has run under next (gke-labs/kube-agents's
+          # docs/pull-request-workflow.md, "How a change merges", with the
+          # SMOKE_PIN_NOT_BEFORE repository variable for the re-pin); a
+          # follow-up drops this line, about a week after the swap.
+          export EVAL_SKIP_REVALIDATION="1"
           if [ -f ./hack/ci-revalidate.sh ]; then
             EVAL_LEDGER_APP_KEY_FILE=/etc/ledger-app-key/key.pem bash ./hack/ci-revalidate.sh && {
               echo "=== [$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Verdict reused; no project leased, no eval run ==="
@@ -166,6 +183,17 @@ presubmits:
           # which gke-labs/kube-agents already publishes.
           export EVAL_GITHUB_APP_ID="4675512"
           export REQUIRE_CACHE="true"
+          # ─── spec.mode next ─────────────────────────────────────────────────
+          # hack/ci-deploy.sh reads EVAL_MODE_NEXT=1 after the today-mode install
+          # has passed its own gates: it builds the A2A and bridge images in the
+          # same Cloud Build step, flips the install to spec.mode: next through
+          # the chart, gates the NATS StatefulSet, the callout, the provisioning
+          # Job and the agent Deployment, and hack/ci-eval-pr.sh then runs the
+          # matrix over the inject transport, with the inject lane's exclusions
+          # and safeguards (hack/eval/inject-lane-*). A Tide batch has no
+          # PULL_NUMBER; the deploy admits the flag there by this job's name
+          # (EVAL_MODE_NEXT_JOB_NAMES in hack/ci-deploy.sh).
+          export EVAL_MODE_NEXT="1"
           # ─── Baseline evidence store: read-only ─────────────────────────────
           # The same variable ci-kube-agents-eval-nightly
           # (kube-agents-periodics.yaml) exports to APPEND; here it is READ.
@@ -699,60 +727,62 @@ presubmits:
       - name: ledger-app-key
         secret:
           secretName: kube-agents-evals-ledger-app-key
-  - name: pull-kube-agents-smoke-test-next
-    # The next-mode lane (gke-labs/kube-agents#2007, "Three speeds of
-    # evaluation", speed 2): pull-kube-agents-smoke-test's matrix, lease,
-    # deploy and teardown, run against an install flipped to `spec.mode: next`
-    # by the EVAL_MODE_NEXT=1 export in the script below. It exists to prove a
-    # fix to the next stack against a real pool project rather than a dev
-    # install, and to show the code that can break next its own result on its
-    # own pull requests. Its record is its own: builds land under this job's
-    # name in GCS, the dashboard collector and the pool-pressure sweep read
-    # the sibling's name only, and prowjob-default-sa can only read the
-    # evidence store, so nothing here reaches today's record.
+  - name: pull-kube-agents-smoke-test-today
+    # The today lane on a pull request (gke-labs/kube-agents#2007, "The
+    # cutover itself": the two lanes swap). pull-kube-agents-smoke-test grades
+    # spec.mode next, the mode a new install gets; today stays supported as
+    # the rollback, and this job proves that path for a change that touches
+    # it. EVAL_MODE_NEXT=1 and EVAL_ROLLBACK_LANE=1 in the script below: the
+    # deploy brings the install up under next exactly as the blocking job's
+    # does, hack/ci-eval-pr.sh runs hack/rollback-roundtrip.sh with
+    # ROLLBACK_END_MODE=today before the matrix (next -> today -> next ->
+    # today, the JetStream PVC and the bus creds Secret kept throughout), and
+    # the matrix then runs over the agent API on the rolled-back install. A
+    # rollback that fails reds the run. Its record is its own: builds land
+    # under this job's name in GCS, and prowjob-default-sa can only read the
+    # evidence store.
     #
-    # Optional, and it stays optional until #2007's parity phase is done:
-    # the next stack has holes independent of any pull request (#1660, #1700,
-    # #1701, #1702, #1557), so a blocking lane would red changes that did not
-    # cause them. Not always_run for the same reason and for cost: the matrix
-    # is the sibling's, so an unrelated pull request would pay a second lease
-    # to measure the same thing twice.
+    # Optional: today is the rollback, not what a new install gets, and the
+    # same path runs every six hours on main (ci-kube-agents-eval-today in
+    # kube-agents-periodics.yaml). Not always_run, for cost: the matrix is the
+    # blocking job's, so an unrelated pull request would pay a second lease.
     #
-    # Runs on its own when a pull request touches the bus or the operator's
-    # A2A reconciliation (run_if_changed below), and on demand on any pull
-    # request:
-    #   /test pull-kube-agents-smoke-test-next
+    # Runs on its own when a pull request touches the round trip itself or the
+    # operator's A2A reconciliation, whose teardown is the rollback
+    # (run_if_changed below), and on demand on any pull request:
+    #   /test pull-kube-agents-smoke-test-today
     # That is Prow's default trigger for the job name; `/test all` runs it only
     # when run_if_changed matches, and `/retest` re-runs it only after a
-    # failure. Neither command matches the sibling's name.
+    # failure. Neither command matches the blocking job's name.
     #
-    # Pool cost: one kube-agents-evals-project lease for about ninety minutes
-    # per run (#2007, after gke-labs/kube-agents#1922), from the same
-    # thirty-five-project pool the sibling saturates at max_concurrency 35. At
-    # max_concurrency 1 a second trigger queues behind the first rather than
-    # taking a second project from pull requests; raise it on evidence from
-    # ci-kube-agents-pool-pressure, not ahead of it.
+    # Pool cost: one kube-agents-evals-project lease for about two hours per
+    # run, from the same thirty-five-project pool the blocking job saturates
+    # at max_concurrency 35. At max_concurrency 1 a second trigger queues
+    # behind the first rather than taking a second project from pull
+    # requests; raise it on evidence from ci-kube-agents-pool-pressure, not
+    # ahead of it.
     max_concurrency: 1
     cluster: build-kube-agents
     always_run: false
     skip_report: false
     # run_if_changed and skip_if_only_changed are mutually exclusive in Prow's
-    # job validation, so this job carries the former where the sibling carries
-    # the latter. Like the sibling's list, this decides only what triggers the
+    # job validation, so this job carries the former where the blocking job
+    # carries the latter. Like that list, this decides only what triggers the
     # job, never what it checks: a change anywhere else still gets the full
-    # matrix on /test. a2a/ is the bus (gateway, callout, worker adapter,
-    # bridge, Dockerfiles); the operator prefix is every file that renders the
-    # A2A objects under mode: next.
-    run_if_changed: '^a2a/|^k8s-operator/internal/controller/platformagent_a2a_'
+    # run on /test. hack/rollback-roundtrip.sh is the round trip; the
+    # operator prefix is every file that renders, and on the flip to today
+    # tears down, the A2A objects. The bus itself (a2a/) is graded on every
+    # pull request by the blocking job now. The lane's own steps in
+    # hack/ci-eval-pr.sh and hack/ci-deploy.sh are left off: those scripts
+    # change on most eval pull requests, so a change to the lane there asks
+    # for this job with /test.
+    run_if_changed: '^hack/rollback-roundtrip\.sh$|^k8s-operator/internal/controller/platformagent_a2a_'
     optional: true
     decorate: true
     decoration_config:
-      # The sibling's budget, unchanged. The matrix is the same, and the flip
-      # adds the A2A image builds and the mode-next rollout gates (the
-      # provisioning Job alone has been measured at 19.5 minutes under adverse
-      # conditions) to a run #2007 puts at about ninety minutes; 360m is the
-      # sibling's ceiling for its own worst case, not a number re-derived for
-      # this one. Revisit on this job's first runs.
+      # The blocking job's budget, unchanged. The matrix is the same; the
+      # round trip before it adds about five minutes on a healthy install and
+      # is bounded at 60 minutes (EVAL_ROLLBACK_TIMEOUT_SECONDS in hack/ci-eval-pr.sh).
       timeout: 360m
       grace_period: 5m
     spec:
@@ -826,17 +856,24 @@ presubmits:
           # which gke-labs/kube-agents already publishes.
           export EVAL_GITHUB_APP_ID="4675512"
           export REQUIRE_CACHE="true"
-          # ─── The next-mode lane ───────────────────────────────────────────────
-          # EVAL_MODE_NEXT=1 is the whole difference between this job's script
-          # and pull-kube-agents-smoke-test's. hack/ci-deploy.sh reads it after
-          # the today-mode install has passed its own gates: it builds the A2A
-          # and bridge images in the same Cloud Build step, patches the CR to
-          # spec.mode: next, gates the NATS StatefulSet, the callout, the
-          # provisioning Job and the agent Deployment, and hack/ci-eval-pr.sh
-          # then runs the same matrix over the inject transport
-          # (gke-labs/kube-agents#1686, PR #1694). Unset, both scripts are
-          # byte-for-byte what the sibling runs.
+          # ─── The today lane ──────────────────────────────────────────────────
+          # EVAL_ROLLBACK_LANE=1 is what makes this the today lane. Both this job
+          # and pull-kube-agents-smoke-test deploy under EVAL_MODE_NEXT=1; on this
+          # lane hack/ci-eval-pr.sh rolls the install back to today before the
+          # matrix and grades it over the agent API. The deploy refuses
+          # EVAL_ROLLBACK_LANE=1 without EVAL_MODE_NEXT=1. No step 0 window
+          # here: the job is optional, so a reused verdict merges nothing.
           export EVAL_MODE_NEXT="1"
+          export EVAL_ROLLBACK_LANE="1"
+          # ─── The agent model: Claude on Vertex AI ───────────────────────────
+          # The same model as the nightlies whose record this lane is compared
+          # with (oss-test-infra#2736) and as the blocking job once #2737 lands.
+          # hack/ci-deploy.sh reads the first two, hack/ci-eval-pr.sh stamps
+          # records with the third; set all three or the record names a model
+          # the install is not serving. The judge stays on Gemini.
+          export MODEL_PROVIDER="vertex_ai"
+          export MODEL_DEFAULT_NAME="claude-opus-5-5"
+          export AGENT_MODEL_OVERRIDE="claude-opus-5-5"
           # ─── Baseline evidence store: read-only ─────────────────────────────
           # The same variable ci-kube-agents-eval-nightly
           # (kube-agents-periodics.yaml) exports to APPEND; here it is READ.
