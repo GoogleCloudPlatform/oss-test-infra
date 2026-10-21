@@ -148,7 +148,7 @@ postsubmits:
       # No gke-labs dashboard exists in testgrid/config.yaml yet; skip TestGrid
       # (same pattern as louhi-echo-test-periodic).
       testgrid-create-test-group: "false"
-      description: Full-catalog eval of each kube-agents release candidate nominated for staging; a red verdict blocks the promotion (gke-labs/kube-agents#1024).
+      description: Eval of each kube-agents release candidate nominated for staging, on a spec.mode next install; a red verdict blocks the promotion (gke-labs/kube-agents#1024, #2007).
     # NO extra_refs, and that is load-bearing rather than an omission. A
     # postsubmit already has a primary ref -- gke-labs/kube-agents at the tag
     # that triggered it -- which decoration clones and makes the working
@@ -243,6 +243,21 @@ postsubmits:
             exit 1
           fi
           export RC_TAG="${PULL_BASE_REF}"
+          # Grade the candidate under spec.mode: next, the mode a new install
+          # gets since the default flipped (gke-labs/kube-agents#2007, "The
+          # cutover itself"). The candidate's hack/ci-deploy.sh installs its
+          # published images today, proves that install, then flips it to next
+          # and hands the operator the published A2A images, the inject door
+          # and the bridge's concurrency; its hack/ci-eval-pr.sh runs the
+          # matrix through the inject door. The deploy admits the flag on this
+          # job, which has no PULL_NUMBER, by name (EVAL_MODE_NEXT_JOB_NAMES in
+          # hack/ci-deploy.sh). A candidate cut before that name was on its
+          # allow-list refuses the flag at second zero, which the driver
+          # reports as NOT RUN: land this once the newest rc_*_validated
+          # candidate carries it, or the nightly nominations in between are
+          # withdrawn unmeasured. Like every RC run, a flagged one writes
+          # nothing to main's baseline store.
+          export EVAL_MODE_NEXT="1"
           #
           # EVAL_TIER is deliberately NOT set, though this run does measure the
           # full nightly catalog. hack/ci-eval-rc.sh exports it itself, and
