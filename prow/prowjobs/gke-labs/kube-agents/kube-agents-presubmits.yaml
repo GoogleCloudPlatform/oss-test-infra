@@ -143,14 +143,14 @@ presubmits:
           # /etc/bench-github-token is not read here; a mint that fails is a
           # full run, not an anonymous read.
           # EVAL_SKIP_REVALIDATION=1 in this env forces a full run.
-          # ─── The swap window: no reused verdicts ────────────────────────────
+          # ─── Greens from before the swap to spec.mode next ──────────────────
           # Every green this job posted before it graded spec.mode next graded
-          # today, and step 0 would carry it to the merge at an unchanged head.
-          # Off until the open queue has run under next (gke-labs/kube-agents's
-          # docs/pull-request-workflow.md, "How a change merges", with the
-          # SMOKE_PIN_NOT_BEFORE repository variable for the re-pin); a
-          # follow-up drops this line, about a week after the swap.
-          export EVAL_SKIP_REVALIDATION="1"
+          # today. Step 0 refuses a green whose first success status on GitHub
+          # is older than this time, however long its pull request sat. It is
+          # the SMOKE_PIN_NOT_BEFORE repository variable's value, as
+          # gke-labs/kube-agents's docs/pull-request-workflow.md ("How a change
+          # merges") asks for the follow-up that drops EVAL_SKIP_REVALIDATION.
+          export EVAL_REVALIDATION_NOT_BEFORE="2026-10-21T18:49:00Z"
           if [ -f ./hack/ci-revalidate.sh ]; then
             EVAL_LEDGER_APP_KEY_FILE=/etc/ledger-app-key/key.pem bash ./hack/ci-revalidate.sh && {
               echo "=== [$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Verdict reused; no project leased, no eval run ==="
