@@ -96,6 +96,9 @@ lgtm:
   - gke-labs/kube-agents
   review_acts_as_lgtm: true
   trusted_team_for_sticky_lgtm: 'Googlers'
+  # Keep lgtm across a push that leaves the tree unchanged (an empty commit
+  # that puts a pull request back in the merge queue), for every author.
+  store_tree_hash: true
 
 owners:
   # gke-labs/kube-agents takes lgtm only from the accounts its OWNERS files
