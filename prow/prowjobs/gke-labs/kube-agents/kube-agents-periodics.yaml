@@ -35,7 +35,7 @@ periodics:
   spec:
     serviceAccountName: prowjob-default-sa
     containers:
-    - image: gcr.io/google.com/cloudsdktool/google-cloud-cli:alpine
+    - image: gcr.io/google.com/cloudsdktool/google-cloud-cli:588.0.0-alpine
       command:
       - /bin/sh
       - -c
@@ -103,7 +103,7 @@ periodics:
     # pull-request code may run as it.
     serviceAccountName: eval-pull-sweeper
     containers:
-    - image: gcr.io/google.com/cloudsdktool/google-cloud-cli:alpine
+    - image: gcr.io/google.com/cloudsdktool/google-cloud-cli:588.0.0-alpine
       command:
       - /bin/sh
       - -c
@@ -127,6 +127,71 @@ periodics:
           --boskos-server http://boskos.boskos.svc.cluster.local \
           --boskos-owner "${JOB_NAME}-${BUILD_ID}-gitlab" || rc=$?
         exit "${rc}"
+      resources:
+        requests:
+          cpu: 250m
+          memory: 512Mi
+- name: ci-kube-agents-compute-sweep
+  # Hourly: the script deletes only plants older than 4 hours
+  # (DEFAULT_MAX_AGE_HOURS in hack/ci_sweep_compute_plants.py), so a shorter
+  # interval deletes nothing more, and hourly deletes a leftover at most one
+  # hour after it becomes old enough. Minute 45 is five minutes from each
+  # pull-sweep start and away from pool-pressure at :23, and a run that finds
+  # nothing ends before the nightlies lease their projects at :00.
+  cron: "45 * * * *"
+  # Same cluster as the presubmit: Boskos is ClusterIP-only, and the sweep
+  # holds each free project through it while it lists and deletes.
+  cluster: build-kube-agents
+  max_concurrency: 1
+  decorate: true
+  decoration_config:
+    # Below the hourly interval. The script takes the 40 pool projects one at
+    # a time. A project with no plant costs three gcloud list calls (about
+    # 15 s, estimated), so a clean run takes about 10 minutes. Each plant adds
+    # five deletes (three addresses, a subnet, a VPC), about 2 minutes. A run
+    # that this ceiling stops releases its project on SIGTERM.
+    timeout: 45m
+    # Logs go to a bucket kube-agents owns: this job runs under its own
+    # identity, which cannot write the cluster default gs://kube-agents-prow.
+    gcs_configuration:
+      bucket: kube-agents-periodic-logs
+  extra_refs:
+  - org: gke-labs
+    repo: kube-agents
+    base_ref: main
+  annotations:
+    testgrid-dashboards: googleoss-kube-agents
+    testgrid-tab-name: compute-sweep
+    description: >-
+      Deletes the Compute networks, subnets and addresses that killed bench
+      runs left in free pool projects: only resources whose description starts
+      with "kube-agents-bench plant", and only when their VPC is older than 4
+      hours. Runs main only, never pull-request code, which is why it and not
+      the presubmit can delete Compute resources.
+  spec:
+    # Its own identity, never the presubmit's: eval-compute-sweeper can list
+    # and delete networks, subnets and addresses on every pool project, and no
+    # job that runs pull-request code may run as it. It is not
+    # eval-pull-sweeper or seeded-fleet-reconciler, so neither of those gets
+    # Compute delete rights it does not need.
+    serviceAccountName: eval-compute-sweeper
+    containers:
+    # A pinned version, not :alpine. From 589.0.0 (2026-10-13) the alpine
+    # image has no python3 on PATH; 588.0.0 has /usr/local/bin/python3.
+    - image: gcr.io/google.com/cloudsdktool/google-cloud-cli:588.0.0-alpine
+      command:
+      - /bin/sh
+      - -c
+      # The working directory after an extra_refs clone is the repo root. The
+      # script takes only what Boskos hands out as free and releases every
+      # project it takes, so a leased project is never touched. A red here is
+      # a project it could not sweep fully; compute-sweep.json in the
+      # artifacts names it and the resources it could not delete.
+      - |
+        set -eu
+        python3 hack/ci_sweep_compute_plants.py --pool \
+          --boskos-server http://boskos.boskos.svc.cluster.local \
+          --boskos-owner "${JOB_NAME}-${BUILD_ID}"
       resources:
         requests:
           cpu: 250m
@@ -218,6 +283,12 @@ periodics:
   # baseline-append.jsonl artifact every night (and appends straight to the
   # evidence store once EVAL_BASELINE_STORE below is armed), which is what
   # fills the admission window the #925 gate machinery reads.
+  #
+  # Grades spec.mode next (EVAL_MODE_NEXT=1 below), the mode a new install
+  # gets and the one pull-kube-agents-smoke-test grades, so this job and its
+  # -writers part record the next-mode window the presubmit is compared with
+  # (gke-labs/kube-agents#2007). ci-kube-agents-eval-nightly-today below is
+  # the today-mode nightly kept as the rollback check, and records today's.
   cluster: build-kube-agents
   # 00:00 UTC (8 PM EDT / 7 PM EST; 5 PM / 4 PM Pacific): after the working
   # day's presubmit herd in the team's Eastern time zone, so the nightly's
@@ -250,15 +321,19 @@ periodics:
     # cases / 123 units and spent 1734-2693 serial minutes a night; at
     # parallelism 6 the fan-out realised 5.4-5.8x, so three of six nights ran
     # to this deadline and recorded nothing. At 8 the worst night so far fits
-    # in ~6h; the budget stays 480m.
-    # On claude-opus-5 the whole main part replays to a median of 426min
-    # and a maximum of 528min over the nine Claude nights 10-08..16
-    # (gke-labs/kube-agents#3384), past 480m about one night in nine. Split
-    # into two halves on two leased projects (option C there), the same
-    # replay puts each half at a ~219min median and a ~305min maximum, so
-    # 480m covers the worst night with ~175min to spare, and a run cut at
-    # 480m still ends by 08:00 UTC, well before the 13:00 UTC digest.
-    timeout: 480m
+    # in ~6h; the budget stays 480m. Back to 6 under spec.mode next (see the
+    # export below).
+    # 480m -> 720m with the move to Claude (gke-labs/kube-agents#3384): the
+    # whole main part on claude-opus-5 at parallelism 8 replays to a median
+    # of 426min and a maximum of 528min over the nine Claude nights
+    # 10-08..16. Split into two halves on two leased projects (option C
+    # there), the same replay puts each half at a ~219min median and a
+    # ~305min maximum. Each half keeps 720m all the same: that replay is
+    # today-mode at parallelism 8, and the first spec.mode next night (build
+    # 2113782591592075264, the whole main part at parallelism 6, 23min of it
+    # the next-mode deploy) ran to 720m with about 20 cases finished. A run
+    # cut at 720m still ends by 12:00 UTC, before the 13:00 UTC digest.
+    timeout: 720m
     grace_period: 5m
     # Logs and artifacts go to a bucket kube-agents owns, NOT the cluster
     # default gs://kube-agents-prow (prow/oss/config.yaml, build-kube-agents).
@@ -281,7 +356,7 @@ periodics:
     # dashboard (gke-labs/kube-agents#1335) rather than a second UI, so the
     # googleoss-kube-agents dashboard keeps only the pool-pressure tab.
     testgrid-create-test-group: "false"
-    description: Nightly full-catalog kube-agents eval on main, recording baseline evidence (gke-labs/kube-agents#1021).
+    description: Nightly full-catalog kube-agents eval on main under spec.mode next, recording baseline evidence (gke-labs/kube-agents#1021, #2007).
   extra_refs:
   - org: gke-labs
     repo: kube-agents
@@ -335,6 +410,18 @@ periodics:
         # not recognise. This export is the whole difference between this job
         # and the presubmit's eval step.
         export EVAL_TIER="nightly"
+        # ─── spec.mode next ─────────────────────────────────────────────────
+        # hack/ci-deploy.sh flips the install to spec.mode next after the
+        # today-mode install has passed its own gates, and hack/ci-eval-pr.sh
+        # runs the matrix through the gateway's inject door, less
+        # hack/eval/inject-lane-exclusions.txt. The deploy admits the flag on
+        # this job, which has no PULL_NUMBER, only by name
+        # (EVAL_MODE_NEXT_JOB_NAMES in hack/ci-deploy.sh, which
+        # gke-labs/kube-agents#3783 extends: merge that first, or this job
+        # reds at the deploy's refusal). bench-gate reads the inject transport
+        # as the version key's next mode, so the lines this job appends file
+        # under next and never reach today's window.
+        export EVAL_MODE_NEXT="1"
         # ─── The agent model: Claude on Vertex AI ───────────────────────────
         # Moved off gemini-3.1-pro-preview (gke-labs/kube-agents#3160): Gemini 3.x
         # runs on Vertex's dynamic shared quota, the source of the 429 storms,
@@ -360,8 +447,17 @@ periodics:
         export EVAL_NIGHTLY_PART="main-a"
         # Wider fan-out than the presubmit's 4: the nightly runs alone on the
         # model quota at this hour. 6 -> 8 on 2026-09-22 after six measured
-        # nights (see the timeout comment above).
-        export EVAL_TASK_PARALLELISM="8"
+        # nights (see the timeout comment above); 8 -> 6 with the move to
+        # spec.mode next. hack/ci-deploy.sh sizes the provision's maxSessions
+        # from this value: at 6 it is 2, and at 8 the bridge's reserve alone
+        # exceeds the bus's task floor, so the stream is created wider than
+        # the floor, a shape no run has measured. 6 is what the next-mode
+        # nightly ran at: the whole catalog, this part plus the one-at-a-time
+        # pull-request units (about 100m), took 403-717m a night from
+        # 2026-10-08 to 10-21. This part alone fits this job's 720m with
+        # little margin on the slowest of those nights; a night cut at the
+        # deadline keeps the cases it already recorded.
+        export EVAL_TASK_PARALLELISM="6"
         # ─── Baseline evidence store: ARMED ──────────────────────────────────
         # The bucket, the eval-baseline-recorder identity this job runs as,
         # and the grants on both are prerequisites -- docs/designs/
@@ -483,9 +579,9 @@ periodics:
         # on 2026-10-14 lost their leases while still running, the reaper handed
         # their projects to other runs, and at the ceiling their teardowns
         # uninstalled the new tenants (gke-labs/kube-agents#3129). This job's
-        # timeout is 480m, so a heartbeat that stops before then means the
+        # timeout is 720m, so a heartbeat that stops before then means the
         # project is about to be taken away, whatever its exit status says.
-        ( "${BOSKOSCTL[@]}" heartbeat --resource "${RESOURCE}" --period=30s --retries=8 --timeout=500m || true
+        ( "${BOSKOSCTL[@]}" heartbeat --resource "${RESOURCE}" --period=30s --retries=8 --timeout=740m || true
           [ -e "${TEARDOWN_SENTINEL}" ] || kill -TERM $$ ) &
         HEARTBEAT_PID=$!
 
@@ -598,15 +694,19 @@ periodics:
     # cases / 123 units and spent 1734-2693 serial minutes a night; at
     # parallelism 6 the fan-out realised 5.4-5.8x, so three of six nights ran
     # to this deadline and recorded nothing. At 8 the worst night so far fits
-    # in ~6h; the budget stays 480m.
-    # On claude-opus-5 the whole main part replays to a median of 426min
-    # and a maximum of 528min over the nine Claude nights 10-08..16
-    # (gke-labs/kube-agents#3384), past 480m about one night in nine. Split
-    # into two halves on two leased projects (option C there), the same
-    # replay puts each half at a ~219min median and a ~305min maximum, so
-    # 480m covers the worst night with ~175min to spare, and a run cut at
-    # 480m still ends by 08:00 UTC, well before the 13:00 UTC digest.
-    timeout: 480m
+    # in ~6h; the budget stays 480m. Back to 6 under spec.mode next (see the
+    # export below).
+    # 480m -> 720m with the move to Claude (gke-labs/kube-agents#3384): the
+    # whole main part on claude-opus-5 at parallelism 8 replays to a median
+    # of 426min and a maximum of 528min over the nine Claude nights
+    # 10-08..16. Split into two halves on two leased projects (option C
+    # there), the same replay puts each half at a ~219min median and a
+    # ~305min maximum. Each half keeps 720m all the same: that replay is
+    # today-mode at parallelism 8, and the first spec.mode next night (build
+    # 2113782591592075264, the whole main part at parallelism 6, 23min of it
+    # the next-mode deploy) ran to 720m with about 20 cases finished. A run
+    # cut at 720m still ends by 12:00 UTC, before the 13:00 UTC digest.
+    timeout: 720m
     grace_period: 5m
     # Logs and artifacts go to a bucket kube-agents owns, NOT the cluster
     # default gs://kube-agents-prow (prow/oss/config.yaml, build-kube-agents).
@@ -828,9 +928,9 @@ periodics:
         # on 2026-10-14 lost their leases while still running, the reaper handed
         # their projects to other runs, and at the ceiling their teardowns
         # uninstalled the new tenants (gke-labs/kube-agents#3129). This job's
-        # timeout is 480m, so a heartbeat that stops before then means the
+        # timeout is 720m, so a heartbeat that stops before then means the
         # project is about to be taken away, whatever its exit status says.
-        ( "${BOSKOSCTL[@]}" heartbeat --resource "${RESOURCE}" --period=30s --retries=8 --timeout=500m || true
+        ( "${BOSKOSCTL[@]}" heartbeat --resource "${RESOURCE}" --period=30s --retries=8 --timeout=740m || true
           [ -e "${TEARDOWN_SENTINEL}" ] || kill -TERM $$ ) &
         HEARTBEAT_PID=$!
 
@@ -1224,7 +1324,8 @@ periodics:
   # job's spec, copied: the same lease from the kube-agents-evals-project
   # pool, provisioning, deploy, eval, teardown, identity and log bucket, so
   # its baseline records and its logs land where the main part's do (the
-  # dashboard joins the two builds into one night).
+  # dashboard joins the two builds into one night). Like the main part it
+  # grades spec.mode next (EVAL_MODE_NEXT=1 below).
   cluster: build-kube-agents
   # 00:00 UTC (8 PM EDT / 7 PM EST; 5 PM / 4 PM Pacific): after the working
   # day's presubmit herd in the team's Eastern time zone, so the nightly's
@@ -1318,6 +1419,18 @@ periodics:
         # not recognise. This export is the whole difference between this job
         # and the presubmit's eval step.
         export EVAL_TIER="nightly"
+        # ─── spec.mode next ─────────────────────────────────────────────────
+        # hack/ci-deploy.sh flips the install to spec.mode next after the
+        # today-mode install has passed its own gates, and hack/ci-eval-pr.sh
+        # runs the matrix through the gateway's inject door, less
+        # hack/eval/inject-lane-exclusions.txt. The deploy admits the flag on
+        # this job, which has no PULL_NUMBER, only by name
+        # (EVAL_MODE_NEXT_JOB_NAMES in hack/ci-deploy.sh, which
+        # gke-labs/kube-agents#3783 extends: merge that first, or this job
+        # reds at the deploy's refusal). bench-gate reads the inject transport
+        # as the version key's next mode, so the lines this job appends file
+        # under next and never reach today's window.
+        export EVAL_MODE_NEXT="1"
         # ─── The agent model: Claude on Vertex AI ───────────────────────────
         # Moved off gemini-3.1-pro-preview (gke-labs/kube-agents#3160): Gemini 3.x
         # runs on Vertex's dynamic shared quota, the source of the 429 storms,
@@ -1330,10 +1443,10 @@ periodics:
         export AGENT_MODEL_OVERRIDE="claude-opus-5-5"
         # This job's part: only the cases that request a pull request.
         export EVAL_NIGHTLY_PART="writers"
-        # Wider fan-out than the presubmit's 4: the nightly runs alone on the
-        # model quota at this hour. 6 -> 8 on 2026-09-22 after six measured
-        # nights (see the timeout comment above).
-        export EVAL_TASK_PARALLELISM="8"
+        # 6 under spec.mode next, as the main part (its comment says
+        # why). These cases run one unit at a time anyway, so it does not
+        # move this job's wall clock.
+        export EVAL_TASK_PARALLELISM="6"
         # ─── Baseline evidence store: ARMED ──────────────────────────────────
         # The bucket, the eval-baseline-recorder identity this job runs as,
         # and the grants on both are prerequisites -- docs/designs/
@@ -1508,28 +1621,27 @@ periodics:
     - name: ledger-app-key
       secret:
         secretName: kube-agents-evals-ledger-app-key
-- name: ci-kube-agents-eval-next
-  # The next-mode lane on main (gke-labs/kube-agents#2007, "Three speeds of
-  # evaluation", speed 3): pull-kube-agents-smoke-test-next's spec, copied
-  # verbatim, run against main every six hours for the parity record. The
-  # phase 2 exit in #2007 is read off this job: fourteen consecutive green
-  # runs at three repetitions on the platform executor's own record (decided
-  # on gke-labs/kube-agents#2037: through the inject door the lane grades the
-  # platform persona, not the Planning Agent today's presubmit reaches), every
-  # case the lane grades at 3/3, zero catastrophic safeguards tripped. Kept
-  # after cutover as the today lane, when the two presubmits swap. Not a
-  # daily job and not a permanent fixture before the stack is worth watching,
-  # which is why it is an interval and not a cron: it starts counting from
-  # whenever it lands, and it is removed when the window closes.
+- name: ci-kube-agents-eval-today
+  # The today lane on main (gke-labs/kube-agents#2007, "The cutover itself":
+  # the two lanes swap, and this six-hourly slot, ci-kube-agents-eval-next
+  # until then, is kept as the today lane because something has to prove the
+  # rollback path). pull-kube-agents-smoke-test grades spec.mode next, the mode
+  # a new install gets, on every pull request; this job grades today, what a
+  # rollback lands on, on main. Its spec is pull-kube-agents-smoke-test-today's:
+  # EVAL_MODE_NEXT=1 and EVAL_ROLLBACK_LANE=1, so the deploy brings the install
+  # up under next, hack/ci-eval-pr.sh runs hack/rollback-roundtrip.sh with
+  # ROLLBACK_END_MODE=today before the matrix (next -> today -> next -> today,
+  # the JetStream PVC and the bus creds Secret kept throughout: cutover
+  # condition 6, run every six hours), and the matrix then runs over the agent
+  # API on the rolled-back install. A rollback that fails reds the run; until
+  # the swap it was reported beside the next lane's verdict and changed
+  # nothing.
   #
-  # Switch-on condition, not a date: two consecutive green on-demand runs of
-  # pull-kube-agents-smoke-test-next, plus the gke-labs/kube-agents change
-  # that lets EVAL_MODE_NEXT=1 run on a Prow job with no PULL_NUMBER when the
-  # job is on the next lane's allow-list (this job's name is on it). Until
-  # that change is on main, this job reds every six hours at the deploy
-  # script's refusal and proves nothing, which is why it lands held. The
-  # scorer already skips the baseline append for every case the lane grades
-  # differently, so a run here cannot write next's samples under today's key.
+  # The deploy admits EVAL_MODE_NEXT=1 on this job, which has no PULL_NUMBER,
+  # by name (EVAL_MODE_NEXT_JOB_NAMES in hack/ci-deploy.sh), and
+  # hack/ci-eval-pr.sh keeps a flagged run out of the baseline recorder and the
+  # dashboard publisher, so a rolled-back install's samples never land in the
+  # window the presubmit is compared with.
   cluster: build-kube-agents
   # Every six hours from the moment it lands. This overlaps
   # ci-kube-agents-eval-nightly (00:00 UTC, up to 480m at EVAL_TASK_PARALLELISM
@@ -1542,9 +1654,11 @@ periodics:
   max_concurrency: 1
   decorate: true
   decoration_config:
-    # The presubmit's budget. Four runs a day at ~90 minutes is six hours of
-    # lease a day from a thirty-five-project pool; a run that hits the ceiling costs
-    # a lease and nothing else, as the job is non-gating.
+    # The presubmit's budget. Four runs a day at about two hours (the next
+    # lane's runs in this slot took 107 minutes before the swap, of which the
+    # round trip was four) is eight hours of lease a day from a
+    # thirty-five-project pool; a run that hits the ceiling costs a lease and
+    # nothing else, as the job is non-gating.
     timeout: 360m
     grace_period: 5m
   annotations:
@@ -1553,7 +1667,7 @@ periodics:
     # (scripts/eval_dashboard/collect.py in gke-labs/kube-agents reads the
     # sibling jobs' names only today).
     testgrid-create-test-group: "false"
-    description: Six-hourly kube-agents eval on main under spec.mode next, for the parity record (gke-labs/kube-agents#2007).
+    description: Six-hourly kube-agents eval on main under spec.mode today after a scripted rollback from next, proving the rollback path (gke-labs/kube-agents#2007).
   extra_refs:
   - org: gke-labs
     repo: kube-agents
@@ -1562,8 +1676,8 @@ periodics:
   spec:
     # prowjob-default-sa, the presubmit's identity, NOT the nightly's
     # eval-baseline-recorder. This identity holds objectViewer only on
-    # gs://kube-agents-evals-bench, so a next-mode run reads today's window for
-    # its advisory comparison and cannot append to it. Prow sets
+    # gs://kube-agents-evals-bench, so a run reads the window for its advisory
+    # comparison and cannot append to it. Prow sets
     # JOB_TYPE=periodic with no PULL_NUMBER here, which arms the recorder path
     # in hack/ci-eval-pr.sh exactly as it does on the nightly; the append is
     # refused by IAM, logged as a WARNING per case, and the verdict is
@@ -1607,17 +1721,23 @@ periodics:
         # which gke-labs/kube-agents already publishes.
         export EVAL_GITHUB_APP_ID="4675512"
         export REQUIRE_CACHE="true"
-        # ─── The next-mode lane ───────────────────────────────────────────────
-        # EVAL_MODE_NEXT=1 is the whole difference between this job's script
-        # and pull-kube-agents-smoke-test's. hack/ci-deploy.sh reads it after
-        # the today-mode install has passed its own gates: it builds the A2A
-        # and bridge images in the same Cloud Build step, patches the CR to
-        # spec.mode: next, gates the NATS StatefulSet, the callout, the
-        # provisioning Job and the agent Deployment, and hack/ci-eval-pr.sh
-        # then runs the same matrix over the inject transport
-        # (gke-labs/kube-agents#1686, merged as PR #1694). Unset, both scripts are
-        # byte-for-byte what the sibling runs.
+        # ─── The today lane ──────────────────────────────────────────────────
+        # pull-kube-agents-smoke-test-today's two exports: the deploy brings the
+        # install up under next (EVAL_MODE_NEXT=1), and hack/ci-eval-pr.sh rolls
+        # it back to today before the matrix and grades it over the agent API
+        # (EVAL_ROLLBACK_LANE=1). The deploy refuses the second without the
+        # first.
         export EVAL_MODE_NEXT="1"
+        export EVAL_ROLLBACK_LANE="1"
+        # ─── The agent model: Claude on Vertex AI ───────────────────────────
+        # The same model as the nightlies whose record this lane is compared
+        # with (oss-test-infra#2736) and as the blocking job once #2737 lands.
+        # hack/ci-deploy.sh reads the first two, hack/ci-eval-pr.sh stamps
+        # records with the third; set all three or the record names a model
+        # the install is not serving. The judge stays on Gemini.
+        export MODEL_PROVIDER="vertex_ai"
+        export MODEL_DEFAULT_NAME="claude-opus-5-5"
+        export AGENT_MODEL_OVERRIDE="claude-opus-5-5"
         # ─── Baseline evidence store: read-only ─────────────────────────────
         # The same variable ci-kube-agents-eval-nightly
         # (kube-agents-periodics.yaml) exports to APPEND; here it is READ.
@@ -1789,65 +1909,60 @@ periodics:
     - name: ledger-app-key
       secret:
         secretName: kube-agents-evals-ledger-app-key
-- name: ci-kube-agents-eval-nightly-next-claude
-  # The next-mode half of the daily mode comparison
-  # (gke-labs/kube-agents#2474, feeding #2007's parity condition): the full
-  # eval catalog on main under spec.mode next with the agent on Claude,
-  # beside ci-kube-agents-eval-nightly (with its -writers part), which runs
-  # the same model since gke-labs/kube-agents#3160. The deploy
-  # admits EVAL_MODE_NEXT=1 here by job name (EVAL_MODE_NEXT_JOB_NAMES in
-  # hack/ci-deploy.sh), which gke-labs/kube-agents#2601 adds: merge that
-  # first, or this job reds at the deploy's refusal until it lands.
+- name: ci-kube-agents-eval-nightly-today
+  # The today-mode nightly, kept as the rollback check once the main nightly
+  # moved to spec.mode next (gke-labs/kube-agents#2007): the full eval catalog
+  # on main on a fresh spec.mode today install, over the agent API, with the
+  # agent on Claude like every eval job here. It is the one run that records
+  # today's window in the evidence store, which is what a rollback to today
+  # is measured against; ci-kube-agents-eval-today proves the rollback itself
+  # every six hours and records nothing. This job was
+  # ci-kube-agents-eval-nightly-next-claude, the next-mode twin of the
+  # nightly, until the nightly took that role: renamed, with EVAL_MODE_NEXT
+  # dropped and the recorder identity and log bucket the nightly uses. The
+  # deploy refuses EVAL_MODE_NEXT=1 on this name (it is not in
+  # EVAL_MODE_NEXT_JOB_NAMES in hack/ci-deploy.sh), so the flag leaking in
+  # stops the run at second zero rather than recording next as today.
   cluster: build-kube-agents
-  # 06:00 UTC daily: after ci-kube-agents-eval-nightly's 00:00 start, before
-  # the daytime presubmit herd. The agent runs on Claude through Vertex AI in
-  # the leased project, so it does not draw on the Gemini capacity that
-  # nightly uses; the judge stays on the shared Gemini key, as everywhere.
+  # 06:00 UTC daily: after the main nightly's 00:00 start, before the daytime
+  # presubmit herd. Each run leases its own project and Claude has fixed quota
+  # per project, so the two nightlies do not contend.
   cron: "0 6 * * *"
   # A slow run must skip the next tick, not stack a second lease behind it.
   max_concurrency: 1
   decorate: true
   decoration_config:
-    # The full catalog at EVAL_TASK_PARALLELISM=6, the ceiling under next
-    # (the bridge's reserve no longer fits the bus's task stream at 8), which
-    # the today-mode twin matches. First runs, 2026-10-08, 75 cases: this job
-    # 481m (deploy 22m, fan-out 356m, then the 15 pull-request units one at a
-    # time 100m), the today twin 558m (19m, 464m, 73m). 900m is 61% over the
-    # slower twin's 558m: room for the matrix to grow and for this lane's
-    # move to the bridge's api executor, which routes through the Planning
-    # Agent and is expected to run slower. Both twins keep the same budget,
-    # so a slow mode is measured rather than cut off. A deadline-length run
-    # still ends by 21:05 UTC, before ci-kube-agents-eval-nightly's 00:00
-    # start.
+    # The full catalog in one job, at EVAL_TASK_PARALLELISM=6. First runs,
+    # 2026-10-08, 75 cases: today on this pool took 558m (deploy 19m, fan-out
+    # 464m, then the pull-request units one at a time 73m). 900m is 61% over
+    # that, room for the matrix to grow. A deadline-length run still ends by
+    # 21:05 UTC, before the main nightly's 00:00 start.
     timeout: 900m
     grace_period: 5m
+    # The nightly's bucket, for the nightly's reason: this job runs as
+    # eval-baseline-recorder (serviceAccountName below), which cannot write
+    # the cluster default gs://kube-agents-prow. Its logs land beside the
+    # main nightly's under logs/ci-kube-agents-eval-nightly-today/.
+    gcs_configuration:
+      bucket: kube-agents-evals-nightly-logs
   annotations:
-    # No TestGrid tab, as the nightly: the team reads this run through the
-    # eval dashboard once the collector knows the job name
-    # (scripts/eval_dashboard/collect.py in gke-labs/kube-agents reads the
-    # sibling jobs' names only today).
+    # No TestGrid tab, as the nightly. The eval dashboard collects the main
+    # nightly's runs only; this job's are read in Prow, and its record in
+    # the dashboard's Trend page, which draws the today-mode series.
     testgrid-create-test-group: "false"
-    description: Daily kube-agents eval on main under spec.mode next with the agent on Claude, compared with the today-mode twin (gke-labs/kube-agents#2474).
+    description: Nightly full-catalog kube-agents eval on main under spec.mode today, the rollback check, recording today's baseline evidence (gke-labs/kube-agents#2007).
   extra_refs:
   - org: gke-labs
     repo: kube-agents
     base_ref: main
     workdir: true
   spec:
-    # prowjob-default-sa, the presubmit's identity, NOT the nightly's
-    # eval-baseline-recorder. This identity holds objectViewer only on
-    # gs://kube-agents-evals-bench, so a next-mode run reads today's window for
-    # its advisory comparison and cannot append to it. Prow sets
-    # JOB_TYPE=periodic with no PULL_NUMBER here, which arms the recorder path
-    # in hack/ci-eval-pr.sh exactly as it does on the nightly; the append is
-    # refused by IAM, logged as a WARNING per case, and the verdict is
-    # unaffected. A record for next needs a version key that names the mode
-    # first (bench/kube_agents_bench/baselines.py VersionKey has no such
-    # field), and then a recorder identity of its own. Logs go to the cluster
-    # default bucket (gs://kube-agents-prow), which this identity can write; the
-    # nightly's gcs_configuration override exists only because the recorder
-    # identity cannot.
-    serviceAccountName: prowjob-default-sa
+    # eval-baseline-recorder, the main nightly's identity, which holds
+    # objectViewer and objectCreator on gs://kube-agents-evals-bench. Prow
+    # sets JOB_TYPE=periodic with no PULL_NUMBER here, which arms the
+    # recorder path in hack/ci-eval-pr.sh; the matrix runs over the api
+    # transport, so bench-gate files its lines under today's key.
+    serviceAccountName: eval-baseline-recorder
     containers:
     - image: gcr.io/k8s-staging-test-infra/kubekins-e2e:latest-1.32
       command:
@@ -1881,41 +1996,28 @@ periodics:
         # which gke-labs/kube-agents already publishes.
         export EVAL_GITHUB_APP_ID="4675512"
         export REQUIRE_CACHE="true"
-        # ─── The next-mode lane ───────────────────────────────────────────────
-        # EVAL_MODE_NEXT=1 is the whole difference between this job's script
-        # and pull-kube-agents-smoke-test's. hack/ci-deploy.sh reads it after
-        # the today-mode install has passed its own gates: it builds the A2A
-        # and bridge images in the same Cloud Build step, patches the CR to
-        # spec.mode: next, gates the NATS StatefulSet, the callout, the
-        # provisioning Job and the agent Deployment, and hack/ci-eval-pr.sh
-        # then runs the same matrix over the inject transport
-        # (gke-labs/kube-agents#1686, merged as PR #1694). Unset, both scripts are
-        # byte-for-byte what the sibling runs.
-        export EVAL_MODE_NEXT="1"
+        # ─── spec.mode today: no EVAL_MODE_NEXT ──────────────────────────────
+        # Unset, hack/ci-deploy.sh installs spec.mode today and
+        # hack/ci-eval-pr.sh runs the matrix over the agent API with no inject
+        # lane exclusions, so the cases the next nightly leaves out still run
+        # here once a night.
         # ─── The agent model: Claude on Vertex AI ───────────────────────────
         # This job and ci-kube-agents-eval-nightly run the same agent model,
         # judge and matrix, so the difference between their per-case scores is
-        # the mode; the nightly fans out at 8, this job at 6, the ceiling
-        # under next. hack/ci-deploy.sh reads the first
-        # two, hack/ci-eval-pr.sh stamps records with the third; set all three
-        # or the record names a model the install is not serving.
+        # the mode. hack/ci-deploy.sh reads the first two, hack/ci-eval-pr.sh
+        # stamps records with the third; set all three or the record names a
+        # model the install is not serving.
         export MODEL_PROVIDER="vertex_ai"
         export MODEL_DEFAULT_NAME="claude-opus-5-5"
         export AGENT_MODEL_OVERRIDE="claude-opus-5-5"
         # The full catalog: hack/eval/nightly-cases.txt on top of the presubmit's.
         export EVAL_TIER="nightly"
         export EVAL_TASK_PARALLELISM="6"
-        # ─── Baseline evidence store: read-only ─────────────────────────────
-        # The same variable ci-kube-agents-eval-nightly
-        # (kube-agents-periodics.yaml) exports to APPEND; here it is READ.
-        # prowjob-default-sa holds objectViewer only on this bucket, so a
-        # pull request cannot write the baseline it is judged against even
-        # if hack/ci-eval-pr.sh's JOB_TYPE guard were edited away. The
-        # grant is a prerequisite (docs/designs/eval-scorer.md,
-        # "Provisioning it", in gke-labs/kube-agents); without it the read
-        # 403s and the gate degrades to advisory with a banner on every
-        # run. Unset, the presubmit reads the empty checked-in directory
-        # and the rate-based rungs stay inert with no signal that they are.
+        # ─── Baseline evidence store: ARMED ──────────────────────────────────
+        # Appends, as ci-kube-agents-eval-nightly does, under the identity
+        # above: one immutable object per case per night, named by the
+        # record's own version key (today here, next there) and this build's
+        # id, so the two nightlies never write the same object.
         export EVAL_BASELINE_STORE="gs://kube-agents-evals-bench/evidence"
         # ─── Ensure boskosctl is available (pinned version) ─────────────────────────
         # Named once, used by both the GCS fast path and the fallback below.
@@ -2038,6 +2140,252 @@ periodics:
         # and if the step then exited 0, cleanup would capture rc=0 and the
         # job would go green having never run the eval. `wait` is
         # interruptible, so the trap fires immediately and cleanup sees 143.
+        #
+        # Signalling the process group (kill -TERM 0) also interrupts
+        # promptly, but prow's entrypoint starts the job without Setpgid
+        # (sigs.k8s.io/prow pkg/entrypoint/run.go), so the group includes the
+        # entrypoint itself: it would mark the job aborted and SIGKILL this
+        # script once grace_period expires, cutting teardown and the Boskos
+        # release short. This form does not depend on that topology.
+        run_step() { "$@" & STEP_PID=$!; wait "${STEP_PID}"; }
+
+        # Clean up any leftover state if a previous job was hard-killed
+        run_step ./hack/ci-teardown.sh || true
+        run_step ./hack/ci-connection-test.sh
+        run_step ./hack/ci-deploy.sh
+        run_step ./hack/ci-eval-pr.sh
+      resources:
+        requests:
+          memory: "1Gi"
+          cpu: "500m"
+      volumeMounts:
+      - name: gemini-secret
+        mountPath: /etc/gemini-secret
+        readOnly: true
+      - name: bench-github-token
+        mountPath: /etc/bench-github-token
+        readOnly: true
+      - name: ledger-app-key
+        mountPath: /etc/ledger-app-key
+        readOnly: true
+    volumes:
+    - name: gemini-secret
+      secret:
+        secretName: kube-agents-gemini-api-key
+    - name: bench-github-token
+      secret:
+        secretName: kube-agents-bench-github-token
+    - name: ledger-app-key
+      secret:
+        secretName: kube-agents-evals-ledger-app-key
+# The GitLab lane under spec.mode next (gke-labs/kube-agents#2007): the GitLab
+# nightly above with EVAL_MODE_NEXT=1, so the forge-grading cases
+# (hack/eval/gitlab-cases.txt) also run against a next install, through the
+# gateway's inject door, before the default flips. No other job runs a GitLab
+# case under next: the next lane's jobs all deploy against GitHub. The deploy
+# admits EVAL_MODE_NEXT=1 here by job name (EVAL_MODE_NEXT_JOB_NAMES in
+# hack/ci-deploy.sh); merge the gke-labs/kube-agents change that adds this
+# name first, or this job reds at the deploy's refusal until it lands.
+- name: ci-kube-agents-eval-nightly-gitlab-next
+  cluster: build-kube-agents
+  # 04:00 UTC: after the today-mode GitLab nightly (02:00, about 90 minutes)
+  # has finished, so the two GitLab nightlies do not draw on the model quota
+  # together, and before the 06:00 Claude nightlies.
+  cron: "0 4 * * *"
+  # A slow night must skip the next tick, not stack a second lease behind it.
+  max_concurrency: 1
+  decorate: true
+  decoration_config:
+    # The today-mode GitLab nightly's budget. Its three cases (nine units,
+    # each opening a merge request, so run one at a time) took about 90
+    # minutes there; next routes each turn through the bridge and is expected
+    # to be slower, and the job is non-gating, so a long night costs a lease.
+    timeout: 480m
+    grace_period: 5m
+  annotations:
+    # No TestGrid tab, as the other next-lane jobs.
+    testgrid-create-test-group: "false"
+    description: Nightly kube-agents eval of the GitLab lane's cases (hack/eval/gitlab-cases.txt) under spec.mode next (gke-labs/kube-agents#2007).
+  extra_refs:
+  - org: gke-labs
+    repo: kube-agents
+    base_ref: main
+    workdir: true
+  spec:
+    # prowjob-default-sa, as the other next-lane jobs and the GitLab
+    # presubmit: objectViewer only on the evidence bucket, and the script
+    # appends nothing under EVAL_MODE_NEXT=1 or EVAL_FORGE=gitlab anyway.
+    # Logs go to the cluster default bucket (gs://kube-agents-prow).
+    serviceAccountName: prowjob-default-sa
+    containers:
+    - image: gcr.io/k8s-staging-test-infra/kubekins-e2e:latest-1.32
+      command:
+      - /bin/bash
+      - -c
+      - |
+        set -euo pipefail
+        # procps for pkill: cleanup() uses it to reap the heartbeat's
+        # boskosctl child, and its `|| true` would swallow a missing binary.
+        apt-get update && apt-get install -y --no-install-recommends gettext-base jq procps
+        command -v gke-gcloud-auth-plugin >/dev/null
+        curl -LsSf https://astral.sh/uv/install.sh | sh
+        export PATH="$HOME/.local/bin:$PATH"
+        curl --proto '=https' --tlsv1.2 -fsSL https://get.opentofu.org/install-opentofu.sh -o install-opentofu.sh && chmod +x install-opentofu.sh && ./install-opentofu.sh --install-method standalone
+        export GEMINI_API_KEY="$(cat /etc/gemini-secret/GEMINI_API_KEY)"
+        # The bench verifier reads back the GitHub ledger issue the run
+        # published and grades its contents; ledger_issue_contains has no
+        # other credential source, and the *-infra repos are private.
+        export BENCH_GITHUB_TOKEN="$(cat /etc/bench-github-token/BENCH_GITHUB_TOKEN)"
+        # hack/ci-eval-pr.sh mints a 1-hour installation token per
+        # devops-bench invocation and overwrites BENCH_GITHUB_TOKEN with it.
+        # App 4739812 is read-only and scoped to the *-infra repos.
+        # gke-labs/kube-agents#994.
+        export EVAL_LEDGER_APP_KEY_FILE="/etc/ledger-app-key/key.pem"
+        # Turns on the in-cluster token minter, which is what lets the agent
+        # write that issue. An App ID is an identifier, not a credential:
+        # minting requires signing a JWT with the App's private key, which
+        # is non-exportable inside each pool project's Cloud KMS. What bounds
+        # where a run can write is the App's installation list -- the
+        # *-infra repos, repository_selection: selected -- not this value,
+        # which gke-labs/kube-agents already publishes.
+        export EVAL_GITHUB_APP_ID="4675512"
+        export REQUIRE_CACHE="true"
+        # The full nightly tier, which under EVAL_FORGE=gitlab is the GitLab
+        # lane's list, not the catalogue.
+        export EVAL_TIER="nightly"
+        # The GitLab lane (gke-labs/kube-agents#2394, #2832): the deploy points
+        # the agent at the leased project's GitLab repository and the eval runs
+        # hack/eval/gitlab-cases.txt with the pool's GitLab token pair read from
+        # Secret Manager after the lease.
+        export EVAL_FORGE="gitlab"
+        # ─── The next-mode lane ───────────────────────────────────────────────
+        # EVAL_MODE_NEXT=1 is the whole difference from
+        # ci-kube-agents-eval-nightly-gitlab's eval selection: the deploy flips
+        # the install to spec.mode next and gates the A2A stack, and the eval
+        # sends the matrix through the inject door. EVAL_TASK_PARALLELISM stays
+        # at the script's default of 4: every case here opens a merge request,
+        # so the units run one at a time whatever it is.
+        export EVAL_MODE_NEXT="1"
+        # ─── Baseline evidence store: read-only ─────────────────────────────
+        # Read for the advisory comparison; prowjob-default-sa cannot append.
+        export EVAL_BASELINE_STORE="gs://kube-agents-evals-bench/evidence"
+        # ─── Ensure boskosctl is available (pinned version) ─────────────────────────
+        # Named once, used by both the GCS fast path and the fallback below.
+        BOSKOSCTL_VERSION="v0.0.0-20260730151943-11fb0c84248b"
+        if ! command -v boskosctl >/dev/null; then
+          # Prefer a binary staged in a bucket we own. gke-labs/kube-agents#943
+          # died here: proxy.golang.org answered INTERNAL_ERROR and the job
+          # exited before it had leased a project, so no task ran at all and
+          # there was nothing for a rerun to repeat. A pinned binary does not
+          # need the public module proxy on the critical path of every run.
+          #
+          # NOTE: gs://kube-agents-prow/tools/boskosctl-* does not exist yet.
+          # Until somebody stages it, this copy always misses and the fallback
+          # is the real path -- which is why the fallback is retried.
+          if gsutil -q cp "gs://kube-agents-prow/tools/boskosctl-${BOSKOSCTL_VERSION}" /usr/local/bin/boskosctl; then
+            chmod +x /usr/local/bin/boskosctl
+            echo "✓ boskosctl ${BOSKOSCTL_VERSION} restored from GCS"
+          else
+            echo "boskosctl ${BOSKOSCTL_VERSION} not in GCS; falling back to the module proxy"
+            for attempt in 1 2 3; do
+              if GOBIN=/usr/local/bin go install "sigs.k8s.io/boskos/cmd/boskosctl@${BOSKOSCTL_VERSION}"; then
+                break
+              fi
+              if [ "${attempt}" -eq 3 ]; then
+                echo "ERROR: go install boskosctl failed 3 times; proxy.golang.org is the usual cause"
+                exit 1
+              fi
+              echo "go install attempt ${attempt} failed; retrying in $((attempt * 15))s"
+              sleep "$((attempt * 15))"
+            done
+          fi
+        fi
+
+        # ─── Boskos Lease, Heartbeat & Cleanup Handler ──────────────────────────────
+        BOSKOS_SERVER="http://boskos.boskos.svc.cluster.local"
+        BOSKOS_RESOURCE_TYPE="kube-agents-evals-project"
+        BOSKOS_OWNER="${JOB_NAME}-${BUILD_ID}"
+        BOSKOSCTL=(boskosctl --server-url="${BOSKOS_SERVER}" --owner-name="${BOSKOS_OWNER}")
+
+        echo "=== [$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Leasing GCP Project from Boskos ==="
+        RESOURCE="$("${BOSKOSCTL[@]}" acquire --type="${BOSKOS_RESOURCE_TYPE}" \
+          --state=free --target-state=busy --timeout=10m)"
+        LEASED_PROJECT="$(echo "${RESOURCE}" | jq -r .name)"
+        if [ -z "${LEASED_PROJECT}" ] || [ "${LEASED_PROJECT}" = "null" ]; then
+          echo "ERROR: could not parse leased project from: ${RESOURCE}"
+          exit 1
+        fi
+        export PROJECT_ID="${LEASED_PROJECT}"
+        echo "✓ Successfully leased project: ${PROJECT_ID}"
+
+        # Marks "teardown has begun" for the heartbeat's abort fallback. Its
+        # directory is created fresh by mktemp -d, so the sentinel provably
+        # does not exist until cleanup() creates it -- a fixed path could be
+        # left behind by an earlier run and would silence the abort for the
+        # whole job.
+        TEARDOWN_DIR="$(mktemp -d)"
+        TEARDOWN_SENTINEL="${TEARDOWN_DIR}/teardown-begun"
+
+        cleanup() {
+          local rc=$?
+          trap - EXIT INT TERM
+          # Before the kills, and this ordering is the point. If the
+          # heartbeat exhausts its retries in the window between `trap -`
+          # above and the subshell actually dying, its `kill -TERM $$`
+          # fallback lands with no handler installed and terminates this
+          # script mid-teardown -- before ci-teardown.sh finishes and before
+          # the Boskos release, leaking GKE resources into a project the next
+          # lease hands straight to somebody else. The sentinel silences the
+          # fallback for an expiry during intentional teardown only; a
+          # heartbeat that dies mid-eval still aborts the run.
+          touch "${TEARDOWN_SENTINEL}"
+          # boskosctl is a child of the subshell, not the subshell itself:
+          # the subshell body is a compound command, so bash does not
+          # exec-optimise it away. Killing only ${HEARTBEAT_PID} orphans a
+          # heartbeat that keeps beating a resource this cleanup is about to
+          # release, and Boskos answers 401 Unauthorized on the owner
+          # mismatch -- nine of them, matching --retries=8. That reads like a
+          # credential problem next to a Boskos release and is not one.
+          pkill -P "${HEARTBEAT_PID:-0}" 2>/dev/null || true
+          kill "${HEARTBEAT_PID:-}" 2>/dev/null || true
+          kill "${STEP_PID:-}" 2>/dev/null || true
+          echo "=== [$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Running CI Teardown ==="
+          ./hack/ci-teardown.sh || true
+          if [ -n "${LEASED_PROJECT:-}" ] && [ "${LEASED_PROJECT}" != "null" ]; then
+            echo "=== [$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Releasing Boskos Project: ${LEASED_PROJECT} ==="
+            "${BOSKOSCTL[@]}" release --name="${LEASED_PROJECT}" --target-state=free || true
+          fi
+          exit $rc
+        }
+        trap cleanup EXIT INT TERM
+
+        # The abort fallback fires only while the eval is still running. Once
+        # cleanup() has touched the sentinel the resource is on its way back
+        # to the pool, so an expiring heartbeat is expected and must not
+        # signal a script that is mid-teardown. `$$` is still this script's
+        # PID inside the subshell, which is what the comment below is about.
+        #
+        # --timeout outlives the job, and ANY exit of the heartbeat aborts the
+        # run, exit 0 included. boskosctl stops beating at its --timeout (5h by
+        # default) and exits 0; four kube-agents smoke runs held past that point
+        # on 2026-10-14 lost their leases while still running, the reaper handed
+        # their projects to other runs, and at the ceiling their teardowns
+        # uninstalled the new tenants (gke-labs/kube-agents#3129). This job's
+        # timeout is 480m, so a heartbeat that stops before then means the
+        # project is about to be taken away, whatever its exit status says.
+        ( "${BOSKOSCTL[@]}" heartbeat --resource "${RESOURCE}" --period=30s --retries=8 --timeout=500m || true
+          [ -e "${TEARDOWN_SENTINEL}" ] || kill -TERM $$ ) &
+        HEARTBEAT_PID=$!
+
+        # Every step runs in the background and is waited on, because bash
+        # defers a trapped signal until the *foreground* command completes.
+        # Run in the foreground, a heartbeat failure mid-eval would sit
+        # pending for the rest of the multi-hour step -- long past the 5m
+        # Boskos reaper window, so a concurrent run could lease the same
+        # project -- and if the step then exited 0, cleanup would capture
+        # rc=0 and the job would go green having never run the eval. `wait`
+        # is interruptible, so the trap fires immediately and cleanup sees
+        # 143.
         #
         # Signalling the process group (kill -TERM 0) also interrupts
         # promptly, but prow's entrypoint starts the job without Setpgid
