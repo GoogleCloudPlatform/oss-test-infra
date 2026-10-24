@@ -285,10 +285,11 @@ periodics:
   # fills the admission window the #925 gate machinery reads.
   #
   # Grades spec.mode next (EVAL_MODE_NEXT=1 below), the mode a new install
-  # gets and the one pull-kube-agents-smoke-test grades, so this job and its
-  # -writers part record the next-mode window the presubmit is compared with
-  # (gke-labs/kube-agents#2007). ci-kube-agents-eval-nightly-today below is
-  # the today-mode nightly kept as the rollback check, and records today's.
+  # gets and the one pull-kube-agents-smoke-test grades, so this job, its
+  # -main-b half and its -writers part record the next-mode window the
+  # presubmit is compared with (gke-labs/kube-agents#2007).
+  # ci-kube-agents-eval-nightly-today below is the today-mode nightly kept
+  # as the rollback check, and records today's.
   cluster: build-kube-agents
   # 00:00 UTC (8 PM EDT / 7 PM EST; 5 PM / 4 PM Pacific): after the working
   # day's presubmit herd in the team's Eastern time zone, so the nightly's
@@ -454,8 +455,9 @@ periodics:
         # the floor, a shape no run has measured. 6 is what the next-mode
         # nightly ran at: the whole catalog, this part plus the one-at-a-time
         # pull-request units (about 100m), took 403-717m a night from
-        # 2026-10-08 to 10-21. This part alone fits this job's 720m with
-        # little margin on the slowest of those nights; a night cut at the
+        # 2026-10-08 to 10-21. The first night this job ran the whole main
+        # part under next it reached the 720m deadline, which is why the part
+        # is now halved (the timeout comment above); a night cut at the
         # deadline keeps the cases it already recorded.
         export EVAL_TASK_PARALLELISM="6"
         # ─── Baseline evidence store: ARMED ──────────────────────────────────
@@ -646,7 +648,8 @@ periodics:
   # the builds into one night). Both halves append to the evidence store;
   # their cases are disjoint, so no case is recorded twice a night. The
   # Boskos owner, log path and build identity all derive from JOB_NAME and
-  # BUILD_ID, so nothing below needs to differ by hand.
+  # BUILD_ID, so nothing below needs to differ by hand. Like the other two
+  # parts it grades spec.mode next (EVAL_MODE_NEXT=1 below).
   #
   # What the copied comments below say about the whole job:
   # The nightly catch-all (gke-labs/kube-agents#1021): runs the FULL eval
@@ -729,7 +732,7 @@ periodics:
     # dashboard (gke-labs/kube-agents#1335) rather than a second UI, so the
     # googleoss-kube-agents dashboard keeps only the pool-pressure tab.
     testgrid-create-test-group: "false"
-    description: Nightly kube-agents eval on main, the second half of the main part, on its own project (gke-labs/kube-agents#3384).
+    description: Nightly kube-agents eval on main under spec.mode next, the second half of the main part, on its own project (gke-labs/kube-agents#3384, #2007).
   extra_refs:
   - org: gke-labs
     repo: kube-agents
@@ -783,6 +786,18 @@ periodics:
         # not recognise. This export is the whole difference between this job
         # and the presubmit's eval step.
         export EVAL_TIER="nightly"
+        # ─── spec.mode next ─────────────────────────────────────────────────
+        # As ci-kube-agents-eval-nightly above: hack/ci-deploy.sh flips the
+        # install to spec.mode next after the today-mode install has passed
+        # its own gates, and hack/ci-eval-pr.sh runs this half through the
+        # gateway's inject door, less hack/eval/inject-lane-exclusions.txt.
+        # The deploy admits the flag on this job, which has no PULL_NUMBER,
+        # only by name (EVAL_MODE_NEXT_JOB_NAMES in hack/ci-deploy.sh, which
+        # gke-labs/kube-agents#3934 extends: merge that first, or this job
+        # reds at the deploy's refusal). bench-gate reads the inject transport
+        # as the version key's next mode, so the lines this job appends file
+        # under next and never reach today's window.
+        export EVAL_MODE_NEXT="1"
         # ─── The agent model: Claude on Vertex AI ───────────────────────────
         # Moved off gemini-3.1-pro-preview (gke-labs/kube-agents#3160): Gemini 3.x
         # runs on Vertex's dynamic shared quota, the source of the 429 storms,
@@ -803,10 +818,9 @@ periodics:
         # the split lives in hack/ci-eval-pr.sh, gke-labs/kube-agents#3432):
         # this job runs main-b, ci-kube-agents-eval-nightly runs main-a.
         export EVAL_NIGHTLY_PART="main-b"
-        # Wider fan-out than the presubmit's 4: the nightly runs alone on the
-        # model quota at this hour. 6 -> 8 on 2026-09-22 after six measured
-        # nights (see the timeout comment above).
-        export EVAL_TASK_PARALLELISM="8"
+        # 6 under spec.mode next, as ci-kube-agents-eval-nightly (its
+        # comment says why).
+        export EVAL_TASK_PARALLELISM="6"
         # ─── Baseline evidence store: ARMED ──────────────────────────────────
         # The bucket, the eval-baseline-recorder identity this job runs as,
         # and the grants on both are prerequisites -- docs/designs/
