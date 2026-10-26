@@ -4,7 +4,7 @@ presubmits:
   run_if_changed: '^prow/(oss/(config|plugins)\.yaml$|prowjobs/)|^\.prow'
   spec:
     containers:
-      - image: us-central1-docker.pkg.dev/gob-prow/prow-images/checkconfig:v20261013-95ea2ce97
+      - image: us-central1-docker.pkg.dev/gob-prow/prow-images/checkconfig:v20261019-8110e8d2b
         imagePullPolicy: Always
         command:
           - checkconfig
