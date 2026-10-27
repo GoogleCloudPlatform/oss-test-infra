@@ -206,15 +206,17 @@ presubmits:
           # run. Unset, the presubmit reads the empty checked-in directory
           # and the rate-based rungs stay inert with no signal that they are.
           export EVAL_BASELINE_STORE="gs://kube-agents-evals-bench/evidence"
-          # ─── The agent model: Claude on Vertex AI ───────────────────────────
+          # ─── The agent model: Gemini on Vertex AI, temporarily ──────────────
           # Moved off gemini-3.1-pro-preview with the nightly (gke-labs/kube-agents#3160),
           # so the gate grades the model whose record admits a case. hack/ci-deploy.sh
           # reads the first two, hack/ci-eval-pr.sh stamps records with the third; set
           # all three or the record names a model the install is not serving. The judge
           # stays on Gemini (JUDGE_MODEL in the script).
           export MODEL_PROVIDER="vertex_ai"
-          export MODEL_DEFAULT_NAME="claude-opus-5-5"
-          export AGENT_MODEL_OVERRIDE="claude-opus-5-5"
+          # Temporarily on gemini-4-argon in place of claude-opus-5-5 (hangdng, 2026-10-27);
+          # revert to claude-opus-5-5 when told.
+          export MODEL_DEFAULT_NAME="gemini-4-argon"
+          export AGENT_MODEL_OVERRIDE="gemini-4-argon"
           # ─── Ensure boskosctl is available (pinned version) ─────────────────────────
           # Named once, used by both the GCS fast path and the fallback below.
           BOSKOSCTL_VERSION="v0.0.0-20260730151943-11fb0c84248b"
@@ -874,15 +876,17 @@ presubmits:
           # here: the job is optional, so a reused verdict merges nothing.
           export EVAL_MODE_NEXT="1"
           export EVAL_ROLLBACK_LANE="1"
-          # ─── The agent model: Claude on Vertex AI ───────────────────────────
+          # ─── The agent model: Gemini on Vertex AI, temporarily ──────────────
           # The same model as the nightlies whose record this lane is compared
           # with (oss-test-infra#2736) and as the blocking job once #2737 lands.
           # hack/ci-deploy.sh reads the first two, hack/ci-eval-pr.sh stamps
           # records with the third; set all three or the record names a model
           # the install is not serving. The judge stays on Gemini.
           export MODEL_PROVIDER="vertex_ai"
-          export MODEL_DEFAULT_NAME="claude-opus-5-5"
-          export AGENT_MODEL_OVERRIDE="claude-opus-5-5"
+          # Temporarily on gemini-4-argon in place of claude-opus-5-5 (hangdng, 2026-10-27);
+          # revert to claude-opus-5-5 when told.
+          export MODEL_DEFAULT_NAME="gemini-4-argon"
+          export AGENT_MODEL_OVERRIDE="gemini-4-argon"
           # ─── Baseline evidence store: read-only ─────────────────────────────
           # The same variable ci-kube-agents-eval-nightly
           # (kube-agents-periodics.yaml) exports to APPEND; here it is READ.
