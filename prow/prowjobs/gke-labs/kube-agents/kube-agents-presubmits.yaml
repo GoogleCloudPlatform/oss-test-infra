@@ -207,8 +207,8 @@ presubmits:
           # and the rate-based rungs stay inert with no signal that they are.
           export EVAL_BASELINE_STORE="gs://kube-agents-evals-bench/evidence"
           # ─── The agent model: Gemini on Vertex AI, temporarily ──────────────
-          # Moved off gemini-3.1-pro-preview with the nightly (gke-labs/kube-agents#3160),
-          # so the gate grades the model whose record admits a case. hack/ci-deploy.sh
+          # Same model as the nightlies (history: gke-labs/kube-agents#3160), so the
+          # gate grades the model whose record admits a case. hack/ci-deploy.sh
           # reads the first two, hack/ci-eval-pr.sh stamps records with the third; set
           # all three or the record names a model the install is not serving. The judge
           # stays on Gemini (JUDGE_MODEL in the script).
@@ -878,7 +878,7 @@ presubmits:
           export EVAL_ROLLBACK_LANE="1"
           # ─── The agent model: Gemini on Vertex AI, temporarily ──────────────
           # The same model as the nightlies whose record this lane is compared
-          # with (oss-test-infra#2736) and as the blocking job once #2737 lands.
+          # with, and as the blocking job (oss-test-infra#2736, #2737).
           # hack/ci-deploy.sh reads the first two, hack/ci-eval-pr.sh stamps
           # records with the third; set all three or the record names a model
           # the install is not serving. The judge stays on Gemini.
