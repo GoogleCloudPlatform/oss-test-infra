@@ -324,7 +324,8 @@ periodics:
     # to this deadline and recorded nothing. At 8 the worst night so far fits
     # in ~6h; the budget stays 480m. Back to 6 under spec.mode next (see the
     # export below).
-    # 480m -> 720m with the move to Claude (gke-labs/kube-agents#3384): the
+    # 480m -> 720m with the move to Claude (gke-labs/kube-agents#3384), kept as
+    # is for the temporary gemini-4-argon window (not re-measured on it): the
     # whole main part on claude-opus-5 at parallelism 8 replays to a median
     # of 426min and a maximum of 528min over the nine Claude nights
     # 10-08..16. Split into two halves on two leased projects (option C
@@ -423,19 +424,17 @@ periodics:
         # as the version key's next mode, so the lines this job appends file
         # under next and never reach today's window.
         export EVAL_MODE_NEXT="1"
-        # ─── The agent model: Claude on Vertex AI ───────────────────────────
-        # Moved off gemini-3.1-pro-preview (gke-labs/kube-agents#3160): Gemini 3.x
-        # runs on Vertex's dynamic shared quota, the source of the 429 storms,
-        # while Claude has fixed quota per project and each run leases its own.
+        # ─── The agent model: Gemini on Vertex AI, temporarily ──────────────
+        # History: gemini-3.1-pro-preview, then claude-opus-5-5 for its fixed quota
+        # (gke-labs/kube-agents#3160), now gemini-4-argon on dynamic shared quota.
         # hack/ci-deploy.sh reads the first two, hack/ci-eval-pr.sh stamps records
         # with the third; set all three or the record names a model the install
         # is not serving. The judge stays on Gemini (JUDGE_MODEL in the script).
         export MODEL_PROVIDER="vertex_ai"
-        # claude-opus-5-5 answers on the global endpoint in every pool project
-        # (kube-agents-evals-2 to -35, probed 2026-10-19); the four Claude jobs
-        # here use it, so the today/next comparison stays on one model.
-        export MODEL_DEFAULT_NAME="claude-opus-5-5"
-        export AGENT_MODEL_OVERRIDE="claude-opus-5-5"
+        # Temporarily on gemini-4-argon in place of claude-opus-5-5 (hangdng, 2026-10-27);
+        # revert to claude-opus-5-5 when told.
+        export MODEL_DEFAULT_NAME="gemini-4-argon"
+        export AGENT_MODEL_OVERRIDE="gemini-4-argon"
         # The main part: everything but the cases that request a pull
         # request, which ci-kube-agents-eval-nightly-writers below runs on a
         # second leased project (gke-labs/kube-agents#2467). Those run one
@@ -699,7 +698,8 @@ periodics:
     # to this deadline and recorded nothing. At 8 the worst night so far fits
     # in ~6h; the budget stays 480m. Back to 6 under spec.mode next (see the
     # export below).
-    # 480m -> 720m with the move to Claude (gke-labs/kube-agents#3384): the
+    # 480m -> 720m with the move to Claude (gke-labs/kube-agents#3384), kept as
+    # is for the temporary gemini-4-argon window (not re-measured on it): the
     # whole main part on claude-opus-5 at parallelism 8 replays to a median
     # of 426min and a maximum of 528min over the nine Claude nights
     # 10-08..16. Split into two halves on two leased projects (option C
@@ -798,16 +798,17 @@ periodics:
         # as the version key's next mode, so the lines this job appends file
         # under next and never reach today's window.
         export EVAL_MODE_NEXT="1"
-        # ─── The agent model: Claude on Vertex AI ───────────────────────────
-        # Moved off gemini-3.1-pro-preview (gke-labs/kube-agents#3160): Gemini 3.x
-        # runs on Vertex's dynamic shared quota, the source of the 429 storms,
-        # while Claude has fixed quota per project and each run leases its own.
+        # ─── The agent model: Gemini on Vertex AI, temporarily ──────────────
+        # History: gemini-3.1-pro-preview, then claude-opus-5-5 for its fixed quota
+        # (gke-labs/kube-agents#3160), now gemini-4-argon on dynamic shared quota.
         # hack/ci-deploy.sh reads the first two, hack/ci-eval-pr.sh stamps records
         # with the third; set all three or the record names a model the install
         # is not serving. The judge stays on Gemini (JUDGE_MODEL in the script).
         export MODEL_PROVIDER="vertex_ai"
-        export MODEL_DEFAULT_NAME="claude-opus-5-5"
-        export AGENT_MODEL_OVERRIDE="claude-opus-5-5"
+        # Temporarily on gemini-4-argon in place of claude-opus-5-5 (hangdng, 2026-10-27);
+        # revert to claude-opus-5-5 when told.
+        export MODEL_DEFAULT_NAME="gemini-4-argon"
+        export AGENT_MODEL_OVERRIDE="gemini-4-argon"
         # The main part: everything but the cases that request a pull
         # request, which ci-kube-agents-eval-nightly-writers below runs on a
         # second leased project (gke-labs/kube-agents#2467). Those run one
@@ -1126,16 +1127,17 @@ periodics:
         # not recognise. This export is the whole difference between this job
         # and the presubmit's eval step.
         export EVAL_TIER="nightly"
-        # ─── The agent model: Claude on Vertex AI ───────────────────────────
-        # Moved off gemini-3.1-pro-preview (gke-labs/kube-agents#3160): Gemini 3.x
-        # runs on Vertex's dynamic shared quota, the source of the 429 storms,
-        # while Claude has fixed quota per project and each run leases its own.
+        # ─── The agent model: Gemini on Vertex AI, temporarily ──────────────
+        # History: gemini-3.1-pro-preview, then claude-opus-5-5 for its fixed quota
+        # (gke-labs/kube-agents#3160), now gemini-4-argon on dynamic shared quota.
         # hack/ci-deploy.sh reads the first two, hack/ci-eval-pr.sh stamps records
         # with the third; set all three or the record names a model the install
         # is not serving. The judge stays on Gemini (JUDGE_MODEL in the script).
         export MODEL_PROVIDER="vertex_ai"
-        export MODEL_DEFAULT_NAME="claude-opus-5-5"
-        export AGENT_MODEL_OVERRIDE="claude-opus-5-5"
+        # Temporarily on gemini-4-argon in place of claude-opus-5-5 (hangdng, 2026-10-27);
+        # revert to claude-opus-5-5 when told.
+        export MODEL_DEFAULT_NAME="gemini-4-argon"
+        export AGENT_MODEL_OVERRIDE="gemini-4-argon"
         # The GitLab lane (gke-labs/kube-agents#2394, #2832): hack/ci-deploy.sh deploys
         # against the leased project's GitLab repository and hack/ci-eval-pr.sh runs
         # hack/eval/gitlab-cases.txt, the forge-grading cases, with the pool's
@@ -1445,16 +1447,17 @@ periodics:
         # as the version key's next mode, so the lines this job appends file
         # under next and never reach today's window.
         export EVAL_MODE_NEXT="1"
-        # ─── The agent model: Claude on Vertex AI ───────────────────────────
-        # Moved off gemini-3.1-pro-preview (gke-labs/kube-agents#3160): Gemini 3.x
-        # runs on Vertex's dynamic shared quota, the source of the 429 storms,
-        # while Claude has fixed quota per project and each run leases its own.
+        # ─── The agent model: Gemini on Vertex AI, temporarily ──────────────
+        # History: gemini-3.1-pro-preview, then claude-opus-5-5 for its fixed quota
+        # (gke-labs/kube-agents#3160), now gemini-4-argon on dynamic shared quota.
         # hack/ci-deploy.sh reads the first two, hack/ci-eval-pr.sh stamps records
         # with the third; set all three or the record names a model the install
         # is not serving. The judge stays on Gemini (JUDGE_MODEL in the script).
         export MODEL_PROVIDER="vertex_ai"
-        export MODEL_DEFAULT_NAME="claude-opus-5-5"
-        export AGENT_MODEL_OVERRIDE="claude-opus-5-5"
+        # Temporarily on gemini-4-argon in place of claude-opus-5-5 (hangdng, 2026-10-27);
+        # revert to claude-opus-5-5 when told.
+        export MODEL_DEFAULT_NAME="gemini-4-argon"
+        export AGENT_MODEL_OVERRIDE="gemini-4-argon"
         # This job's part: only the cases that request a pull request.
         export EVAL_NIGHTLY_PART="writers"
         # 6 under spec.mode next, as the main part (its comment says
@@ -1743,15 +1746,17 @@ periodics:
         # first.
         export EVAL_MODE_NEXT="1"
         export EVAL_ROLLBACK_LANE="1"
-        # ─── The agent model: Claude on Vertex AI ───────────────────────────
+        # ─── The agent model: Gemini on Vertex AI, temporarily ──────────────
         # The same model as the nightlies whose record this lane is compared
-        # with (oss-test-infra#2736) and as the blocking job once #2737 lands.
+        # with, and as the blocking job (oss-test-infra#2736, #2737).
         # hack/ci-deploy.sh reads the first two, hack/ci-eval-pr.sh stamps
         # records with the third; set all three or the record names a model
         # the install is not serving. The judge stays on Gemini.
         export MODEL_PROVIDER="vertex_ai"
-        export MODEL_DEFAULT_NAME="claude-opus-5-5"
-        export AGENT_MODEL_OVERRIDE="claude-opus-5-5"
+        # Temporarily on gemini-4-argon in place of claude-opus-5-5 (hangdng, 2026-10-27);
+        # revert to claude-opus-5-5 when told.
+        export MODEL_DEFAULT_NAME="gemini-4-argon"
+        export AGENT_MODEL_OVERRIDE="gemini-4-argon"
         # ─── Baseline evidence store: read-only ─────────────────────────────
         # The same variable ci-kube-agents-eval-nightly
         # (kube-agents-periodics.yaml) exports to APPEND; here it is READ.
@@ -1935,7 +1940,7 @@ periodics:
   cluster: build-kube-agents
   # 04:00 UTC: after the today-mode GitLab nightly (02:00, about 90 minutes)
   # has finished, so the two GitLab nightlies do not draw on the model quota
-  # together, and before the 06:00 Claude nightlies.
+  # together, and before the 06:00 main nightlies.
   cron: "0 4 * * *"
   # A slow night must skip the next tick, not stack a second lease behind it.
   max_concurrency: 1
