@@ -197,7 +197,7 @@ periodics:
           cpu: 250m
           memory: 512Mi
 - name: ci-kube-agents-fleet-reconcile-daily
-  # Daily, 08:30 UTC (4:30 AM Eastern, before the 9 AM digest that reports
+  # Daily, 08:30 UTC (4:30 AM Eastern, before the 11 AM digest that reports
   # it): every mapped pool project, asked for by name and held through Boskos
   # (free -> reconciling -> free) for its one apply, the leased ones asked for
   # again until the budget is spent. This pass catches what the on-merge run
@@ -294,7 +294,7 @@ periodics:
   # 00:00 UTC (8 PM EDT / 7 PM EST; 5 PM / 4 PM Pacific): after the working
   # day's presubmit herd in the team's Eastern time zone, so the nightly's
   # lease and its model-quota draw do not contend with pull requests, and the
-  # night is over before the next morning's 9 AM ET digest reports it.
+  # night is over before the next morning's 11 AM ET digest reports it.
   # ci-kube-agents-pool-pressure above fires at :23 and leases nothing from
   # Boskos, so the two never contend.
   cron: "0 0 * * *"
@@ -338,7 +338,7 @@ periodics:
     # today-mode at parallelism 8, and the first spec.mode next night (build
     # 2113782591592075264, the whole main part at parallelism 6, 23min of it
     # the next-mode deploy) ran to 720m with about 20 cases finished. A run
-    # cut at 720m still ends by 12:00 UTC, before the 13:00 UTC digest.
+    # cut at 720m still ends by 12:00 UTC, before the 15:00 UTC digest (11 AM Toronto; gke-labs/kube-agents#4238).
     timeout: 840m
     grace_period: 5m
     # Logs and artifacts go to a bucket kube-agents owns, NOT the cluster
@@ -672,7 +672,7 @@ periodics:
   # 00:00 UTC (8 PM EDT / 7 PM EST; 5 PM / 4 PM Pacific): after the working
   # day's presubmit herd in the team's Eastern time zone, so the nightly's
   # lease and its model-quota draw do not contend with pull requests, and the
-  # night is over before the next morning's 9 AM ET digest reports it.
+  # night is over before the next morning's 11 AM ET digest reports it.
   # ci-kube-agents-pool-pressure above fires at :23 and leases nothing from
   # Boskos, so the two never contend.
   cron: "0 0 * * *"
@@ -716,7 +716,7 @@ periodics:
     # today-mode at parallelism 8, and the first spec.mode next night (build
     # 2113782591592075264, the whole main part at parallelism 6, 23min of it
     # the next-mode deploy) ran to 720m with about 20 cases finished. A run
-    # cut at 720m still ends by 12:00 UTC, before the 13:00 UTC digest.
+    # cut at 720m still ends by 12:00 UTC, before the 15:00 UTC digest (11 AM Toronto; gke-labs/kube-agents#4238).
     timeout: 840m
     grace_period: 5m
     # Logs and artifacts go to a bucket kube-agents owns, NOT the cluster
@@ -1029,7 +1029,7 @@ periodics:
   # 00:00 UTC (8 PM EDT / 7 PM EST; 5 PM / 4 PM Pacific): after the working
   # day's presubmit herd in the team's Eastern time zone, so the nightly's
   # lease and its model-quota draw do not contend with pull requests, and the
-  # night is over before the next morning's 9 AM ET digest reports it.
+  # night is over before the next morning's 11 AM ET digest reports it.
   # ci-kube-agents-pool-pressure above fires at :23 and leases nothing from
   # Boskos, so the two never contend.
   cron: "0 2 * * *"
@@ -1354,7 +1354,7 @@ periodics:
   # 00:00 UTC (8 PM EDT / 7 PM EST; 5 PM / 4 PM Pacific): after the working
   # day's presubmit herd in the team's Eastern time zone, so the nightly's
   # lease and its model-quota draw do not contend with pull requests, and the
-  # night is over before the next morning's 9 AM ET digest reports it.
+  # night is over before the next morning's 11 AM ET digest reports it.
   # ci-kube-agents-pool-pressure above fires at :23 and leases nothing from
   # Boskos, so the two never contend.
   cron: "0 0 * * *"
