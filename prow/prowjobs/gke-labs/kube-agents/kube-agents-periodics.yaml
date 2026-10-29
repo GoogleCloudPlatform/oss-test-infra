@@ -324,10 +324,11 @@ periodics:
     # to this deadline and recorded nothing. At 8 the worst night so far fits
     # in ~6h; the budget stays 480m. Back to 6 under spec.mode next (see the
     # export below).
-    # 720m -> 960m for the gemini-4-argon window (oss-test-infra#2758): the first
+    # 720m -> 840m for the gemini-4-argon window (oss-test-infra#2758): the first
     # Argon night (2026-10-29) cut main-a at 720m with 252 of 255 units done,
-    # ~750m needed, and main-b took 550m; a run cut at 960m ends by 16:00 UTC,
-    # after the 13:00 UTC digest, which then reports the night as running.
+    # ~750m needed, and main-b took 550m. A run cut at 840m ends by 14:06 UTC;
+    # the ci-health digest moves to 11 AM Toronto to stay after that, and the
+    # dashboard's running window to 14h30m (gke-labs/kube-agents#4238).
     # Before that, 480m -> 720m with the move to Claude (gke-labs/kube-agents#3384): the
     # whole main part on claude-opus-5 at parallelism 8 replays to a median
     # of 426min and a maximum of 528min over the nine Claude nights
@@ -338,7 +339,7 @@ periodics:
     # 2113782591592075264, the whole main part at parallelism 6, 23min of it
     # the next-mode deploy) ran to 720m with about 20 cases finished. A run
     # cut at 720m still ends by 12:00 UTC, before the 13:00 UTC digest.
-    timeout: 960m
+    timeout: 840m
     grace_period: 5m
     # Logs and artifacts go to a bucket kube-agents owns, NOT the cluster
     # default gs://kube-agents-prow (prow/oss/config.yaml, build-kube-agents).
@@ -585,7 +586,7 @@ periodics:
         # uninstalled the new tenants (gke-labs/kube-agents#3129). This job's
         # timeout is 720m, so a heartbeat that stops before then means the
         # project is about to be taken away, whatever its exit status says.
-        ( "${BOSKOSCTL[@]}" heartbeat --resource "${RESOURCE}" --period=30s --retries=8 --timeout=980m || true
+        ( "${BOSKOSCTL[@]}" heartbeat --resource "${RESOURCE}" --period=30s --retries=8 --timeout=860m || true
           [ -e "${TEARDOWN_SENTINEL}" ] || kill -TERM $$ ) &
         HEARTBEAT_PID=$!
 
@@ -701,10 +702,11 @@ periodics:
     # to this deadline and recorded nothing. At 8 the worst night so far fits
     # in ~6h; the budget stays 480m. Back to 6 under spec.mode next (see the
     # export below).
-    # 720m -> 960m for the gemini-4-argon window (oss-test-infra#2758): the first
+    # 720m -> 840m for the gemini-4-argon window (oss-test-infra#2758): the first
     # Argon night (2026-10-29) cut main-a at 720m with 252 of 255 units done,
-    # ~750m needed, and main-b took 550m; a run cut at 960m ends by 16:00 UTC,
-    # after the 13:00 UTC digest, which then reports the night as running.
+    # ~750m needed, and main-b took 550m. A run cut at 840m ends by 14:06 UTC;
+    # the ci-health digest moves to 11 AM Toronto to stay after that, and the
+    # dashboard's running window to 14h30m (gke-labs/kube-agents#4238).
     # Before that, 480m -> 720m with the move to Claude (gke-labs/kube-agents#3384): the
     # whole main part on claude-opus-5 at parallelism 8 replays to a median
     # of 426min and a maximum of 528min over the nine Claude nights
@@ -715,7 +717,7 @@ periodics:
     # 2113782591592075264, the whole main part at parallelism 6, 23min of it
     # the next-mode deploy) ran to 720m with about 20 cases finished. A run
     # cut at 720m still ends by 12:00 UTC, before the 13:00 UTC digest.
-    timeout: 960m
+    timeout: 840m
     grace_period: 5m
     # Logs and artifacts go to a bucket kube-agents owns, NOT the cluster
     # default gs://kube-agents-prow (prow/oss/config.yaml, build-kube-agents).
@@ -951,7 +953,7 @@ periodics:
         # uninstalled the new tenants (gke-labs/kube-agents#3129). This job's
         # timeout is 720m, so a heartbeat that stops before then means the
         # project is about to be taken away, whatever its exit status says.
-        ( "${BOSKOSCTL[@]}" heartbeat --resource "${RESOURCE}" --period=30s --retries=8 --timeout=980m || true
+        ( "${BOSKOSCTL[@]}" heartbeat --resource "${RESOURCE}" --period=30s --retries=8 --timeout=860m || true
           [ -e "${TEARDOWN_SENTINEL}" ] || kill -TERM $$ ) &
         HEARTBEAT_PID=$!
 
@@ -1363,11 +1365,11 @@ periodics:
   decoration_config:
     # One unit at a time, about 1.5-2h a night for the five such cases at
     # three repetitions as of 2026-10-06; 240m left room for that set to
-    # grow. 240m -> 420m for the gemini-4-argon window (oss-test-infra#2758):
+    # grow. 240m -> 360m for the gemini-4-argon window (oss-test-infra#2758):
     # nine cases now, ~9.4 min a unit on Argon against ~5.5 on Claude, and the
     # first Argon night was cut at 240m with 22 of 27 units launched (~295m
-    # needed). A run cut at 420m still ends by 07:00 UTC, before the digest.
-    timeout: 420m
+    # needed). A run cut at 360m still ends by 06:00 UTC, before the digest.
+    timeout: 360m
     grace_period: 5m
     # Logs and artifacts go to a bucket kube-agents owns, NOT the cluster
     # default gs://kube-agents-prow (prow/oss/config.yaml, build-kube-agents).
@@ -1596,7 +1598,7 @@ periodics:
         # uninstalled the new tenants (gke-labs/kube-agents#3129). This job's
         # timeout is 240m, so a heartbeat that stops before then means the
         # project is about to be taken away, whatever its exit status says.
-        ( "${BOSKOSCTL[@]}" heartbeat --resource "${RESOURCE}" --period=30s --retries=8 --timeout=440m || true
+        ( "${BOSKOSCTL[@]}" heartbeat --resource "${RESOURCE}" --period=30s --retries=8 --timeout=380m || true
           [ -e "${TEARDOWN_SENTINEL}" ] || kill -TERM $$ ) &
         HEARTBEAT_PID=$!
 
