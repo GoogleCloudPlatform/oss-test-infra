@@ -107,6 +107,7 @@ tide:
     author: "dependabot[bot]"
     includedBranches:
     - master
+    - main
     # Merge is gated by the required 'ci-passed' commit status in
     # context_options below (branch-protection is inert here: no
     # branchprotector is deployed in oss-test-infra).
@@ -155,6 +156,9 @@ tide:
             # required makes Tide block until it reports success.
             branches:
               master:
+                required-contexts:
+                  - ci-passed
+              main:
                 required-contexts:
                   - ci-passed
 
