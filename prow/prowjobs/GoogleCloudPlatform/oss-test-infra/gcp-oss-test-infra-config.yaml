@@ -1,4 +1,5 @@
 postsubmits:
+foo bar baz
   GoogleCloudPlatform/oss-test-infra:
   - name: post-oss-test-infra-deploy-prow
     cluster: test-infra-trusted
