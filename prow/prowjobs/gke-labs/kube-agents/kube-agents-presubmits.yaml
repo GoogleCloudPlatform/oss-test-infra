@@ -54,9 +54,8 @@ presubmits:
     # (gke-labs/kube-agents#2007, "The cutover itself"), through the gateway's
     # inject door: the EVAL_MODE_NEXT=1 export in the script below. Today mode,
     # what a rollback lands on, moved to the optional
-    # pull-kube-agents-smoke-test-today and the six-hourly
-    # ci-kube-agents-eval-today (kube-agents-periodics.yaml), which roll a next
-    # install back to today before grading it. The job keeps its name, so the
+    # pull-kube-agents-smoke-test-today, which rolls a next install back to
+    # today before grading it. The job keeps its name, so the
     # required context, Tide's history, step 0's verdict reuse and the
     # kube-agents dashboard and health readers that key on it are unchanged.
     decorate: true
@@ -760,10 +759,9 @@ presubmits:
     # under this job's name in GCS, and prowjob-default-sa can only read the
     # evidence store.
     #
-    # Optional: today is the rollback, not what a new install gets, and the
-    # same path runs every six hours on main (ci-kube-agents-eval-today in
-    # kube-agents-periodics.yaml). Not always_run, for cost: the matrix is the
-    # blocking job's, so an unrelated pull request would pay a second lease.
+    # Optional: today is the rollback, not what a new install gets. Not
+    # always_run, for cost: the matrix is the blocking job's, so an unrelated
+    # pull request would pay a second lease.
     #
     # Runs on its own when a pull request touches the round trip itself or the
     # operator's A2A reconciliation, whose teardown is the rollback
