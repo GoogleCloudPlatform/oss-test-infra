@@ -197,7 +197,7 @@ periodics:
           cpu: 250m
           memory: 512Mi
 - name: ci-kube-agents-fleet-reconcile-daily
-  # Daily, 08:30 UTC (4:30 AM Eastern, before the 9 AM digest that reports
+  # Daily, 08:30 UTC (4:30 AM Eastern, before the 11 AM digest that reports
   # it): every mapped pool project, asked for by name and held through Boskos
   # (free -> reconciling -> free) for its one apply, the leased ones asked for
   # again until the budget is spent. This pass catches what the on-merge run
@@ -294,7 +294,7 @@ periodics:
   # 00:00 UTC (8 PM EDT / 7 PM EST; 5 PM / 4 PM Pacific): after the working
   # day's presubmit herd in the team's Eastern time zone, so the nightly's
   # lease and its model-quota draw do not contend with pull requests, and the
-  # night is over before the next morning's 9 AM ET digest reports it.
+  # night is over before the next morning's 11 AM ET digest reports it.
   # ci-kube-agents-pool-pressure above fires at :23 and leases nothing from
   # Boskos, so the two never contend.
   cron: "0 0 * * *"
@@ -324,8 +324,12 @@ periodics:
     # to this deadline and recorded nothing. At 8 the worst night so far fits
     # in ~6h; the budget stays 480m. Back to 6 under spec.mode next (see the
     # export below).
-    # 480m -> 720m with the move to Claude (gke-labs/kube-agents#3384), kept as
-    # is for the temporary gemini-4-argon window (not re-measured on it): the
+    # 720m -> 840m for the gemini-4-argon window (oss-test-infra#2758): the first
+    # Argon night (2026-10-29) cut main-a at 720m with 252 of 255 units done,
+    # ~750m needed, and main-b took 550m. A run cut at 840m ends by 14:06 UTC;
+    # the ci-health digest moves to 11 AM Toronto to stay after that, and the
+    # dashboard's running window to 14h30m (gke-labs/kube-agents#4238).
+    # Before that, 480m -> 720m with the move to Claude (gke-labs/kube-agents#3384): the
     # whole main part on claude-opus-5 at parallelism 8 replays to a median
     # of 426min and a maximum of 528min over the nine Claude nights
     # 10-08..16. Split into two halves on two leased projects (option C
@@ -334,8 +338,8 @@ periodics:
     # today-mode at parallelism 8, and the first spec.mode next night (build
     # 2113782591592075264, the whole main part at parallelism 6, 23min of it
     # the next-mode deploy) ran to 720m with about 20 cases finished. A run
-    # cut at 720m still ends by 12:00 UTC, before the 13:00 UTC digest.
-    timeout: 720m
+    # cut at 720m still ends by 12:00 UTC, before the 15:00 UTC digest (11 AM Toronto; gke-labs/kube-agents#4238).
+    timeout: 840m
     grace_period: 5m
     # Logs and artifacts go to a bucket kube-agents owns, NOT the cluster
     # default gs://kube-agents-prow (prow/oss/config.yaml, build-kube-agents).
@@ -582,7 +586,7 @@ periodics:
         # uninstalled the new tenants (gke-labs/kube-agents#3129). This job's
         # timeout is 720m, so a heartbeat that stops before then means the
         # project is about to be taken away, whatever its exit status says.
-        ( "${BOSKOSCTL[@]}" heartbeat --resource "${RESOURCE}" --period=30s --retries=8 --timeout=740m || true
+        ( "${BOSKOSCTL[@]}" heartbeat --resource "${RESOURCE}" --period=30s --retries=8 --timeout=860m || true
           [ -e "${TEARDOWN_SENTINEL}" ] || kill -TERM $$ ) &
         HEARTBEAT_PID=$!
 
@@ -668,7 +672,7 @@ periodics:
   # 00:00 UTC (8 PM EDT / 7 PM EST; 5 PM / 4 PM Pacific): after the working
   # day's presubmit herd in the team's Eastern time zone, so the nightly's
   # lease and its model-quota draw do not contend with pull requests, and the
-  # night is over before the next morning's 9 AM ET digest reports it.
+  # night is over before the next morning's 11 AM ET digest reports it.
   # ci-kube-agents-pool-pressure above fires at :23 and leases nothing from
   # Boskos, so the two never contend.
   cron: "0 0 * * *"
@@ -698,8 +702,12 @@ periodics:
     # to this deadline and recorded nothing. At 8 the worst night so far fits
     # in ~6h; the budget stays 480m. Back to 6 under spec.mode next (see the
     # export below).
-    # 480m -> 720m with the move to Claude (gke-labs/kube-agents#3384), kept as
-    # is for the temporary gemini-4-argon window (not re-measured on it): the
+    # 720m -> 840m for the gemini-4-argon window (oss-test-infra#2758): the first
+    # Argon night (2026-10-29) cut main-a at 720m with 252 of 255 units done,
+    # ~750m needed, and main-b took 550m. A run cut at 840m ends by 14:06 UTC;
+    # the ci-health digest moves to 11 AM Toronto to stay after that, and the
+    # dashboard's running window to 14h30m (gke-labs/kube-agents#4238).
+    # Before that, 480m -> 720m with the move to Claude (gke-labs/kube-agents#3384): the
     # whole main part on claude-opus-5 at parallelism 8 replays to a median
     # of 426min and a maximum of 528min over the nine Claude nights
     # 10-08..16. Split into two halves on two leased projects (option C
@@ -708,8 +716,8 @@ periodics:
     # today-mode at parallelism 8, and the first spec.mode next night (build
     # 2113782591592075264, the whole main part at parallelism 6, 23min of it
     # the next-mode deploy) ran to 720m with about 20 cases finished. A run
-    # cut at 720m still ends by 12:00 UTC, before the 13:00 UTC digest.
-    timeout: 720m
+    # cut at 720m still ends by 12:00 UTC, before the 15:00 UTC digest (11 AM Toronto; gke-labs/kube-agents#4238).
+    timeout: 840m
     grace_period: 5m
     # Logs and artifacts go to a bucket kube-agents owns, NOT the cluster
     # default gs://kube-agents-prow (prow/oss/config.yaml, build-kube-agents).
@@ -945,7 +953,7 @@ periodics:
         # uninstalled the new tenants (gke-labs/kube-agents#3129). This job's
         # timeout is 720m, so a heartbeat that stops before then means the
         # project is about to be taken away, whatever its exit status says.
-        ( "${BOSKOSCTL[@]}" heartbeat --resource "${RESOURCE}" --period=30s --retries=8 --timeout=740m || true
+        ( "${BOSKOSCTL[@]}" heartbeat --resource "${RESOURCE}" --period=30s --retries=8 --timeout=860m || true
           [ -e "${TEARDOWN_SENTINEL}" ] || kill -TERM $$ ) &
         HEARTBEAT_PID=$!
 
@@ -1021,7 +1029,7 @@ periodics:
   # 00:00 UTC (8 PM EDT / 7 PM EST; 5 PM / 4 PM Pacific): after the working
   # day's presubmit herd in the team's Eastern time zone, so the nightly's
   # lease and its model-quota draw do not contend with pull requests, and the
-  # night is over before the next morning's 9 AM ET digest reports it.
+  # night is over before the next morning's 11 AM ET digest reports it.
   # ci-kube-agents-pool-pressure above fires at :23 and leases nothing from
   # Boskos, so the two never contend.
   cron: "0 2 * * *"
@@ -1346,7 +1354,7 @@ periodics:
   # 00:00 UTC (8 PM EDT / 7 PM EST; 5 PM / 4 PM Pacific): after the working
   # day's presubmit herd in the team's Eastern time zone, so the nightly's
   # lease and its model-quota draw do not contend with pull requests, and the
-  # night is over before the next morning's 9 AM ET digest reports it.
+  # night is over before the next morning's 11 AM ET digest reports it.
   # ci-kube-agents-pool-pressure above fires at :23 and leases nothing from
   # Boskos, so the two never contend.
   cron: "0 0 * * *"
@@ -1356,9 +1364,12 @@ periodics:
   decorate: true
   decoration_config:
     # One unit at a time, about 1.5-2h a night for the five such cases at
-    # three repetitions as of 2026-10-06; 240m leaves room for that set to
-    # grow before it needs this job's own pricing.
-    timeout: 240m
+    # three repetitions as of 2026-10-06; 240m left room for that set to
+    # grow. 240m -> 360m for the gemini-4-argon window (oss-test-infra#2758):
+    # nine cases now, ~9.4 min a unit on Argon against ~5.5 on Claude, and the
+    # first Argon night was cut at 240m with 22 of 27 units launched (~295m
+    # needed). A run cut at 360m still ends by 06:00 UTC, before the digest.
+    timeout: 360m
     grace_period: 5m
     # Logs and artifacts go to a bucket kube-agents owns, NOT the cluster
     # default gs://kube-agents-prow (prow/oss/config.yaml, build-kube-agents).
@@ -1587,7 +1598,7 @@ periodics:
         # uninstalled the new tenants (gke-labs/kube-agents#3129). This job's
         # timeout is 240m, so a heartbeat that stops before then means the
         # project is about to be taken away, whatever its exit status says.
-        ( "${BOSKOSCTL[@]}" heartbeat --resource "${RESOURCE}" --period=30s --retries=8 --timeout=260m || true
+        ( "${BOSKOSCTL[@]}" heartbeat --resource "${RESOURCE}" --period=30s --retries=8 --timeout=380m || true
           [ -e "${TEARDOWN_SENTINEL}" ] || kill -TERM $$ ) &
         HEARTBEAT_PID=$!
 
