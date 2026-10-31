@@ -9,7 +9,7 @@ periodics:
   extra_refs:
     - org: kubeflow
       repo: pipelines
-      base_ref: master
+      base_ref: main
       workdir: true
   spec:
     containers:
@@ -29,7 +29,7 @@ periodics:
   extra_refs:
   - org: kubeflow
     repo: pipelines
-    base_ref: master
+    base_ref: main
     workdir: true
   spec:
     containers:
