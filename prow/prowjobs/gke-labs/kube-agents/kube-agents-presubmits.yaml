@@ -1022,7 +1022,7 @@ presubmits:
             kill "${STEP_PID:-}" 2>/dev/null || true
             echo "=== [$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Running CI Teardown ==="
             ./hack/ci-forge.sh down || true
-          ./hack/ci-teardown.sh || true
+            ./hack/ci-teardown.sh || true
             if [ -n "${LEASED_PROJECT:-}" ] && [ "${LEASED_PROJECT}" != "null" ]; then
               echo "=== [$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Releasing Boskos Project: ${LEASED_PROJECT} ==="
               "${BOSKOSCTL[@]}" release --name="${LEASED_PROJECT}" --target-state=free || true
@@ -1384,7 +1384,7 @@ presubmits:
             kill "${STEP_PID:-}" 2>/dev/null || true
             echo "=== [$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Running CI Teardown ==="
             ./hack/ci-forge.sh down || true
-          ./hack/ci-teardown.sh || true
+            ./hack/ci-teardown.sh || true
             if [ -n "${LEASED_PROJECT:-}" ] && [ "${LEASED_PROJECT}" != "null" ]; then
               echo "=== [$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Releasing Boskos Project: ${LEASED_PROJECT} ==="
               "${BOSKOSCTL[@]}" release --name="${LEASED_PROJECT}" --target-state=free || true

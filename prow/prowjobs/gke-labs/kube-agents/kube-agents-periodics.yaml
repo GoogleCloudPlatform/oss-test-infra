@@ -2397,16 +2397,17 @@ periodics:
         secretName: kube-agents-evals-ledger-app-key
 - name: ci-kube-agents-eval-nightly-ghes-next
   cluster: build-kube-agents
-  # 05:00 UTC: after the today-mode GHES nightly (03:00) and the GitLab next
-  # nightly (04:00) have finished, so the forge nightlies do not draw on the
-  # model quota together, and before the 06:00 Claude nightlies.
+  # 05:00 UTC: two hours after the today-mode GHES nightly (03:00) and an
+  # hour after the GitLab next nightly (04:00), staggered so the forge
+  # nightlies do not all take their leases at once, and before the 06:00
+  # Claude nightlies.
   cron: "0 5 * * *"
   # A slow night must skip the next tick, not stack a second lease behind it.
   max_concurrency: 1
   decorate: true
   decoration_config:
     # The today-mode GHES nightly's budget. Its three cases (nine units,
-    # each opening a merge request, so run one at a time) took about 90
+    # each opening a pull request, so run one at a time) took about 90
     # minutes there; next routes each turn through the bridge and is expected
     # to be slower, and the job is non-gating, so a long night costs a lease.
     timeout: 480m
@@ -2966,9 +2967,10 @@ periodics:
         secretName: kube-agents-evals-ledger-app-key
 - name: ci-kube-agents-eval-nightly-gitlab-ce-next
   cluster: build-kube-agents
-  # 05:30 UTC: after the today-mode GitLab CE nightly (03:30) and the GHES
-  # next nightly (05:00) have started, so the forge nightlies do not draw on the
-  # model quota together, and before the 06:00 Claude nightlies.
+  # 05:30 UTC: two hours after the today-mode GitLab CE nightly (03:30) and
+  # 30 minutes after the GHES next nightly (05:00), staggered so the forge
+  # nightlies do not all take their leases at once, and before the 06:00
+  # Claude nightlies.
   cron: "30 5 * * *"
   # A slow night must skip the next tick, not stack a second lease behind it.
   max_concurrency: 1
