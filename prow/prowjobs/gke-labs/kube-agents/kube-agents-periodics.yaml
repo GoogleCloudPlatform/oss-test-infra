@@ -67,12 +67,12 @@ periodics:
           memory: 1Gi
 
 - name: ci-kube-agents-pull-sweep
-  # Hourly, off the hour and apart from pool-pressure's :23. A project freed
-  # and re-leased inside one interval inherits the agent's leftover pull
-  # requests for that lease, which the head-commit check keeps out of grading
-  # (kube-agents docs/ci-pool-projects.md 5.5), so the interval trades API
-  # calls against tidiness only. Every ten minutes it spent ~720 of the token
-  # minter installation's 6,350 GitHub requests an hour; hourly is ~120.
+  # Hourly: a re-leased project's leftover pull requests stay out of grading
+  # (head-commit check, kube-agents docs/ci-pool-projects.md 5.5), so the
+  # interval costs tidiness only. Every ten minutes the sweep's reads were
+  # ~720 of the token-minter installation's 6,350 GitHub requests an hour;
+  # hourly they are ~120. :41 is away from pool-pressure (:23) and the run
+  # ends well before compute-sweep (:45).
   cron: "41 * * * *"
   # Same cluster as the presubmit: Boskos is ClusterIP-only, and the sweep
   # holds each free project through it for the seconds a repository takes.
@@ -137,8 +137,8 @@ periodics:
   # Hourly: the script deletes only plants older than 4 hours
   # (DEFAULT_MAX_AGE_HOURS in hack/ci_sweep_compute_plants.py), so a shorter
   # interval deletes nothing more, and hourly deletes a leftover at most one
-  # hour after it becomes old enough. Minute 45 is five minutes from each
-  # pull-sweep start and away from pool-pressure at :23, and a run that finds
+  # hour after it becomes old enough. Minute 45 is four minutes after the
+  # pull-sweep's :41 and away from pool-pressure at :23, and a run that finds
   # nothing ends before the nightlies lease their projects at :00.
   cron: "45 * * * *"
   # Same cluster as the presubmit: Boskos is ClusterIP-only, and the sweep
