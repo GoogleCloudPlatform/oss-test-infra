@@ -858,6 +858,10 @@ presubmits:
       # exist.
       timeout: 360m
       grace_period: 5m
+      # Logs and artifacts go to the bucket kube-agents owns; the reasons and
+      # the grants are on pull-kube-agents-smoke-test above.
+      gcs_configuration:
+        bucket: kube-agents-evals-presubmit-logs
     spec:
       serviceAccountName: prowjob-default-sa
       containers:
@@ -1220,6 +1224,10 @@ presubmits:
       # exist.
       timeout: 360m
       grace_period: 5m
+      # Logs and artifacts go to the bucket kube-agents owns; the reasons and
+      # the grants are on pull-kube-agents-smoke-test above.
+      gcs_configuration:
+        bucket: kube-agents-evals-presubmit-logs
     spec:
       serviceAccountName: prowjob-default-sa
       containers:

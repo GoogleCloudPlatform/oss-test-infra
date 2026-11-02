@@ -2019,16 +2019,17 @@ periodics:
         # not recognise. This export is the whole difference between this job
         # and the presubmit's eval step.
         export EVAL_TIER="nightly"
-        # ─── The agent model: Claude on Vertex AI ───────────────────────────
-        # Moved off gemini-3.1-pro-preview (gke-labs/kube-agents#3160): Gemini 3.x
-        # runs on Vertex's dynamic shared quota, the source of the 429 storms,
-        # while Claude has fixed quota per project and each run leases its own.
+        # ─── The agent model: Gemini on Vertex AI, temporarily ──────────────
+        # History: gemini-3.1-pro-preview, then claude-opus-5-5 for its fixed quota
+        # (gke-labs/kube-agents#3160), now gemini-4-argon on dynamic shared quota.
         # hack/ci-deploy.sh reads the first two, hack/ci-eval-pr.sh stamps records
         # with the third; set all three or the record names a model the install
         # is not serving. The judge stays on Gemini (JUDGE_MODEL in the script).
         export MODEL_PROVIDER="vertex_ai"
-        export MODEL_DEFAULT_NAME="claude-opus-5-5"
-        export AGENT_MODEL_OVERRIDE="claude-opus-5-5"
+        # Temporarily on gemini-4-argon in place of claude-opus-5-5 (hangdng, 2026-10-27);
+        # revert to claude-opus-5-5 when told.
+        export MODEL_DEFAULT_NAME="gemini-4-argon"
+        export AGENT_MODEL_OVERRIDE="gemini-4-argon"
         # The GHES lane (gke-labs/kube-agents#3684): hack/ci-forge.sh stands the
         # GitHub Enterprise Server proxy up on a VM in the leased project,
         # hack/ci-deploy.sh declares the GitHub forge at its host with its CA,
@@ -2588,16 +2589,17 @@ periodics:
         # not recognise. This export is the whole difference between this job
         # and the presubmit's eval step.
         export EVAL_TIER="nightly"
-        # ─── The agent model: Claude on Vertex AI ───────────────────────────
-        # Moved off gemini-3.1-pro-preview (gke-labs/kube-agents#3160): Gemini 3.x
-        # runs on Vertex's dynamic shared quota, the source of the 429 storms,
-        # while Claude has fixed quota per project and each run leases its own.
+        # ─── The agent model: Gemini on Vertex AI, temporarily ──────────────
+        # History: gemini-3.1-pro-preview, then claude-opus-5-5 for its fixed quota
+        # (gke-labs/kube-agents#3160), now gemini-4-argon on dynamic shared quota.
         # hack/ci-deploy.sh reads the first two, hack/ci-eval-pr.sh stamps records
         # with the third; set all three or the record names a model the install
         # is not serving. The judge stays on Gemini (JUDGE_MODEL in the script).
         export MODEL_PROVIDER="vertex_ai"
-        export MODEL_DEFAULT_NAME="claude-opus-5-5"
-        export AGENT_MODEL_OVERRIDE="claude-opus-5-5"
+        # Temporarily on gemini-4-argon in place of claude-opus-5-5 (hangdng, 2026-10-27);
+        # revert to claude-opus-5-5 when told.
+        export MODEL_DEFAULT_NAME="gemini-4-argon"
+        export AGENT_MODEL_OVERRIDE="gemini-4-argon"
         # The GitLab CE lane (gke-labs/kube-agents#3683): hack/ci-forge.sh stands the
         # GitLab CE up on a VM in the leased project with the bot, its tokens,
         # the group and the project made per run, hack/ci-deploy.sh declares
