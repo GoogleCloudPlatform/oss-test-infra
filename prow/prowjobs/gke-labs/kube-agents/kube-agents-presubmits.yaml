@@ -934,6 +934,10 @@ presubmits:
           export EVAL_GITHUB_APP_ID="4675512"
           # The forge this lane drives; hack/ci-deploy.sh and hack/ci-eval-pr.sh read it.
           export EVAL_FORGE="ghes"
+          # spec.mode: next, as every other eval lane but the GitLab one: the
+          # install grades through the A2A gateway's inject door (see
+          # pull-kube-agents-smoke-test above).
+          export EVAL_MODE_NEXT="1"
           export REQUIRE_CACHE="true"
           # ─── Baseline evidence store: read-only ─────────────────────────────
           # The same variable ci-kube-agents-eval-nightly
@@ -1300,6 +1304,10 @@ presubmits:
           export EVAL_GITHUB_APP_ID="4675512"
           # The forge this lane drives; hack/ci-deploy.sh and hack/ci-eval-pr.sh read it.
           export EVAL_FORGE="gitlab-ce"
+          # spec.mode: next, as every other eval lane but the GitLab one: the
+          # install grades through the A2A gateway's inject door (see
+          # pull-kube-agents-smoke-test above).
+          export EVAL_MODE_NEXT="1"
           export REQUIRE_CACHE="true"
           # ─── Baseline evidence store: read-only ─────────────────────────────
           # The same variable ci-kube-agents-eval-nightly
