@@ -258,6 +258,15 @@ postsubmits:
           # withdrawn unmeasured. Like every RC run, a flagged one writes
           # nothing to main's baseline store.
           export EVAL_MODE_NEXT="1"
+          # ─── The agent model: the nightlies' three exports (oss-test-infra#2758) ──
+          # Without them the candidate's hack/ci-deploy.sh installs its default,
+          # gemini-3.1-pro-preview, so since 2026-10-29 this job has graded a
+          # model no other lane runs, against baselines the nightlies record on
+          # gemini-4-argon; set all three or the record names a model the
+          # install is not serving (the nightly's comment on the same lines).
+          export MODEL_PROVIDER="vertex_ai"
+          export MODEL_DEFAULT_NAME="gemini-4-argon"
+          export AGENT_MODEL_OVERRIDE="gemini-4-argon"
           #
           # EVAL_TIER is deliberately NOT set, though this run does measure the
           # full nightly catalog. hack/ci-eval-rc.sh exports it itself, and
