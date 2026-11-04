@@ -33,6 +33,15 @@ triggers:
   - GoogleCloudPlatform/google-guest-agent
   trusted_apps:
     - copybara-service
+- repos:
+  - gke-labs/kube-agents
+  # Its presubmits lease a project from a pool and run a model-calling
+  # evaluation, so only an org member starts one; a repository collaborator
+  # (the contributor agents hold triage there) needs an org member's
+  # /ok-to-test on each pull request, as any outside author does, or an
+  # OWNERS reviewer's approval, which lgtm's review_acts_as_lgtm turns into
+  # one run of every presubmit.
+  only_org_members: true
 
 config_updater:
   maps:
