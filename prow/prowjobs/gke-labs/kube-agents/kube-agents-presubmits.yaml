@@ -57,7 +57,8 @@ presubmits:
     # pull-kube-agents-smoke-test-today, which rolls a next install back to
     # today before grading it. The job keeps its name, so the
     # required context, Tide's history, step 0's verdict reuse and the
-    # kube-agents dashboard and health readers that key on it are unchanged.
+    # kube-agents dashboard and health readers that key on it are unchanged
+    # (they key on the bucket too; see gcs_configuration below).
     decorate: true
     decoration_config:
       # 85m was ~2x the ~43min this job averaged when it made two devops-bench
@@ -110,6 +111,28 @@ presubmits:
       # exist.
       timeout: 360m
       grace_period: 5m
+      # Logs and artifacts go to a bucket kube-agents owns, not the cluster
+      # default gs://kube-agents-prow: Deck (oss-prow-public-deck@oss-prow)
+      # reads that bucket, and its Spyglass views, which need no login,
+      # render any object in it by name, so a public repository's
+      # model-calling eval left its per-case verdicts, reasons and agent
+      # transcripts readable (gke-labs/kube-agents, 2026-11-01). The new
+      # bucket grants the pod's identity (prowjob-default-sa@kube-agents-prow)
+      # and crier (oss-prow@oss-prow) objectAdmin, the dashboard collector
+      # (github-actions@kube-agents-prow) objectViewer, and Deck nothing;
+      # granted by hand, this comment is the record. Once the pod is reaped
+      # the run page has nothing to show; while it runs, Deck streams the
+      # pod's log, which hack/ci-eval-pr.sh keeps free of grading detail. A
+      # contributor reads a red in the kube-agents health bot's comment on
+      # the pull request and the eval dashboard, not here; the GitHub status
+      # is the public record. The kube-agents readers (the dashboard
+      # collector, step 0's verdict reuse, pool-pressure) name this bucket,
+      # so their change lands first. The four smoke lanes move; the RC
+      # postsubmit, ci-kube-agents-eval-nightly-gitlab-next and the
+      # nightlies' bucket grant to Deck are separate decisions. Only the
+      # bucket is overridden, as the nightlies do.
+      gcs_configuration:
+        bucket: kube-agents-evals-presubmit-logs
     spec:
       serviceAccountName: prowjob-default-sa
       containers:
@@ -500,6 +523,10 @@ presubmits:
       # exist.
       timeout: 360m
       grace_period: 5m
+      # Logs and artifacts go to the bucket kube-agents owns; the reasons and
+      # the grants are on pull-kube-agents-smoke-test above.
+      gcs_configuration:
+        bucket: kube-agents-evals-presubmit-logs
     spec:
       serviceAccountName: prowjob-default-sa
       containers:
@@ -1540,6 +1567,10 @@ presubmits:
       # is bounded at 60 minutes (EVAL_ROLLBACK_TIMEOUT_SECONDS in hack/ci-eval-pr.sh).
       timeout: 360m
       grace_period: 5m
+      # Logs and artifacts go to the bucket kube-agents owns; the reasons and
+      # the grants are on pull-kube-agents-smoke-test above.
+      gcs_configuration:
+        bucket: kube-agents-evals-presubmit-logs
     spec:
       serviceAccountName: prowjob-default-sa
       containers:
@@ -1842,6 +1873,10 @@ presubmits:
       # oss-test-infra#2737 to #2758.
       timeout: 360m
       grace_period: 5m
+      # Logs and artifacts go to the bucket kube-agents owns; the reasons and
+      # the grants are on pull-kube-agents-smoke-test above.
+      gcs_configuration:
+        bucket: kube-agents-evals-presubmit-logs
     spec:
       serviceAccountName: prowjob-default-sa
       containers:
