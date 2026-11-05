@@ -1023,18 +1023,21 @@ periodics:
   # JOB_NAME and BUILD_ID. Like the nightlies it grades spec.mode next
   # (EVAL_MODE_NEXT=1 below; hack/ci-deploy.sh admits this job by name).
   #
-  # Rerun only, about once a week. Prow requires a cron, interval or
-  # minimum_interval on every periodic (pkg/config/config.go, the periodics
-  # check), so the cron below is a date that never comes (the 30th of
-  # February) and the job is started from Deck's Rerun button by a
-  # GoogleCloudPlatform member (rerun_auth_configs in prow/oss/config.yaml).
-  # The suite fills its 60-run window by hand at the start, then once a week;
-  # a second slice (ci-kube-agents-certification-2, EVAL_CERTIFICATION_PART=2)
-  # is added when the roster's part 1 no longer fits the timeout.
+  # Weekly, Saturday 14:00 UTC (09:00 EST): after the nightlies end and in
+  # the window the pool is idle (the pool-pressure reading over the week
+  # before this job landed: 1 to 2 free projects at the nightlies' hour on a
+  # weeknight, about 30 on a weekend morning). Horologium creates the run on
+  # the cron, which is what gives Deck a ProwJob to Rerun from: a periodic
+  # whose schedule never fires has no run and no Rerun button. The suite
+  # fills its 60-run window from Deck's Rerun button at the start (a
+  # GoogleCloudPlatform member, rerun_auth_configs in prow/oss/config.yaml),
+  # then this cron carries it once a week; a second slice
+  # (ci-kube-agents-certification-2, EVAL_CERTIFICATION_PART=2) is added when
+  # the roster's part 1 no longer fits the timeout.
   cluster: build-kube-agents
-  cron: "0 0 30 2 *"
-  # A rerun pressed twice must queue, not stack a second lease and a second
-  # full provisioning behind the first.
+  cron: "0 14 * * 6"
+  # A Rerun pressed while the weekly run is still going must queue, not
+  # stack a second lease and a second full provisioning behind the first.
   max_concurrency: 1
   decorate: true
   decoration_config:
@@ -1068,7 +1071,7 @@ periodics:
     # (gke-labs/kube-agents#1335) rather than a second UI, so the
     # googleoss-kube-agents dashboard keeps only the pool-pressure tab.
     testgrid-create-test-group: "false"
-    description: Certification lane, slice 1, Rerun only, about weekly. kube-agents certification suite on main under spec.mode next, on its own project (gke-labs/kube-agents#3978).
+    description: Certification lane, slice 1, weekly on Saturday 14:00 UTC and on Rerun. kube-agents certification suite on main under spec.mode next, on its own project (gke-labs/kube-agents#3978).
   extra_refs:
   - org: gke-labs
     repo: kube-agents
@@ -1132,8 +1135,7 @@ periodics:
         # only by name (EVAL_MODE_NEXT_JOB_NAMES in hack/ci-deploy.sh, which
         # the kube-agents pull request that adds the tier extends: merge that
         # first, or this job reds at the deploy's refusal). bench-gate reads
-        # the inject transport as the version key's next mode, so the lines
-        # this job appends file under next and never reach today's window.
+        # the inject transport as the version key's next mode.
         export EVAL_MODE_NEXT="1"
         # ─── The agent model: Gemini on Vertex AI, temporarily ──────────────
         # History: gemini-3.1-pro-preview, then claude-opus-5-5 for its fixed quota
@@ -1149,17 +1151,13 @@ periodics:
         # 6 under spec.mode next, as ci-kube-agents-eval-nightly (its
         # comment says why).
         export EVAL_TASK_PARALLELISM="6"
-        # ─── Baseline evidence store: ARMED ──────────────────────────────────
-        # The bucket, the eval-baseline-recorder identity this job runs as,
-        # and the grants on both are prerequisites -- docs/designs/
-        # eval-scorer.md, "Provisioning it", in gke-labs/kube-agents. The
-        # contract from hack/ci-eval-pr.sh's EVAL_BASELINE_STORE comment:
-        # turning the store on is TWO Prow exports, not one. This job holds
-        # objectViewer AND objectCreator on the bucket (it appends one
-        # immutable object per case per run); the presubmit exports the SAME
-        # variable with objectViewer only (it reads). A certification case is
-        # never on the blocking roster, so its lines inform the record and
-        # arm nothing.
+        # ─── Baseline evidence store: read only ─────────────────────────────
+        # Exported for the read, like a presubmit. hack/ci-eval-pr.sh sets
+        # EVAL_IS_MAIN_RUN=false under EVAL_TIER=certification, so this lane
+        # appends nothing to the store; its record is the logs bucket above,
+        # which the certified-capabilities page reads. The identity still
+        # holds objectCreator because the spec is the nightly's, copied; the
+        # script's opt-out is what keeps the write from happening.
         #
         # EVAL_REPETITIONS stays at the script's default 3, the count the
         # page's window is priced at (60 runs = 20 slice runs).
