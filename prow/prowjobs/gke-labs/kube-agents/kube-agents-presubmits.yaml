@@ -34,13 +34,12 @@ presubmits:
     # runtime file anywhere in a diff runs the full eval regardless: this
     # decides what triggers the job, never what the job checks.
     #
-    # k8s-api-proxy/ is a self-contained Go module with its own workflow
-    # (gofmt, vet, go test -race). Skipping it is a choice: once an image builds
-    # from the module, a proxy-only change reaches the agent's kubectl path
-    # without this job. The image build and its wiring (deploy/, charts/,
-    # k8s-operator/) still run it. Keep this list identical to SMOKE_SKIP_RE in
-    # gke-labs/kube-agents scripts/merge_gate.py.
-    skip_if_only_changed: '^(docs/|\.github/|examples/|tests/|scripts/release/|scripts/eval_dashboard/|k8s-api-proxy/)|^scripts/test_[^/]+\.py$|^[^/]+\.md$|^(LICENSE|OWNERS|OWNERS_ALIASES|\.gitignore|install\.sh|upgrade\.sh|uninstall\.sh)$'
+    # k8s-api-proxy/ is not on the list: the sandbox routes the agent's kubectl
+    # through the proxy, so a proxy-only change reaches what the agent runs and
+    # the job has to grade it. Keep this list identical to SMOKE_SKIP_RE in
+    # gke-labs/kube-agents scripts/merge_gate.py: when the two differ, the
+    # kube-agents merge gate waits for a status this job never posts.
+    skip_if_only_changed: '^(docs/|\.github/|examples/|tests/|scripts/release/|scripts/eval_dashboard/)|^scripts/test_[^/]+\.py$|^[^/]+\.md$|^(LICENSE|OWNERS|OWNERS_ALIASES|\.gitignore|install\.sh|upgrade\.sh|uninstall\.sh)$'
     # Merge-blocking since 2026-09: what blocks is not this flag alone but
     # admission on the kube-agents side -- a case's record in the evidence
     # store once it holds a full window at the current version key, and the
