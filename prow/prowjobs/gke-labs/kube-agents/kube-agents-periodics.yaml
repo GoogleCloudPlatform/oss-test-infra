@@ -67,11 +67,13 @@ periodics:
           memory: 1Gi
 
 - name: ci-kube-agents-pull-sweep
-  # Every ten minutes: a project freed and re-leased inside one interval
-  # inherits the agent's leftover pull requests for that lease, which the
-  # head-commit check keeps out of grading (kube-agents docs/ci-pool-projects.md
-  # 5.5), so the interval trades API calls against tidiness only.
-  cron: "*/10 * * * *"
+  # Hourly: a re-leased project's leftover pull requests stay out of grading
+  # (head-commit check, kube-agents docs/ci-pool-projects.md 5.5), so the
+  # interval costs tidiness only. Every ten minutes the sweep's reads were
+  # ~720 of the token-minter installation's 6,350 GitHub requests an hour;
+  # hourly they are ~120. :41 is away from pool-pressure (:23) and the run
+  # ends well before compute-sweep (:45).
+  cron: "41 * * * *"
   # Same cluster as the presubmit: Boskos is ClusterIP-only, and the sweep
   # holds each free project through it for the seconds a repository takes.
   cluster: build-kube-agents
@@ -135,8 +137,8 @@ periodics:
   # Hourly: the script deletes only plants older than 4 hours
   # (DEFAULT_MAX_AGE_HOURS in hack/ci_sweep_compute_plants.py), so a shorter
   # interval deletes nothing more, and hourly deletes a leftover at most one
-  # hour after it becomes old enough. Minute 45 is five minutes from each
-  # pull-sweep start and away from pool-pressure at :23, and a run that finds
+  # hour after it becomes old enough. Minute 45 is four minutes after the
+  # pull-sweep's :41 and away from pool-pressure at :23, and a run that finds
   # nothing ends before the nightlies lease their projects at :00.
   cron: "45 * * * *"
   # Same cluster as the presubmit: Boskos is ClusterIP-only, and the sweep
@@ -428,13 +430,17 @@ periodics:
         # as the version key's next mode, so the lines this job appends file
         # under next and never reach today's window.
         export EVAL_MODE_NEXT="1"
-        # ─── The agent model: Gemini on Vertex AI, temporarily ──────────────
+        # ─── The agent model: Gemini on the Gemini Developer API ─────────────
         # History: gemini-3.1-pro-preview, then claude-opus-5-5 for its fixed quota
-        # (gke-labs/kube-agents#3160), now gemini-4-argon on dynamic shared quota.
+        # (gke-labs/kube-agents#3160), then gemini-4-argon on Vertex AI's dynamic
+        # shared quota, now gemini-4-argon on the Gemini Developer API with the
+        # leased project's own key (gke-labs/kube-agents#4850): hack/ci-deploy.sh
+        # reads it from the project's Secret Manager under MODEL_PROVIDER=gemini
+        # and stops before Helm when the project has none.
         # hack/ci-deploy.sh reads the first two, hack/ci-eval-pr.sh stamps records
         # with the third; set all three or the record names a model the install
-        # is not serving. The judge stays on Gemini (JUDGE_MODEL in the script).
-        export MODEL_PROVIDER="vertex_ai"
+        # is not serving. The judge stays on the shared key (JUDGE_MODEL in the script).
+        export MODEL_PROVIDER="gemini"
         # Temporarily on gemini-4-argon in place of claude-opus-5-5 (hangdng, 2026-10-27);
         # revert to claude-opus-5-5 when told.
         export MODEL_DEFAULT_NAME="gemini-4-argon"
@@ -806,13 +812,17 @@ periodics:
         # as the version key's next mode, so the lines this job appends file
         # under next and never reach today's window.
         export EVAL_MODE_NEXT="1"
-        # ─── The agent model: Gemini on Vertex AI, temporarily ──────────────
+        # ─── The agent model: Gemini on the Gemini Developer API ─────────────
         # History: gemini-3.1-pro-preview, then claude-opus-5-5 for its fixed quota
-        # (gke-labs/kube-agents#3160), now gemini-4-argon on dynamic shared quota.
+        # (gke-labs/kube-agents#3160), then gemini-4-argon on Vertex AI's dynamic
+        # shared quota, now gemini-4-argon on the Gemini Developer API with the
+        # leased project's own key (gke-labs/kube-agents#4850): hack/ci-deploy.sh
+        # reads it from the project's Secret Manager under MODEL_PROVIDER=gemini
+        # and stops before Helm when the project has none.
         # hack/ci-deploy.sh reads the first two, hack/ci-eval-pr.sh stamps records
         # with the third; set all three or the record names a model the install
-        # is not serving. The judge stays on Gemini (JUDGE_MODEL in the script).
-        export MODEL_PROVIDER="vertex_ai"
+        # is not serving. The judge stays on the shared key (JUDGE_MODEL in the script).
+        export MODEL_PROVIDER="gemini"
         # Temporarily on gemini-4-argon in place of claude-opus-5-5 (hangdng, 2026-10-27);
         # revert to claude-opus-5-5 when told.
         export MODEL_DEFAULT_NAME="gemini-4-argon"
@@ -1135,13 +1145,17 @@ periodics:
         # not recognise. This export is the whole difference between this job
         # and the presubmit's eval step.
         export EVAL_TIER="nightly"
-        # ─── The agent model: Gemini on Vertex AI, temporarily ──────────────
+        # ─── The agent model: Gemini on the Gemini Developer API ─────────────
         # History: gemini-3.1-pro-preview, then claude-opus-5-5 for its fixed quota
-        # (gke-labs/kube-agents#3160), now gemini-4-argon on dynamic shared quota.
+        # (gke-labs/kube-agents#3160), then gemini-4-argon on Vertex AI's dynamic
+        # shared quota, now gemini-4-argon on the Gemini Developer API with the
+        # leased project's own key (gke-labs/kube-agents#4850): hack/ci-deploy.sh
+        # reads it from the project's Secret Manager under MODEL_PROVIDER=gemini
+        # and stops before Helm when the project has none.
         # hack/ci-deploy.sh reads the first two, hack/ci-eval-pr.sh stamps records
         # with the third; set all three or the record names a model the install
-        # is not serving. The judge stays on Gemini (JUDGE_MODEL in the script).
-        export MODEL_PROVIDER="vertex_ai"
+        # is not serving. The judge stays on the shared key (JUDGE_MODEL in the script).
+        export MODEL_PROVIDER="gemini"
         # Temporarily on gemini-4-argon in place of claude-opus-5-5 (hangdng, 2026-10-27);
         # revert to claude-opus-5-5 when told.
         export MODEL_DEFAULT_NAME="gemini-4-argon"
@@ -1458,13 +1472,17 @@ periodics:
         # as the version key's next mode, so the lines this job appends file
         # under next and never reach today's window.
         export EVAL_MODE_NEXT="1"
-        # ─── The agent model: Gemini on Vertex AI, temporarily ──────────────
+        # ─── The agent model: Gemini on the Gemini Developer API ─────────────
         # History: gemini-3.1-pro-preview, then claude-opus-5-5 for its fixed quota
-        # (gke-labs/kube-agents#3160), now gemini-4-argon on dynamic shared quota.
+        # (gke-labs/kube-agents#3160), then gemini-4-argon on Vertex AI's dynamic
+        # shared quota, now gemini-4-argon on the Gemini Developer API with the
+        # leased project's own key (gke-labs/kube-agents#4850): hack/ci-deploy.sh
+        # reads it from the project's Secret Manager under MODEL_PROVIDER=gemini
+        # and stops before Helm when the project has none.
         # hack/ci-deploy.sh reads the first two, hack/ci-eval-pr.sh stamps records
         # with the third; set all three or the record names a model the install
-        # is not serving. The judge stays on Gemini (JUDGE_MODEL in the script).
-        export MODEL_PROVIDER="vertex_ai"
+        # is not serving. The judge stays on the shared key (JUDGE_MODEL in the script).
+        export MODEL_PROVIDER="gemini"
         # Temporarily on gemini-4-argon in place of claude-opus-5-5 (hangdng, 2026-10-27);
         # revert to claude-opus-5-5 when told.
         export MODEL_DEFAULT_NAME="gemini-4-argon"
@@ -1737,6 +1755,13 @@ periodics:
         # at the script's default of 4: every case here opens a merge request,
         # so the units run one at a time whatever it is.
         export EVAL_MODE_NEXT="1"
+        # ─── The agent model, as the four nightlies above ────────────────────
+        # gemini-4-argon on the Gemini Developer API with the leased project's
+        # own key (gke-labs/kube-agents#4850). Set all three or the record names
+        # a model the install is not serving.
+        export MODEL_PROVIDER="gemini"
+        export MODEL_DEFAULT_NAME="gemini-4-argon"
+        export AGENT_MODEL_OVERRIDE="gemini-4-argon"
         # ─── Baseline evidence store: read-only ─────────────────────────────
         # Read for the advisory comparison; prowjob-default-sa cannot append.
         export EVAL_BASELINE_STORE="gs://kube-agents-evals-bench/evidence"
