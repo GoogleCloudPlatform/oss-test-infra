@@ -604,6 +604,27 @@ presubmits:
           # The forge this lane drives; hack/ci-deploy.sh and hack/ci-eval-pr.sh read it.
           export EVAL_FORGE="gitlab"
           export REQUIRE_CACHE="true"
+          # ─── The agent model: from the build cluster's eval-model Secret ─────
+          # The `gate` keys of the Secret mounted at /etc/eval-model
+          # (kube-agents-eval-model, namespace test-pods on build-kube-agents),
+          # kept equal by hand to what the blocking job sets in this file until
+          # that lane reads the Secret too; this lane mirrors the blocking job
+          # on GitLab. Before 2026-11-06 the lane set no model and ran on
+          # hack/ci-deploy.sh's default. Assigned before the export so an
+          # unreadable key stops the run (`export VAR="$(...)"` returns 0
+          # whatever the substitution did), refused when empty (every consumer
+          # below defaults an empty value to a model nobody chose), stray
+          # whitespace dropped. hack/ci-deploy.sh reads the first two,
+          # hack/ci-eval-pr.sh stamps records with the third, derived from the
+          # second. Under provider gemini, hack/ci-deploy.sh reads the leased
+          # project's own key from Secret Manager (gke-labs/kube-agents#4856);
+          # the judge stays on the shared key.
+          MODEL_PROVIDER="$(tr -d '[:space:]' < /etc/eval-model/gate.provider)"
+          MODEL_DEFAULT_NAME="$(tr -d '[:space:]' < /etc/eval-model/gate.name)"
+          : "${MODEL_PROVIDER:?eval-model Secret: gate.provider is missing or empty}"
+          : "${MODEL_DEFAULT_NAME:?eval-model Secret: gate.name is missing or empty}"
+          export MODEL_PROVIDER MODEL_DEFAULT_NAME
+          export AGENT_MODEL_OVERRIDE="${MODEL_DEFAULT_NAME}"
           # ─── Baseline evidence store: read-only ─────────────────────────────
           # The same variable ci-kube-agents-eval-nightly
           # (kube-agents-periodics.yaml) exports to APPEND; here it is READ.
@@ -759,6 +780,9 @@ presubmits:
         - name: gemini-secret
           mountPath: /etc/gemini-secret
           readOnly: true
+        - name: eval-model
+          mountPath: /etc/eval-model
+          readOnly: true
         - name: bench-github-token
           mountPath: /etc/bench-github-token
           readOnly: true
@@ -769,6 +793,9 @@ presubmits:
       - name: gemini-secret
         secret:
           secretName: kube-agents-gemini-api-key
+      - name: eval-model
+        secret:
+          secretName: kube-agents-eval-model
       - name: bench-github-token
         secret:
           secretName: kube-agents-bench-github-token
