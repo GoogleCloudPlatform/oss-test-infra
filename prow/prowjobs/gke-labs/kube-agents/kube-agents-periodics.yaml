@@ -1065,38 +1065,48 @@ periodics:
   # are written to artifacts/release-under-test.json for the page's fetcher,
   # which groups repetitions by release.
   #
-  # EVAL_REPETITIONS=60 and EVAL_TASK_PARALLELISM=1: one window per release,
-  # scored by the page's 57-of-60 rule (a Wilson 95 percent lower bound of
-  # 0.85); a repetition the harness records as infrastructure
-  # (KUBE_AGENTS_INFRA_FAILURE) sits outside the scored count, and a Rerun on
-  # the same release pools its scored repetitions into that release's window.
-  # The lane is serial under the harness's infrastructure lock, so the
-  # parallelism buys nothing and 1 keeps one plant on the host at a time.
+  # EVAL_REPETITIONS=30 and EVAL_TASK_PARALLELISM=1, two builds a weekend:
+  # one window per release, scored by the page's 57-of-60 rule (a Wilson 95
+  # percent lower bound of 0.85) over every scored repetition of that release
+  # across builds; a repetition the harness records as infrastructure
+  # (KUBE_AGENTS_INFRA_FAILURE) sits outside the scored count. Thirty per
+  # build, not sixty, because the harness writes a case's record only after
+  # its last repetition (grade_case in hack/ci-eval-pr.sh) and the partial
+  # verdict reads only cases with that record: a build the deadline cuts
+  # inside a case records nothing for it. Thirty repetitions at the lane's
+  # 11 minutes each, or 15.6 at the slowest, plus setup, end inside 720m with
+  # margin; the Saturday and Sunday builds pool to 60, and a Rerun tops up
+  # what infrastructure took. The later option, once the harness writes the
+  # case record per repetition: one 60-repetition build under a longer
+  # timeout, so a release's window fills in one build. The lane is serial
+  # under the harness's infrastructure lock, so the parallelism buys nothing
+  # and 1 keeps one plant on the host at a time.
   #
-  # Weekly, Saturday 14:00 UTC (09:00 EST): after the nightlies end and in
+  # Saturday and Sunday 14:00 UTC (09:00 EST): after the nightlies end and in
   # the window the pool is idle (the pool-pressure reading over the week
   # before this job landed: 1 to 2 free projects at the nightlies' hour on a
   # weeknight, about 30 on a weekend morning). Horologium creates the run on
   # the cron, which is what gives Deck a ProwJob to Rerun from: a periodic
   # whose schedule never fires has no run and no Rerun button. One release a
-  # week is graded, the newest GA at the cron; a Rerun grades the newest GA
-  # of its day. A second slice (ci-kube-agents-certification-2,
-  # EVAL_CERTIFICATION_PART=2) is added when the roster's part 1 no longer
-  # fits the timeout.
+  # week is graded, the newest GA at each cron (both days read the same tag
+  # unless a release lands between them, when Sunday's build starts the next
+  # release's window); a Rerun grades the newest GA of its day. A second
+  # slice (ci-kube-agents-certification-2, EVAL_CERTIFICATION_PART=2) is
+  # added when the roster's part 1 no longer fits the timeout.
   cluster: build-kube-agents
-  cron: "0 14 * * 6"
+  cron: "0 14 * * 6,0"
   # A Rerun pressed while the weekly run is still going must queue, not
   # stack a second lease and a second full provisioning behind the first.
   max_concurrency: 1
   decorate: true
   decoration_config:
-    # Provisional. One baseline case at 60 repetitions, serial: the measured
-    # unit is 7.5 minutes median and 15.6 minutes at the slowest (the nightly
-    # record, 10-29 to 11-05), plus 45 to 60 minutes of setup, so 60 units
-    # sit between 8.5 and 16.5 hours; 720m holds the median and most of the
-    # tail, and a run cut at the deadline keeps the repetitions it recorded
-    # (a Rerun pools the rest into the same release's window). It follows
-    # the first runs' wall clock, as the nightlies' did.
+    # Provisional. One baseline case at 30 repetitions, serial: the lane's
+    # unit is about 11 minutes (7.5 median on the api lane, 15.6 at the
+    # slowest), plus 45 to 60 minutes of setup, so 30 units sit between 4.7
+    # and 8.8 hours; 720m holds the slowest with margin, which matters
+    # because a build the deadline cuts inside a case records nothing for
+    # it (the job comment above). It follows the first runs' wall clock, as
+    # the nightlies' did.
     timeout: 720m
     grace_period: 5m
     # Logs and artifacts go to a bucket kube-agents owns, NOT the cluster
@@ -1121,7 +1131,7 @@ periodics:
     # (gke-labs/kube-agents#1335) rather than a second UI, so the
     # googleoss-kube-agents dashboard keeps only the pool-pressure tab.
     testgrid-create-test-group: "false"
-    description: Certification lane, slice 1, weekly on Saturday 14:00 UTC and on Rerun. kube-agents certification suite graded on the newest GA release's published images under spec.mode next, 60 repetitions per case, on its own project (gke-labs/kube-agents#3978).
+    description: Certification lane, slice 1, Saturday and Sunday 14:00 UTC and on Rerun. kube-agents certification suite graded on the newest GA release's published images under spec.mode next, 30 repetitions per case per build pooled to the release's 60, on its own project (gke-labs/kube-agents#3978).
   extra_refs:
   - org: gke-labs
     repo: kube-agents
@@ -1200,10 +1210,11 @@ periodics:
         export AGENT_MODEL_OVERRIDE="gemini-4-argon"
         # 1, not the nightly's 6: every certification case carries a stack
         # and the harness runs stack-bearing units one at a time under its
-        # infrastructure lock, so a wider fan-out buys nothing here; 60
-        # repetitions fill one release's window (the job comment above).
+        # infrastructure lock, so a wider fan-out buys nothing here; 30
+        # repetitions per build, two builds a weekend, fill one release's
+        # window of 60 (the job comment above).
         export EVAL_TASK_PARALLELISM="1"
-        export EVAL_REPETITIONS="60"
+        export EVAL_REPETITIONS="30"
         # ─── Baseline evidence store: read only ─────────────────────────────
         # Exported for the read, like a presubmit. hack/ci-eval-pr.sh sets
         # EVAL_IS_MAIN_RUN=false under EVAL_TIER=certification, so this lane
