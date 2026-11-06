@@ -532,7 +532,7 @@ postsubmits:
     # failure once a later daily at the same fleet tree has.
     branches:
     - ^main$
-    run_if_changed: '^bench/tf/fleet/.*\.(tf|hcl)$|^bench/tf/fleet/reconcile-allow\.json$|^bench/tf/fleet/seeded_b_pin\.py$|^bench/tf/fleet/gateway_status\.py$'
+    run_if_changed: '^bench/tf/fleet/.*\.(tf|hcl)$|^bench/tf/fleet/reconcile-allow\.json$|^bench/tf/fleet/seeded_b_pin\.py$|^bench/tf/fleet/gateway_status\.py$|^bench/tf/fleet/config_connector\.py$'
     cluster: build-kube-agents
     # Two fleet merges close together queue: the second run would otherwise
     # find every project busy under the first, and the first would be stopped
