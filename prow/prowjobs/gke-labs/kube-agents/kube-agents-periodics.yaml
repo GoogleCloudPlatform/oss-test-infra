@@ -331,9 +331,9 @@ periodics:
     # ~750m needed, and main-b took 550m. A run cut at 840m ends by 14:06 UTC;
     # the ci-health digest moves to 11 AM Toronto to stay after that, and the
     # dashboard's running window to 14h30m (gke-labs/kube-agents#4238).
-    # Before that, 480m -> 720m with the move to Claude (gke-labs/kube-agents#3384): the
-    # whole main part on claude-opus-5 at parallelism 8 replays to a median
-    # of 426min and a maximum of 528min over the nine Claude nights
+    # Before that, 480m -> 720m with the model change gke-labs/kube-agents#3384 sized for: the
+    # whole main part on that model at parallelism 8 replays to a median
+    # of 426min and a maximum of 528min over the nine nights
     # 10-08..16. Split into two halves on two leased projects (option C
     # there), the same replay puts each half at a ~219min median and a
     # ~305min maximum. Each half keeps 720m all the same: that replay is
@@ -430,21 +430,20 @@ periodics:
         # as the version key's next mode, so the lines this job appends file
         # under next and never reach today's window.
         export EVAL_MODE_NEXT="1"
-        # ─── The agent model: Gemini on the Gemini Developer API ─────────────
-        # History: gemini-3.1-pro-preview, then claude-opus-5-5 for its fixed quota
-        # (gke-labs/kube-agents#3160), then gemini-4-argon on Vertex AI's dynamic
-        # shared quota, now gemini-4-argon on the Gemini Developer API with the
-        # leased project's own key (gke-labs/kube-agents#4850): hack/ci-deploy.sh
-        # reads it from the project's Secret Manager under MODEL_PROVIDER=gemini
-        # and stops before Helm when the project has none.
-        # hack/ci-deploy.sh reads the first two, hack/ci-eval-pr.sh stamps records
-        # with the third; set all three or the record names a model the install
-        # is not serving. The judge stays on the shared key (JUDGE_MODEL in the script).
-        export MODEL_PROVIDER="gemini"
-        # Temporarily on gemini-4-argon in place of claude-opus-5-5 (hangdng, 2026-10-27);
-        # revert to claude-opus-5-5 when told.
-        export MODEL_DEFAULT_NAME="gemini-4-argon"
-        export AGENT_MODEL_OVERRIDE="gemini-4-argon"
+        # ─── The agent model: the `nightly` pair of the eval-model Secret ─────────
+        # The nightlies' pair, which all five nightlies read; the gate's
+        # record is built from these runs, so `gate.name` must name the same
+        # model or rung 6 compares nothing.
+        # Mounted at /etc/eval-model from kube-agents-eval-model (namespace
+        # test-pods on build-kube-agents). The mechanism and its reasons are on
+        # pull-kube-agents-smoke-test's block in kube-agents-presubmits.yaml;
+        # this block sets no model, and a switch is one write to the Secret.
+        MODEL_PROVIDER="$(tr -d '[:space:]' < /etc/eval-model/nightly.provider)"
+        MODEL_DEFAULT_NAME="$(tr -d '[:space:]' < /etc/eval-model/nightly.name)"
+        : "${MODEL_PROVIDER:?eval-model Secret: nightly.provider is missing or empty}"
+        : "${MODEL_DEFAULT_NAME:?eval-model Secret: nightly.name is missing or empty}"
+        export MODEL_PROVIDER MODEL_DEFAULT_NAME
+        export AGENT_MODEL_OVERRIDE="${MODEL_DEFAULT_NAME}"
         # The main part: everything but the cases that request a pull
         # request, which ci-kube-agents-eval-nightly-writers below runs on a
         # second leased project (gke-labs/kube-agents#2467). Those run one
@@ -627,6 +626,9 @@ periodics:
       - name: gemini-secret
         mountPath: /etc/gemini-secret
         readOnly: true
+      - name: eval-model
+        mountPath: /etc/eval-model
+        readOnly: true
       - name: bench-github-token
         mountPath: /etc/bench-github-token
         readOnly: true
@@ -637,6 +639,9 @@ periodics:
     - name: gemini-secret
       secret:
         secretName: kube-agents-gemini-api-key
+    - name: eval-model
+      secret:
+        secretName: kube-agents-eval-model
     - name: bench-github-token
       secret:
         secretName: kube-agents-bench-github-token
@@ -645,7 +650,7 @@ periodics:
         secretName: kube-agents-evals-ledger-app-key
 - name: ci-kube-agents-eval-nightly-main-b
   # The second half of the nightly's main part (gke-labs/kube-agents#3384,
-  # option C). On claude-opus-5 the whole main part replayed to a 426min
+  # option C). On the model #3384 sized for, the whole main part replayed to a 426min
   # median and a 528min maximum on one project, past the 480m budget about
   # one night in nine; hack/ci-eval-pr.sh splits it into two disjoint halves
   # on EVAL_NIGHTLY_PART=main-a / main-b (gke-labs/kube-agents#3432), and
@@ -713,9 +718,9 @@ periodics:
     # ~750m needed, and main-b took 550m. A run cut at 840m ends by 14:06 UTC;
     # the ci-health digest moves to 11 AM Toronto to stay after that, and the
     # dashboard's running window to 14h30m (gke-labs/kube-agents#4238).
-    # Before that, 480m -> 720m with the move to Claude (gke-labs/kube-agents#3384): the
-    # whole main part on claude-opus-5 at parallelism 8 replays to a median
-    # of 426min and a maximum of 528min over the nine Claude nights
+    # Before that, 480m -> 720m with the model change gke-labs/kube-agents#3384 sized for: the
+    # whole main part on that model at parallelism 8 replays to a median
+    # of 426min and a maximum of 528min over the nine nights
     # 10-08..16. Split into two halves on two leased projects (option C
     # there), the same replay puts each half at a ~219min median and a
     # ~305min maximum. Each half keeps 720m all the same: that replay is
@@ -812,21 +817,20 @@ periodics:
         # as the version key's next mode, so the lines this job appends file
         # under next and never reach today's window.
         export EVAL_MODE_NEXT="1"
-        # ─── The agent model: Gemini on the Gemini Developer API ─────────────
-        # History: gemini-3.1-pro-preview, then claude-opus-5-5 for its fixed quota
-        # (gke-labs/kube-agents#3160), then gemini-4-argon on Vertex AI's dynamic
-        # shared quota, now gemini-4-argon on the Gemini Developer API with the
-        # leased project's own key (gke-labs/kube-agents#4850): hack/ci-deploy.sh
-        # reads it from the project's Secret Manager under MODEL_PROVIDER=gemini
-        # and stops before Helm when the project has none.
-        # hack/ci-deploy.sh reads the first two, hack/ci-eval-pr.sh stamps records
-        # with the third; set all three or the record names a model the install
-        # is not serving. The judge stays on the shared key (JUDGE_MODEL in the script).
-        export MODEL_PROVIDER="gemini"
-        # Temporarily on gemini-4-argon in place of claude-opus-5-5 (hangdng, 2026-10-27);
-        # revert to claude-opus-5-5 when told.
-        export MODEL_DEFAULT_NAME="gemini-4-argon"
-        export AGENT_MODEL_OVERRIDE="gemini-4-argon"
+        # ─── The agent model: the `nightly` pair of the eval-model Secret ─────────
+        # The nightlies' pair, which all five nightlies read; the gate's
+        # record is built from these runs, so `gate.name` must name the same
+        # model or rung 6 compares nothing.
+        # Mounted at /etc/eval-model from kube-agents-eval-model (namespace
+        # test-pods on build-kube-agents). The mechanism and its reasons are on
+        # pull-kube-agents-smoke-test's block in kube-agents-presubmits.yaml;
+        # this block sets no model, and a switch is one write to the Secret.
+        MODEL_PROVIDER="$(tr -d '[:space:]' < /etc/eval-model/nightly.provider)"
+        MODEL_DEFAULT_NAME="$(tr -d '[:space:]' < /etc/eval-model/nightly.name)"
+        : "${MODEL_PROVIDER:?eval-model Secret: nightly.provider is missing or empty}"
+        : "${MODEL_DEFAULT_NAME:?eval-model Secret: nightly.name is missing or empty}"
+        export MODEL_PROVIDER MODEL_DEFAULT_NAME
+        export AGENT_MODEL_OVERRIDE="${MODEL_DEFAULT_NAME}"
         # The main part: everything but the cases that request a pull
         # request, which ci-kube-agents-eval-nightly-writers below runs on a
         # second leased project (gke-labs/kube-agents#2467). Those run one
@@ -998,6 +1002,9 @@ periodics:
       - name: gemini-secret
         mountPath: /etc/gemini-secret
         readOnly: true
+      - name: eval-model
+        mountPath: /etc/eval-model
+        readOnly: true
       - name: bench-github-token
         mountPath: /etc/bench-github-token
         readOnly: true
@@ -1008,6 +1015,9 @@ periodics:
     - name: gemini-secret
       secret:
         secretName: kube-agents-gemini-api-key
+    - name: eval-model
+      secret:
+        secretName: kube-agents-eval-model
     - name: bench-github-token
       secret:
         secretName: kube-agents-bench-github-token
@@ -1145,21 +1155,20 @@ periodics:
         # not recognise. This export is the whole difference between this job
         # and the presubmit's eval step.
         export EVAL_TIER="nightly"
-        # ─── The agent model: Gemini on the Gemini Developer API ─────────────
-        # History: gemini-3.1-pro-preview, then claude-opus-5-5 for its fixed quota
-        # (gke-labs/kube-agents#3160), then gemini-4-argon on Vertex AI's dynamic
-        # shared quota, now gemini-4-argon on the Gemini Developer API with the
-        # leased project's own key (gke-labs/kube-agents#4850): hack/ci-deploy.sh
-        # reads it from the project's Secret Manager under MODEL_PROVIDER=gemini
-        # and stops before Helm when the project has none.
-        # hack/ci-deploy.sh reads the first two, hack/ci-eval-pr.sh stamps records
-        # with the third; set all three or the record names a model the install
-        # is not serving. The judge stays on the shared key (JUDGE_MODEL in the script).
-        export MODEL_PROVIDER="gemini"
-        # Temporarily on gemini-4-argon in place of claude-opus-5-5 (hangdng, 2026-10-27);
-        # revert to claude-opus-5-5 when told.
-        export MODEL_DEFAULT_NAME="gemini-4-argon"
-        export AGENT_MODEL_OVERRIDE="gemini-4-argon"
+        # ─── The agent model: the `nightly` pair of the eval-model Secret ─────────
+        # The nightlies' pair, which all five nightlies read; the gate's
+        # record is built from these runs, so `gate.name` must name the same
+        # model or rung 6 compares nothing.
+        # Mounted at /etc/eval-model from kube-agents-eval-model (namespace
+        # test-pods on build-kube-agents). The mechanism and its reasons are on
+        # pull-kube-agents-smoke-test's block in kube-agents-presubmits.yaml;
+        # this block sets no model, and a switch is one write to the Secret.
+        MODEL_PROVIDER="$(tr -d '[:space:]' < /etc/eval-model/nightly.provider)"
+        MODEL_DEFAULT_NAME="$(tr -d '[:space:]' < /etc/eval-model/nightly.name)"
+        : "${MODEL_PROVIDER:?eval-model Secret: nightly.provider is missing or empty}"
+        : "${MODEL_DEFAULT_NAME:?eval-model Secret: nightly.name is missing or empty}"
+        export MODEL_PROVIDER MODEL_DEFAULT_NAME
+        export AGENT_MODEL_OVERRIDE="${MODEL_DEFAULT_NAME}"
         # The GitLab lane (gke-labs/kube-agents#2394, #2832): hack/ci-deploy.sh deploys
         # against the leased project's GitLab repository and hack/ci-eval-pr.sh runs
         # hack/eval/gitlab-cases.txt, the forge-grading cases, with the pool's
@@ -1334,6 +1343,9 @@ periodics:
       - name: gemini-secret
         mountPath: /etc/gemini-secret
         readOnly: true
+      - name: eval-model
+        mountPath: /etc/eval-model
+        readOnly: true
       - name: bench-github-token
         mountPath: /etc/bench-github-token
         readOnly: true
@@ -1344,6 +1356,9 @@ periodics:
     - name: gemini-secret
       secret:
         secretName: kube-agents-gemini-api-key
+    - name: eval-model
+      secret:
+        secretName: kube-agents-eval-model
     - name: bench-github-token
       secret:
         secretName: kube-agents-bench-github-token
@@ -1380,7 +1395,7 @@ periodics:
     # One unit at a time, about 1.5-2h a night for the five such cases at
     # three repetitions as of 2026-10-06; 240m left room for that set to
     # grow. 240m -> 360m for the gemini-4-argon window (oss-test-infra#2758):
-    # nine cases now, ~9.4 min a unit on Argon against ~5.5 on Claude, and the
+    # nine cases now, ~9.4 min a unit on Argon against ~5.5 on the previous model, and the
     # first Argon night was cut at 240m with 22 of 27 units launched (~295m
     # needed). A run cut at 360m still ends by 06:00 UTC, before the digest.
     timeout: 360m
@@ -1472,21 +1487,20 @@ periodics:
         # as the version key's next mode, so the lines this job appends file
         # under next and never reach today's window.
         export EVAL_MODE_NEXT="1"
-        # ─── The agent model: Gemini on the Gemini Developer API ─────────────
-        # History: gemini-3.1-pro-preview, then claude-opus-5-5 for its fixed quota
-        # (gke-labs/kube-agents#3160), then gemini-4-argon on Vertex AI's dynamic
-        # shared quota, now gemini-4-argon on the Gemini Developer API with the
-        # leased project's own key (gke-labs/kube-agents#4850): hack/ci-deploy.sh
-        # reads it from the project's Secret Manager under MODEL_PROVIDER=gemini
-        # and stops before Helm when the project has none.
-        # hack/ci-deploy.sh reads the first two, hack/ci-eval-pr.sh stamps records
-        # with the third; set all three or the record names a model the install
-        # is not serving. The judge stays on the shared key (JUDGE_MODEL in the script).
-        export MODEL_PROVIDER="gemini"
-        # Temporarily on gemini-4-argon in place of claude-opus-5-5 (hangdng, 2026-10-27);
-        # revert to claude-opus-5-5 when told.
-        export MODEL_DEFAULT_NAME="gemini-4-argon"
-        export AGENT_MODEL_OVERRIDE="gemini-4-argon"
+        # ─── The agent model: the `nightly` pair of the eval-model Secret ─────────
+        # The nightlies' pair, which all five nightlies read; the gate's
+        # record is built from these runs, so `gate.name` must name the same
+        # model or rung 6 compares nothing.
+        # Mounted at /etc/eval-model from kube-agents-eval-model (namespace
+        # test-pods on build-kube-agents). The mechanism and its reasons are on
+        # pull-kube-agents-smoke-test's block in kube-agents-presubmits.yaml;
+        # this block sets no model, and a switch is one write to the Secret.
+        MODEL_PROVIDER="$(tr -d '[:space:]' < /etc/eval-model/nightly.provider)"
+        MODEL_DEFAULT_NAME="$(tr -d '[:space:]' < /etc/eval-model/nightly.name)"
+        : "${MODEL_PROVIDER:?eval-model Secret: nightly.provider is missing or empty}"
+        : "${MODEL_DEFAULT_NAME:?eval-model Secret: nightly.name is missing or empty}"
+        export MODEL_PROVIDER MODEL_DEFAULT_NAME
+        export AGENT_MODEL_OVERRIDE="${MODEL_DEFAULT_NAME}"
         # This job's part: only the cases that request a pull request.
         export EVAL_NIGHTLY_PART="writers"
         # 6 under spec.mode next, as the main part (its comment says
@@ -1651,6 +1665,9 @@ periodics:
       - name: gemini-secret
         mountPath: /etc/gemini-secret
         readOnly: true
+      - name: eval-model
+        mountPath: /etc/eval-model
+        readOnly: true
       - name: bench-github-token
         mountPath: /etc/bench-github-token
         readOnly: true
@@ -1661,6 +1678,9 @@ periodics:
     - name: gemini-secret
       secret:
         secretName: kube-agents-gemini-api-key
+    - name: eval-model
+      secret:
+        secretName: kube-agents-eval-model
     - name: bench-github-token
       secret:
         secretName: kube-agents-bench-github-token
@@ -1755,13 +1775,20 @@ periodics:
         # at the script's default of 4: every case here opens a merge request,
         # so the units run one at a time whatever it is.
         export EVAL_MODE_NEXT="1"
-        # ─── The agent model, as the four nightlies above ────────────────────
-        # gemini-4-argon on the Gemini Developer API with the leased project's
-        # own key (gke-labs/kube-agents#4850). Set all three or the record names
-        # a model the install is not serving.
-        export MODEL_PROVIDER="gemini"
-        export MODEL_DEFAULT_NAME="gemini-4-argon"
-        export AGENT_MODEL_OVERRIDE="gemini-4-argon"
+        # ─── The agent model: the `nightly` pair of the eval-model Secret ─────────
+        # The nightlies' pair, which all five nightlies read; the gate's
+        # record is built from these runs, so `gate.name` must name the same
+        # model or rung 6 compares nothing.
+        # Mounted at /etc/eval-model from kube-agents-eval-model (namespace
+        # test-pods on build-kube-agents). The mechanism and its reasons are on
+        # pull-kube-agents-smoke-test's block in kube-agents-presubmits.yaml;
+        # this block sets no model, and a switch is one write to the Secret.
+        MODEL_PROVIDER="$(tr -d '[:space:]' < /etc/eval-model/nightly.provider)"
+        MODEL_DEFAULT_NAME="$(tr -d '[:space:]' < /etc/eval-model/nightly.name)"
+        : "${MODEL_PROVIDER:?eval-model Secret: nightly.provider is missing or empty}"
+        : "${MODEL_DEFAULT_NAME:?eval-model Secret: nightly.name is missing or empty}"
+        export MODEL_PROVIDER MODEL_DEFAULT_NAME
+        export AGENT_MODEL_OVERRIDE="${MODEL_DEFAULT_NAME}"
         # ─── Baseline evidence store: read-only ─────────────────────────────
         # Read for the advisory comparison; prowjob-default-sa cannot append.
         export EVAL_BASELINE_STORE="gs://kube-agents-evals-bench/evidence"
@@ -1904,6 +1931,9 @@ periodics:
       - name: gemini-secret
         mountPath: /etc/gemini-secret
         readOnly: true
+      - name: eval-model
+        mountPath: /etc/eval-model
+        readOnly: true
       - name: bench-github-token
         mountPath: /etc/bench-github-token
         readOnly: true
@@ -1914,6 +1944,9 @@ periodics:
     - name: gemini-secret
       secret:
         secretName: kube-agents-gemini-api-key
+    - name: eval-model
+      secret:
+        secretName: kube-agents-eval-model
     - name: bench-github-token
       secret:
         secretName: kube-agents-bench-github-token

@@ -234,22 +234,30 @@ presubmits:
           # run. Unset, the presubmit reads the empty checked-in directory
           # and the rate-based rungs stay inert with no signal that they are.
           export EVAL_BASELINE_STORE="gs://kube-agents-evals-bench/evidence"
-          # ─── The agent model: Gemini on the Gemini Developer API ─────────────
-          # Same model as the nightlies (history: gke-labs/kube-agents#3160), so the
-          # gate grades the model whose record admits a case. hack/ci-deploy.sh
-          # reads the first two, hack/ci-eval-pr.sh stamps records with the third; set
-          # all three or the record names a model the install is not serving. The judge
-          # stays on the shared key (JUDGE_MODEL in the script).
-          # gemini, as the nightlies since oss-test-infra#2772: hack/ci-deploy.sh
-          # reads the leased project's own key from Secret Manager
-          # (gke-labs/kube-agents#4856). The checkout is the pull request merged
-          # onto main, so every run carries that change; a pull request that
-          # reverts it would read the shared job-env key instead.
-          export MODEL_PROVIDER="gemini"
-          # Temporarily on gemini-4-argon in place of claude-opus-5-5 (hangdng, 2026-10-27);
-          # revert to claude-opus-5-5 when told.
-          export MODEL_DEFAULT_NAME="gemini-4-argon"
-          export AGENT_MODEL_OVERRIDE="gemini-4-argon"
+          # ─── The agent model: from the build cluster's eval-model Secret ─────
+          # The `gate` keys of the Secret mounted at /etc/eval-model
+          # (kube-agents-eval-model, namespace test-pods on build-kube-agents): the gate's pair, which the
+          # today and forge lanes and the RC postsubmit read too. The nightlies
+          # read the `nightly` pair, and the record this gate compares against
+          # (rung 6, admission by record) is keyed by their model, so the two
+          # pairs are kept equal by hand; nothing in these files checks it.
+          # This block sets no model; a switch is one write to that Secret,
+          # which GKE's audit log records. Assigned before the export so an
+          # unreadable key stops the run (`export VAR="$(...)"` returns 0
+          # whatever the substitution did), refused when empty (every consumer
+          # below defaults an empty value to a model nobody chose), stray
+          # whitespace dropped. hack/ci-deploy.sh reads the first two,
+          # hack/ci-eval-pr.sh stamps records with the third, derived from the
+          # second.
+          # Under provider gemini, hack/ci-deploy.sh reads the leased project's
+          # own key from Secret Manager (gke-labs/kube-agents#4856); the judge
+          # stays on the shared key.
+          MODEL_PROVIDER="$(tr -d '[:space:]' < /etc/eval-model/gate.provider)"
+          MODEL_DEFAULT_NAME="$(tr -d '[:space:]' < /etc/eval-model/gate.name)"
+          : "${MODEL_PROVIDER:?eval-model Secret: gate.provider is missing or empty}"
+          : "${MODEL_DEFAULT_NAME:?eval-model Secret: gate.name is missing or empty}"
+          export MODEL_PROVIDER MODEL_DEFAULT_NAME
+          export AGENT_MODEL_OVERRIDE="${MODEL_DEFAULT_NAME}"
           # ─── Ensure boskosctl is available (pinned version) ─────────────────────────
           # Named once, used by both the GCS fast path and the fallback below.
           BOSKOSCTL_VERSION="v0.0.0-20260730151943-11fb0c84248b"
@@ -393,6 +401,9 @@ presubmits:
         - name: gemini-secret
           mountPath: /etc/gemini-secret
           readOnly: true
+        - name: eval-model
+          mountPath: /etc/eval-model
+          readOnly: true
         - name: bench-github-token
           mountPath: /etc/bench-github-token
           readOnly: true
@@ -403,6 +414,9 @@ presubmits:
       - name: gemini-secret
         secret:
           secretName: kube-agents-gemini-api-key
+      - name: eval-model
+        secret:
+          secretName: kube-agents-eval-model
       - name: bench-github-token
         secret:
           secretName: kube-agents-bench-github-token
@@ -604,21 +618,14 @@ presubmits:
           # The forge this lane drives; hack/ci-deploy.sh and hack/ci-eval-pr.sh read it.
           export EVAL_FORGE="gitlab"
           export REQUIRE_CACHE="true"
-          # ─── The agent model: from the build cluster's eval-model Secret ─────
-          # The `gate` keys of the Secret mounted at /etc/eval-model
-          # (kube-agents-eval-model, namespace test-pods on build-kube-agents),
-          # kept equal by hand to what the blocking job sets in this file until
-          # that lane reads the Secret too; this lane mirrors the blocking job
-          # on GitLab. Before 2026-11-06 the lane set no model and ran on
-          # hack/ci-deploy.sh's default. Assigned before the export so an
-          # unreadable key stops the run (`export VAR="$(...)"` returns 0
-          # whatever the substitution did), refused when empty (every consumer
-          # below defaults an empty value to a model nobody chose), stray
-          # whitespace dropped. hack/ci-deploy.sh reads the first two,
-          # hack/ci-eval-pr.sh stamps records with the third, derived from the
-          # second. Under provider gemini, hack/ci-deploy.sh reads the leased
-          # project's own key from Secret Manager (gke-labs/kube-agents#4856);
-          # the judge stays on the shared key.
+          # ─── The agent model: the `gate` pair of the eval-model Secret ─────────
+          # The same provider and model as the blocking job, which this lane
+          # mirrors on GitLab (before 2026-11-06 it set no model and ran on
+          # hack/ci-deploy.sh's default).
+          # Mounted at /etc/eval-model from kube-agents-eval-model (namespace
+          # test-pods on build-kube-agents). The mechanism and its reasons are on
+          # pull-kube-agents-smoke-test's block in kube-agents-presubmits.yaml;
+          # this block sets no model, and a switch is one write to the Secret.
           MODEL_PROVIDER="$(tr -d '[:space:]' < /etc/eval-model/gate.provider)"
           MODEL_DEFAULT_NAME="$(tr -d '[:space:]' < /etc/eval-model/gate.name)"
           : "${MODEL_PROVIDER:?eval-model Secret: gate.provider is missing or empty}"
@@ -997,6 +1004,20 @@ presubmits:
           # pull-kube-agents-smoke-test above).
           export EVAL_MODE_NEXT="1"
           export REQUIRE_CACHE="true"
+          # ─── The agent model: the `gate` pair of the eval-model Secret ─────────
+          # The same provider and model as the blocking job, which this lane
+          # mirrors on GHES (before 2026-11-06 it set no model and ran on
+          # hack/ci-deploy.sh's default).
+          # Mounted at /etc/eval-model from kube-agents-eval-model (namespace
+          # test-pods on build-kube-agents). The mechanism and its reasons are on
+          # pull-kube-agents-smoke-test's block in kube-agents-presubmits.yaml;
+          # this block sets no model, and a switch is one write to the Secret.
+          MODEL_PROVIDER="$(tr -d '[:space:]' < /etc/eval-model/gate.provider)"
+          MODEL_DEFAULT_NAME="$(tr -d '[:space:]' < /etc/eval-model/gate.name)"
+          : "${MODEL_PROVIDER:?eval-model Secret: gate.provider is missing or empty}"
+          : "${MODEL_DEFAULT_NAME:?eval-model Secret: gate.name is missing or empty}"
+          export MODEL_PROVIDER MODEL_DEFAULT_NAME
+          export AGENT_MODEL_OVERRIDE="${MODEL_DEFAULT_NAME}"
           # ─── Baseline evidence store: read-only ─────────────────────────────
           # The same variable ci-kube-agents-eval-nightly
           # (kube-agents-periodics.yaml) exports to APPEND; here it is READ.
@@ -1155,6 +1176,9 @@ presubmits:
         - name: gemini-secret
           mountPath: /etc/gemini-secret
           readOnly: true
+        - name: eval-model
+          mountPath: /etc/eval-model
+          readOnly: true
         - name: bench-github-token
           mountPath: /etc/bench-github-token
           readOnly: true
@@ -1165,6 +1189,9 @@ presubmits:
       - name: gemini-secret
         secret:
           secretName: kube-agents-gemini-api-key
+      - name: eval-model
+        secret:
+          secretName: kube-agents-eval-model
       - name: bench-github-token
         secret:
           secretName: kube-agents-bench-github-token
@@ -1367,6 +1394,20 @@ presubmits:
           # pull-kube-agents-smoke-test above).
           export EVAL_MODE_NEXT="1"
           export REQUIRE_CACHE="true"
+          # ─── The agent model: the `gate` pair of the eval-model Secret ─────────
+          # The same provider and model as the blocking job, which this lane
+          # mirrors on GitLab CE (before 2026-11-06 it set no model and ran on
+          # hack/ci-deploy.sh's default).
+          # Mounted at /etc/eval-model from kube-agents-eval-model (namespace
+          # test-pods on build-kube-agents). The mechanism and its reasons are on
+          # pull-kube-agents-smoke-test's block in kube-agents-presubmits.yaml;
+          # this block sets no model, and a switch is one write to the Secret.
+          MODEL_PROVIDER="$(tr -d '[:space:]' < /etc/eval-model/gate.provider)"
+          MODEL_DEFAULT_NAME="$(tr -d '[:space:]' < /etc/eval-model/gate.name)"
+          : "${MODEL_PROVIDER:?eval-model Secret: gate.provider is missing or empty}"
+          : "${MODEL_DEFAULT_NAME:?eval-model Secret: gate.name is missing or empty}"
+          export MODEL_PROVIDER MODEL_DEFAULT_NAME
+          export AGENT_MODEL_OVERRIDE="${MODEL_DEFAULT_NAME}"
           # ─── Baseline evidence store: read-only ─────────────────────────────
           # The same variable ci-kube-agents-eval-nightly
           # (kube-agents-periodics.yaml) exports to APPEND; here it is READ.
@@ -1525,6 +1566,9 @@ presubmits:
         - name: gemini-secret
           mountPath: /etc/gemini-secret
           readOnly: true
+        - name: eval-model
+          mountPath: /etc/eval-model
+          readOnly: true
         - name: bench-github-token
           mountPath: /etc/bench-github-token
           readOnly: true
@@ -1535,6 +1579,9 @@ presubmits:
       - name: gemini-secret
         secret:
           secretName: kube-agents-gemini-api-key
+      - name: eval-model
+        secret:
+          secretName: kube-agents-eval-model
       - name: bench-github-token
         secret:
           secretName: kube-agents-bench-github-token
@@ -1682,22 +1729,14 @@ presubmits:
           # here: the job is optional, so a reused verdict merges nothing.
           export EVAL_MODE_NEXT="1"
           export EVAL_ROLLBACK_LANE="1"
-          # ─── The agent model: from the build cluster's eval-model Secret ─────
-          # The `gate` keys of the Secret mounted at /etc/eval-model
-          # (kube-agents-eval-model, namespace test-pods on build-kube-agents),
-          # kept equal by hand to what the blocking job and the nightlies set
-          # in this file and the periodics until those lanes read the Secret
-          # too; then a switch is one write to the Secret, which GKE's audit
-          # log records, and this file names no model. Assigned before the
-          # export so an unreadable key stops the run (`export VAR="$(...)"`
-          # returns 0 whatever the substitution did), and refused when empty:
-          # every consumer below defaults an empty value to a model nobody
-          # chose. Stray whitespace (a CRLF write) is dropped. hack/ci-deploy.sh
-          # reads the first two, hack/ci-eval-pr.sh stamps records with the
-          # third, which is derived from the second. Under provider gemini,
-          # hack/ci-deploy.sh reads the leased project's own key from Secret
-          # Manager (gke-labs/kube-agents#4856); the judge stays on the shared
+          # ─── The agent model: the `gate` pair of the eval-model Secret ─────────
+          # The same provider and model as the blocking job, in today mode;
+          # the record this lane is compared with is built at that model's
           # key.
+          # Mounted at /etc/eval-model from kube-agents-eval-model (namespace
+          # test-pods on build-kube-agents). The mechanism and its reasons are on
+          # pull-kube-agents-smoke-test's block in kube-agents-presubmits.yaml;
+          # this block sets no model, and a switch is one write to the Secret.
           MODEL_PROVIDER="$(tr -d '[:space:]' < /etc/eval-model/gate.provider)"
           MODEL_DEFAULT_NAME="$(tr -d '[:space:]' < /etc/eval-model/gate.name)"
           : "${MODEL_PROVIDER:?eval-model Secret: gate.provider is missing or empty}"
@@ -1881,19 +1920,20 @@ presubmits:
       - name: ledger-app-key
         secret:
           secretName: kube-agents-evals-ledger-app-key
-  - name: pull-kube-agents-smoke-test-claude
+  - name: pull-kube-agents-smoke-test-alt
     # pull-kube-agents-smoke-test's matrix, lease, deploy, spec.mode next and
-    # teardown, with the agent on Claude (claude-opus-5-5 on Vertex AI, the
-    # model oss-test-infra#2737 set) instead of the Gemini model every eval
-    # job has run since oss-test-infra#2758. It exists to measure Claude's
-    # prompt caching and cost on the real eval flow rather than a synthetic
-    # test: on the 2026-10-22..27 Claude nightlies a session wrote its prompt
-    # to the cache about three times instead of once. Run it on a pull request
-    # that carries the cache probe (gke-labs/kube-agents#4316), whose
-    # `cache probe:` lines land in the run's artifacts/litellm.log.
+    # teardown, with the agent on the `alt` pair of the eval-model Secret: a
+    # second model family on its own provider, instead of the gate's. It
+    # exists to measure that family's prompt caching and cost on the real
+    # eval flow rather than a synthetic test (on the nightlies of 2026-10-22
+    # to 10-27, on the family oss-test-infra#2737 set, a session wrote its
+    # prompt to the cache about three times instead of once). Run it on a
+    # pull request that carries the cache probe
+    # (gke-labs/kube-agents#4316), whose `cache probe:` lines land in the
+    # run's artifacts/litellm.log.
     #
-    # On demand only, and expensive: about $260 of Claude spend per run.
-    #   /test pull-kube-agents-smoke-test-claude
+    # On demand only, and expensive (a full suite on the alternate model).
+    #   /test pull-kube-agents-smoke-test-alt
     # No always_run, no run_if_changed and no skip_if_only_changed, so nothing
     # starts it but that comment: `/test all` matches only jobs that would run
     # on their own, and `/retest` re-runs only a job that failed.
@@ -1917,8 +1957,8 @@ presubmits:
     optional: true
     decorate: true
     decoration_config:
-      # The blocking job's budget, which it ran under on Claude from
-      # oss-test-infra#2737 to #2758.
+      # The blocking job's budget, which it ran under on the family
+      # oss-test-infra#2737 set, from #2737 to #2758.
       timeout: 360m
       grace_period: 5m
       # Logs and artifacts go to the bucket kube-agents owns; the reasons and
@@ -1991,16 +2031,19 @@ presubmits:
           # run. Unset, the presubmit reads the empty checked-in directory
           # and the rate-based rungs stay inert with no signal that they are.
           export EVAL_BASELINE_STORE="gs://kube-agents-evals-bench/evidence"
-          # ─── The agent model: Claude on Vertex AI ───────────────────────────
-          # What this job is for: the model oss-test-infra#2737 set on the
-          # blocking job before #2758 moved every eval job to Gemini.
-          # hack/ci-deploy.sh reads the first two, hack/ci-eval-pr.sh stamps
-          # records with the third; set all three or the record names a model
-          # the install is not serving. The judge stays on Gemini (JUDGE_MODEL
-          # in the script).
-          export MODEL_PROVIDER="vertex_ai"
-          export MODEL_DEFAULT_NAME="claude-opus-5-5"
-          export AGENT_MODEL_OVERRIDE="claude-opus-5-5"
+          # ─── The agent model: the `alt` pair of the eval-model Secret ─────────
+          # This lane's own pair: a second model family on its own provider,
+          # which the blocking job does not run.
+          # Mounted at /etc/eval-model from kube-agents-eval-model (namespace
+          # test-pods on build-kube-agents). The mechanism and its reasons are on
+          # pull-kube-agents-smoke-test's block in kube-agents-presubmits.yaml;
+          # this block sets no model, and a switch is one write to the Secret.
+          MODEL_PROVIDER="$(tr -d '[:space:]' < /etc/eval-model/alt.provider)"
+          MODEL_DEFAULT_NAME="$(tr -d '[:space:]' < /etc/eval-model/alt.name)"
+          : "${MODEL_PROVIDER:?eval-model Secret: alt.provider is missing or empty}"
+          : "${MODEL_DEFAULT_NAME:?eval-model Secret: alt.name is missing or empty}"
+          export MODEL_PROVIDER MODEL_DEFAULT_NAME
+          export AGENT_MODEL_OVERRIDE="${MODEL_DEFAULT_NAME}"
           # ─── Ensure boskosctl is available (pinned version) ─────────────────────────
           # Named once, used by both the GCS fast path and the fallback below.
           BOSKOSCTL_VERSION="v0.0.0-20260730151943-11fb0c84248b"
@@ -2144,6 +2187,9 @@ presubmits:
         - name: gemini-secret
           mountPath: /etc/gemini-secret
           readOnly: true
+        - name: eval-model
+          mountPath: /etc/eval-model
+          readOnly: true
         - name: bench-github-token
           mountPath: /etc/bench-github-token
           readOnly: true
@@ -2154,6 +2200,9 @@ presubmits:
       - name: gemini-secret
         secret:
           secretName: kube-agents-gemini-api-key
+      - name: eval-model
+        secret:
+          secretName: kube-agents-eval-model
       - name: bench-github-token
         secret:
           secretName: kube-agents-bench-github-token
@@ -2162,17 +2211,15 @@ presubmits:
           secretName: kube-agents-evals-ledger-app-key
   - name: pull-kube-agents-smoke-test-flash
     # pull-kube-agents-smoke-test's matrix, lease, deploy, spec.mode next and
-    # teardown, with the agent on Gemini Flash (gemini-3.8-flash on Vertex AI)
-    # instead of gemini-4-argon. It exists to measure, on the real eval flow,
-    # the model family customers actually run: 10 of the 12 installs we know
-    # of are on Gemini Flash, and every eval job runs Argon. Copied from
-    # pull-kube-agents-smoke-test-claude (oss-test-infra#2761); the agent
-    # model is the only difference.
+    # teardown, with the agent on the `flash` pair of the eval-model Secret:
+    # the Flash family, the one most installs we know of run, instead of the
+    # gate's. It exists to measure that family on the real eval flow. Copied
+    # from the lane now named pull-kube-agents-smoke-test-alt
+    # (oss-test-infra#2761); the agent model is the only difference.
     #
-    # On demand only, for a cost and quality measurement. About a third of an
-    # Argon presubmit's model spend per run: gemini-3.8-flash's introductory
-    # Vertex price is $0.75 per million input tokens and $3.75 per million
-    # output tokens through 2026-12-31.
+    # On demand only, for a cost and quality measurement; a run costs a
+    # fraction of a gate run (the family's price at the time is in #2775's
+    # history).
     #   /test pull-kube-agents-smoke-test-flash
     # No always_run, no run_if_changed and no skip_if_only_changed, so nothing
     # starts it but that comment: `/test all` matches only jobs that would run
@@ -2270,17 +2317,20 @@ presubmits:
           # run. Unset, the presubmit reads the empty checked-in directory
           # and the rate-based rungs stay inert with no signal that they are.
           export EVAL_BASELINE_STORE="gs://kube-agents-evals-bench/evidence"
-          # ─── The agent model: Gemini Flash on Vertex AI ─────────────────────
-          # What this job is for: the customer-default Gemini Flash family.
-          # hack/ci-deploy.sh reads the first two, hack/ci-eval-pr.sh stamps
-          # records with the third; set all three or the record names a model
-          # the install is not serving. The judge stays on its own model
-          # (JUDGE_MODEL in the script). The chart's Gemini handling keys on the
-          # gemini- prefix (thinking key, cache-marker strip, session affinity),
-          # so this model needs no kube-agents change.
-          export MODEL_PROVIDER="vertex_ai"
-          export MODEL_DEFAULT_NAME="gemini-3.8-flash"
-          export AGENT_MODEL_OVERRIDE="gemini-3.8-flash"
+          # ─── The agent model: the `flash` pair of the eval-model Secret ─────────
+          # This lane's own pair: the Flash family, which it exists to grade.
+          # The chart's Gemini handling keys on the gemini- prefix, so a Flash
+          # model needs no kube-agents change.
+          # Mounted at /etc/eval-model from kube-agents-eval-model (namespace
+          # test-pods on build-kube-agents). The mechanism and its reasons are on
+          # pull-kube-agents-smoke-test's block in kube-agents-presubmits.yaml;
+          # this block sets no model, and a switch is one write to the Secret.
+          MODEL_PROVIDER="$(tr -d '[:space:]' < /etc/eval-model/flash.provider)"
+          MODEL_DEFAULT_NAME="$(tr -d '[:space:]' < /etc/eval-model/flash.name)"
+          : "${MODEL_PROVIDER:?eval-model Secret: flash.provider is missing or empty}"
+          : "${MODEL_DEFAULT_NAME:?eval-model Secret: flash.name is missing or empty}"
+          export MODEL_PROVIDER MODEL_DEFAULT_NAME
+          export AGENT_MODEL_OVERRIDE="${MODEL_DEFAULT_NAME}"
           # ─── Ensure boskosctl is available (pinned version) ─────────────────────────
           # Named once, used by both the GCS fast path and the fallback below.
           BOSKOSCTL_VERSION="v0.0.0-20260730151943-11fb0c84248b"
@@ -2424,6 +2474,9 @@ presubmits:
         - name: gemini-secret
           mountPath: /etc/gemini-secret
           readOnly: true
+        - name: eval-model
+          mountPath: /etc/eval-model
+          readOnly: true
         - name: bench-github-token
           mountPath: /etc/bench-github-token
           readOnly: true
@@ -2434,6 +2487,9 @@ presubmits:
       - name: gemini-secret
         secret:
           secretName: kube-agents-gemini-api-key
+      - name: eval-model
+        secret:
+          secretName: kube-agents-eval-model
       - name: bench-github-token
         secret:
           secretName: kube-agents-bench-github-token
