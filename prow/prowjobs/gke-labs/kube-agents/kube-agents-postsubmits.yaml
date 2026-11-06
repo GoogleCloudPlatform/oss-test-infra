@@ -264,7 +264,12 @@ postsubmits:
           # model no other lane runs, against baselines the nightlies record on
           # gemini-4-argon; set all three or the record names a model the
           # install is not serving (the nightly's comment on the same lines).
-          export MODEL_PROVIDER="vertex_ai"
+          # gemini, as the nightlies since oss-test-infra#2772: the candidate's
+          # hack/ci-deploy.sh reads the leased project's own key from Secret
+          # Manager (gke-labs/kube-agents#4856). Every candidate this job grades
+          # must carry that change, or its deploy would read the shared job-env
+          # key under this provider, the setup gke-labs/kube-agents#1097 retired.
+          export MODEL_PROVIDER="gemini"
           export MODEL_DEFAULT_NAME="gemini-4-argon"
           export AGENT_MODEL_OVERRIDE="gemini-4-argon"
           #
