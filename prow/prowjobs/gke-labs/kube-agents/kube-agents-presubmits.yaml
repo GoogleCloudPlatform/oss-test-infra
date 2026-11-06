@@ -234,13 +234,18 @@ presubmits:
           # run. Unset, the presubmit reads the empty checked-in directory
           # and the rate-based rungs stay inert with no signal that they are.
           export EVAL_BASELINE_STORE="gs://kube-agents-evals-bench/evidence"
-          # ─── The agent model: Gemini on Vertex AI, temporarily ──────────────
+          # ─── The agent model: Gemini on the Gemini Developer API ─────────────
           # Same model as the nightlies (history: gke-labs/kube-agents#3160), so the
           # gate grades the model whose record admits a case. hack/ci-deploy.sh
           # reads the first two, hack/ci-eval-pr.sh stamps records with the third; set
           # all three or the record names a model the install is not serving. The judge
-          # stays on Gemini (JUDGE_MODEL in the script).
-          export MODEL_PROVIDER="vertex_ai"
+          # stays on the shared key (JUDGE_MODEL in the script).
+          # gemini, as the nightlies since oss-test-infra#2772: hack/ci-deploy.sh
+          # reads the leased project's own key from Secret Manager
+          # (gke-labs/kube-agents#4856). The checkout is the pull request merged
+          # onto main, so every run carries that change; a pull request that
+          # reverts it would read the shared job-env key instead.
+          export MODEL_PROVIDER="gemini"
           # Temporarily on gemini-4-argon in place of claude-opus-5-5 (hangdng, 2026-10-27);
           # revert to claude-opus-5-5 when told.
           export MODEL_DEFAULT_NAME="gemini-4-argon"
@@ -1650,13 +1655,15 @@ presubmits:
           # here: the job is optional, so a reused verdict merges nothing.
           export EVAL_MODE_NEXT="1"
           export EVAL_ROLLBACK_LANE="1"
-          # ─── The agent model: Gemini on Vertex AI, temporarily ──────────────
+          # ─── The agent model: Gemini on the Gemini Developer API ─────────────
           # The same model as the nightlies whose record this lane is compared
           # with, and as the blocking job (oss-test-infra#2736, #2737).
           # hack/ci-deploy.sh reads the first two, hack/ci-eval-pr.sh stamps
           # records with the third; set all three or the record names a model
-          # the install is not serving. The judge stays on Gemini.
-          export MODEL_PROVIDER="vertex_ai"
+          # the install is not serving. The judge stays on the shared key.
+          # gemini, as the blocking job above and the nightlies since
+          # oss-test-infra#2772 (gke-labs/kube-agents#4856).
+          export MODEL_PROVIDER="gemini"
           # Temporarily on gemini-4-argon in place of claude-opus-5-5 (hangdng, 2026-10-27);
           # revert to claude-opus-5-5 when told.
           export MODEL_DEFAULT_NAME="gemini-4-argon"
