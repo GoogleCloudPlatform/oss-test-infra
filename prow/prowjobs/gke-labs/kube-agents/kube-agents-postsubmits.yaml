@@ -258,20 +258,19 @@ postsubmits:
           # withdrawn unmeasured. Like every RC run, a flagged one writes
           # nothing to main's baseline store.
           export EVAL_MODE_NEXT="1"
-          # ─── The agent model: the nightlies' three exports (oss-test-infra#2758) ──
-          # Without them the candidate's hack/ci-deploy.sh installs its default,
-          # gemini-3.1-pro-preview, so since 2026-10-29 this job has graded a
-          # model no other lane runs, against baselines the nightlies record on
-          # gemini-4-argon; set all three or the record names a model the
-          # install is not serving (the nightly's comment on the same lines).
-          # gemini, as the nightlies since oss-test-infra#2772: the candidate's
-          # hack/ci-deploy.sh reads the leased project's own key from Secret
-          # Manager (gke-labs/kube-agents#4856). Every candidate this job grades
-          # must carry that change, or its deploy would read the shared job-env
-          # key under this provider, the setup gke-labs/kube-agents#1097 retired.
-          export MODEL_PROVIDER="gemini"
-          export MODEL_DEFAULT_NAME="gemini-4-argon"
-          export AGENT_MODEL_OVERRIDE="gemini-4-argon"
+          # ─── The agent model: the `gate` pair of the eval-model Secret ─────────
+          # The gate's pair, so the candidate is graded on the model the gate
+          # runs, against the record the nightlies build at that model's key.
+          # Mounted at /etc/eval-model from kube-agents-eval-model (namespace
+          # test-pods on build-kube-agents). The mechanism and its reasons are on
+          # pull-kube-agents-smoke-test's block in kube-agents-presubmits.yaml;
+          # this block sets no model, and a switch is one write to the Secret.
+          MODEL_PROVIDER="$(tr -d '[:space:]' < /etc/eval-model/gate.provider)"
+          MODEL_DEFAULT_NAME="$(tr -d '[:space:]' < /etc/eval-model/gate.name)"
+          : "${MODEL_PROVIDER:?eval-model Secret: gate.provider is missing or empty}"
+          : "${MODEL_DEFAULT_NAME:?eval-model Secret: gate.name is missing or empty}"
+          export MODEL_PROVIDER MODEL_DEFAULT_NAME
+          export AGENT_MODEL_OVERRIDE="${MODEL_DEFAULT_NAME}"
           #
           # EVAL_TIER is deliberately NOT set, though this run does measure the
           # full nightly catalog. hack/ci-eval-rc.sh exports it itself, and
@@ -507,6 +506,9 @@ postsubmits:
         - name: gemini-secret
           mountPath: /etc/gemini-secret
           readOnly: true
+        - name: eval-model
+          mountPath: /etc/eval-model
+          readOnly: true
         - name: bench-github-token
           mountPath: /etc/bench-github-token
           readOnly: true
@@ -517,6 +519,9 @@ postsubmits:
       - name: gemini-secret
         secret:
           secretName: kube-agents-gemini-api-key
+      - name: eval-model
+        secret:
+          secretName: kube-agents-eval-model
       - name: bench-github-token
         secret:
           secretName: kube-agents-bench-github-token
