@@ -1655,19 +1655,28 @@ presubmits:
           # here: the job is optional, so a reused verdict merges nothing.
           export EVAL_MODE_NEXT="1"
           export EVAL_ROLLBACK_LANE="1"
-          # ─── The agent model: Gemini on the Gemini Developer API ─────────────
-          # The same model as the nightlies whose record this lane is compared
-          # with, and as the blocking job (oss-test-infra#2736, #2737).
-          # hack/ci-deploy.sh reads the first two, hack/ci-eval-pr.sh stamps
-          # records with the third; set all three or the record names a model
-          # the install is not serving. The judge stays on the shared key.
-          # gemini, as the blocking job above and the nightlies since
-          # oss-test-infra#2772 (gke-labs/kube-agents#4856).
-          export MODEL_PROVIDER="gemini"
-          # Temporarily on gemini-4-argon in place of claude-opus-5-5 (hangdng, 2026-10-27);
-          # revert to claude-opus-5-5 when told.
-          export MODEL_DEFAULT_NAME="gemini-4-argon"
-          export AGENT_MODEL_OVERRIDE="gemini-4-argon"
+          # ─── The agent model: from the build cluster's eval-model Secret ─────
+          # The `gate` keys of the Secret mounted at /etc/eval-model
+          # (kube-agents-eval-model, namespace test-pods on build-kube-agents),
+          # kept equal by hand to what the blocking job and the nightlies set
+          # in this file and the periodics until those lanes read the Secret
+          # too; then a switch is one write to the Secret, which GKE's audit
+          # log records, and this file names no model. Assigned before the
+          # export so an unreadable key stops the run (`export VAR="$(...)"`
+          # returns 0 whatever the substitution did), and refused when empty:
+          # every consumer below defaults an empty value to a model nobody
+          # chose. Stray whitespace (a CRLF write) is dropped. hack/ci-deploy.sh
+          # reads the first two, hack/ci-eval-pr.sh stamps records with the
+          # third, which is derived from the second. Under provider gemini,
+          # hack/ci-deploy.sh reads the leased project's own key from Secret
+          # Manager (gke-labs/kube-agents#4856); the judge stays on the shared
+          # key.
+          MODEL_PROVIDER="$(tr -d '[:space:]' < /etc/eval-model/gate.provider)"
+          MODEL_DEFAULT_NAME="$(tr -d '[:space:]' < /etc/eval-model/gate.name)"
+          : "${MODEL_PROVIDER:?eval-model Secret: gate.provider is missing or empty}"
+          : "${MODEL_DEFAULT_NAME:?eval-model Secret: gate.name is missing or empty}"
+          export MODEL_PROVIDER MODEL_DEFAULT_NAME
+          export AGENT_MODEL_OVERRIDE="${MODEL_DEFAULT_NAME}"
           # ─── Baseline evidence store: read-only ─────────────────────────────
           # The same variable ci-kube-agents-eval-nightly
           # (kube-agents-periodics.yaml) exports to APPEND; here it is READ.
@@ -1823,6 +1832,9 @@ presubmits:
         - name: gemini-secret
           mountPath: /etc/gemini-secret
           readOnly: true
+        - name: eval-model
+          mountPath: /etc/eval-model
+          readOnly: true
         - name: bench-github-token
           mountPath: /etc/bench-github-token
           readOnly: true
@@ -1833,6 +1845,9 @@ presubmits:
       - name: gemini-secret
         secret:
           secretName: kube-agents-gemini-api-key
+      - name: eval-model
+        secret:
+          secretName: kube-agents-eval-model
       - name: bench-github-token
         secret:
           secretName: kube-agents-bench-github-token
