@@ -14,32 +14,32 @@ presubmits:
     cluster: build-kube-agents
     always_run: false
     skip_report: false
-    # Only paths that cannot change what the agent does at eval time belong
-    # here: a diff confined to them leaves the eval nothing to measure, and
-    # running it anyway spends two hours and a leased eval project to grade
-    # behaviour the diff cannot reach. .md is root-anchored because
-    # agents/**/*.md is prompt content shipped in the image
-    # (deploy/docker/Dockerfile). tests/ is not shipped at all, and neither are
-    # the unit tests beside the repository tooling, scripts/test_*.py: the
-    # Dockerfile copies agents/*/scripts/, not scripts/, which stays off the list
-    # as a whole; scripts/eval_dashboard/ is read only by publish_eval_dashboard,
-    # which returns early when PULL_NUMBER is set, so no presubmit runs it.
-    # scripts/release/ runs at release time, and this job never invokes the root
-    # installer entrypoints.
+    # Only paths the eval never reads belong here: a diff confined to them
+    # leaves the eval nothing to measure, and running it anyway spends two
+    # hours and a leased eval project to grade behaviour the diff cannot reach.
+    # It is a deny-list on purpose, so a new folder or file runs the eval until
+    # someone adds it. .md is root-anchored (plus the top of hack/ and
+    # scripts/) because agents/**/*.md is prompt content shipped in the image.
+    # Go tests (_test.go) are skipped anywhere: go build never compiles them.
+    # Repository tooling under scripts/ and hack/ is named file by file,
+    # because scripts/ and hack/ also hold what the eval runs
+    # (scripts/verify_ci_pool_project.py, scripts/installer/gke_dns_endpoint.sh,
+    # the hack/ci-* steps). scripts/eval_dashboard/ is read only by the
+    # nightly's publish step, scripts/release/ only by the release lane.
     #
-    # bench/ must never appear here -- it is the eval harness itself, so a
-    # change to it is exactly when the gate has to run -- and neither may
-    # agents/, deploy/, charts/ or k8s-operator/, which all reach the running
-    # agent. The filter skips only when every changed file matches, so one
-    # runtime file anywhere in a diff runs the full eval regardless: this
-    # decides what triggers the job, never what the job checks.
+    # Never add agents/, a2a/, deploy/, charts/, k8s-operator/, k8s-api-proxy/,
+    # agentplugins/ or bench/ beyond bench/cuj, bench/dashboard and bench/tests:
+    # they reach the running agent or are the eval harness. The filter skips
+    # only when every changed file matches, so one runtime file anywhere in a
+    # diff runs the full eval: this decides what triggers the job, never what
+    # the job checks.
     #
-    # k8s-api-proxy/ is not on the list: the sandbox routes the agent's kubectl
-    # through the proxy, so a proxy-only change reaches what the agent runs and
-    # the job has to grade it. Keep this list identical to SMOKE_SKIP_RE in
-    # gke-labs/kube-agents scripts/merge_gate.py: when the two differ, the
-    # kube-agents merge gate waits for a status this job never posts.
-    skip_if_only_changed: '^(docs/|\.github/|examples/|tests/|scripts/release/|scripts/eval_dashboard/)|^scripts/test_[^/]+\.py$|^[^/]+\.md$|^(LICENSE|OWNERS|OWNERS_ALIASES|\.gitignore|install\.sh|upgrade\.sh|uninstall\.sh)$'
+    # Keep this list identical to SMOKE_SKIP_RE in gke-labs/kube-agents
+    # scripts/merge_gate.py: when Prow skips a path the gate does not, the merge
+    # gate waits for a status this job never posts. That repository's
+    # scripts/test_smoke_skip_paths.py fails if the list covers a path the
+    # eval reads, and compares it with this one.
+    skip_if_only_changed: '^(docs/|\.github/|\.agents/|\.claude/|examples/|tests/|admin_console/|terraform/|agents/contributor/|bench/cuj/|bench/dashboard/|bench/tests/|hack/slack-live-check/|scripts/dev/|scripts/eval_dashboard/|scripts/feedback_form/|scripts/release/|scripts/testdata/)|^scripts/test_[^/]+\.py$|_test\.go$|^[^/]+\.md$|^(hack|scripts)/[^/]+\.md$|^hack/(ci-dashboard-refresh\.sh|conformance-mutations\.py|pool_pressure_cron\.sh|slack-live-check-run\.sh)$|^scripts/(case_owner|check_[a-z_]+|classify_risk|domain_allowlist|domain_coverage|eval_rosters|generate_docs|github_api|hold_unresolved_threads|merge_gate|notify_broken_main|notify_flaky_check|pool_pressure|request_reviewers|rerun_failed_checks|skill_overlay|sync-upstream-skills)\.py$|^scripts/installer/(README\.md|common\.sh|installer_common\.sh|min_versions\.sh|print_instructions_[a-z]+\.sh)$|^(LICENSE|OWNERS|OWNERS_ALIASES|\.gitignore|install\.sh|upgrade\.sh|uninstall\.sh|install\.defaults\.env|install\.env\.example|requirements-test\.txt)$'
     # Merge-blocking since 2026-09: what blocks is not this flag alone but
     # admission on the kube-agents side -- a case's record in the evidence
     # store once it holds a full window at the current version key, and the
