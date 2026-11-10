@@ -618,6 +618,10 @@ presubmits:
           export EVAL_GITHUB_APP_ID="4675512"
           # The forge this lane drives; hack/ci-deploy.sh and hack/ci-eval-pr.sh read it.
           export EVAL_FORGE="gitlab"
+          # spec.mode: next, as every other eval lane but the today one: the
+          # install grades through the A2A gateway's inject door (see
+          # pull-kube-agents-smoke-test above).
+          export EVAL_MODE_NEXT="1"
           export REQUIRE_CACHE="true"
           # ─── The agent model: the `gate` pair of the eval-model Secret ─────────
           # The same provider and model as the blocking job, which this lane
@@ -1000,7 +1004,7 @@ presubmits:
           export EVAL_GITHUB_APP_ID="4675512"
           # The forge this lane drives; hack/ci-deploy.sh and hack/ci-eval-pr.sh read it.
           export EVAL_FORGE="ghes"
-          # spec.mode: next, as every other eval lane but the GitLab one: the
+          # spec.mode: next, as every other eval lane but the today one: the
           # install grades through the A2A gateway's inject door (see
           # pull-kube-agents-smoke-test above).
           export EVAL_MODE_NEXT="1"
@@ -1390,7 +1394,7 @@ presubmits:
           export EVAL_GITHUB_APP_ID="4675512"
           # The forge this lane drives; hack/ci-deploy.sh and hack/ci-eval-pr.sh read it.
           export EVAL_FORGE="gitlab-ce"
-          # spec.mode: next, as every other eval lane but the GitLab one: the
+          # spec.mode: next, as every other eval lane but the today one: the
           # install grades through the A2A gateway's inject door (see
           # pull-kube-agents-smoke-test above).
           export EVAL_MODE_NEXT="1"
