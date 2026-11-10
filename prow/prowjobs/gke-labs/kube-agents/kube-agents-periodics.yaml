@@ -1059,28 +1059,28 @@ periodics:
   # ghcr.io images at that commit and builds nothing, the way
   # post-kube-agents-eval-rc measures a candidate. The certification roster,
   # bench and tier are therefore the release's own: a release whose tree has
-  # no certification roster (every release before the suite's first case
-  # merged) is logged and skipped with exit 0, so the page reads "No run" for
-  # it rather than the lane reading red. The tag, the commit and the registry
+  # no certification case (no roster line and no task file with the suite
+  # line; every release before the suite's first case merged) is logged and
+  # skipped with exit 0, so the page reads "No run" for it rather than the
+  # lane reading red. The tag, the commit and the registry
   # are written to artifacts/release-under-test.json for the page's fetcher,
   # which groups repetitions by release.
   #
-  # EVAL_REPETITIONS=30 and EVAL_TASK_PARALLELISM=1, two builds a weekend:
-  # one window per release, scored by the page's 57-of-60 rule (a Wilson 95
-  # percent lower bound of 0.85) over every scored repetition of that release
-  # across builds; a repetition the harness records as infrastructure
-  # (KUBE_AGENTS_INFRA_FAILURE) sits outside the scored count. Thirty per
-  # build, not sixty, because the harness writes a case's record only after
-  # its last repetition (grade_case in hack/ci-eval-pr.sh) and the partial
-  # verdict reads only cases with that record: a build the deadline cuts
-  # inside a case records nothing for it. Thirty repetitions at the lane's
-  # 11 minutes each, or 15.6 at the slowest, plus setup, end inside 720m with
-  # margin; the Saturday and Sunday builds pool to 60, and a Rerun tops up
-  # what infrastructure took. The later option, once the harness writes the
-  # case record per repetition: one 60-repetition build under a longer
-  # timeout, so a release's window fills in one build. The lane is serial
-  # under the harness's infrastructure lock, so the parallelism buys nothing
-  # and 1 keeps one plant on the host at a time.
+  # EVAL_REPETITIONS=3 and EVAL_TASK_PARALLELISM=1 while the suite is built
+  # out. One window per release, scored by the page's 57-of-60 rule (a Wilson
+  # 95 percent lower bound of 0.85) over every scored repetition of that
+  # release across builds; a repetition the harness records as infrastructure
+  # (KUBE_AGENTS_INFRA_FAILURE) sits outside the scored count. At 3 per build
+  # no release reaches 60, so every page cell reads "n of 60, not enough
+  # runs" and nothing is certified; the count rises on measured unit times
+  # once the roster's parts are sized (the harness writes a case's record
+  # only after its last repetition, grade_case in hack/ci-eval-pr.sh, so a
+  # build must finish every case it starts: a deadline-cut build records
+  # nothing for the case it was in). The later shape, once the harness
+  # writes the case record per repetition: one 60-repetition build under a
+  # longer timeout. The lane is serial under the harness's infrastructure
+  # lock, so the parallelism buys nothing and 1 keeps one plant on the host
+  # at a time.
   #
   # Saturday and Sunday 14:00 UTC (09:00 EST): after the nightlies end and in
   # the window the pool is idle (the pool-pressure reading over the week
@@ -1100,13 +1100,13 @@ periodics:
   max_concurrency: 1
   decorate: true
   decoration_config:
-    # Provisional. One baseline case at 30 repetitions, serial: the lane's
-    # unit is about 11 minutes (7.5 median on the api lane, 15.6 at the
-    # slowest), plus 45 to 60 minutes of setup, so 30 units sit between 4.7
-    # and 8.8 hours; 720m holds the slowest with margin, which matters
-    # because a build the deadline cuts inside a case records nothing for
-    # it (the job comment above). It follows the first runs' wall clock, as
-    # the nightlies' did.
+    # Provisional. At 3 repetitions per case the lane's unit of about 11
+    # minutes (7.5 median on the api lane, 15.6 at the slowest) plus 45 to 60
+    # minutes of setup ends well inside 720m for the parts the roster holds
+    # now; the timeout stays where the first runs' wall clock, and the
+    # repetition count as it rises, will size it, as the nightlies' did. A
+    # build the deadline cuts inside a case records nothing for it (the job
+    # comment above), so the margin is kept wide.
     timeout: 720m
     grace_period: 5m
     # Logs and artifacts go to a bucket kube-agents owns, NOT the cluster
@@ -1131,7 +1131,7 @@ periodics:
     # (gke-labs/kube-agents#1335) rather than a second UI, so the
     # googleoss-kube-agents dashboard keeps only the pool-pressure tab.
     testgrid-create-test-group: "false"
-    description: Certification lane, slice 1, Saturday and Sunday 14:00 UTC and on Rerun. kube-agents certification suite graded on the newest GA release's published images under spec.mode next, 30 repetitions per case per build pooled to the release's 60, on its own project (gke-labs/kube-agents#3978).
+    description: Certification lane, slice 1, Saturday and Sunday 14:00 UTC and on Rerun. kube-agents certification suite graded on the newest GA release's published images under spec.mode next, 3 repetitions per case per build while the suite is built out, on its own project (gke-labs/kube-agents#3978).
   extra_refs:
   - org: gke-labs
     repo: kube-agents
@@ -1197,24 +1197,27 @@ periodics:
         # first, or this job reds at the deploy's refusal). bench-gate reads
         # the inject transport as the version key's next mode.
         export EVAL_MODE_NEXT="1"
-        # ─── The agent model: Gemini on Vertex AI, temporarily ──────────────
-        # History: gemini-3.1-pro-preview, then claude-opus-5-5 for its fixed quota
-        # (gke-labs/kube-agents#3160), now gemini-4-argon on dynamic shared quota.
-        # hack/ci-deploy.sh reads the first two, hack/ci-eval-pr.sh stamps records
-        # with the third; set all three or the record names a model the install
-        # is not serving. The judge stays on Gemini (JUDGE_MODEL in the script).
-        export MODEL_PROVIDER="vertex_ai"
-        # Temporarily on gemini-4-argon in place of claude-opus-5-5 (hangdng, 2026-10-27);
-        # revert to claude-opus-5-5 when told.
-        export MODEL_DEFAULT_NAME="gemini-4-argon"
-        export AGENT_MODEL_OVERRIDE="gemini-4-argon"
+        # ─── The agent model: the `nightly` pair of the eval-model Secret ─────────
+        # The nightlies' pair, which every nightly and weekly periodic reads;
+        # the gate's record is built from these runs, so `gate.name` must name
+        # the same model or rung 6 compares nothing.
+        # Mounted at /etc/eval-model from kube-agents-eval-model (namespace
+        # test-pods on build-kube-agents). The mechanism and its reasons are on
+        # pull-kube-agents-smoke-test's block in kube-agents-presubmits.yaml;
+        # this block sets no model, and a switch is one write to the Secret.
+        MODEL_PROVIDER="$(tr -d '[:space:]' < /etc/eval-model/nightly.provider)"
+        MODEL_DEFAULT_NAME="$(tr -d '[:space:]' < /etc/eval-model/nightly.name)"
+        : "${MODEL_PROVIDER:?eval-model Secret: nightly.provider is missing or empty}"
+        : "${MODEL_DEFAULT_NAME:?eval-model Secret: nightly.name is missing or empty}"
+        export MODEL_PROVIDER MODEL_DEFAULT_NAME
+        export AGENT_MODEL_OVERRIDE="${MODEL_DEFAULT_NAME}"
         # 1, not the nightly's 6: every certification case carries a stack
         # and the harness runs stack-bearing units one at a time under its
-        # infrastructure lock, so a wider fan-out buys nothing here; 30
-        # repetitions per build, two builds a weekend, fill one release's
-        # window of 60 (the job comment above).
+        # infrastructure lock, so a wider fan-out buys nothing here. 3
+        # repetitions per build while the suite is built out (the job comment
+        # above); the count rises on measured unit times.
         export EVAL_TASK_PARALLELISM="1"
-        export EVAL_REPETITIONS="30"
+        export EVAL_REPETITIONS="3"
         # ─── Baseline evidence store: read only ─────────────────────────────
         # Exported for the read, like a presubmit. hack/ci-eval-pr.sh sets
         # EVAL_IS_MAIN_RUN=false under EVAL_TIER=certification, so this lane
@@ -1277,7 +1280,11 @@ periodics:
         fi
         RELEASE_COMMIT="$(resolve_source_image_commit "${GA_TAG}")"
         echo "=== Release under test: ${GA_TAG} (images built at ${RELEASE_COMMIT}) ==="
-        if ! git show "${RELEASE_COMMIT}:hack/eval/certification-cases.txt" 2>/dev/null | grep -q '^\./tasks/'; then
+        # A release carries the suite when its roster file lists a case or, once
+        # the roster is generated from the task files, when any task.yaml carries
+        # the suite line; either form admits the release.
+        if ! git show "${RELEASE_COMMIT}:hack/eval/certification-cases.txt" 2>/dev/null | grep -q '^\./tasks/' \
+          && ! git grep -q '^suite: certification$' "${RELEASE_COMMIT}" -- 'bench/tasks/*/task.yaml'; then
           echo "Release ${GA_TAG} carries no certification case (its tree predates the suite); nothing to grade, and the page reads No run for it."
           exit 0
         fi
@@ -1353,7 +1360,7 @@ periodics:
         # uninstalled the new tenants (gke-labs/kube-agents#3129). This job's
         # timeout is 480m, so a heartbeat that stops before then means the
         # project is about to be taken away, whatever its exit status says.
-        ( "${BOSKOSCTL[@]}" heartbeat --resource "${RESOURCE}" --period=30s --retries=8 --timeout=500m || true
+        ( "${BOSKOSCTL[@]}" heartbeat --resource "${RESOURCE}" --period=30s --retries=8 --timeout=740m || true
           [ -e "${TEARDOWN_SENTINEL}" ] || kill -TERM $$ ) &
         HEARTBEAT_PID=$!
 
@@ -1388,6 +1395,9 @@ periodics:
       - name: gemini-secret
         mountPath: /etc/gemini-secret
         readOnly: true
+      - name: eval-model
+        mountPath: /etc/eval-model
+        readOnly: true
       - name: bench-github-token
         mountPath: /etc/bench-github-token
         readOnly: true
@@ -1398,6 +1408,9 @@ periodics:
     - name: gemini-secret
       secret:
         secretName: kube-agents-gemini-api-key
+    - name: eval-model
+      secret:
+        secretName: kube-agents-eval-model
     - name: bench-github-token
       secret:
         secretName: kube-agents-bench-github-token
