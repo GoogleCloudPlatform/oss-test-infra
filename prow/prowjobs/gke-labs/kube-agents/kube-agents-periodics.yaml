@@ -4367,9 +4367,15 @@ periodics:
     gcs_configuration:
       bucket: kube-agents-evals-nightly-logs
   annotations:
-    # No TestGrid tab on purpose: the team reads this run through the eval
-    # dashboard (gke-labs/kube-agents#1335) rather than a second UI, so the
-    # googleoss-kube-agents dashboard keeps only the pool-pressure tab.
+    # No TestGrid tab: the lane publishes no eval-dashboard data, and its
+    # results are read in two places instead. kube-agents' ci-health watches
+    # the job like the certification slice (scripts/eval_dashboard/periodics.py
+    # WATCHED, from this bucket's logs/ prefix), so a failed or stale run is a
+    # health-bot note and a line in the daily digest (gke-labs/kube-agents#5374);
+    # its runbook is docs/ci-pool-projects.md, "The replay lane". The served share and each
+    # replayed conversation's verdict are in the report under
+    # replay-shadow/replay-lane/<day>/<build>/report/ in
+    # gs://kube-agents-replay-shadow, read by the eval crew.
     testgrid-create-test-group: "false"
     description: Non-blocking inference-replay lane on main, replaying the next-mode nightlies' recorded model answers; reports served share and verdict agreement, gates nothing.
   extra_refs:
