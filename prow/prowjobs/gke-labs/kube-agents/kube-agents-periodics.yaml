@@ -4302,6 +4302,10 @@ periodics:
     # deletes the fleet in its own exit trap before the pod is killed.
     timeout: 360m
     grace_period: 15m
+    # Logs go to the bucket kube-agents owns, as the fleet reconcile's do: this
+    # job's identity cannot write the cluster default gs://kube-agents-prow.
+    gcs_configuration:
+      bucket: kube-agents-periodic-logs
   extra_refs:
   - org: gke-labs
     repo: kube-agents
@@ -4315,10 +4319,13 @@ periodics:
       8 clusters): no crash, every audit finishes, the first-run flow
       finishes; records resource use and cost.
   spec:
-    # prowjob-default-sa@kube-agents-prow holds, on the scale project, the
-    # roles hack/ci-scale-nightly.sh names in its header; nothing else here
-    # needs a secret.
-    serviceAccountName: prowjob-default-sa
+    # Its own identity, never the presubmit's, as seeded-fleet-reconciler is:
+    # sized-fleet-runner holds container.admin on the scale project, and no job
+    # that runs pull-request code may run as it. The KSA test-pods/sized-fleet-runner
+    # and its Workload Identity binding to
+    # sized-fleet-runner@kube-agents-prow.iam.gserviceaccount.com are
+    # prerequisites of this file (kube-agents docs/designs/sized-test-fleet.md).
+    serviceAccountName: sized-fleet-runner
     containers:
     - image: gcr.io/k8s-staging-test-infra/kubekins-e2e:latest-1.32
       command:
@@ -4348,6 +4355,10 @@ periodics:
     # The M run's budget plus the longer build of 16 clusters.
     timeout: 420m
     grace_period: 15m
+    # Logs go to the bucket kube-agents owns, as the fleet reconcile's do: this
+    # job's identity cannot write the cluster default gs://kube-agents-prow.
+    gcs_configuration:
+      bucket: kube-agents-periodic-logs
   extra_refs:
   - org: gke-labs
     repo: kube-agents
@@ -4361,7 +4372,7 @@ periodics:
       16 clusters): no crash, every audit finishes, the first-run flow
       finishes; records resource use and cost.
   spec:
-    serviceAccountName: prowjob-default-sa
+    serviceAccountName: sized-fleet-runner
     containers:
     - image: gcr.io/k8s-staging-test-infra/kubekins-e2e:latest-1.32
       command:
