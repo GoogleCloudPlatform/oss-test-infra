@@ -529,8 +529,10 @@ periodics:
         BOSKOSCTL=(boskosctl --server-url="${BOSKOS_SERVER}" --owner-name="${BOSKOS_OWNER}")
 
         echo "=== [$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Leasing GCP Project from Boskos ==="
+        # 90m, not the presubmit's 10m: the eight nightly parts lease together at
+        # 00:00 UTC against a pool the gate may fill (kube-agents#5472).
         RESOURCE="$("${BOSKOSCTL[@]}" acquire --type="${BOSKOS_RESOURCE_TYPE}" \
-          --state=free --target-state=busy --timeout=10m)"
+          --state=free --target-state=busy --timeout=90m)"
         LEASED_PROJECT="$(echo "${RESOURCE}" | jq -r .name)"
         if [ -z "${LEASED_PROJECT}" ] || [ "${LEASED_PROJECT}" = "null" ]; then
           echo "ERROR: could not parse leased project from: ${RESOURCE}"
@@ -912,8 +914,10 @@ periodics:
         BOSKOSCTL=(boskosctl --server-url="${BOSKOS_SERVER}" --owner-name="${BOSKOS_OWNER}")
 
         echo "=== [$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Leasing GCP Project from Boskos ==="
+        # 90m, not the presubmit's 10m: the eight nightly parts lease together at
+        # 00:00 UTC against a pool the gate may fill (kube-agents#5472).
         RESOURCE="$("${BOSKOSCTL[@]}" acquire --type="${BOSKOS_RESOURCE_TYPE}" \
-          --state=free --target-state=busy --timeout=10m)"
+          --state=free --target-state=busy --timeout=90m)"
         LEASED_PROJECT="$(echo "${RESOURCE}" | jq -r .name)"
         if [ -z "${LEASED_PROJECT}" ] || [ "${LEASED_PROJECT}" = "null" ]; then
           echo "ERROR: could not parse leased project from: ${RESOURCE}"
@@ -1675,8 +1679,10 @@ periodics:
         BOSKOSCTL=(boskosctl --server-url="${BOSKOS_SERVER}" --owner-name="${BOSKOS_OWNER}")
 
         echo "=== [$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Leasing GCP Project from Boskos ==="
+        # 90m, not the presubmit's 10m: the eight nightly parts lease together at
+        # 00:00 UTC against a pool the gate may fill (kube-agents#5472).
         RESOURCE="$("${BOSKOSCTL[@]}" acquire --type="${BOSKOS_RESOURCE_TYPE}" \
-          --state=free --target-state=busy --timeout=10m)"
+          --state=free --target-state=busy --timeout=90m)"
         LEASED_PROJECT="$(echo "${RESOURCE}" | jq -r .name)"
         if [ -z "${LEASED_PROJECT}" ] || [ "${LEASED_PROJECT}" = "null" ]; then
           echo "ERROR: could not parse leased project from: ${RESOURCE}"
@@ -2055,8 +2061,10 @@ periodics:
         BOSKOSCTL=(boskosctl --server-url="${BOSKOS_SERVER}" --owner-name="${BOSKOS_OWNER}")
 
         echo "=== [$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Leasing GCP Project from Boskos ==="
+        # 90m, not the presubmit's 10m: the eight nightly parts lease together at
+        # 00:00 UTC against a pool the gate may fill (kube-agents#5472).
         RESOURCE="$("${BOSKOSCTL[@]}" acquire --type="${BOSKOS_RESOURCE_TYPE}" \
-          --state=free --target-state=busy --timeout=10m)"
+          --state=free --target-state=busy --timeout=90m)"
         LEASED_PROJECT="$(echo "${RESOURCE}" | jq -r .name)"
         if [ -z "${LEASED_PROJECT}" ] || [ "${LEASED_PROJECT}" = "null" ]; then
           echo "ERROR: could not parse leased project from: ${RESOURCE}"
@@ -2435,8 +2443,10 @@ periodics:
         BOSKOSCTL=(boskosctl --server-url="${BOSKOS_SERVER}" --owner-name="${BOSKOS_OWNER}")
 
         echo "=== [$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Leasing GCP Project from Boskos ==="
+        # 90m, not the presubmit's 10m: the eight nightly parts lease together at
+        # 00:00 UTC against a pool the gate may fill (kube-agents#5472).
         RESOURCE="$("${BOSKOSCTL[@]}" acquire --type="${BOSKOS_RESOURCE_TYPE}" \
-          --state=free --target-state=busy --timeout=10m)"
+          --state=free --target-state=busy --timeout=90m)"
         LEASED_PROJECT="$(echo "${RESOURCE}" | jq -r .name)"
         if [ -z "${LEASED_PROJECT}" ] || [ "${LEASED_PROJECT}" = "null" ]; then
           echo "ERROR: could not parse leased project from: ${RESOURCE}"
@@ -2779,8 +2789,10 @@ periodics:
         BOSKOSCTL=(boskosctl --server-url="${BOSKOS_SERVER}" --owner-name="${BOSKOS_OWNER}")
 
         echo "=== [$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Leasing GCP Project from Boskos ==="
+        # 90m, not the presubmit's 10m: the eight nightly parts lease together at
+        # 00:00 UTC against a pool the gate may fill (kube-agents#5472).
         RESOURCE="$("${BOSKOSCTL[@]}" acquire --type="${BOSKOS_RESOURCE_TYPE}" \
-          --state=free --target-state=busy --timeout=10m)"
+          --state=free --target-state=busy --timeout=90m)"
         LEASED_PROJECT="$(echo "${RESOURCE}" | jq -r .name)"
         if [ -z "${LEASED_PROJECT}" ] || [ "${LEASED_PROJECT}" = "null" ]; then
           echo "ERROR: could not parse leased project from: ${RESOURCE}"
@@ -3115,8 +3127,10 @@ periodics:
         BOSKOSCTL=(boskosctl --server-url="${BOSKOS_SERVER}" --owner-name="${BOSKOS_OWNER}")
 
         echo "=== [$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Leasing GCP Project from Boskos ==="
+        # 90m, not the presubmit's 10m: the eight nightly parts lease together at
+        # 00:00 UTC against a pool the gate may fill (kube-agents#5472).
         RESOURCE="$("${BOSKOSCTL[@]}" acquire --type="${BOSKOS_RESOURCE_TYPE}" \
-          --state=free --target-state=busy --timeout=10m)"
+          --state=free --target-state=busy --timeout=90m)"
         LEASED_PROJECT="$(echo "${RESOURCE}" | jq -r .name)"
         if [ -z "${LEASED_PROJECT}" ] || [ "${LEASED_PROJECT}" = "null" ]; then
           echo "ERROR: could not parse leased project from: ${RESOURCE}"
@@ -3451,8 +3465,10 @@ periodics:
         BOSKOSCTL=(boskosctl --server-url="${BOSKOS_SERVER}" --owner-name="${BOSKOS_OWNER}")
 
         echo "=== [$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Leasing GCP Project from Boskos ==="
+        # 90m, not the presubmit's 10m: the eight nightly parts lease together at
+        # 00:00 UTC against a pool the gate may fill (kube-agents#5472).
         RESOURCE="$("${BOSKOSCTL[@]}" acquire --type="${BOSKOS_RESOURCE_TYPE}" \
-          --state=free --target-state=busy --timeout=10m)"
+          --state=free --target-state=busy --timeout=90m)"
         LEASED_PROJECT="$(echo "${RESOURCE}" | jq -r .name)"
         if [ -z "${LEASED_PROJECT}" ] || [ "${LEASED_PROJECT}" = "null" ]; then
           echo "ERROR: could not parse leased project from: ${RESOURCE}"
