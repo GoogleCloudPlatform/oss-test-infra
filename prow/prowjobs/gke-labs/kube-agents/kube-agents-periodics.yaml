@@ -295,8 +295,11 @@ periodics:
   cluster: build-kube-agents
   # 00:00 UTC (8 PM EDT / 7 PM EST; 5 PM / 4 PM Pacific): after the working
   # day's presubmit herd in the team's Eastern time zone, so the nightly's
-  # lease and its model-quota draw do not contend with pull requests, and the
-  # night is over before the next morning's 11 AM ET digest reports it.
+  # model-quota draw rarely contends with pull requests, and the night is
+  # over before the next morning's 11 AM ET digest reports it. The herd can
+  # still hold the pool at this hour (34 smoke runs did on 2026-11-11,
+  # gke-labs/kube-agents#5472), so the acquire below waits up to 90m of this
+  # part's own timeout for a project.
   # ci-kube-agents-pool-pressure above fires at :23 and leases nothing from
   # Boskos, so the two never contend.
   cron: "0 0 * * *"
@@ -529,8 +532,11 @@ periodics:
         BOSKOSCTL=(boskosctl --server-url="${BOSKOS_SERVER}" --owner-name="${BOSKOS_OWNER}")
 
         echo "=== [$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Leasing GCP Project from Boskos ==="
+        # 90m, not the presubmit's 10m: the eight nightly parts lease together at
+        # 00:00 UTC against a pool the presubmit herd may have filled, and the
+        # wait comes out of this part's own timeout (gke-labs/kube-agents#5472).
         RESOURCE="$("${BOSKOSCTL[@]}" acquire --type="${BOSKOS_RESOURCE_TYPE}" \
-          --state=free --target-state=busy --timeout=10m)"
+          --state=free --target-state=busy --timeout=90m)"
         LEASED_PROJECT="$(echo "${RESOURCE}" | jq -r .name)"
         if [ -z "${LEASED_PROJECT}" ] || [ "${LEASED_PROJECT}" = "null" ]; then
           echo "ERROR: could not parse leased project from: ${RESOURCE}"
@@ -689,8 +695,11 @@ periodics:
   cluster: build-kube-agents
   # 00:00 UTC (8 PM EDT / 7 PM EST; 5 PM / 4 PM Pacific): after the working
   # day's presubmit herd in the team's Eastern time zone, so the nightly's
-  # lease and its model-quota draw do not contend with pull requests, and the
-  # night is over before the next morning's 11 AM ET digest reports it.
+  # model-quota draw rarely contends with pull requests, and the night is
+  # over before the next morning's 11 AM ET digest reports it. The herd can
+  # still hold the pool at this hour (34 smoke runs did on 2026-11-11,
+  # gke-labs/kube-agents#5472), so the acquire below waits up to 90m of this
+  # part's own timeout for a project.
   # ci-kube-agents-pool-pressure above fires at :23 and leases nothing from
   # Boskos, so the two never contend.
   cron: "0 0 * * *"
@@ -912,8 +921,11 @@ periodics:
         BOSKOSCTL=(boskosctl --server-url="${BOSKOS_SERVER}" --owner-name="${BOSKOS_OWNER}")
 
         echo "=== [$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Leasing GCP Project from Boskos ==="
+        # 90m, not the presubmit's 10m: the eight nightly parts lease together at
+        # 00:00 UTC against a pool the presubmit herd may have filled, and the
+        # wait comes out of this part's own timeout (gke-labs/kube-agents#5472).
         RESOURCE="$("${BOSKOSCTL[@]}" acquire --type="${BOSKOS_RESOURCE_TYPE}" \
-          --state=free --target-state=busy --timeout=10m)"
+          --state=free --target-state=busy --timeout=90m)"
         LEASED_PROJECT="$(echo "${RESOURCE}" | jq -r .name)"
         if [ -z "${LEASED_PROJECT}" ] || [ "${LEASED_PROJECT}" = "null" ]; then
           echo "ERROR: could not parse leased project from: ${RESOURCE}"
@@ -1451,8 +1463,11 @@ periodics:
   cluster: build-kube-agents
   # 00:00 UTC (8 PM EDT / 7 PM EST; 5 PM / 4 PM Pacific): after the working
   # day's presubmit herd in the team's Eastern time zone, so the nightly's
-  # lease and its model-quota draw do not contend with pull requests, and the
-  # night is over before the next morning's 11 AM ET digest reports it.
+  # model-quota draw rarely contends with pull requests, and the night is
+  # over before the next morning's 11 AM ET digest reports it. The herd can
+  # still hold the pool at this hour (34 smoke runs did on 2026-11-11,
+  # gke-labs/kube-agents#5472), so the acquire below waits up to 90m of this
+  # part's own timeout for a project.
   # ci-kube-agents-pool-pressure above fires at :23 and leases nothing from
   # Boskos, so the two never contend.
   cron: "0 0 * * *"
@@ -1675,8 +1690,11 @@ periodics:
         BOSKOSCTL=(boskosctl --server-url="${BOSKOS_SERVER}" --owner-name="${BOSKOS_OWNER}")
 
         echo "=== [$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Leasing GCP Project from Boskos ==="
+        # 90m, not the presubmit's 10m: the eight nightly parts lease together at
+        # 00:00 UTC against a pool the presubmit herd may have filled, and the
+        # wait comes out of this part's own timeout (gke-labs/kube-agents#5472).
         RESOURCE="$("${BOSKOSCTL[@]}" acquire --type="${BOSKOS_RESOURCE_TYPE}" \
-          --state=free --target-state=busy --timeout=10m)"
+          --state=free --target-state=busy --timeout=90m)"
         LEASED_PROJECT="$(echo "${RESOURCE}" | jq -r .name)"
         if [ -z "${LEASED_PROJECT}" ] || [ "${LEASED_PROJECT}" = "null" ]; then
           echo "ERROR: could not parse leased project from: ${RESOURCE}"
@@ -1831,8 +1849,11 @@ periodics:
   cluster: build-kube-agents
   # 00:00 UTC (8 PM EDT / 7 PM EST; 5 PM / 4 PM Pacific): after the working
   # day's presubmit herd in the team's Eastern time zone, so the nightly's
-  # lease and its model-quota draw do not contend with pull requests, and the
-  # night is over before the next morning's 11 AM ET digest reports it.
+  # model-quota draw rarely contends with pull requests, and the night is
+  # over before the next morning's 11 AM ET digest reports it. The herd can
+  # still hold the pool at this hour (34 smoke runs did on 2026-11-11,
+  # gke-labs/kube-agents#5472), so the acquire below waits up to 90m of this
+  # part's own timeout for a project.
   # ci-kube-agents-pool-pressure above fires at :23 and leases nothing from
   # Boskos, so the two never contend.
   cron: "0 0 * * *"
@@ -2055,8 +2076,11 @@ periodics:
         BOSKOSCTL=(boskosctl --server-url="${BOSKOS_SERVER}" --owner-name="${BOSKOS_OWNER}")
 
         echo "=== [$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Leasing GCP Project from Boskos ==="
+        # 90m, not the presubmit's 10m: the eight nightly parts lease together at
+        # 00:00 UTC against a pool the presubmit herd may have filled, and the
+        # wait comes out of this part's own timeout (gke-labs/kube-agents#5472).
         RESOURCE="$("${BOSKOSCTL[@]}" acquire --type="${BOSKOS_RESOURCE_TYPE}" \
-          --state=free --target-state=busy --timeout=10m)"
+          --state=free --target-state=busy --timeout=90m)"
         LEASED_PROJECT="$(echo "${RESOURCE}" | jq -r .name)"
         if [ -z "${LEASED_PROJECT}" ] || [ "${LEASED_PROJECT}" = "null" ]; then
           echo "ERROR: could not parse leased project from: ${RESOURCE}"
@@ -2211,8 +2235,11 @@ periodics:
   cluster: build-kube-agents
   # 00:00 UTC (8 PM EDT / 7 PM EST; 5 PM / 4 PM Pacific): after the working
   # day's presubmit herd in the team's Eastern time zone, so the nightly's
-  # lease and its model-quota draw do not contend with pull requests, and the
-  # night is over before the next morning's 11 AM ET digest reports it.
+  # model-quota draw rarely contends with pull requests, and the night is
+  # over before the next morning's 11 AM ET digest reports it. The herd can
+  # still hold the pool at this hour (34 smoke runs did on 2026-11-11,
+  # gke-labs/kube-agents#5472), so the acquire below waits up to 90m of this
+  # part's own timeout for a project.
   # ci-kube-agents-pool-pressure above fires at :23 and leases nothing from
   # Boskos, so the two never contend.
   cron: "0 0 * * *"
@@ -2435,8 +2462,11 @@ periodics:
         BOSKOSCTL=(boskosctl --server-url="${BOSKOS_SERVER}" --owner-name="${BOSKOS_OWNER}")
 
         echo "=== [$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Leasing GCP Project from Boskos ==="
+        # 90m, not the presubmit's 10m: the eight nightly parts lease together at
+        # 00:00 UTC against a pool the presubmit herd may have filled, and the
+        # wait comes out of this part's own timeout (gke-labs/kube-agents#5472).
         RESOURCE="$("${BOSKOSCTL[@]}" acquire --type="${BOSKOS_RESOURCE_TYPE}" \
-          --state=free --target-state=busy --timeout=10m)"
+          --state=free --target-state=busy --timeout=90m)"
         LEASED_PROJECT="$(echo "${RESOURCE}" | jq -r .name)"
         if [ -z "${LEASED_PROJECT}" ] || [ "${LEASED_PROJECT}" = "null" ]; then
           echo "ERROR: could not parse leased project from: ${RESOURCE}"
@@ -2587,8 +2617,11 @@ periodics:
   cluster: build-kube-agents
   # 00:00 UTC (8 PM EDT / 7 PM EST; 5 PM / 4 PM Pacific): after the working
   # day's presubmit herd in the team's Eastern time zone, so the nightly's
-  # lease and its model-quota draw do not contend with pull requests, and the
-  # night is over before the next morning's 11 AM ET digest reports it.
+  # model-quota draw rarely contends with pull requests, and the night is
+  # over before the next morning's 11 AM ET digest reports it. The herd can
+  # still hold the pool at this hour (34 smoke runs did on 2026-11-11,
+  # gke-labs/kube-agents#5472), so the acquire below waits up to 90m of this
+  # part's own timeout for a project.
   # ci-kube-agents-pool-pressure above fires at :23 and leases nothing from
   # Boskos, so the two never contend.
   cron: "0 0 * * *"
@@ -2779,8 +2812,11 @@ periodics:
         BOSKOSCTL=(boskosctl --server-url="${BOSKOS_SERVER}" --owner-name="${BOSKOS_OWNER}")
 
         echo "=== [$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Leasing GCP Project from Boskos ==="
+        # 90m, not the presubmit's 10m: the eight nightly parts lease together at
+        # 00:00 UTC against a pool the presubmit herd may have filled, and the
+        # wait comes out of this part's own timeout (gke-labs/kube-agents#5472).
         RESOURCE="$("${BOSKOSCTL[@]}" acquire --type="${BOSKOS_RESOURCE_TYPE}" \
-          --state=free --target-state=busy --timeout=10m)"
+          --state=free --target-state=busy --timeout=90m)"
         LEASED_PROJECT="$(echo "${RESOURCE}" | jq -r .name)"
         if [ -z "${LEASED_PROJECT}" ] || [ "${LEASED_PROJECT}" = "null" ]; then
           echo "ERROR: could not parse leased project from: ${RESOURCE}"
@@ -2924,8 +2960,11 @@ periodics:
   cluster: build-kube-agents
   # 00:00 UTC (8 PM EDT / 7 PM EST; 5 PM / 4 PM Pacific): after the working
   # day's presubmit herd in the team's Eastern time zone, so the nightly's
-  # lease and its model-quota draw do not contend with pull requests, and the
-  # night is over before the next morning's 11 AM ET digest reports it.
+  # model-quota draw rarely contends with pull requests, and the night is
+  # over before the next morning's 11 AM ET digest reports it. The herd can
+  # still hold the pool at this hour (34 smoke runs did on 2026-11-11,
+  # gke-labs/kube-agents#5472), so the acquire below waits up to 90m of this
+  # part's own timeout for a project.
   # ci-kube-agents-pool-pressure above fires at :23 and leases nothing from
   # Boskos, so the two never contend.
   cron: "0 0 * * *"
@@ -3115,8 +3154,11 @@ periodics:
         BOSKOSCTL=(boskosctl --server-url="${BOSKOS_SERVER}" --owner-name="${BOSKOS_OWNER}")
 
         echo "=== [$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Leasing GCP Project from Boskos ==="
+        # 90m, not the presubmit's 10m: the eight nightly parts lease together at
+        # 00:00 UTC against a pool the presubmit herd may have filled, and the
+        # wait comes out of this part's own timeout (gke-labs/kube-agents#5472).
         RESOURCE="$("${BOSKOSCTL[@]}" acquire --type="${BOSKOS_RESOURCE_TYPE}" \
-          --state=free --target-state=busy --timeout=10m)"
+          --state=free --target-state=busy --timeout=90m)"
         LEASED_PROJECT="$(echo "${RESOURCE}" | jq -r .name)"
         if [ -z "${LEASED_PROJECT}" ] || [ "${LEASED_PROJECT}" = "null" ]; then
           echo "ERROR: could not parse leased project from: ${RESOURCE}"
@@ -3260,8 +3302,11 @@ periodics:
   cluster: build-kube-agents
   # 00:00 UTC (8 PM EDT / 7 PM EST; 5 PM / 4 PM Pacific): after the working
   # day's presubmit herd in the team's Eastern time zone, so the nightly's
-  # lease and its model-quota draw do not contend with pull requests, and the
-  # night is over before the next morning's 11 AM ET digest reports it.
+  # model-quota draw rarely contends with pull requests, and the night is
+  # over before the next morning's 11 AM ET digest reports it. The herd can
+  # still hold the pool at this hour (34 smoke runs did on 2026-11-11,
+  # gke-labs/kube-agents#5472), so the acquire below waits up to 90m of this
+  # part's own timeout for a project.
   # ci-kube-agents-pool-pressure above fires at :23 and leases nothing from
   # Boskos, so the two never contend.
   cron: "0 0 * * *"
@@ -3451,8 +3496,11 @@ periodics:
         BOSKOSCTL=(boskosctl --server-url="${BOSKOS_SERVER}" --owner-name="${BOSKOS_OWNER}")
 
         echo "=== [$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Leasing GCP Project from Boskos ==="
+        # 90m, not the presubmit's 10m: the eight nightly parts lease together at
+        # 00:00 UTC against a pool the presubmit herd may have filled, and the
+        # wait comes out of this part's own timeout (gke-labs/kube-agents#5472).
         RESOURCE="$("${BOSKOSCTL[@]}" acquire --type="${BOSKOS_RESOURCE_TYPE}" \
-          --state=free --target-state=busy --timeout=10m)"
+          --state=free --target-state=busy --timeout=90m)"
         LEASED_PROJECT="$(echo "${RESOURCE}" | jq -r .name)"
         if [ -z "${LEASED_PROJECT}" ] || [ "${LEASED_PROJECT}" = "null" ]; then
           echo "ERROR: could not parse leased project from: ${RESOURCE}"
