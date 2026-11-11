@@ -126,10 +126,10 @@ presubmits:
       # the pull request and the eval dashboard, not here; the GitHub status
       # is the public record. The kube-agents readers (the dashboard
       # collector, step 0's verdict reuse, pool-pressure) name this bucket,
-      # so their change lands first. The four smoke lanes move; the RC
-      # postsubmit, ci-kube-agents-eval-nightly-gitlab-next and the
-      # nightlies' bucket grant to Deck are separate decisions. Only the
-      # bucket is overridden, as the nightlies do.
+      # so their change lands first. The smoke presubmits and the RC
+      # postsubmit move; ci-kube-agents-eval-nightly-gitlab-next, the two
+      # weekly forge lanes and the nightlies' bucket grant to Deck are
+      # separate decisions. Only the bucket is overridden, as the nightlies do.
       gcs_configuration:
         bucket: kube-agents-evals-presubmit-logs
     spec:
