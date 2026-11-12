@@ -144,6 +144,14 @@ postsubmits:
       # explains why the number cannot simply follow.
       timeout: 360m
       grace_period: 5m
+      # Logs and artifacts go to the bucket kube-agents owns, as the smoke
+      # lanes' do; the reasons and the grants are on pull-kube-agents-smoke-test
+      # in kube-agents-presubmits.yaml. The release readers
+      # (scripts/release/poll_rc_eval_verdict.py, ci-health.yml's RC glob)
+      # list both buckets once gke-labs/kube-agents#5430 lands, so this move
+      # lands after it and loses no verdict.
+      gcs_configuration:
+        bucket: kube-agents-evals-presubmit-logs
     annotations:
       # No gke-labs dashboard exists in testgrid/config.yaml yet; skip TestGrid
       # (same pattern as louhi-echo-test-periodic).
