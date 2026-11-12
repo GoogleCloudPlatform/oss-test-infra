@@ -4465,7 +4465,7 @@ periodics:
     # replay-shadow/replay-lane/<day>/<build>/report/ in
     # gs://kube-agents-replay-shadow, read by the eval crew.
     testgrid-create-test-group: "false"
-    description: Non-blocking inference-replay lane on main, replaying the next-mode nightlies' recorded model answers; reports served share and verdict agreement, gates nothing.
+    description: Non-blocking inference-replay lane, replaying the next-mode nightlies' recorded model answers on the commit the newest night ran; reports served share and verdict agreement, gates nothing.
   extra_refs:
   - org: gke-labs
     repo: kube-agents
@@ -4592,8 +4592,10 @@ periodics:
         # its night ran, and fetch_cache.py --print-commit prints the newest
         # night's, read here from main's checkout with the bucket, age, mode
         # and forge hack/ci-env.sh's prepare_replay_lane_cache fetches with
-        # (EVAL_REPLAY_CACHE_BUCKET, unset here, defaults to the bucket below;
-        # REPLAY_LANE_CACHE_MAX_AGE_HOURS is 30). It is stdlib Python plus
+        # (EVAL_REPLAY_CACHE_BUCKET, unset here, defaults to the bucket below,
+        # hack/ci-env.sh's REPLAY_CACHE_DEFAULT_BUCKET; the age is
+        # fetch_cache.py's own default, which REPLAY_LANE_CACHE_MAX_AGE_HOURS
+        # equals). It is stdlib Python plus
         # gcloud, so it runs before anything is built, and everything after
         # it (teardown, deploy, images, scripts) comes from that commit.
         # Before the lease, so a slow fetch holds no project. It prints
@@ -4602,9 +4604,11 @@ periodics:
         # history, or one that cannot be fetched. None of those fails the
         # job: the lane then replays on main, as it did before records named
         # a commit. hack/ci-env.sh hands REPLAY_LANE_COMMIT_SOURCE and the
-        # checkout's commit to the lane's report.
+        # checkout's commit to the lane's report. One consequence: a change to
+        # the lane's own scripts (or a kube-agents change this job comes to
+        # need) reaches the lane a night later, once a nightly has recorded on
+        # it.
         REPLAY_LANE_CACHE_BUCKET="${EVAL_REPLAY_CACHE_BUCKET:-kube-agents-replay-cache}"
-        REPLAY_LANE_CACHE_MAX_AGE_HOURS=30
         REPLAY_LANE_REPO_URL="https://github.com/gke-labs/kube-agents.git"
         REPLAY_LANE_COMMIT_RE='^[0-9a-f]{40}$'
         REPLAY_LANE_FETCH_ATTEMPTS=3
@@ -4612,7 +4616,7 @@ periodics:
         export REPLAY_LANE_COMMIT_SOURCE="main"
         main_commit="$(git rev-parse HEAD)"
         recorded_commit="$(python3 hack/replay-proxy/fetch_cache.py --print-commit \
-          --bucket "${REPLAY_LANE_CACHE_BUCKET}" --max-age-hours "${REPLAY_LANE_CACHE_MAX_AGE_HOURS}" \
+          --bucket "${REPLAY_LANE_CACHE_BUCKET}" \
           --eval-mode-next "${EVAL_MODE_NEXT:-}" --forge "${EVAL_FORGE:-}" < /dev/null)" || recorded_commit=""
         if ! [[ "${recorded_commit}" =~ ${REPLAY_LANE_COMMIT_RE} ]]; then
           echo "Replay lane: no recording night names a commit (the line above says why); replaying on main, ${main_commit}"
