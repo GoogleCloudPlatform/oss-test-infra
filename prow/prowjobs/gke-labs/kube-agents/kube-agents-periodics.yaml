@@ -4409,7 +4409,8 @@ periodics:
   # examples/inference-replay/eval-design.md, Rollout step 2). The trusted
   # nightlies above run their LiteLLM proxy in record mode and publish the
   # answers of passing runs to gs://kube-agents-replay-cache; this job replays
-  # them on main, through a proxy in replay mode, to measure how much of a run
+  # them on the commit the newest recording night ran (main when no record
+  # names one), through a proxy in replay mode, to measure how much of a run
   # replay serves and whether each replayed conversation gets the verdict of
   # the night it came from. It gates nothing: hack/ci-eval-pr.sh runs
   # hack/eval/replay-lane-cases.txt under EVAL_REPLAY_LANE=true, with no tier,
@@ -4464,7 +4465,7 @@ periodics:
     # replay-shadow/replay-lane/<day>/<build>/report/ in
     # gs://kube-agents-replay-shadow, read by the eval crew.
     testgrid-create-test-group: "false"
-    description: Non-blocking inference-replay lane on main, replaying the next-mode nightlies' recorded model answers; reports served share and verdict agreement, gates nothing.
+    description: Non-blocking inference-replay lane, replaying the next-mode nightlies' recorded model answers on the commit the newest night ran; reports served share and verdict agreement, gates nothing.
   extra_refs:
   - org: gke-labs
     repo: kube-agents
@@ -4579,6 +4580,72 @@ periodics:
               echo "go install attempt ${attempt} failed; retrying in $((attempt * 15))s"
               sleep "$((attempt * 15))"
             done
+          fi
+        fi
+
+        # ─── Replay on the commit the newest recording night ran ──────────────────
+        # The nightlies check out main at 00:00 and record; main at 06:00 can
+        # differ, and a prompt or normalizer change merged in between makes
+        # the lane's requests match no recording, so the lane would measure
+        # how far main moved overnight instead of replay
+        # (gke-labs/kube-agents#5666). Each publish record names the commit
+        # its night ran, and fetch_cache.py --print-commit prints the newest
+        # night's, read here from main's checkout with the bucket, age, mode
+        # and forge hack/ci-env.sh's prepare_replay_lane_cache fetches with
+        # (EVAL_REPLAY_CACHE_BUCKET, unset here, defaults to the bucket below,
+        # hack/ci-env.sh's REPLAY_CACHE_DEFAULT_BUCKET; the age is
+        # fetch_cache.py's own default, which REPLAY_LANE_CACHE_MAX_AGE_HOURS
+        # equals). It is stdlib Python plus
+        # gcloud, so it runs before anything is built, and everything after
+        # it (teardown, deploy, images, scripts) comes from that commit.
+        # Before the lease, so a slow fetch holds no project. It prints
+        # nothing when no record names a commit, and the job stays on main;
+        # so does a value that is not a full SHA, a commit not on main's
+        # history, or one that cannot be fetched. None of those fails the
+        # job: the lane then replays on main, as it did before records named
+        # a commit. hack/ci-env.sh hands REPLAY_LANE_COMMIT_SOURCE and the
+        # checkout's commit to the lane's report. One consequence: a change to
+        # the lane's own scripts (or a kube-agents change this job comes to
+        # need) reaches the lane a night later, once a nightly has recorded on
+        # it.
+        REPLAY_LANE_CACHE_BUCKET="${EVAL_REPLAY_CACHE_BUCKET:-kube-agents-replay-cache}"
+        REPLAY_LANE_REPO_URL="https://github.com/gke-labs/kube-agents.git"
+        REPLAY_LANE_COMMIT_RE='^[0-9a-f]{40}$'
+        REPLAY_LANE_FETCH_ATTEMPTS=3
+        REPLAY_LANE_FETCH_BACKOFF_SECONDS=10
+        export REPLAY_LANE_COMMIT_SOURCE="main"
+        main_commit="$(git rev-parse HEAD)"
+        recorded_commit="$(python3 hack/replay-proxy/fetch_cache.py --print-commit \
+          --bucket "${REPLAY_LANE_CACHE_BUCKET}" \
+          --eval-mode-next "${EVAL_MODE_NEXT:-}" --forge "${EVAL_FORGE:-}" < /dev/null)" || recorded_commit=""
+        if ! [[ "${recorded_commit}" =~ ${REPLAY_LANE_COMMIT_RE} ]]; then
+          echo "Replay lane: no recording night names a commit (the line above says why); replaying on main, ${main_commit}"
+        else
+          have_commit="false"
+          if git cat-file -e "${recorded_commit}^{commit}" 2>/dev/null; then
+            have_commit="true"
+          else
+            for attempt in $(seq 1 "${REPLAY_LANE_FETCH_ATTEMPTS}"); do
+              if git fetch --quiet "${REPLAY_LANE_REPO_URL}" "${recorded_commit}"; then
+                have_commit="true"
+                break
+              fi
+              if [ "${attempt}" -lt "${REPLAY_LANE_FETCH_ATTEMPTS}" ]; then
+                echo "git fetch of ${recorded_commit} failed (attempt ${attempt}); retrying in $((attempt * REPLAY_LANE_FETCH_BACKOFF_SECONDS))s"
+                sleep "$((attempt * REPLAY_LANE_FETCH_BACKOFF_SECONDS))"
+              fi
+            done
+          fi
+          if [ "${have_commit}" != "true" ]; then
+            echo "Replay lane: could not fetch ${recorded_commit}, the commit the newest recording night ran, after ${REPLAY_LANE_FETCH_ATTEMPTS} attempts; replaying on main, ${main_commit}"
+          elif ! git merge-base --is-ancestor "${recorded_commit}" "${main_commit}"; then
+            echo "Replay lane: ${recorded_commit}, which the newest recording night names, is not on main's history; replaying on main, ${main_commit}"
+          elif ! git checkout --quiet --detach "${recorded_commit}"; then
+            echo "Replay lane: could not check out ${recorded_commit}; replaying on main, ${main_commit}"
+            git checkout --quiet --detach "${main_commit}"
+          else
+            REPLAY_LANE_COMMIT_SOURCE="recording"
+            echo "Replay lane: replaying on ${recorded_commit}, the commit the newest recording night ran (main is ${main_commit})"
           fi
         fi
 
