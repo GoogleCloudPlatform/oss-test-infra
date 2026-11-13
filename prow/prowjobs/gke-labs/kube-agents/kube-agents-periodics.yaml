@@ -4778,3 +4778,113 @@ periodics:
     - name: ledger-app-key
       secret:
         secretName: kube-agents-evals-ledger-app-key
+- name: ci-kube-agents-scale-nightly-m
+  # The sized test fleet's nightly run (gke-labs/kube-agents
+  # docs/designs/sized-test-fleet.md): builds the M fleet (250 n1-standard-1
+  # nodes in 8 clusters, 2,000 small workloads), resets the scale host's
+  # install, runs a burst window of about 1 hour (the first-run flow and
+  # every audit) and a 1-hour soak window, writes the verdict, the
+  # measurements and the cost record to the results bucket, and deletes the
+  # fleet. 00:00 UTC, so the run ends before the first scheduled audit of the
+  # day (06:20 UTC) and the soak window holds none. Wednesday is the L run's
+  # night (below), so the two never share the install or the project.
+  cluster: build-kube-agents
+  cron: "0 0 * * 0,1,2,4,5,6"
+  # A slow night must skip the next tick, not build a second fleet beside it.
+  max_concurrency: 1
+  decorate: true
+  decoration_config:
+    # About 3.5 hours: the fleet build (30-45m), the workloads (15m), the
+    # burst window (1h nominal, capped at 3h), the soak window (1h) and the
+    # teardown (15m). 6h covers a burst window at its cap; the script
+    # deletes the fleet in its own exit trap before the pod is killed.
+    timeout: 360m
+    grace_period: 15m
+    # Logs go to the bucket kube-agents owns, as the fleet reconcile's do: this
+    # job's identity cannot write the cluster default gs://kube-agents-prow.
+    gcs_configuration:
+      bucket: kube-agents-periodic-logs
+  extra_refs:
+  - org: gke-labs
+    repo: kube-agents
+    base_ref: main
+    workdir: true
+  annotations:
+    testgrid-dashboards: googleoss-kube-agents
+    testgrid-tab-name: scale-nightly-m
+    description: >-
+      Nightly run of kube-agents on the M sized test fleet (250 real nodes,
+      8 clusters): no crash, every audit finishes, the first-run flow
+      finishes; records resource use and cost.
+  spec:
+    # Its own identity, never the presubmit's, as seeded-fleet-reconciler is:
+    # sized-fleet-runner holds container.admin on the scale project, and no job
+    # that runs pull-request code may run as it. The KSA test-pods/sized-fleet-runner
+    # and its Workload Identity binding to
+    # sized-fleet-runner@kube-agents-prow.iam.gserviceaccount.com are
+    # prerequisites of this file (kube-agents docs/designs/sized-test-fleet.md).
+    serviceAccountName: sized-fleet-runner
+    containers:
+    - image: gcr.io/k8s-staging-test-infra/kubekins-e2e:latest-1.32
+      command:
+      - hack/ci-scale-nightly.sh
+      env:
+      - name: SCALE_FLEET_SIZE
+        value: M
+      - name: SCALE_PROJECT_ID
+        value: haoxuw-gke-dev
+      - name: SCALE_HOST_CLUSTER
+        value: scale-host
+      - name: SCALE_RESULTS_BUCKET
+        value: gs://haoxuw-gke-dev-kube-agents-scale-results
+      resources:
+        requests:
+          cpu: "1"
+          memory: 2Gi
+- name: ci-kube-agents-scale-weekly-l
+  # The L sized test fleet, once a week: 500 n1-standard-1 nodes in 16
+  # clusters, 4,000 workloads, the same run as ci-kube-agents-scale-nightly-m.
+  # Wednesday at 00:00 UTC, the one night the M run does not take.
+  cluster: build-kube-agents
+  cron: "0 0 * * 3"
+  max_concurrency: 1
+  decorate: true
+  decoration_config:
+    # The M run's budget plus the longer build of 16 clusters.
+    timeout: 420m
+    grace_period: 15m
+    # Logs go to the bucket kube-agents owns, as the fleet reconcile's do: this
+    # job's identity cannot write the cluster default gs://kube-agents-prow.
+    gcs_configuration:
+      bucket: kube-agents-periodic-logs
+  extra_refs:
+  - org: gke-labs
+    repo: kube-agents
+    base_ref: main
+    workdir: true
+  annotations:
+    testgrid-dashboards: googleoss-kube-agents
+    testgrid-tab-name: scale-weekly-l
+    description: >-
+      Weekly run of kube-agents on the L sized test fleet (500 real nodes,
+      16 clusters): no crash, every audit finishes, the first-run flow
+      finishes; records resource use and cost.
+  spec:
+    serviceAccountName: sized-fleet-runner
+    containers:
+    - image: gcr.io/k8s-staging-test-infra/kubekins-e2e:latest-1.32
+      command:
+      - hack/ci-scale-nightly.sh
+      env:
+      - name: SCALE_FLEET_SIZE
+        value: L
+      - name: SCALE_PROJECT_ID
+        value: haoxuw-gke-dev
+      - name: SCALE_HOST_CLUSTER
+        value: scale-host
+      - name: SCALE_RESULTS_BUCKET
+        value: gs://haoxuw-gke-dev-kube-agents-scale-results
+      resources:
+        requests:
+          cpu: "1"
+          memory: 2Gi
