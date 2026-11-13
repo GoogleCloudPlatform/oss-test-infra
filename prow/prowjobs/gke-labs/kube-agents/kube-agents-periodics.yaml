@@ -289,9 +289,9 @@ periodics:
   # Grades spec.mode next (EVAL_MODE_NEXT=1 below), the mode a new install
   # gets and the one pull-kube-agents-smoke-test grades, so this job, its
   # -main-b to -main-e shards and its three writers thirds record the next-mode window the
-  # presubmit is compared with (gke-labs/kube-agents#2007). The rollback to
-  # today is proven by pull-kube-agents-smoke-test-today
-  # (kube-agents-presubmits.yaml) and the staging promotion pipeline.
+  # presubmit is compared with (gke-labs/kube-agents#2007). Today mode is
+  # retired (gke-labs/kube-agents#5752 and its stack), so no job proves a
+  # rollback to it; the staging promotion pipeline proves the release path.
   cluster: build-kube-agents
   # 00:00 UTC (8 PM EDT / 7 PM EST; 5 PM / 4 PM Pacific): after the working
   # day's presubmit herd in the team's Eastern time zone, so the nightly's
