@@ -141,7 +141,8 @@ repo_milestone:
 
 milestone_applier:
   kubeflow/trainer:
-    master: v2.4
+    master: v2.5
+    release-2.4: v2.4
     release-2.3: v2.3
     release-2.2: v2.2
     release-2.1: v2.1
