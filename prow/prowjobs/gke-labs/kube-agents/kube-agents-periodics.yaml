@@ -2937,6 +2937,158 @@ periodics:
     - name: ledger-app-key
       secret:
         secretName: kube-agents-evals-ledger-app-key
+- name: ci-kube-agents-eval-nightly-slack
+  # The Slack lane (gke-labs/kube-agents#5400 item 4, #5546): advisory. EVAL_SLACK_LANE=1 makes
+  # hack/ci-deploy.sh install with Slack on through the eval Slack app (its secrets, slack-eval-*,
+  # read from Secret Manager in kube-agents-prow), and hack/ci-eval-pr.sh run hack/slack-lane/run.sh
+  # in place of the matrix: each case in hack/slack-lane/cases.txt once, through real Slack. It
+  # exits 0 whatever the cases did and records no baseline. Without the secrets, or without
+  # roles/secretmanager.secretAccessor on them for eval-baseline-recorder (gke-labs/kube-agents
+  # docs/ci-pool-projects.md 5.12), it installs without Slack and the lane logs one skip line. One case at a time on its own project, at
+  # 07:00 UTC, after the replay lane, so it does not contend with the midnight parts for the pool.
+  cluster: build-kube-agents
+  cron: "0 7 * * *"
+  max_concurrency: 1
+  decorate: true
+  decoration_config:
+    timeout: 360m
+    grace_period: 5m
+    gcs_configuration:
+      bucket: kube-agents-evals-nightly-logs
+  annotations:
+    testgrid-create-test-group: "false"
+    description: Nightly kube-agents Slack lane on main, advisory - the chat cases in hack/slack-lane/cases.txt through real Slack with the eval Slack app; skips until its secrets exist (gke-labs/kube-agents#5546).
+  extra_refs:
+  - org: gke-labs
+    repo: kube-agents
+    base_ref: main
+    workdir: true
+  spec:
+    serviceAccountName: eval-baseline-recorder
+    containers:
+    - image: gcr.io/k8s-staging-test-infra/kubekins-e2e:latest-1.32
+      command:
+      - /bin/bash
+      - -c
+      - |
+        set -euo pipefail
+        apt-get update && apt-get install -y --no-install-recommends gettext-base jq procps
+        command -v gke-gcloud-auth-plugin >/dev/null
+        curl -LsSf https://astral.sh/uv/install.sh | sh
+        export PATH="$HOME/.local/bin:$PATH"
+        curl --proto '=https' --tlsv1.2 -fsSL https://get.opentofu.org/install-opentofu.sh -o install-opentofu.sh && chmod +x install-opentofu.sh && ./install-opentofu.sh --install-method standalone
+        export GEMINI_API_KEY="$(cat /etc/gemini-secret/GEMINI_API_KEY)"
+        export BENCH_GITHUB_TOKEN="$(cat /etc/bench-github-token/BENCH_GITHUB_TOKEN)"
+        export EVAL_LEDGER_APP_KEY_FILE="/etc/ledger-app-key/key.pem"
+        export EVAL_GITHUB_APP_ID="4675512"
+        export REQUIRE_CACHE="true"
+        export EVAL_TIER="nightly"
+        export EVAL_MODE_NEXT="1"
+        MODEL_PROVIDER="$(tr -d '[:space:]' < /etc/eval-model/nightly.provider)"
+        MODEL_DEFAULT_NAME="$(tr -d '[:space:]' < /etc/eval-model/nightly.name)"
+        : "${MODEL_PROVIDER:?eval-model Secret: nightly.provider is missing or empty}"
+        : "${MODEL_DEFAULT_NAME:?eval-model Secret: nightly.name is missing or empty}"
+        export MODEL_PROVIDER MODEL_DEFAULT_NAME
+        export AGENT_MODEL_OVERRIDE="${MODEL_DEFAULT_NAME}"
+        export EVAL_SLACK_LANE="1"
+        export EVAL_TASK_PARALLELISM="1"
+        BOSKOSCTL_VERSION="v0.0.0-20260730151943-11fb0c84248b"
+        if ! command -v boskosctl >/dev/null; then
+          if gsutil -q cp "gs://kube-agents-prow/tools/boskosctl-${BOSKOSCTL_VERSION}" /usr/local/bin/boskosctl; then
+            chmod +x /usr/local/bin/boskosctl
+            echo "✓ boskosctl ${BOSKOSCTL_VERSION} restored from GCS"
+          else
+            echo "boskosctl ${BOSKOSCTL_VERSION} not in GCS; falling back to the module proxy"
+            for attempt in 1 2 3; do
+              if GOBIN=/usr/local/bin go install "sigs.k8s.io/boskos/cmd/boskosctl@${BOSKOSCTL_VERSION}"; then
+                break
+              fi
+              if [ "${attempt}" -eq 3 ]; then
+                echo "ERROR: go install boskosctl failed 3 times; proxy.golang.org is the usual cause"
+                exit 1
+              fi
+              echo "go install attempt ${attempt} failed; retrying in $((attempt * 15))s"
+              sleep "$((attempt * 15))"
+            done
+          fi
+        fi
+
+        BOSKOS_SERVER="http://boskos.boskos.svc.cluster.local"
+        BOSKOS_RESOURCE_TYPE="kube-agents-evals-project"
+        BOSKOS_OWNER="${JOB_NAME}-${BUILD_ID}"
+        BOSKOSCTL=(boskosctl --server-url="${BOSKOS_SERVER}" --owner-name="${BOSKOS_OWNER}")
+
+        echo "=== [$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Leasing GCP Project from Boskos ==="
+        RESOURCE="$("${BOSKOSCTL[@]}" acquire --type="${BOSKOS_RESOURCE_TYPE}" \
+          --state=free --target-state=busy --timeout=90m)"
+        LEASED_PROJECT="$(echo "${RESOURCE}" | jq -r .name)"
+        if [ -z "${LEASED_PROJECT}" ] || [ "${LEASED_PROJECT}" = "null" ]; then
+          echo "ERROR: could not parse leased project from: ${RESOURCE}"
+          exit 1
+        fi
+        export PROJECT_ID="${LEASED_PROJECT}"
+        echo "✓ Successfully leased project: ${PROJECT_ID}"
+
+        TEARDOWN_DIR="$(mktemp -d)"
+        TEARDOWN_SENTINEL="${TEARDOWN_DIR}/teardown-begun"
+
+        cleanup() {
+          local rc=$?
+          trap - EXIT INT TERM
+          touch "${TEARDOWN_SENTINEL}"
+          pkill -P "${HEARTBEAT_PID:-0}" 2>/dev/null || true
+          kill "${HEARTBEAT_PID:-}" 2>/dev/null || true
+          kill "${STEP_PID:-}" 2>/dev/null || true
+          echo "=== [$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Running CI Teardown ==="
+          ./hack/ci-teardown.sh || true
+          if [ -n "${LEASED_PROJECT:-}" ] && [ "${LEASED_PROJECT}" != "null" ]; then
+            echo "=== [$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Releasing Boskos Project: ${LEASED_PROJECT} ==="
+            "${BOSKOSCTL[@]}" release --name="${LEASED_PROJECT}" --target-state=free || true
+          fi
+          exit $rc
+        }
+        trap cleanup EXIT INT TERM
+
+        ( "${BOSKOSCTL[@]}" heartbeat --resource "${RESOURCE}" --period=30s --retries=8 --timeout=380m || true
+          [ -e "${TEARDOWN_SENTINEL}" ] || kill -TERM $$ ) &
+        HEARTBEAT_PID=$!
+
+        run_step() { "$@" & STEP_PID=$!; wait "${STEP_PID}"; }
+
+        run_step ./hack/ci-teardown.sh || true
+        run_step ./hack/ci-connection-test.sh
+        run_step ./hack/ci-deploy.sh
+        run_step ./hack/ci-eval-pr.sh
+      resources:
+        requests:
+          memory: "1Gi"
+          cpu: "500m"
+      volumeMounts:
+      - name: gemini-secret
+        mountPath: /etc/gemini-secret
+        readOnly: true
+      - name: eval-model
+        mountPath: /etc/eval-model
+        readOnly: true
+      - name: bench-github-token
+        mountPath: /etc/bench-github-token
+        readOnly: true
+      - name: ledger-app-key
+        mountPath: /etc/ledger-app-key
+        readOnly: true
+    volumes:
+    - name: gemini-secret
+      secret:
+        secretName: kube-agents-gemini-api-key
+    - name: eval-model
+      secret:
+        secretName: kube-agents-eval-model
+    - name: bench-github-token
+      secret:
+        secretName: kube-agents-bench-github-token
+    - name: ledger-app-key
+      secret:
+        secretName: kube-agents-evals-ledger-app-key
 - name: ci-kube-agents-eval-nightly-writers-b
   # The second third of the nightly's writers part (gke-labs/kube-agents#4238):
   # the cases that request a pull request, the stopped asks and the
