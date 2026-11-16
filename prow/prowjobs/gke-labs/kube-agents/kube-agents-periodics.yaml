@@ -1102,9 +1102,10 @@ periodics:
   # whose schedule never fires has no run and no Rerun button. One release a
   # week is graded, the newest GA at each cron (both days read the same tag
   # unless a release lands between them, when Sunday's build starts the next
-  # release's window); a Rerun grades the newest GA of its day. A second
+  # release's window); a Rerun grades the newest GA of its day. The whole
+  # suite runs in this one job while it fits the timeout below. A second
   # slice (ci-kube-agents-certification-2, EVAL_CERTIFICATION_PART=2) is
-  # added when the roster's part 1 no longer fits the timeout.
+  # added when it no longer does.
   cluster: build-kube-agents
   cron: "0 14 * * 6,0"
   # A Rerun pressed while the weekly run is still going must queue, not
@@ -1112,14 +1113,15 @@ periodics:
   max_concurrency: 1
   decorate: true
   decoration_config:
-    # Provisional. At 3 repetitions per case the lane's unit of about 11
-    # minutes (7.5 median on the api lane, 15.6 at the slowest) plus 45 to 60
-    # minutes of setup ends well inside 720m for the parts the roster holds
-    # now; the timeout stays where the first runs' wall clock, and the
-    # repetition count as it rises, will size it, as the nightlies' did. A
-    # build the deadline cuts inside a case records nothing for it (the job
-    # comment above), so the margin is kept wide.
-    timeout: 720m
+    # Sized on the first repetitions of the lane's first graded build
+    # (2122395161064378368): about 10 minutes from one repetition's launch
+    # to the next, after about 11 minutes of setup. The suite's 24 cases at
+    # 3 repetitions then run for about 12 hours, which leaves about 3 hours
+    # under this limit. A build the deadline cuts inside a case records
+    # nothing for it (the job comment above), so the margin is kept wide.
+    # The repetition count and the suite's size, as they rise, split the
+    # suite into parts rather than raise this again.
+    timeout: 900m
     grace_period: 5m
     # Logs and artifacts go to a bucket kube-agents owns, NOT the cluster
     # default gs://kube-agents-prow (prow/oss/config.yaml, build-kube-agents).
@@ -1372,9 +1374,9 @@ periodics:
         # on 2026-10-14 lost their leases while still running, the reaper handed
         # their projects to other runs, and at the ceiling their teardowns
         # uninstalled the new tenants (gke-labs/kube-agents#3129). This job's
-        # timeout is 480m, so a heartbeat that stops before then means the
+        # timeout is 900m, so a heartbeat that stops before then means the
         # project is about to be taken away, whatever its exit status says.
-        ( "${BOSKOSCTL[@]}" heartbeat --resource "${RESOURCE}" --period=30s --retries=8 --timeout=740m || true
+        ( "${BOSKOSCTL[@]}" heartbeat --resource "${RESOURCE}" --period=30s --retries=8 --timeout=920m || true
           [ -e "${TEARDOWN_SENTINEL}" ] || kill -TERM $$ ) &
         HEARTBEAT_PID=$!
 
