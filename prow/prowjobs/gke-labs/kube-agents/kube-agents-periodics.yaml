@@ -1284,7 +1284,9 @@ periodics:
         # hack/ci-deploy.sh install the published images at that commit.
         # shellcheck source=/dev/null
         source scripts/release/common.sh
-        git fetch --quiet --tags origin
+        # By URL: clonerefs builds the checkout with `git init` and a fetch by
+        # URL, so it has no remote named origin.
+        git fetch --quiet --tags https://github.com/gke-labs/kube-agents.git
         GA_TAG="$(get_latest_ga_tag)"
         if [ -z "${GA_TAG}" ]; then
           echo "ERROR: no GA version tag in the clone; nothing to certify" >&2
