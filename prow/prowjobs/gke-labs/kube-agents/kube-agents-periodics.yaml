@@ -1113,12 +1113,14 @@ periodics:
   max_concurrency: 1
   decorate: true
   decoration_config:
-    # Sized on the lane's first graded build: a repetition takes about 9
-    # minutes, so the suite's 24 cases at 3 repetitions run for about 11
-    # hours, plus about 10 minutes of setup. A build the deadline cuts
-    # inside a case records nothing for it (the job comment above), so the
-    # margin is kept wide. The repetition count and the suite's size, as
-    # they rise, split the suite into parts rather than raise this again.
+    # Sized on the first repetitions of the lane's first graded build
+    # (2122395161064378368): about 10 minutes from one repetition's launch
+    # to the next, after about 11 minutes of setup. The suite's 24 cases at
+    # 3 repetitions then run for about 12 hours, which leaves about 3 hours
+    # under this limit. A build the deadline cuts inside a case records
+    # nothing for it (the job comment above), so the margin is kept wide.
+    # The repetition count and the suite's size, as they rise, split the
+    # suite into parts rather than raise this again.
     timeout: 900m
     grace_period: 5m
     # Logs and artifacts go to a bucket kube-agents owns, NOT the cluster
