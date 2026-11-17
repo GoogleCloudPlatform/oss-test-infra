@@ -449,22 +449,6 @@ plugins:
     - verify-owners   # Validates OWNERS file changes in PRs.
     - wip   # Applies a label to PRs with wip in the title to block merge
 
-  # This is a gerrit repo so this config doesn't do anything. It is included
-  # to satisfy the checkconfig tool which expects all repos that configure
-  # jobs to enable the trigger plugin if a plugins.yaml is specified.
-  # https://github.com/kubernetes/test-infra/issues/14743
-  https://kunit-review.googlesource.com/linux:
-    plugins:
-    - trigger
-
-  # This is a gerrit repo so this config doesn't do anything. It is included
-  # to satisfy the checkconfig tool which expects all repos that configure
-  # jobs to enable the trigger plugin if a plugins.yaml is specified.
-  # https://github.com/kubernetes/test-infra/issues/14743
-  https://linux-review.googlesource.com/linux/kernel/git/torvalds/linux:
-    plugins:
-    - trigger
-
   grpc-ecosystem/grpc-httpjson-transcoding:
     plugins:
     - approve
