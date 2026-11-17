@@ -1298,8 +1298,13 @@ periodics:
         echo "=== Release under test: ${GA_TAG} (images built at ${RELEASE_COMMIT}) ==="
         # A release carries the suite when its roster file lists a case or, once
         # the roster is generated from the task files, when any task.yaml carries
-        # the suite line; either form admits the release.
-        if ! git show "${RELEASE_COMMIT}:hack/eval/certification-cases.txt" 2>/dev/null | grep -q '^\./tasks/' \
+        # the suite line; either form admits the release. A release that names
+        # the suite `validated-capabilities` reads the tier and the part under
+        # that name, so the job hands its own scripts the names its tree uses.
+        if git grep -q '^suite: validated-capabilities$' "${RELEASE_COMMIT}" -- 'bench/tasks/*/task.yaml'; then
+          export EVAL_TIER="validated-capabilities"
+          export EVAL_VALIDATED_CAPABILITIES_PART="${EVAL_CERTIFICATION_PART}"
+        elif ! git show "${RELEASE_COMMIT}:hack/eval/certification-cases.txt" 2>/dev/null | grep -q '^\./tasks/' \
           && ! git grep -q '^suite: certification$' "${RELEASE_COMMIT}" -- 'bench/tasks/*/task.yaml'; then
           echo "Release ${GA_TAG} carries no certification case (its tree predates the suite); nothing to grade, and the page reads No run for it."
           exit 0
