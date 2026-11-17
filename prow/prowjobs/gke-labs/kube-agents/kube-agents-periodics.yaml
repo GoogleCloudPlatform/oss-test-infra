@@ -147,9 +147,9 @@ periodics:
   max_concurrency: 1
   decorate: true
   decoration_config:
-    # Below the hourly interval. The script takes the 40 pool projects one at
+    # Below the hourly interval. The script takes the 50 pool projects one at
     # a time. A project with no plant costs three gcloud list calls (about
-    # 15 s, estimated), so a clean run takes about 10 minutes. Each plant adds
+    # 15 s, estimated), so a clean run takes about 13 minutes. Each plant adds
     # five deletes (three addresses, a subnet, a VPC), about 2 minutes. A run
     # that this ceiling stops releases its project on SIGTERM.
     timeout: 45m
