@@ -208,12 +208,7 @@ plugins:
     - size
   GoogleCloudPlatform/compute-image-tools:
     plugins:
-    - approve
-    - blunderbuss
-    - lgtm
-    - owners-label
     - size
-    - verify-owners
   GoogleCloudPlatform/compute-image-windows:
     plugins:
     - approve
