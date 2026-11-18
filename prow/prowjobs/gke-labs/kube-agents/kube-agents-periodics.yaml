@@ -3805,6 +3805,11 @@ periodics:
     # long night costs a lease.
     timeout: 480m
     grace_period: 5m
+    # The lane's record is not public: it goes to the eval nightlies' bucket,
+    # as the main nightlies' does (gke-labs/kube-agents#5244). Only the bucket
+    # is overridden; path_strategy and credentials come from the cluster default.
+    gcs_configuration:
+      bucket: kube-agents-evals-nightly-logs
   annotations:
     # No TestGrid tab, as the other next-lane jobs.
     testgrid-create-test-group: "false"
@@ -3818,7 +3823,8 @@ periodics:
     # prowjob-default-sa, as the other next-lane jobs and the GitLab
     # presubmit: objectViewer only on the evidence bucket, and the script
     # appends nothing under EVAL_MODE_NEXT=1 or EVAL_FORGE=gitlab anyway.
-    # Logs go to the cluster default bucket (gs://kube-agents-prow).
+    # Logs go to kube-agents-evals-nightly-logs (gcs_configuration above),
+    # which grants this identity objectAdmin as the presubmit bucket does.
     serviceAccountName: prowjob-default-sa
     containers:
     - image: gcr.io/k8s-staging-test-infra/kubekins-e2e:latest-1.32
@@ -4063,6 +4069,11 @@ periodics:
     # to be slower, and the job is non-gating, so a long night costs a lease.
     timeout: 480m
     grace_period: 5m
+    # The lane's record is not public: it goes to the eval nightlies' bucket,
+    # as the main nightlies' does (gke-labs/kube-agents#5244). Only the bucket
+    # is overridden; path_strategy and credentials come from the cluster default.
+    gcs_configuration:
+      bucket: kube-agents-evals-nightly-logs
   annotations:
     # No TestGrid tab, as the other next-lane jobs.
     testgrid-create-test-group: "false"
@@ -4076,7 +4087,8 @@ periodics:
     # prowjob-default-sa, as the other next-lane jobs and the GHES
     # presubmit: objectViewer only on the evidence bucket, and the script
     # appends nothing under EVAL_MODE_NEXT=1 or EVAL_FORGE=ghes anyway.
-    # Logs go to the cluster default bucket (gs://kube-agents-prow).
+    # Logs go to kube-agents-evals-nightly-logs (gcs_configuration above),
+    # which grants this identity objectAdmin as the presubmit bucket does.
     serviceAccountName: prowjob-default-sa
     containers:
     - image: gcr.io/k8s-staging-test-infra/kubekins-e2e:latest-1.32
@@ -4321,6 +4333,11 @@ periodics:
     # to be slower, and the job is non-gating, so a long night costs a lease.
     timeout: 480m
     grace_period: 5m
+    # The lane's record is not public: it goes to the eval nightlies' bucket,
+    # as the main nightlies' does (gke-labs/kube-agents#5244). Only the bucket
+    # is overridden; path_strategy and credentials come from the cluster default.
+    gcs_configuration:
+      bucket: kube-agents-evals-nightly-logs
   annotations:
     # No TestGrid tab, as the other next-lane jobs.
     testgrid-create-test-group: "false"
@@ -4334,7 +4351,8 @@ periodics:
     # prowjob-default-sa, as the other next-lane jobs and the GitLab CE
     # presubmit: objectViewer only on the evidence bucket, and the script
     # appends nothing under EVAL_MODE_NEXT=1 or EVAL_FORGE=gitlab-ce anyway.
-    # Logs go to the cluster default bucket (gs://kube-agents-prow).
+    # Logs go to kube-agents-evals-nightly-logs (gcs_configuration above),
+    # which grants this identity objectAdmin as the presubmit bucket does.
     serviceAccountName: prowjob-default-sa
     containers:
     - image: gcr.io/k8s-staging-test-infra/kubekins-e2e:latest-1.32
