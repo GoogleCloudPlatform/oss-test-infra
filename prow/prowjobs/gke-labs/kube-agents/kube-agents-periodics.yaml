@@ -1046,22 +1046,22 @@ periodics:
     - name: ledger-app-key
       secret:
         secretName: kube-agents-evals-ledger-app-key
-- name: ci-kube-agents-certification-1
-  # The certification lane, slice 1 (gke-labs/kube-agents#3978): the cases
-  # behind the certified-capabilities page, graded on a lane of their own.
-  # EVAL_TIER=certification below makes hack/ci-eval-pr.sh run
-  # hack/eval/certification-cases.txt alone, and EVAL_CERTIFICATION_PART=1
-  # its first `# part N` section; no presubmit or nightly case runs here, and
-  # no certification case runs anywhere else, so each case holds one record on
-  # one lane. The blocking roster is a subset of the presubmit, so rung 4 is
-  # disarmed by construction: a failing certification case is a record for
-  # the page, never a red. Otherwise this is ci-kube-agents-eval-nightly-main-b's
+- name: ci-kube-agents-validated-capabilities-1
+  # The Validated Capabilities lane, slice 1 (gke-labs/kube-agents#3978): the
+  # cases behind the Validated Capabilities page, graded on a lane of their
+  # own. The tier export below makes hack/ci-eval-pr.sh run the suite's cases
+  # alone, and the part export its part 1; no presubmit or nightly case runs
+  # here, and no suite case runs anywhere else, so each case holds one record
+  # on one lane. The blocking roster is a subset of the presubmit, so rung 4
+  # is disarmed by construction: a failing suite case is a record for the
+  # page, never a red. Otherwise this is ci-kube-agents-eval-nightly-main-b's
   # spec, copied, as the other parts are: the same lease pool, provisioning,
   # deploy, eval, teardown, identity and log bucket, so its logs land beside
-  # the nightlies' under logs/ci-kube-agents-certification-1/ for the page's
-  # fetcher. The Boskos owner, log path and build identity all derive from
+  # the nightlies' under logs/ci-kube-agents-validated-capabilities-1/ for
+  # the page's fetcher. The Boskos owner, log path and build identity all derive from
   # JOB_NAME and BUILD_ID. Like the nightlies it grades spec.mode next
-  # (EVAL_MODE_NEXT=1 below; hack/ci-deploy.sh admits this job by name).
+  # (EVAL_MODE_NEXT=1 below; hack/ci-deploy.sh admits this job by name, so
+  # the job runs only on a release whose copy of that script holds the name).
   #
   # What it grades: a RELEASE, not main's head. The script below resolves the
   # newest GA version tag (0.24.0, ...) to the commit whose published images
@@ -1069,9 +1069,9 @@ periodics:
   # the stamp commit's parent), checks the tree out there and hands the commit
   # to hack/ci-deploy.sh as RC_COMMIT_SHA, which installs the published
   # ghcr.io images at that commit and builds nothing, the way
-  # post-kube-agents-eval-rc measures a candidate. The certification roster,
+  # post-kube-agents-eval-rc measures a candidate. The suite's roster,
   # bench and tier are therefore the release's own: a release whose tree has
-  # no certification case (no roster line and no task file with the suite
+  # no suite case (no roster line and no task file with the suite
   # line; every release before the suite's first case merged) is logged and
   # skipped with exit 0, so the page reads "No run" for it rather than the
   # lane reading red. The tag, the commit and the registry
@@ -1084,7 +1084,7 @@ periodics:
   # release across builds; a repetition the harness records as infrastructure
   # (KUBE_AGENTS_INFRA_FAILURE) sits outside the scored count. At 3 per build
   # no release reaches 60, so every page cell reads "n of 60, not enough
-  # runs" and nothing is certified; the count rises on measured unit times
+  # runs" and no cell is validated; the count rises on measured unit times
   # once the roster's parts are sized (the harness writes a case's record
   # only after its last repetition, grade_case in hack/ci-eval-pr.sh, so a
   # build must finish every case it starts: a deadline-cut build records
@@ -1103,7 +1103,7 @@ periodics:
   # week is graded, the newest GA at each cron (both days read the same tag
   # unless a release lands between them, when Sunday's build starts the next
   # release's window); a Rerun grades the newest GA of its day. This job
-  # runs the suite's part 1; ci-kube-agents-certification-2 below runs
+  # runs the suite's part 1; ci-kube-agents-validated-capabilities-2 below runs
   # part 2 (EVAL_CERTIFICATION_PART=2).
   cluster: build-kube-agents
   cron: "0 14 * * 6,0"
@@ -1140,11 +1140,11 @@ periodics:
       bucket: kube-agents-evals-nightly-logs
   annotations:
     # No TestGrid tab on purpose: the team reads this run through the
-    # certified-capabilities page and the eval dashboard
+    # Validated Capabilities page and the eval dashboard
     # (gke-labs/kube-agents#1335) rather than a second UI, so the
     # googleoss-kube-agents dashboard keeps only the pool-pressure tab.
     testgrid-create-test-group: "false"
-    description: Certification lane, slice 1, Saturday and Sunday 14:00 UTC and on Rerun. kube-agents certification suite graded on the newest GA release's published images under spec.mode next, 3 repetitions per case per build while the suite is built out, on its own project (gke-labs/kube-agents#3978).
+    description: Validated Capabilities lane, slice 1 (suite part 1), Saturday and Sunday 14:00 UTC and on Rerun. kube-agents Validated Capabilities suite graded on the newest GA release's published images under spec.mode next, 3 repetitions per case per build while the suite is built out, on its own project (gke-labs/kube-agents#3978).
   extra_refs:
   - org: gke-labs
     repo: kube-agents
@@ -1437,14 +1437,15 @@ periodics:
     - name: ledger-app-key
       secret:
         secretName: kube-agents-evals-ledger-app-key
-- name: ci-kube-agents-certification-2
-  # The certification lane, slice 2 (gke-labs/kube-agents#3978): the suite's
-  # part 2, the cases whose task file carries the part line for 2. This is
-  # ci-kube-agents-certification-1's spec, copied, and that job's comments
-  # hold the reasons. The differences are the name, this comment, the
-  # description and EVAL_CERTIFICATION_PART=2 below. A case is in one part,
-  # so the two jobs grade disjoint cases, each on a leased project of its
-  # own, and this job's logs land under logs/ci-kube-agents-certification-2/.
+- name: ci-kube-agents-validated-capabilities-2
+  # The Validated Capabilities lane, slice 2 (gke-labs/kube-agents#3978):
+  # the suite's part 2, the cases whose task file carries the part line for
+  # 2. This is ci-kube-agents-validated-capabilities-1's spec, copied, and
+  # that job's comments hold the reasons. The differences are the name, this
+  # comment, the description and EVAL_CERTIFICATION_PART=2 below. A case is
+  # in one part, so the two jobs grade disjoint cases, each on a leased
+  # project of its own, and this job's logs land under
+  # logs/ci-kube-agents-validated-capabilities-2/.
   #
   # The job runs the release's own hack/ci-deploy.sh, which admits a job
   # under EVAL_MODE_NEXT by name (EVAL_MODE_NEXT_JOB_NAMES). On a release
@@ -1481,11 +1482,11 @@ periodics:
       bucket: kube-agents-evals-nightly-logs
   annotations:
     # No TestGrid tab on purpose: the team reads this run through the
-    # certified-capabilities page and the eval dashboard
+    # Validated Capabilities page and the eval dashboard
     # (gke-labs/kube-agents#1335) rather than a second UI, so the
     # googleoss-kube-agents dashboard keeps only the pool-pressure tab.
     testgrid-create-test-group: "false"
-    description: Certification lane, slice 2 (suite part 2), Saturday and Sunday 14:00 UTC and on Rerun. kube-agents certification suite graded on the newest GA release's published images under spec.mode next, 3 repetitions per case per build while the suite is built out, on its own project (gke-labs/kube-agents#3978).
+    description: Validated Capabilities lane, slice 2 (suite part 2), Saturday and Sunday 14:00 UTC and on Rerun. kube-agents Validated Capabilities suite graded on the newest GA release's published images under spec.mode next, 3 repetitions per case per build while the suite is built out, on its own project (gke-labs/kube-agents#3978).
   extra_refs:
   - org: gke-labs
     repo: kube-agents
