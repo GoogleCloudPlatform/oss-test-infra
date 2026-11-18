@@ -3820,12 +3820,13 @@ periodics:
     base_ref: main
     workdir: true
   spec:
-    # prowjob-default-sa, as the other next-lane jobs and the GitLab
-    # presubmit: objectViewer only on the evidence bucket, and the script
-    # appends nothing under EVAL_MODE_NEXT=1 or EVAL_FORGE=gitlab anyway.
-    # Logs go to kube-agents-evals-nightly-logs (gcs_configuration above),
-    # which grants this identity objectAdmin as the presubmit bucket does.
-    serviceAccountName: prowjob-default-sa
+    # eval-baseline-recorder, as the main nightlies: the one identity that
+    # writes kube-agents-evals-nightly-logs (gcs_configuration above), so the
+    # move adds no grant to prowjob-default-sa, which pull-request code runs
+    # as. The script appends nothing under EVAL_MODE_NEXT=1 or
+    # EVAL_FORGE=gitlab anyway, so the recorder's write on the evidence
+    # store goes unused here; this job runs main only, never pull-request code.
+    serviceAccountName: eval-baseline-recorder
     containers:
     - image: gcr.io/k8s-staging-test-infra/kubekins-e2e:latest-1.32
       command:
@@ -4084,12 +4085,13 @@ periodics:
     base_ref: main
     workdir: true
   spec:
-    # prowjob-default-sa, as the other next-lane jobs and the GHES
-    # presubmit: objectViewer only on the evidence bucket, and the script
-    # appends nothing under EVAL_MODE_NEXT=1 or EVAL_FORGE=ghes anyway.
-    # Logs go to kube-agents-evals-nightly-logs (gcs_configuration above),
-    # which grants this identity objectAdmin as the presubmit bucket does.
-    serviceAccountName: prowjob-default-sa
+    # eval-baseline-recorder, as the main nightlies: the one identity that
+    # writes kube-agents-evals-nightly-logs (gcs_configuration above), so the
+    # move adds no grant to prowjob-default-sa, which pull-request code runs
+    # as. The script appends nothing under EVAL_MODE_NEXT=1 or
+    # EVAL_FORGE=ghes anyway, so the recorder's write on the evidence
+    # store goes unused here; this job runs main only, never pull-request code.
+    serviceAccountName: eval-baseline-recorder
     containers:
     - image: gcr.io/k8s-staging-test-infra/kubekins-e2e:latest-1.32
       command:
@@ -4348,12 +4350,13 @@ periodics:
     base_ref: main
     workdir: true
   spec:
-    # prowjob-default-sa, as the other next-lane jobs and the GitLab CE
-    # presubmit: objectViewer only on the evidence bucket, and the script
-    # appends nothing under EVAL_MODE_NEXT=1 or EVAL_FORGE=gitlab-ce anyway.
-    # Logs go to kube-agents-evals-nightly-logs (gcs_configuration above),
-    # which grants this identity objectAdmin as the presubmit bucket does.
-    serviceAccountName: prowjob-default-sa
+    # eval-baseline-recorder, as the main nightlies: the one identity that
+    # writes kube-agents-evals-nightly-logs (gcs_configuration above), so the
+    # move adds no grant to prowjob-default-sa, which pull-request code runs
+    # as. The script appends nothing under EVAL_MODE_NEXT=1 or
+    # EVAL_FORGE=gitlab-ce anyway, so the recorder's write on the evidence
+    # store goes unused here; this job runs main only, never pull-request code.
+    serviceAccountName: eval-baseline-recorder
     containers:
     - image: gcr.io/k8s-staging-test-infra/kubekins-e2e:latest-1.32
       command:
