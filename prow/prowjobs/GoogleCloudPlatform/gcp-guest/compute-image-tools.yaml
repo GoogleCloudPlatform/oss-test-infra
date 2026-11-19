@@ -9,7 +9,7 @@ presubmits:
     decorate: true
     spec:
       containers:
-      - image: gcr.io/gcp-guest/gointegtest:latest
+      - image: gcr.io/gcp-guest/daisy-builder:latest
         imagePullPolicy: Always
         command:
         - "bash"
@@ -25,7 +25,7 @@ presubmits:
     decorate: true
     spec:
       containers:
-      - image: gcr.io/gcp-guest/gointegtest:latest
+      - image: gcr.io/gcp-guest/daisy-builder:latest
         imagePullPolicy: Always
         command:
         - "bash"
