@@ -4790,8 +4790,8 @@ periodics:
         # how far main moved overnight instead of replay
         # (gke-labs/kube-agents#5666). Each publish record names the commit
         # its night ran, and fetch_cache.py --print-commit prints the newest
-        # night's, read here from main's checkout with the bucket, age, mode
-        # and forge hack/ci-env.sh's prepare_replay_lane_cache fetches with
+        # night's, read here from main's checkout with the bucket, age and
+        # forge hack/ci-env.sh's prepare_replay_lane_cache fetches with
         # (EVAL_REPLAY_CACHE_BUCKET, unset here, defaults to the bucket below,
         # hack/ci-env.sh's REPLAY_CACHE_DEFAULT_BUCKET; the age is
         # fetch_cache.py's own default, which REPLAY_LANE_CACHE_MAX_AGE_HOURS
@@ -4817,7 +4817,7 @@ periodics:
         main_commit="$(git rev-parse HEAD)"
         recorded_commit="$(python3 hack/replay-proxy/fetch_cache.py --print-commit \
           --bucket "${REPLAY_LANE_CACHE_BUCKET}" \
-          --eval-mode-next "${EVAL_MODE_NEXT:-}" --forge "${EVAL_FORGE:-}" < /dev/null)" || recorded_commit=""
+          --forge "${EVAL_FORGE:-}" < /dev/null)" || recorded_commit=""
         if ! [[ "${recorded_commit}" =~ ${REPLAY_LANE_COMMIT_RE} ]]; then
           echo "Replay lane: no recording night names a commit (the line above says why); replaying on main, ${main_commit}"
         else
