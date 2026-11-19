@@ -4334,11 +4334,11 @@ periodics:
       - name: SCALE_FLEET_SIZE
         value: M
       - name: SCALE_PROJECT_ID
-        value: haoxuw-gke-dev
+        value: kube-agents-scale-testbed
       - name: SCALE_HOST_CLUSTER
         value: scale-host
       - name: SCALE_RESULTS_BUCKET
-        value: gs://haoxuw-gke-dev-kube-agents-scale-results
+        value: gs://kube-agents-scale-testbed-results
       resources:
         requests:
           cpu: "1"
@@ -4381,11 +4381,11 @@ periodics:
       - name: SCALE_FLEET_SIZE
         value: L
       - name: SCALE_PROJECT_ID
-        value: haoxuw-gke-dev
+        value: kube-agents-scale-testbed
       - name: SCALE_HOST_CLUSTER
         value: scale-host
       - name: SCALE_RESULTS_BUCKET
-        value: gs://haoxuw-gke-dev-kube-agents-scale-results
+        value: gs://kube-agents-scale-testbed-results
       resources:
         requests:
           cpu: "1"
