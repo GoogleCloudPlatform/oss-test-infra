@@ -165,7 +165,7 @@ presubmits:
         - "/go/main.sh"
   - name: guest-agent-presubmit-gobuild
     cluster: gcp-guest
-    run_if_changed: '\.go$'
+    run_if_changed: '(\.go|go\.mod|go\.sum)$'
     trigger: "(?m)^/gobuild$"
     rerun_command: "/gobuild"
     context: prow/presubmit/gobuild
@@ -178,7 +178,7 @@ presubmits:
         - "/go/main.sh"
   - name: guest-agent-presubmit-gotest
     cluster: gcp-guest
-    run_if_changed: '\.go$'
+    run_if_changed: '(\.go|go\.mod|go\.sum)$'
     trigger: "(?m)^/gotest$"
     rerun_command: "/gotest"
     context: prow/presubmit/gotest
@@ -219,7 +219,7 @@ presubmits:
         - "/go/main.sh"
   - name: guest-logging-presubmit-gobuild
     cluster: gcp-guest
-    run_if_changed: '\.go$'
+    run_if_changed: '(\.go|go\.mod|go\.sum)$'
     trigger: "(?m)^/gobuild$"
     rerun_command: "/gobuild"
     context: prow/presubmit/gobuild
@@ -232,7 +232,7 @@ presubmits:
         - "/go/main.sh"
   - name: guest-logging-presubmit-gotest
     cluster: gcp-guest
-    run_if_changed: '\.go$'
+    run_if_changed: '(\.go|go\.mod|go\.sum)$'
     trigger: "(?m)^/gotest$"
     rerun_command: "/gotest"
     context: prow/presubmit/gotest
