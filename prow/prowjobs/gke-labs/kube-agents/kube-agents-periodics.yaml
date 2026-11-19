@@ -3805,6 +3805,11 @@ periodics:
     # long night costs a lease.
     timeout: 480m
     grace_period: 5m
+    # The lane's record is not public: it goes to the eval nightlies' bucket,
+    # as the main nightlies' does (gke-labs/kube-agents#5244). Only the bucket
+    # is overridden; path_strategy and credentials come from the cluster default.
+    gcs_configuration:
+      bucket: kube-agents-evals-nightly-logs
   annotations:
     # No TestGrid tab, as the other next-lane jobs.
     testgrid-create-test-group: "false"
@@ -3815,11 +3820,13 @@ periodics:
     base_ref: main
     workdir: true
   spec:
-    # prowjob-default-sa, as the other next-lane jobs and the GitLab
-    # presubmit: objectViewer only on the evidence bucket, and the script
-    # appends nothing under EVAL_MODE_NEXT=1 or EVAL_FORGE=gitlab anyway.
-    # Logs go to the cluster default bucket (gs://kube-agents-prow).
-    serviceAccountName: prowjob-default-sa
+    # eval-baseline-recorder, as the main nightlies: the identity they write
+    # kube-agents-evals-nightly-logs with (gcs_configuration above), so the
+    # move adds no grant to prowjob-default-sa, which pull-request code runs
+    # as. The eval script appends nothing to the evidence store off the
+    # GitHub forge (EVAL_FORGE=gitlab here), so the recorder's write there goes
+    # unused; this job runs main only, never pull-request code.
+    serviceAccountName: eval-baseline-recorder
     containers:
     - image: gcr.io/k8s-staging-test-infra/kubekins-e2e:latest-1.32
       command:
@@ -3835,6 +3842,11 @@ periodics:
         export PATH="$HOME/.local/bin:$PATH"
         curl --proto '=https' --tlsv1.2 -fsSL https://get.opentofu.org/install-opentofu.sh -o install-opentofu.sh && chmod +x install-opentofu.sh && ./install-opentofu.sh --install-method standalone
         export GEMINI_API_KEY="$(cat /etc/gemini-secret/GEMINI_API_KEY)"
+        # As the nightlies' identity this lane would otherwise file its shadow
+        # replay as a trusted night and record answers into the shared replay
+        # cache; a forge lane is neither, so both stay off (hack/ci-env.sh).
+        export EVAL_REPLAY_SHADOW="false"
+        export EVAL_REPLAY_RECORD="false"
         # The bench verifier reads back the GitHub ledger issue the run
         # published and grades its contents; ledger_issue_contains has no
         # other credential source, and the *-infra repos are private.
@@ -3883,7 +3895,8 @@ periodics:
         export MODEL_PROVIDER MODEL_DEFAULT_NAME
         export AGENT_MODEL_OVERRIDE="${MODEL_DEFAULT_NAME}"
         # ─── Baseline evidence store: read-only ─────────────────────────────
-        # Read for the advisory comparison; prowjob-default-sa cannot append.
+        # Read for the advisory comparison; a forge lane never appends
+        # (hack/ci-eval-pr.sh keeps EVAL_IS_MAIN_RUN false off the GitHub forge).
         export EVAL_BASELINE_STORE="gs://kube-agents-evals-bench/evidence"
         # ─── Ensure boskosctl is available (pinned version) ─────────────────────────
         # Named once, used by both the GCS fast path and the fallback below.
@@ -4063,6 +4076,11 @@ periodics:
     # to be slower, and the job is non-gating, so a long night costs a lease.
     timeout: 480m
     grace_period: 5m
+    # The lane's record is not public: it goes to the eval nightlies' bucket,
+    # as the main nightlies' does (gke-labs/kube-agents#5244). Only the bucket
+    # is overridden; path_strategy and credentials come from the cluster default.
+    gcs_configuration:
+      bucket: kube-agents-evals-nightly-logs
   annotations:
     # No TestGrid tab, as the other next-lane jobs.
     testgrid-create-test-group: "false"
@@ -4073,11 +4091,13 @@ periodics:
     base_ref: main
     workdir: true
   spec:
-    # prowjob-default-sa, as the other next-lane jobs and the GHES
-    # presubmit: objectViewer only on the evidence bucket, and the script
-    # appends nothing under EVAL_MODE_NEXT=1 or EVAL_FORGE=ghes anyway.
-    # Logs go to the cluster default bucket (gs://kube-agents-prow).
-    serviceAccountName: prowjob-default-sa
+    # eval-baseline-recorder, as the main nightlies: the identity they write
+    # kube-agents-evals-nightly-logs with (gcs_configuration above), so the
+    # move adds no grant to prowjob-default-sa, which pull-request code runs
+    # as. The eval script appends nothing to the evidence store off the
+    # GitHub forge (EVAL_FORGE=ghes here), so the recorder's write there goes
+    # unused; this job runs main only, never pull-request code.
+    serviceAccountName: eval-baseline-recorder
     containers:
     - image: gcr.io/k8s-staging-test-infra/kubekins-e2e:latest-1.32
       command:
@@ -4093,6 +4113,11 @@ periodics:
         export PATH="$HOME/.local/bin:$PATH"
         curl --proto '=https' --tlsv1.2 -fsSL https://get.opentofu.org/install-opentofu.sh -o install-opentofu.sh && chmod +x install-opentofu.sh && ./install-opentofu.sh --install-method standalone
         export GEMINI_API_KEY="$(cat /etc/gemini-secret/GEMINI_API_KEY)"
+        # As the nightlies' identity this lane would otherwise file its shadow
+        # replay as a trusted night and record answers into the shared replay
+        # cache; a forge lane is neither, so both stay off (hack/ci-env.sh).
+        export EVAL_REPLAY_SHADOW="false"
+        export EVAL_REPLAY_RECORD="false"
         # The bench verifier reads back the GitHub ledger issue the run
         # published and grades its contents; ledger_issue_contains has no
         # other credential source, and the *-infra repos are private.
@@ -4140,7 +4165,8 @@ periodics:
         export MODEL_PROVIDER MODEL_DEFAULT_NAME
         export AGENT_MODEL_OVERRIDE="${MODEL_DEFAULT_NAME}"
         # ─── Baseline evidence store: read-only ─────────────────────────────
-        # Read for the advisory comparison; prowjob-default-sa cannot append.
+        # Read for the advisory comparison; a forge lane never appends
+        # (hack/ci-eval-pr.sh keeps EVAL_IS_MAIN_RUN false off the GitHub forge).
         export EVAL_BASELINE_STORE="gs://kube-agents-evals-bench/evidence"
         # ─── Ensure boskosctl is available (pinned version) ─────────────────────────
         # Named once, used by both the GCS fast path and the fallback below.
@@ -4321,6 +4347,11 @@ periodics:
     # to be slower, and the job is non-gating, so a long night costs a lease.
     timeout: 480m
     grace_period: 5m
+    # The lane's record is not public: it goes to the eval nightlies' bucket,
+    # as the main nightlies' does (gke-labs/kube-agents#5244). Only the bucket
+    # is overridden; path_strategy and credentials come from the cluster default.
+    gcs_configuration:
+      bucket: kube-agents-evals-nightly-logs
   annotations:
     # No TestGrid tab, as the other next-lane jobs.
     testgrid-create-test-group: "false"
@@ -4331,11 +4362,13 @@ periodics:
     base_ref: main
     workdir: true
   spec:
-    # prowjob-default-sa, as the other next-lane jobs and the GitLab CE
-    # presubmit: objectViewer only on the evidence bucket, and the script
-    # appends nothing under EVAL_MODE_NEXT=1 or EVAL_FORGE=gitlab-ce anyway.
-    # Logs go to the cluster default bucket (gs://kube-agents-prow).
-    serviceAccountName: prowjob-default-sa
+    # eval-baseline-recorder, as the main nightlies: the identity they write
+    # kube-agents-evals-nightly-logs with (gcs_configuration above), so the
+    # move adds no grant to prowjob-default-sa, which pull-request code runs
+    # as. The eval script appends nothing to the evidence store off the
+    # GitHub forge (EVAL_FORGE=gitlab-ce here), so the recorder's write there goes
+    # unused; this job runs main only, never pull-request code.
+    serviceAccountName: eval-baseline-recorder
     containers:
     - image: gcr.io/k8s-staging-test-infra/kubekins-e2e:latest-1.32
       command:
@@ -4351,6 +4384,11 @@ periodics:
         export PATH="$HOME/.local/bin:$PATH"
         curl --proto '=https' --tlsv1.2 -fsSL https://get.opentofu.org/install-opentofu.sh -o install-opentofu.sh && chmod +x install-opentofu.sh && ./install-opentofu.sh --install-method standalone
         export GEMINI_API_KEY="$(cat /etc/gemini-secret/GEMINI_API_KEY)"
+        # As the nightlies' identity this lane would otherwise file its shadow
+        # replay as a trusted night and record answers into the shared replay
+        # cache; a forge lane is neither, so both stay off (hack/ci-env.sh).
+        export EVAL_REPLAY_SHADOW="false"
+        export EVAL_REPLAY_RECORD="false"
         # The bench verifier reads back the GitHub ledger issue the run
         # published and grades its contents; ledger_issue_contains has no
         # other credential source, and the *-infra repos are private.
@@ -4399,7 +4437,8 @@ periodics:
         export MODEL_PROVIDER MODEL_DEFAULT_NAME
         export AGENT_MODEL_OVERRIDE="${MODEL_DEFAULT_NAME}"
         # ─── Baseline evidence store: read-only ─────────────────────────────
-        # Read for the advisory comparison; prowjob-default-sa cannot append.
+        # Read for the advisory comparison; a forge lane never appends
+        # (hack/ci-eval-pr.sh keeps EVAL_IS_MAIN_RUN false off the GitHub forge).
         export EVAL_BASELINE_STORE="gs://kube-agents-evals-bench/evidence"
         # ─── Ensure boskosctl is available (pinned version) ─────────────────────────
         # Named once, used by both the GCS fast path and the fallback below.
