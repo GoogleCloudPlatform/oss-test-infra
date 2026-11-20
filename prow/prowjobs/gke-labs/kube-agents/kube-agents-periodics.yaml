@@ -404,9 +404,16 @@ periodics:
         export BENCH_GITHUB_TOKEN="$(cat /etc/bench-github-token/BENCH_GITHUB_TOKEN)"
         # hack/ci-eval-pr.sh mints a 1-hour installation token per
         # devops-bench invocation and overwrites BENCH_GITHUB_TOKEN with it.
-        # App 4739812 is read-only and scoped to the *-infra repos.
-        # gke-labs/kube-agents#994.
+        # The reader Apps are scoped to the *-infra repos, ten projects each; the
+        # first is App 4739812, and the mint is narrowed to reads.
+        # gke-labs/kube-agents#994, #6240.
         export EVAL_LEDGER_APP_KEY_FILE="/etc/ledger-app-key/key.pem"
+        # One key per ledger-reader App, in the row order of
+        # hack/eval/ledger-reader-apps.txt (gke-labs/kube-agents#6240): the eval
+        # mints from the leased project's App, ten projects per App, and reads a
+        # project whose key is not here through the first App with a warning. The
+        # first entry is the file above, which step 0 keeps using.
+        export EVAL_LEDGER_APP_KEY_FILES="/etc/ledger-app-key/key.pem /etc/ledger-app-key-2/key.pem /etc/ledger-app-key-3/key.pem /etc/ledger-app-key-4/key.pem /etc/ledger-app-key-5/key.pem"
         # Turns on the in-cluster token minter, which is what lets the agent
         # write that issue. An App ID is an identifier, not a credential:
         # minting requires signing a JWT with the App's private key, which
@@ -644,6 +651,18 @@ periodics:
       - name: ledger-app-key
         mountPath: /etc/ledger-app-key
         readOnly: true
+      - name: ledger-app-key-2
+        mountPath: /etc/ledger-app-key-2
+        readOnly: true
+      - name: ledger-app-key-3
+        mountPath: /etc/ledger-app-key-3
+        readOnly: true
+      - name: ledger-app-key-4
+        mountPath: /etc/ledger-app-key-4
+        readOnly: true
+      - name: ledger-app-key-5
+        mountPath: /etc/ledger-app-key-5
+        readOnly: true
     volumes:
     - name: gemini-secret
       secret:
@@ -657,6 +676,18 @@ periodics:
     - name: ledger-app-key
       secret:
         secretName: kube-agents-evals-ledger-app-key
+    - name: ledger-app-key-2
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-2
+    - name: ledger-app-key-3
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-3
+    - name: ledger-app-key-4
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-4
+    - name: ledger-app-key-5
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-5
 - name: ci-kube-agents-eval-nightly-main-b
   # The main-b shard of the nightly's main part (gke-labs/kube-agents#3384,
   # option C, then #4238). On claude-opus-5 the whole main part replayed to a
@@ -804,9 +835,16 @@ periodics:
         export BENCH_GITHUB_TOKEN="$(cat /etc/bench-github-token/BENCH_GITHUB_TOKEN)"
         # hack/ci-eval-pr.sh mints a 1-hour installation token per
         # devops-bench invocation and overwrites BENCH_GITHUB_TOKEN with it.
-        # App 4739812 is read-only and scoped to the *-infra repos.
-        # gke-labs/kube-agents#994.
+        # The reader Apps are scoped to the *-infra repos, ten projects each; the
+        # first is App 4739812, and the mint is narrowed to reads.
+        # gke-labs/kube-agents#994, #6240.
         export EVAL_LEDGER_APP_KEY_FILE="/etc/ledger-app-key/key.pem"
+        # One key per ledger-reader App, in the row order of
+        # hack/eval/ledger-reader-apps.txt (gke-labs/kube-agents#6240): the eval
+        # mints from the leased project's App, ten projects per App, and reads a
+        # project whose key is not here through the first App with a warning. The
+        # first entry is the file above, which step 0 keeps using.
+        export EVAL_LEDGER_APP_KEY_FILES="/etc/ledger-app-key/key.pem /etc/ledger-app-key-2/key.pem /etc/ledger-app-key-3/key.pem /etc/ledger-app-key-4/key.pem /etc/ledger-app-key-5/key.pem"
         # Turns on the in-cluster token minter, which is what lets the agent
         # write that issue. An App ID is an identifier, not a credential:
         # minting requires signing a JWT with the App's private key, which
@@ -1033,6 +1071,18 @@ periodics:
       - name: ledger-app-key
         mountPath: /etc/ledger-app-key
         readOnly: true
+      - name: ledger-app-key-2
+        mountPath: /etc/ledger-app-key-2
+        readOnly: true
+      - name: ledger-app-key-3
+        mountPath: /etc/ledger-app-key-3
+        readOnly: true
+      - name: ledger-app-key-4
+        mountPath: /etc/ledger-app-key-4
+        readOnly: true
+      - name: ledger-app-key-5
+        mountPath: /etc/ledger-app-key-5
+        readOnly: true
     volumes:
     - name: gemini-secret
       secret:
@@ -1046,6 +1096,18 @@ periodics:
     - name: ledger-app-key
       secret:
         secretName: kube-agents-evals-ledger-app-key
+    - name: ledger-app-key-2
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-2
+    - name: ledger-app-key-3
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-3
+    - name: ledger-app-key-4
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-4
+    - name: ledger-app-key-5
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-5
 - name: ci-kube-agents-validated-capabilities-1
   # The Validated Capabilities lane, slice 1 (gke-labs/kube-agents#3978): the
   # cases behind the Validated Capabilities page, graded on a lane of their
@@ -1114,8 +1176,8 @@ periodics:
   decoration_config:
     # Sized on the first repetitions of the lane's first graded build
     # (2122395161064378368): about 10 minutes from one repetition's launch
-    # to the next, after about 11 minutes of setup. Part 1's 25 cases at
-    # 3 repetitions then run for about 13 hours, which leaves about 2 hours
+    # to the next, after about 11 minutes of setup. Part 1's 23 cases at
+    # 3 repetitions then run for about 12 hours, which leaves about 3 hours
     # under this limit. A build the deadline cuts inside a case records
     # nothing for it (the job comment above), so the margin is kept wide.
     # The repetition count and the suite's size, as they rise, split the
@@ -1181,9 +1243,16 @@ periodics:
         export BENCH_GITHUB_TOKEN="$(cat /etc/bench-github-token/BENCH_GITHUB_TOKEN)"
         # hack/ci-eval-pr.sh mints a 1-hour installation token per
         # devops-bench invocation and overwrites BENCH_GITHUB_TOKEN with it.
-        # App 4739812 is read-only and scoped to the *-infra repos.
-        # gke-labs/kube-agents#994.
+        # The reader Apps are scoped to the *-infra repos, ten projects each; the
+        # first is App 4739812, and the mint is narrowed to reads.
+        # gke-labs/kube-agents#994, #6240.
         export EVAL_LEDGER_APP_KEY_FILE="/etc/ledger-app-key/key.pem"
+        # One key per ledger-reader App, in the row order of
+        # hack/eval/ledger-reader-apps.txt (gke-labs/kube-agents#6240): the eval
+        # mints from the leased project's App, ten projects per App, and reads a
+        # project whose key is not here through the first App with a warning. The
+        # first entry is the file above, which step 0 keeps using.
+        export EVAL_LEDGER_APP_KEY_FILES="/etc/ledger-app-key/key.pem /etc/ledger-app-key-2/key.pem /etc/ledger-app-key-3/key.pem /etc/ledger-app-key-4/key.pem /etc/ledger-app-key-5/key.pem"
         # Turns on the in-cluster token minter, which is what lets the agent
         # write that issue. An App ID is an identifier, not a credential:
         # minting requires signing a JWT with the App's private key, which
@@ -1424,6 +1493,18 @@ periodics:
       - name: ledger-app-key
         mountPath: /etc/ledger-app-key
         readOnly: true
+      - name: ledger-app-key-2
+        mountPath: /etc/ledger-app-key-2
+        readOnly: true
+      - name: ledger-app-key-3
+        mountPath: /etc/ledger-app-key-3
+        readOnly: true
+      - name: ledger-app-key-4
+        mountPath: /etc/ledger-app-key-4
+        readOnly: true
+      - name: ledger-app-key-5
+        mountPath: /etc/ledger-app-key-5
+        readOnly: true
     volumes:
     - name: gemini-secret
       secret:
@@ -1437,6 +1518,18 @@ periodics:
     - name: ledger-app-key
       secret:
         secretName: kube-agents-evals-ledger-app-key
+    - name: ledger-app-key-2
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-2
+    - name: ledger-app-key-3
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-3
+    - name: ledger-app-key-4
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-4
+    - name: ledger-app-key-5
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-5
 - name: ci-kube-agents-validated-capabilities-2
   # The Validated Capabilities lane, slice 2 (gke-labs/kube-agents#3978):
   # the suite's part 2, the cases whose task file carries the part line for
@@ -1458,8 +1551,8 @@ periodics:
   max_concurrency: 1
   decorate: true
   decoration_config:
-    # Slice 1's limit, kept. Part 2's 7 cases at 3 repetitions need about
-    # 4 hours at slice 1's measured pace, but no case of this part has run
+    # Slice 1's limit, kept. Part 2's 9 cases at 3 repetitions need about
+    # 5 hours at slice 1's measured pace, but no case of this part has run
     # in the lane, so its pace is an estimate. A build the deadline cuts
     # inside a case records nothing for it, so the margin is kept wide.
     timeout: 900m
@@ -1523,9 +1616,16 @@ periodics:
         export BENCH_GITHUB_TOKEN="$(cat /etc/bench-github-token/BENCH_GITHUB_TOKEN)"
         # hack/ci-eval-pr.sh mints a 1-hour installation token per
         # devops-bench invocation and overwrites BENCH_GITHUB_TOKEN with it.
-        # App 4739812 is read-only and scoped to the *-infra repos.
-        # gke-labs/kube-agents#994.
+        # The reader Apps are scoped to the *-infra repos, ten projects each; the
+        # first is App 4739812, and the mint is narrowed to reads.
+        # gke-labs/kube-agents#994, #6240.
         export EVAL_LEDGER_APP_KEY_FILE="/etc/ledger-app-key/key.pem"
+        # One key per ledger-reader App, in the row order of
+        # hack/eval/ledger-reader-apps.txt (gke-labs/kube-agents#6240): the eval
+        # mints from the leased project's App, ten projects per App, and reads a
+        # project whose key is not here through the first App with a warning. The
+        # first entry is the file above, which step 0 keeps using.
+        export EVAL_LEDGER_APP_KEY_FILES="/etc/ledger-app-key/key.pem /etc/ledger-app-key-2/key.pem /etc/ledger-app-key-3/key.pem /etc/ledger-app-key-4/key.pem /etc/ledger-app-key-5/key.pem"
         # Turns on the in-cluster token minter, which is what lets the agent
         # write that issue. An App ID is an identifier, not a credential:
         # minting requires signing a JWT with the App's private key, which
@@ -1766,6 +1866,18 @@ periodics:
       - name: ledger-app-key
         mountPath: /etc/ledger-app-key
         readOnly: true
+      - name: ledger-app-key-2
+        mountPath: /etc/ledger-app-key-2
+        readOnly: true
+      - name: ledger-app-key-3
+        mountPath: /etc/ledger-app-key-3
+        readOnly: true
+      - name: ledger-app-key-4
+        mountPath: /etc/ledger-app-key-4
+        readOnly: true
+      - name: ledger-app-key-5
+        mountPath: /etc/ledger-app-key-5
+        readOnly: true
     volumes:
     - name: gemini-secret
       secret:
@@ -1779,6 +1891,18 @@ periodics:
     - name: ledger-app-key
       secret:
         secretName: kube-agents-evals-ledger-app-key
+    - name: ledger-app-key-2
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-2
+    - name: ledger-app-key-3
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-3
+    - name: ledger-app-key-4
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-4
+    - name: ledger-app-key-5
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-5
 # The GitLab lane's nightly (gke-labs/kube-agents#2832): the GitHub nightly's
 # shape with EVAL_FORGE=gitlab, two hours after it so the two do not compete
 # for pool projects at midnight, one at a time. The script runs the lane's
@@ -1922,9 +2046,16 @@ periodics:
         export BENCH_GITHUB_TOKEN="$(cat /etc/bench-github-token/BENCH_GITHUB_TOKEN)"
         # hack/ci-eval-pr.sh mints a 1-hour installation token per
         # devops-bench invocation and overwrites BENCH_GITHUB_TOKEN with it.
-        # App 4739812 is read-only and scoped to the *-infra repos.
-        # gke-labs/kube-agents#994.
+        # The reader Apps are scoped to the *-infra repos, ten projects each; the
+        # first is App 4739812, and the mint is narrowed to reads.
+        # gke-labs/kube-agents#994, #6240.
         export EVAL_LEDGER_APP_KEY_FILE="/etc/ledger-app-key/key.pem"
+        # One key per ledger-reader App, in the row order of
+        # hack/eval/ledger-reader-apps.txt (gke-labs/kube-agents#6240): the eval
+        # mints from the leased project's App, ten projects per App, and reads a
+        # project whose key is not here through the first App with a warning. The
+        # first entry is the file above, which step 0 keeps using.
+        export EVAL_LEDGER_APP_KEY_FILES="/etc/ledger-app-key/key.pem /etc/ledger-app-key-2/key.pem /etc/ledger-app-key-3/key.pem /etc/ledger-app-key-4/key.pem /etc/ledger-app-key-5/key.pem"
         # Turns on the in-cluster token minter, which is what lets the agent
         # write that issue. An App ID is an identifier, not a credential:
         # minting requires signing a JWT with the App's private key, which
@@ -2152,6 +2283,18 @@ periodics:
       - name: ledger-app-key
         mountPath: /etc/ledger-app-key
         readOnly: true
+      - name: ledger-app-key-2
+        mountPath: /etc/ledger-app-key-2
+        readOnly: true
+      - name: ledger-app-key-3
+        mountPath: /etc/ledger-app-key-3
+        readOnly: true
+      - name: ledger-app-key-4
+        mountPath: /etc/ledger-app-key-4
+        readOnly: true
+      - name: ledger-app-key-5
+        mountPath: /etc/ledger-app-key-5
+        readOnly: true
     volumes:
     - name: gemini-secret
       secret:
@@ -2165,6 +2308,18 @@ periodics:
     - name: ledger-app-key
       secret:
         secretName: kube-agents-evals-ledger-app-key
+    - name: ledger-app-key-2
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-2
+    - name: ledger-app-key-3
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-3
+    - name: ledger-app-key-4
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-4
+    - name: ledger-app-key-5
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-5
 # The GitLab lane's nightly (gke-labs/kube-agents#2832): the GitHub nightly's
 # shape with EVAL_FORGE=gitlab, two hours after it so the two do not compete
 # for pool projects at midnight, one at a time. The script runs the lane's
@@ -2308,9 +2463,16 @@ periodics:
         export BENCH_GITHUB_TOKEN="$(cat /etc/bench-github-token/BENCH_GITHUB_TOKEN)"
         # hack/ci-eval-pr.sh mints a 1-hour installation token per
         # devops-bench invocation and overwrites BENCH_GITHUB_TOKEN with it.
-        # App 4739812 is read-only and scoped to the *-infra repos.
-        # gke-labs/kube-agents#994.
+        # The reader Apps are scoped to the *-infra repos, ten projects each; the
+        # first is App 4739812, and the mint is narrowed to reads.
+        # gke-labs/kube-agents#994, #6240.
         export EVAL_LEDGER_APP_KEY_FILE="/etc/ledger-app-key/key.pem"
+        # One key per ledger-reader App, in the row order of
+        # hack/eval/ledger-reader-apps.txt (gke-labs/kube-agents#6240): the eval
+        # mints from the leased project's App, ten projects per App, and reads a
+        # project whose key is not here through the first App with a warning. The
+        # first entry is the file above, which step 0 keeps using.
+        export EVAL_LEDGER_APP_KEY_FILES="/etc/ledger-app-key/key.pem /etc/ledger-app-key-2/key.pem /etc/ledger-app-key-3/key.pem /etc/ledger-app-key-4/key.pem /etc/ledger-app-key-5/key.pem"
         # Turns on the in-cluster token minter, which is what lets the agent
         # write that issue. An App ID is an identifier, not a credential:
         # minting requires signing a JWT with the App's private key, which
@@ -2538,6 +2700,18 @@ periodics:
       - name: ledger-app-key
         mountPath: /etc/ledger-app-key
         readOnly: true
+      - name: ledger-app-key-2
+        mountPath: /etc/ledger-app-key-2
+        readOnly: true
+      - name: ledger-app-key-3
+        mountPath: /etc/ledger-app-key-3
+        readOnly: true
+      - name: ledger-app-key-4
+        mountPath: /etc/ledger-app-key-4
+        readOnly: true
+      - name: ledger-app-key-5
+        mountPath: /etc/ledger-app-key-5
+        readOnly: true
     volumes:
     - name: gemini-secret
       secret:
@@ -2551,6 +2725,18 @@ periodics:
     - name: ledger-app-key
       secret:
         secretName: kube-agents-evals-ledger-app-key
+    - name: ledger-app-key-2
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-2
+    - name: ledger-app-key-3
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-3
+    - name: ledger-app-key-4
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-4
+    - name: ledger-app-key-5
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-5
 # The GitLab lane's nightly (gke-labs/kube-agents#2832): the GitHub nightly's
 # shape with EVAL_FORGE=gitlab, two hours after it so the two do not compete
 # for pool projects at midnight, one at a time. The script runs the lane's
@@ -2694,9 +2880,16 @@ periodics:
         export BENCH_GITHUB_TOKEN="$(cat /etc/bench-github-token/BENCH_GITHUB_TOKEN)"
         # hack/ci-eval-pr.sh mints a 1-hour installation token per
         # devops-bench invocation and overwrites BENCH_GITHUB_TOKEN with it.
-        # App 4739812 is read-only and scoped to the *-infra repos.
-        # gke-labs/kube-agents#994.
+        # The reader Apps are scoped to the *-infra repos, ten projects each; the
+        # first is App 4739812, and the mint is narrowed to reads.
+        # gke-labs/kube-agents#994, #6240.
         export EVAL_LEDGER_APP_KEY_FILE="/etc/ledger-app-key/key.pem"
+        # One key per ledger-reader App, in the row order of
+        # hack/eval/ledger-reader-apps.txt (gke-labs/kube-agents#6240): the eval
+        # mints from the leased project's App, ten projects per App, and reads a
+        # project whose key is not here through the first App with a warning. The
+        # first entry is the file above, which step 0 keeps using.
+        export EVAL_LEDGER_APP_KEY_FILES="/etc/ledger-app-key/key.pem /etc/ledger-app-key-2/key.pem /etc/ledger-app-key-3/key.pem /etc/ledger-app-key-4/key.pem /etc/ledger-app-key-5/key.pem"
         # Turns on the in-cluster token minter, which is what lets the agent
         # write that issue. An App ID is an identifier, not a credential:
         # minting requires signing a JWT with the App's private key, which
@@ -2924,6 +3117,18 @@ periodics:
       - name: ledger-app-key
         mountPath: /etc/ledger-app-key
         readOnly: true
+      - name: ledger-app-key-2
+        mountPath: /etc/ledger-app-key-2
+        readOnly: true
+      - name: ledger-app-key-3
+        mountPath: /etc/ledger-app-key-3
+        readOnly: true
+      - name: ledger-app-key-4
+        mountPath: /etc/ledger-app-key-4
+        readOnly: true
+      - name: ledger-app-key-5
+        mountPath: /etc/ledger-app-key-5
+        readOnly: true
     volumes:
     - name: gemini-secret
       secret:
@@ -2937,6 +3142,18 @@ periodics:
     - name: ledger-app-key
       secret:
         secretName: kube-agents-evals-ledger-app-key
+    - name: ledger-app-key-2
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-2
+    - name: ledger-app-key-3
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-3
+    - name: ledger-app-key-4
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-4
+    - name: ledger-app-key-5
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-5
 - name: ci-kube-agents-eval-nightly-writers
   # The nightly's second part (gke-labs/kube-agents#2467): the cases that
   # request a pull request, the stopped asks and the writes_alone cases, on a
@@ -3053,9 +3270,16 @@ periodics:
         export BENCH_GITHUB_TOKEN="$(cat /etc/bench-github-token/BENCH_GITHUB_TOKEN)"
         # hack/ci-eval-pr.sh mints a 1-hour installation token per
         # devops-bench invocation and overwrites BENCH_GITHUB_TOKEN with it.
-        # App 4739812 is read-only and scoped to the *-infra repos.
-        # gke-labs/kube-agents#994.
+        # The reader Apps are scoped to the *-infra repos, ten projects each; the
+        # first is App 4739812, and the mint is narrowed to reads.
+        # gke-labs/kube-agents#994, #6240.
         export EVAL_LEDGER_APP_KEY_FILE="/etc/ledger-app-key/key.pem"
+        # One key per ledger-reader App, in the row order of
+        # hack/eval/ledger-reader-apps.txt (gke-labs/kube-agents#6240): the eval
+        # mints from the leased project's App, ten projects per App, and reads a
+        # project whose key is not here through the first App with a warning. The
+        # first entry is the file above, which step 0 keeps using.
+        export EVAL_LEDGER_APP_KEY_FILES="/etc/ledger-app-key/key.pem /etc/ledger-app-key-2/key.pem /etc/ledger-app-key-3/key.pem /etc/ledger-app-key-4/key.pem /etc/ledger-app-key-5/key.pem"
         # Turns on the in-cluster token minter, which is what lets the agent
         # write that issue. An App ID is an identifier, not a credential:
         # minting requires signing a JWT with the App's private key, which
@@ -3274,6 +3498,18 @@ periodics:
       - name: ledger-app-key
         mountPath: /etc/ledger-app-key
         readOnly: true
+      - name: ledger-app-key-2
+        mountPath: /etc/ledger-app-key-2
+        readOnly: true
+      - name: ledger-app-key-3
+        mountPath: /etc/ledger-app-key-3
+        readOnly: true
+      - name: ledger-app-key-4
+        mountPath: /etc/ledger-app-key-4
+        readOnly: true
+      - name: ledger-app-key-5
+        mountPath: /etc/ledger-app-key-5
+        readOnly: true
     volumes:
     - name: gemini-secret
       secret:
@@ -3287,6 +3523,18 @@ periodics:
     - name: ledger-app-key
       secret:
         secretName: kube-agents-evals-ledger-app-key
+    - name: ledger-app-key-2
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-2
+    - name: ledger-app-key-3
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-3
+    - name: ledger-app-key-4
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-4
+    - name: ledger-app-key-5
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-5
 - name: ci-kube-agents-eval-nightly-slack
   # The Slack lane (gke-labs/kube-agents#5400 item 4, #5546): advisory. EVAL_SLACK_LANE=1 makes
   # hack/ci-deploy.sh install with Slack on through the eval Slack app (its secrets, slack-eval-*,
@@ -3330,6 +3578,12 @@ periodics:
         export GEMINI_API_KEY="$(cat /etc/gemini-secret/GEMINI_API_KEY)"
         export BENCH_GITHUB_TOKEN="$(cat /etc/bench-github-token/BENCH_GITHUB_TOKEN)"
         export EVAL_LEDGER_APP_KEY_FILE="/etc/ledger-app-key/key.pem"
+        # One key per ledger-reader App, in the row order of
+        # hack/eval/ledger-reader-apps.txt (gke-labs/kube-agents#6240): the eval
+        # mints from the leased project's App, ten projects per App, and reads a
+        # project whose key is not here through the first App with a warning. The
+        # first entry is the file above, which step 0 keeps using.
+        export EVAL_LEDGER_APP_KEY_FILES="/etc/ledger-app-key/key.pem /etc/ledger-app-key-2/key.pem /etc/ledger-app-key-3/key.pem /etc/ledger-app-key-4/key.pem /etc/ledger-app-key-5/key.pem"
         export EVAL_GITHUB_APP_ID="4675512"
         export REQUIRE_CACHE="true"
         export EVAL_TIER="nightly"
@@ -3426,6 +3680,18 @@ periodics:
       - name: ledger-app-key
         mountPath: /etc/ledger-app-key
         readOnly: true
+      - name: ledger-app-key-2
+        mountPath: /etc/ledger-app-key-2
+        readOnly: true
+      - name: ledger-app-key-3
+        mountPath: /etc/ledger-app-key-3
+        readOnly: true
+      - name: ledger-app-key-4
+        mountPath: /etc/ledger-app-key-4
+        readOnly: true
+      - name: ledger-app-key-5
+        mountPath: /etc/ledger-app-key-5
+        readOnly: true
     volumes:
     - name: gemini-secret
       secret:
@@ -3439,6 +3705,18 @@ periodics:
     - name: ledger-app-key
       secret:
         secretName: kube-agents-evals-ledger-app-key
+    - name: ledger-app-key-2
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-2
+    - name: ledger-app-key-3
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-3
+    - name: ledger-app-key-4
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-4
+    - name: ledger-app-key-5
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-5
 - name: ci-kube-agents-eval-nightly-writers-b
   # The second third of the nightly's writers part (gke-labs/kube-agents#4238):
   # the cases that request a pull request, the stopped asks and the
@@ -3548,9 +3826,16 @@ periodics:
         export BENCH_GITHUB_TOKEN="$(cat /etc/bench-github-token/BENCH_GITHUB_TOKEN)"
         # hack/ci-eval-pr.sh mints a 1-hour installation token per
         # devops-bench invocation and overwrites BENCH_GITHUB_TOKEN with it.
-        # App 4739812 is read-only and scoped to the *-infra repos.
-        # gke-labs/kube-agents#994.
+        # The reader Apps are scoped to the *-infra repos, ten projects each; the
+        # first is App 4739812, and the mint is narrowed to reads.
+        # gke-labs/kube-agents#994, #6240.
         export EVAL_LEDGER_APP_KEY_FILE="/etc/ledger-app-key/key.pem"
+        # One key per ledger-reader App, in the row order of
+        # hack/eval/ledger-reader-apps.txt (gke-labs/kube-agents#6240): the eval
+        # mints from the leased project's App, ten projects per App, and reads a
+        # project whose key is not here through the first App with a warning. The
+        # first entry is the file above, which step 0 keeps using.
+        export EVAL_LEDGER_APP_KEY_FILES="/etc/ledger-app-key/key.pem /etc/ledger-app-key-2/key.pem /etc/ledger-app-key-3/key.pem /etc/ledger-app-key-4/key.pem /etc/ledger-app-key-5/key.pem"
         # Turns on the in-cluster token minter, which is what lets the agent
         # write that issue. An App ID is an identifier, not a credential:
         # minting requires signing a JWT with the App's private key, which
@@ -3768,6 +4053,18 @@ periodics:
       - name: ledger-app-key
         mountPath: /etc/ledger-app-key
         readOnly: true
+      - name: ledger-app-key-2
+        mountPath: /etc/ledger-app-key-2
+        readOnly: true
+      - name: ledger-app-key-3
+        mountPath: /etc/ledger-app-key-3
+        readOnly: true
+      - name: ledger-app-key-4
+        mountPath: /etc/ledger-app-key-4
+        readOnly: true
+      - name: ledger-app-key-5
+        mountPath: /etc/ledger-app-key-5
+        readOnly: true
     volumes:
     - name: gemini-secret
       secret:
@@ -3781,6 +4078,18 @@ periodics:
     - name: ledger-app-key
       secret:
         secretName: kube-agents-evals-ledger-app-key
+    - name: ledger-app-key-2
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-2
+    - name: ledger-app-key-3
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-3
+    - name: ledger-app-key-4
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-4
+    - name: ledger-app-key-5
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-5
 - name: ci-kube-agents-eval-nightly-writers-c
   # The last third of the nightly's writers part (gke-labs/kube-agents#4238):
   # the cases that request a pull request, the stopped asks and the
@@ -3890,9 +4199,16 @@ periodics:
         export BENCH_GITHUB_TOKEN="$(cat /etc/bench-github-token/BENCH_GITHUB_TOKEN)"
         # hack/ci-eval-pr.sh mints a 1-hour installation token per
         # devops-bench invocation and overwrites BENCH_GITHUB_TOKEN with it.
-        # App 4739812 is read-only and scoped to the *-infra repos.
-        # gke-labs/kube-agents#994.
+        # The reader Apps are scoped to the *-infra repos, ten projects each; the
+        # first is App 4739812, and the mint is narrowed to reads.
+        # gke-labs/kube-agents#994, #6240.
         export EVAL_LEDGER_APP_KEY_FILE="/etc/ledger-app-key/key.pem"
+        # One key per ledger-reader App, in the row order of
+        # hack/eval/ledger-reader-apps.txt (gke-labs/kube-agents#6240): the eval
+        # mints from the leased project's App, ten projects per App, and reads a
+        # project whose key is not here through the first App with a warning. The
+        # first entry is the file above, which step 0 keeps using.
+        export EVAL_LEDGER_APP_KEY_FILES="/etc/ledger-app-key/key.pem /etc/ledger-app-key-2/key.pem /etc/ledger-app-key-3/key.pem /etc/ledger-app-key-4/key.pem /etc/ledger-app-key-5/key.pem"
         # Turns on the in-cluster token minter, which is what lets the agent
         # write that issue. An App ID is an identifier, not a credential:
         # minting requires signing a JWT with the App's private key, which
@@ -4110,6 +4426,18 @@ periodics:
       - name: ledger-app-key
         mountPath: /etc/ledger-app-key
         readOnly: true
+      - name: ledger-app-key-2
+        mountPath: /etc/ledger-app-key-2
+        readOnly: true
+      - name: ledger-app-key-3
+        mountPath: /etc/ledger-app-key-3
+        readOnly: true
+      - name: ledger-app-key-4
+        mountPath: /etc/ledger-app-key-4
+        readOnly: true
+      - name: ledger-app-key-5
+        mountPath: /etc/ledger-app-key-5
+        readOnly: true
     volumes:
     - name: gemini-secret
       secret:
@@ -4123,6 +4451,18 @@ periodics:
     - name: ledger-app-key
       secret:
         secretName: kube-agents-evals-ledger-app-key
+    - name: ledger-app-key-2
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-2
+    - name: ledger-app-key-3
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-3
+    - name: ledger-app-key-4
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-4
+    - name: ledger-app-key-5
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-5
 # The GitLab lane under spec.mode next (gke-labs/kube-agents#2007): the GitLab
 # nightly above with EVAL_MODE_NEXT=1, so the forge-grading cases
 # (hack/eval/gitlab-cases.txt) also run against a next install, through the
@@ -4146,6 +4486,11 @@ periodics:
     # long night costs a lease.
     timeout: 480m
     grace_period: 5m
+    # The lane's record is not public: it goes to the eval nightlies' bucket,
+    # as the main nightlies' does (gke-labs/kube-agents#5244). Only the bucket
+    # is overridden; path_strategy and credentials come from the cluster default.
+    gcs_configuration:
+      bucket: kube-agents-evals-nightly-logs
   annotations:
     # No TestGrid tab, as the other next-lane jobs.
     testgrid-create-test-group: "false"
@@ -4156,11 +4501,13 @@ periodics:
     base_ref: main
     workdir: true
   spec:
-    # prowjob-default-sa, as the other next-lane jobs and the GitLab
-    # presubmit: objectViewer only on the evidence bucket, and the script
-    # appends nothing under EVAL_MODE_NEXT=1 or EVAL_FORGE=gitlab anyway.
-    # Logs go to the cluster default bucket (gs://kube-agents-prow).
-    serviceAccountName: prowjob-default-sa
+    # eval-baseline-recorder, as the main nightlies: the identity they write
+    # kube-agents-evals-nightly-logs with (gcs_configuration above), so the
+    # move adds no grant to prowjob-default-sa, which pull-request code runs
+    # as. The eval script appends nothing to the evidence store off the
+    # GitHub forge (EVAL_FORGE=gitlab here), so the recorder's write there goes
+    # unused; this job runs main only, never pull-request code.
+    serviceAccountName: eval-baseline-recorder
     containers:
     - image: gcr.io/k8s-staging-test-infra/kubekins-e2e:latest-1.32
       command:
@@ -4176,15 +4523,27 @@ periodics:
         export PATH="$HOME/.local/bin:$PATH"
         curl --proto '=https' --tlsv1.2 -fsSL https://get.opentofu.org/install-opentofu.sh -o install-opentofu.sh && chmod +x install-opentofu.sh && ./install-opentofu.sh --install-method standalone
         export GEMINI_API_KEY="$(cat /etc/gemini-secret/GEMINI_API_KEY)"
+        # As the nightlies' identity this lane would otherwise file its shadow
+        # replay as a trusted night and record answers into the shared replay
+        # cache; a forge lane is neither, so both stay off (hack/ci-env.sh).
+        export EVAL_REPLAY_SHADOW="false"
+        export EVAL_REPLAY_RECORD="false"
         # The bench verifier reads back the GitHub ledger issue the run
         # published and grades its contents; ledger_issue_contains has no
         # other credential source, and the *-infra repos are private.
         export BENCH_GITHUB_TOKEN="$(cat /etc/bench-github-token/BENCH_GITHUB_TOKEN)"
         # hack/ci-eval-pr.sh mints a 1-hour installation token per
         # devops-bench invocation and overwrites BENCH_GITHUB_TOKEN with it.
-        # App 4739812 is read-only and scoped to the *-infra repos.
-        # gke-labs/kube-agents#994.
+        # The reader Apps are scoped to the *-infra repos, ten projects each; the
+        # first is App 4739812, and the mint is narrowed to reads.
+        # gke-labs/kube-agents#994, #6240.
         export EVAL_LEDGER_APP_KEY_FILE="/etc/ledger-app-key/key.pem"
+        # One key per ledger-reader App, in the row order of
+        # hack/eval/ledger-reader-apps.txt (gke-labs/kube-agents#6240): the eval
+        # mints from the leased project's App, ten projects per App, and reads a
+        # project whose key is not here through the first App with a warning. The
+        # first entry is the file above, which step 0 keeps using.
+        export EVAL_LEDGER_APP_KEY_FILES="/etc/ledger-app-key/key.pem /etc/ledger-app-key-2/key.pem /etc/ledger-app-key-3/key.pem /etc/ledger-app-key-4/key.pem /etc/ledger-app-key-5/key.pem"
         # Turns on the in-cluster token minter, which is what lets the agent
         # write that issue. An App ID is an identifier, not a credential:
         # minting requires signing a JWT with the App's private key, which
@@ -4224,7 +4583,8 @@ periodics:
         export MODEL_PROVIDER MODEL_DEFAULT_NAME
         export AGENT_MODEL_OVERRIDE="${MODEL_DEFAULT_NAME}"
         # ─── Baseline evidence store: read-only ─────────────────────────────
-        # Read for the advisory comparison; prowjob-default-sa cannot append.
+        # Read for the advisory comparison; a forge lane never appends
+        # (hack/ci-eval-pr.sh keeps EVAL_IS_MAIN_RUN false off the GitHub forge).
         export EVAL_BASELINE_STORE="gs://kube-agents-evals-bench/evidence"
         # ─── Ensure boskosctl is available (pinned version) ─────────────────────────
         # Named once, used by both the GCS fast path and the fallback below.
@@ -4374,6 +4734,18 @@ periodics:
       - name: ledger-app-key
         mountPath: /etc/ledger-app-key
         readOnly: true
+      - name: ledger-app-key-2
+        mountPath: /etc/ledger-app-key-2
+        readOnly: true
+      - name: ledger-app-key-3
+        mountPath: /etc/ledger-app-key-3
+        readOnly: true
+      - name: ledger-app-key-4
+        mountPath: /etc/ledger-app-key-4
+        readOnly: true
+      - name: ledger-app-key-5
+        mountPath: /etc/ledger-app-key-5
+        readOnly: true
     volumes:
     - name: gemini-secret
       secret:
@@ -4387,6 +4759,18 @@ periodics:
     - name: ledger-app-key
       secret:
         secretName: kube-agents-evals-ledger-app-key
+    - name: ledger-app-key-2
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-2
+    - name: ledger-app-key-3
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-3
+    - name: ledger-app-key-4
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-4
+    - name: ledger-app-key-5
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-5
 - name: ci-kube-agents-eval-weekly-ghes-next
   cluster: build-kube-agents
   # Sundays 05:00 UTC, weekly (gke-labs/kube-agents#3682: the self-managed
@@ -4404,6 +4788,11 @@ periodics:
     # to be slower, and the job is non-gating, so a long night costs a lease.
     timeout: 480m
     grace_period: 5m
+    # The lane's record is not public: it goes to the eval nightlies' bucket,
+    # as the main nightlies' does (gke-labs/kube-agents#5244). Only the bucket
+    # is overridden; path_strategy and credentials come from the cluster default.
+    gcs_configuration:
+      bucket: kube-agents-evals-nightly-logs
   annotations:
     # No TestGrid tab, as the other next-lane jobs.
     testgrid-create-test-group: "false"
@@ -4414,11 +4803,13 @@ periodics:
     base_ref: main
     workdir: true
   spec:
-    # prowjob-default-sa, as the other next-lane jobs and the GHES
-    # presubmit: objectViewer only on the evidence bucket, and the script
-    # appends nothing under EVAL_MODE_NEXT=1 or EVAL_FORGE=ghes anyway.
-    # Logs go to the cluster default bucket (gs://kube-agents-prow).
-    serviceAccountName: prowjob-default-sa
+    # eval-baseline-recorder, as the main nightlies: the identity they write
+    # kube-agents-evals-nightly-logs with (gcs_configuration above), so the
+    # move adds no grant to prowjob-default-sa, which pull-request code runs
+    # as. The eval script appends nothing to the evidence store off the
+    # GitHub forge (EVAL_FORGE=ghes here), so the recorder's write there goes
+    # unused; this job runs main only, never pull-request code.
+    serviceAccountName: eval-baseline-recorder
     containers:
     - image: gcr.io/k8s-staging-test-infra/kubekins-e2e:latest-1.32
       command:
@@ -4434,15 +4825,27 @@ periodics:
         export PATH="$HOME/.local/bin:$PATH"
         curl --proto '=https' --tlsv1.2 -fsSL https://get.opentofu.org/install-opentofu.sh -o install-opentofu.sh && chmod +x install-opentofu.sh && ./install-opentofu.sh --install-method standalone
         export GEMINI_API_KEY="$(cat /etc/gemini-secret/GEMINI_API_KEY)"
+        # As the nightlies' identity this lane would otherwise file its shadow
+        # replay as a trusted night and record answers into the shared replay
+        # cache; a forge lane is neither, so both stay off (hack/ci-env.sh).
+        export EVAL_REPLAY_SHADOW="false"
+        export EVAL_REPLAY_RECORD="false"
         # The bench verifier reads back the GitHub ledger issue the run
         # published and grades its contents; ledger_issue_contains has no
         # other credential source, and the *-infra repos are private.
         export BENCH_GITHUB_TOKEN="$(cat /etc/bench-github-token/BENCH_GITHUB_TOKEN)"
         # hack/ci-eval-pr.sh mints a 1-hour installation token per
         # devops-bench invocation and overwrites BENCH_GITHUB_TOKEN with it.
-        # App 4739812 is read-only and scoped to the *-infra repos.
-        # gke-labs/kube-agents#994.
+        # The reader Apps are scoped to the *-infra repos, ten projects each; the
+        # first is App 4739812, and the mint is narrowed to reads.
+        # gke-labs/kube-agents#994, #6240.
         export EVAL_LEDGER_APP_KEY_FILE="/etc/ledger-app-key/key.pem"
+        # One key per ledger-reader App, in the row order of
+        # hack/eval/ledger-reader-apps.txt (gke-labs/kube-agents#6240): the eval
+        # mints from the leased project's App, ten projects per App, and reads a
+        # project whose key is not here through the first App with a warning. The
+        # first entry is the file above, which step 0 keeps using.
+        export EVAL_LEDGER_APP_KEY_FILES="/etc/ledger-app-key/key.pem /etc/ledger-app-key-2/key.pem /etc/ledger-app-key-3/key.pem /etc/ledger-app-key-4/key.pem /etc/ledger-app-key-5/key.pem"
         # Turns on the in-cluster token minter, which is what lets the agent
         # write that issue. An App ID is an identifier, not a credential:
         # minting requires signing a JWT with the App's private key, which
@@ -4481,7 +4884,8 @@ periodics:
         export MODEL_PROVIDER MODEL_DEFAULT_NAME
         export AGENT_MODEL_OVERRIDE="${MODEL_DEFAULT_NAME}"
         # ─── Baseline evidence store: read-only ─────────────────────────────
-        # Read for the advisory comparison; prowjob-default-sa cannot append.
+        # Read for the advisory comparison; a forge lane never appends
+        # (hack/ci-eval-pr.sh keeps EVAL_IS_MAIN_RUN false off the GitHub forge).
         export EVAL_BASELINE_STORE="gs://kube-agents-evals-bench/evidence"
         # ─── Ensure boskosctl is available (pinned version) ─────────────────────────
         # Named once, used by both the GCS fast path and the fallback below.
@@ -4634,6 +5038,18 @@ periodics:
       - name: ledger-app-key
         mountPath: /etc/ledger-app-key
         readOnly: true
+      - name: ledger-app-key-2
+        mountPath: /etc/ledger-app-key-2
+        readOnly: true
+      - name: ledger-app-key-3
+        mountPath: /etc/ledger-app-key-3
+        readOnly: true
+      - name: ledger-app-key-4
+        mountPath: /etc/ledger-app-key-4
+        readOnly: true
+      - name: ledger-app-key-5
+        mountPath: /etc/ledger-app-key-5
+        readOnly: true
     volumes:
     - name: gemini-secret
       secret:
@@ -4647,6 +5063,18 @@ periodics:
     - name: ledger-app-key
       secret:
         secretName: kube-agents-evals-ledger-app-key
+    - name: ledger-app-key-2
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-2
+    - name: ledger-app-key-3
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-3
+    - name: ledger-app-key-4
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-4
+    - name: ledger-app-key-5
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-5
 - name: ci-kube-agents-eval-weekly-gitlab-ce-next
   cluster: build-kube-agents
   # Sundays 05:30 UTC, weekly as the GHES job: 30 minutes after it (05:00),
@@ -4662,6 +5090,11 @@ periodics:
     # to be slower, and the job is non-gating, so a long night costs a lease.
     timeout: 480m
     grace_period: 5m
+    # The lane's record is not public: it goes to the eval nightlies' bucket,
+    # as the main nightlies' does (gke-labs/kube-agents#5244). Only the bucket
+    # is overridden; path_strategy and credentials come from the cluster default.
+    gcs_configuration:
+      bucket: kube-agents-evals-nightly-logs
   annotations:
     # No TestGrid tab, as the other next-lane jobs.
     testgrid-create-test-group: "false"
@@ -4672,11 +5105,13 @@ periodics:
     base_ref: main
     workdir: true
   spec:
-    # prowjob-default-sa, as the other next-lane jobs and the GitLab CE
-    # presubmit: objectViewer only on the evidence bucket, and the script
-    # appends nothing under EVAL_MODE_NEXT=1 or EVAL_FORGE=gitlab-ce anyway.
-    # Logs go to the cluster default bucket (gs://kube-agents-prow).
-    serviceAccountName: prowjob-default-sa
+    # eval-baseline-recorder, as the main nightlies: the identity they write
+    # kube-agents-evals-nightly-logs with (gcs_configuration above), so the
+    # move adds no grant to prowjob-default-sa, which pull-request code runs
+    # as. The eval script appends nothing to the evidence store off the
+    # GitHub forge (EVAL_FORGE=gitlab-ce here), so the recorder's write there goes
+    # unused; this job runs main only, never pull-request code.
+    serviceAccountName: eval-baseline-recorder
     containers:
     - image: gcr.io/k8s-staging-test-infra/kubekins-e2e:latest-1.32
       command:
@@ -4692,15 +5127,27 @@ periodics:
         export PATH="$HOME/.local/bin:$PATH"
         curl --proto '=https' --tlsv1.2 -fsSL https://get.opentofu.org/install-opentofu.sh -o install-opentofu.sh && chmod +x install-opentofu.sh && ./install-opentofu.sh --install-method standalone
         export GEMINI_API_KEY="$(cat /etc/gemini-secret/GEMINI_API_KEY)"
+        # As the nightlies' identity this lane would otherwise file its shadow
+        # replay as a trusted night and record answers into the shared replay
+        # cache; a forge lane is neither, so both stay off (hack/ci-env.sh).
+        export EVAL_REPLAY_SHADOW="false"
+        export EVAL_REPLAY_RECORD="false"
         # The bench verifier reads back the GitHub ledger issue the run
         # published and grades its contents; ledger_issue_contains has no
         # other credential source, and the *-infra repos are private.
         export BENCH_GITHUB_TOKEN="$(cat /etc/bench-github-token/BENCH_GITHUB_TOKEN)"
         # hack/ci-eval-pr.sh mints a 1-hour installation token per
         # devops-bench invocation and overwrites BENCH_GITHUB_TOKEN with it.
-        # App 4739812 is read-only and scoped to the *-infra repos.
-        # gke-labs/kube-agents#994.
+        # The reader Apps are scoped to the *-infra repos, ten projects each; the
+        # first is App 4739812, and the mint is narrowed to reads.
+        # gke-labs/kube-agents#994, #6240.
         export EVAL_LEDGER_APP_KEY_FILE="/etc/ledger-app-key/key.pem"
+        # One key per ledger-reader App, in the row order of
+        # hack/eval/ledger-reader-apps.txt (gke-labs/kube-agents#6240): the eval
+        # mints from the leased project's App, ten projects per App, and reads a
+        # project whose key is not here through the first App with a warning. The
+        # first entry is the file above, which step 0 keeps using.
+        export EVAL_LEDGER_APP_KEY_FILES="/etc/ledger-app-key/key.pem /etc/ledger-app-key-2/key.pem /etc/ledger-app-key-3/key.pem /etc/ledger-app-key-4/key.pem /etc/ledger-app-key-5/key.pem"
         # Turns on the in-cluster token minter, which is what lets the agent
         # write that issue. An App ID is an identifier, not a credential:
         # minting requires signing a JWT with the App's private key, which
@@ -4740,7 +5187,8 @@ periodics:
         export MODEL_PROVIDER MODEL_DEFAULT_NAME
         export AGENT_MODEL_OVERRIDE="${MODEL_DEFAULT_NAME}"
         # ─── Baseline evidence store: read-only ─────────────────────────────
-        # Read for the advisory comparison; prowjob-default-sa cannot append.
+        # Read for the advisory comparison; a forge lane never appends
+        # (hack/ci-eval-pr.sh keeps EVAL_IS_MAIN_RUN false off the GitHub forge).
         export EVAL_BASELINE_STORE="gs://kube-agents-evals-bench/evidence"
         # ─── Ensure boskosctl is available (pinned version) ─────────────────────────
         # Named once, used by both the GCS fast path and the fallback below.
@@ -4893,6 +5341,18 @@ periodics:
       - name: ledger-app-key
         mountPath: /etc/ledger-app-key
         readOnly: true
+      - name: ledger-app-key-2
+        mountPath: /etc/ledger-app-key-2
+        readOnly: true
+      - name: ledger-app-key-3
+        mountPath: /etc/ledger-app-key-3
+        readOnly: true
+      - name: ledger-app-key-4
+        mountPath: /etc/ledger-app-key-4
+        readOnly: true
+      - name: ledger-app-key-5
+        mountPath: /etc/ledger-app-key-5
+        readOnly: true
     volumes:
     - name: gemini-secret
       secret:
@@ -4906,6 +5366,18 @@ periodics:
     - name: ledger-app-key
       secret:
         secretName: kube-agents-evals-ledger-app-key
+    - name: ledger-app-key-2
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-2
+    - name: ledger-app-key-3
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-3
+    - name: ledger-app-key-4
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-4
+    - name: ledger-app-key-5
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-5
 - name: ci-kube-agents-eval-replay-lane
   # The inference-replay lane (gke-labs/kube-agents,
   # examples/inference-replay/eval-design.md, Rollout step 2). The trusted
@@ -5007,9 +5479,16 @@ periodics:
         export BENCH_GITHUB_TOKEN="$(cat /etc/bench-github-token/BENCH_GITHUB_TOKEN)"
         # hack/ci-eval-pr.sh mints a 1-hour installation token per
         # devops-bench invocation and overwrites BENCH_GITHUB_TOKEN with it.
-        # App 4739812 is read-only and scoped to the *-infra repos.
-        # gke-labs/kube-agents#994.
+        # The reader Apps are scoped to the *-infra repos, ten projects each; the
+        # first is App 4739812, and the mint is narrowed to reads.
+        # gke-labs/kube-agents#994, #6240.
         export EVAL_LEDGER_APP_KEY_FILE="/etc/ledger-app-key/key.pem"
+        # One key per ledger-reader App, in the row order of
+        # hack/eval/ledger-reader-apps.txt (gke-labs/kube-agents#6240): the eval
+        # mints from the leased project's App, ten projects per App, and reads a
+        # project whose key is not here through the first App with a warning. The
+        # first entry is the file above, which step 0 keeps using.
+        export EVAL_LEDGER_APP_KEY_FILES="/etc/ledger-app-key/key.pem /etc/ledger-app-key-2/key.pem /etc/ledger-app-key-3/key.pem /etc/ledger-app-key-4/key.pem /etc/ledger-app-key-5/key.pem"
         # Turns on the in-cluster token minter, which is what lets the agent
         # write that issue. An App ID is an identifier, not a credential:
         # minting requires signing a JWT with the App's private key, which
@@ -5092,8 +5571,8 @@ periodics:
         # how far main moved overnight instead of replay
         # (gke-labs/kube-agents#5666). Each publish record names the commit
         # its night ran, and fetch_cache.py --print-commit prints the newest
-        # night's, read here from main's checkout with the bucket, age, mode
-        # and forge hack/ci-env.sh's prepare_replay_lane_cache fetches with
+        # night's, read here from main's checkout with the bucket, age and
+        # forge hack/ci-env.sh's prepare_replay_lane_cache fetches with
         # (EVAL_REPLAY_CACHE_BUCKET, unset here, defaults to the bucket below,
         # hack/ci-env.sh's REPLAY_CACHE_DEFAULT_BUCKET; the age is
         # fetch_cache.py's own default, which REPLAY_LANE_CACHE_MAX_AGE_HOURS
@@ -5119,7 +5598,7 @@ periodics:
         main_commit="$(git rev-parse HEAD)"
         recorded_commit="$(python3 hack/replay-proxy/fetch_cache.py --print-commit \
           --bucket "${REPLAY_LANE_CACHE_BUCKET}" \
-          --eval-mode-next "${EVAL_MODE_NEXT:-}" --forge "${EVAL_FORGE:-}" < /dev/null)" || recorded_commit=""
+          --forge "${EVAL_FORGE:-}" < /dev/null)" || recorded_commit=""
         if ! [[ "${recorded_commit}" =~ ${REPLAY_LANE_COMMIT_RE} ]]; then
           echo "Replay lane: no recording night names a commit (the line above says why); replaying on main, ${main_commit}"
         else
@@ -5267,6 +5746,18 @@ periodics:
       - name: ledger-app-key
         mountPath: /etc/ledger-app-key
         readOnly: true
+      - name: ledger-app-key-2
+        mountPath: /etc/ledger-app-key-2
+        readOnly: true
+      - name: ledger-app-key-3
+        mountPath: /etc/ledger-app-key-3
+        readOnly: true
+      - name: ledger-app-key-4
+        mountPath: /etc/ledger-app-key-4
+        readOnly: true
+      - name: ledger-app-key-5
+        mountPath: /etc/ledger-app-key-5
+        readOnly: true
     volumes:
     - name: gemini-secret
       secret:
@@ -5280,3 +5771,15 @@ periodics:
     - name: ledger-app-key
       secret:
         secretName: kube-agents-evals-ledger-app-key
+    - name: ledger-app-key-2
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-2
+    - name: ledger-app-key-3
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-3
+    - name: ledger-app-key-4
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-4
+    - name: ledger-app-key-5
+      secret:
+        secretName: kube-agents-evals-ledger-app-key-5

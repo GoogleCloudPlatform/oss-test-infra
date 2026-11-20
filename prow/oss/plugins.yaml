@@ -28,11 +28,19 @@ triggers:
 - repos:
   - GoogleCloudPlatform/compute-daisy
   - GoogleCloudPlatform/cloud-image-tests
+  - GoogleCloudPlatform/compute-image-tools
   - GoogleCloudPlatform/guest-configs
   - GoogleCloudPlatform/galog
   - GoogleCloudPlatform/google-guest-agent
   trusted_apps:
     - copybara-service
+    - dependabot
+- repos:
+  - GoogleCloudPlatform/guest-agent
+  - GoogleCloudPlatform/guest-logging-go
+  - GoogleCloudPlatform/guest-test-infra
+  trusted_apps:
+    - dependabot
 - repos:
   - gke-labs/kube-agents
   # Its presubmits lease a project from a pool and run a model-calling

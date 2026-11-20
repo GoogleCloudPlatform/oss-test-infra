@@ -24,7 +24,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
       - name: deck-blueprints
-        image: us-central1-docker.pkg.dev/gob-prow/prow-images/deck:v20261019-8110e8d2b
+        image: us-central1-docker.pkg.dev/gob-prow/prow-images/deck:v20261118-bbc9339d2
         args:
         - --config-path=/etc/config/config.yaml
         - --hook-url=http://hook:8888/plugin-help
@@ -44,7 +44,7 @@ spec:
         env:
         # Use KUBECONFIG envvar rather than --kubeconfig flag in order to provide multiple configs to merge.
         - name: KUBECONFIG
-          value: "/etc/kubeconfig/config-20240403:/etc/build-openshift-eng/kubeconfig:/etc/build-cloud-kubernetes-node-management-team/kubeconfig:/etc/build-compute-image-import/kubeconfig:/etc/build-blueprints/kubeconfig:/etc/build-elcarro/kubeconfig:/etc/build-kubeflow/kubeconfig:/etc/gke-gcloud-auth-plugin-based/kubeconfigs.yaml"
+          value: "/etc/build-openshift-eng/kubeconfig:/etc/build-cloud-kubernetes-node-management-team/kubeconfig:/etc/build-compute-image-import/kubeconfig:/etc/build-blueprints/kubeconfig:/etc/build-elcarro/kubeconfig:/etc/gke-gcloud-auth-plugin-based/kubeconfigs.yaml"
         ports:
         - name: http
           containerPort: 8080
