@@ -214,3 +214,176 @@ func TestNoAutomaticOrExpensiveOrgWidePlugins(t *testing.T) {
 		}
 	}
 }
+
+var tenantClusterAllowedDirs = map[string][]string{
+	"build-blueprints": {
+		path.Join("GoogleCloudPlatform", "blueprints"),
+	},
+	// Currently unused; block all paths until an owning directory is assigned.
+	"build-cloud-kubernetes-node-management-team": {},
+	"build-compute-image-import": {
+		path.Join("GoogleCloudPlatform", "compute-image-import"),
+	},
+	"build-elcarro": {
+		path.Join("GoogleCloudPlatform", "elcarro-oracle-operator"),
+	},
+	"build-gcp-oracle-team": {
+		path.Join("google", "oracle-toolkit"),
+	},
+	"build-gke-managed-storage": {
+		path.Join("GoogleCloudPlatform", "gcs-fuse-csi-driver"),
+	},
+	"build-kpt-config-sync": {
+		path.Join("GoogleContainerTools", "kpt-config-sync"),
+	},
+	"build-kube-agents": {
+		path.Join("gke-labs", "kube-agents"),
+	},
+	"build-kubeflow": {
+		"kubeflow",
+	},
+	"build-openshift-eng": {
+		"openshift",
+	},
+	"espv2": {
+		path.Join("GoogleCloudPlatform", "esp-v2"),
+		path.Join("google", "http_pattern_matcher"),
+		path.Join("google", "jwt_verify_lib"),
+		path.Join("grpc-ecosystem", "grpc-httpjson-transcoding"),
+	},
+	"gcp-guest": {
+		path.Join("GoogleCloudPlatform", "gcp-guest"),
+	},
+}
+
+func validateTenantClusterIsolation(name, cluster, sourcePath, jobConfigDir string, allowedDirsByCluster map[string][]string) error {
+	// "default" is the shared untrusted build cluster; "test-infra-trusted"
+	// and "*private*" clusters are enforced by TestTrustedJobs and TestPrivateJobs.
+	if cluster == "" || cluster == "default" || cluster == "test-infra-trusted" || strings.Contains(cluster, "private") {
+		return nil
+	}
+	allowedDirs, ok := allowedDirsByCluster[cluster]
+	if !ok {
+		return fmt.Errorf("%s (%s): cluster %q is not listed in TestTenantClusterIsolation allowlist", name, sourcePath, cluster)
+	}
+	cleanPath := path.Clean(sourcePath)
+	for _, dir := range allowedDirs {
+		prefix := path.Join(jobConfigDir, dir) + "/"
+		if strings.HasPrefix(cleanPath, prefix) {
+			return nil
+		}
+	}
+	return fmt.Errorf("%s defined in %s may not run in tenant cluster %q", name, sourcePath, cluster)
+}
+
+// TestTenantClusterIsolation verifies that jobs targeting a tenant build cluster
+// are defined under one of the prow/prowjobs/ directories owned by that tenant.
+func TestTenantClusterIsolation(t *testing.T) {
+	for _, pres := range c.PresubmitsStatic {
+		for _, pre := range pres {
+			if err := validateTenantClusterIsolation(pre.Name, pre.Cluster, pre.SourcePath, *jobConfigPath, tenantClusterAllowedDirs); err != nil {
+				t.Error(err)
+			}
+		}
+	}
+	for _, posts := range c.PostsubmitsStatic {
+		for _, post := range posts {
+			if err := validateTenantClusterIsolation(post.Name, post.Cluster, post.SourcePath, *jobConfigPath, tenantClusterAllowedDirs); err != nil {
+				t.Error(err)
+			}
+		}
+	}
+	for _, per := range c.AllPeriodics() {
+		if err := validateTenantClusterIsolation(per.Name, per.Cluster, per.SourcePath, *jobConfigPath, tenantClusterAllowedDirs); err != nil {
+			t.Error(err)
+		}
+	}
+}
+
+func TestValidateTenantClusterIsolation(t *testing.T) {
+	const baseDir = "../prowjobs/"
+	cases := []struct {
+		name       string
+		cluster    string
+		sourcePath string
+		wantErr    bool
+	}{
+		{
+			name:       "default cluster omitted",
+			cluster:    "",
+			sourcePath: "../prowjobs/GoogleCloudPlatform/gcp-guest/job.yaml",
+		},
+		{
+			name:       "default cluster explicit",
+			cluster:    "default",
+			sourcePath: "../prowjobs/GoogleCloudPlatform/gcp-guest/job.yaml",
+		},
+		{
+			name:       "trusted cluster delegated to TestTrustedJobs",
+			cluster:    "test-infra-trusted",
+			sourcePath: "../prowjobs/GoogleCloudPlatform/gcp-guest/job.yaml",
+		},
+		{
+			name:       "private cluster delegated to TestPrivateJobs",
+			cluster:    "private-cluster",
+			sourcePath: "../prowjobs/GoogleCloudPlatform/gcp-guest/job.yaml",
+		},
+		{
+			name:       "allowed tenant directory",
+			cluster:    "build-elcarro",
+			sourcePath: "../prowjobs/GoogleCloudPlatform/elcarro-oracle-operator/elcarro.yaml",
+		},
+		{
+			name:       "allowed nested sub-repo directory",
+			cluster:    "build-kubeflow",
+			sourcePath: "../prowjobs/kubeflow/pipelines/job.yaml",
+		},
+		{
+			name:       "allowed shared espv2 directory",
+			cluster:    "espv2",
+			sourcePath: "../prowjobs/google/http_pattern_matcher/job.yaml",
+		},
+		{
+			name:       "cross-tenant cluster rejected",
+			cluster:    "build-elcarro",
+			sourcePath: "../prowjobs/GoogleCloudPlatform/gcp-guest/job.yaml",
+			wantErr:    true,
+		},
+		{
+			name:       "directory prefix collision rejected",
+			cluster:    "gcp-guest",
+			sourcePath: "../prowjobs/GoogleCloudPlatform/gcp-guest-evil/job.yaml",
+			wantErr:    true,
+		},
+		{
+			name:       "root prowjobs file rejected",
+			cluster:    "build-elcarro",
+			sourcePath: "../prowjobs/job.yaml",
+			wantErr:    true,
+		},
+		{
+			name:       "unused cluster rejected",
+			cluster:    "build-cloud-kubernetes-node-management-team",
+			sourcePath: "../prowjobs/GoogleCloudPlatform/gcp-guest/job.yaml",
+			wantErr:    true,
+		},
+		{
+			name:       "unlisted cluster rejected",
+			cluster:    "build-unlisted",
+			sourcePath: "../prowjobs/GoogleCloudPlatform/gcp-guest/job.yaml",
+			wantErr:    true,
+		},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			err := validateTenantClusterIsolation(tc.name, tc.cluster, tc.sourcePath, baseDir, tenantClusterAllowedDirs)
+			if tc.wantErr && err == nil {
+				t.Errorf("expected error for cluster %q in %q, got nil", tc.cluster, tc.sourcePath)
+			}
+			if !tc.wantErr && err != nil {
+				t.Errorf("unexpected error for cluster %q in %q: %v", tc.cluster, tc.sourcePath, err)
+			}
+		})
+	}
+}
