@@ -50,6 +50,12 @@ triggers:
   # OWNERS reviewer's approval, which lgtm's review_acts_as_lgtm turns into
   # one run of every presubmit.
   only_org_members: true
+  # The release App opens one pull request after each release, the upgrade
+  # table's relabel, from a workflow on main: only that workflow holds the
+  # App's key. Untrusted, it waits for an /ok-to-test while main's docs check
+  # stays red.
+  trusted_apps:
+    - kube-agents-release-bot
 
 config_updater:
   maps:
