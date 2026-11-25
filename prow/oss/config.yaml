@@ -236,7 +236,7 @@ plank:
   - cluster: build-gke-managed-storage
     config:
       gcs_configuration:
-        bucket: "oss-cloud-kubernetes-test"
+        bucket: "oss-prow" # Public, so raw log links work for everyone.
       default_service_account_name: "prowjob-default-sa" # Use workload identity
       gcs_credentials_secret: ""                         # rather than service account key secret
 
