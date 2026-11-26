@@ -55,8 +55,12 @@ postsubmits:
     # which needs step-3 -- the full E2E matrix -- to have passed, and step-1 ran
     # scripts/release/verify_candidate_images.sh before any of that. By the time
     # an evalcand_ tag exists, the candidate's images have been verified present
-    # in GHCR and then installed and exercised by the matrix. There is no window
-    # left for resolve-rc-target.sh's image gate to fire.
+    # in the registry that pipeline reads and then installed and exercised by
+    # the matrix, hours after the publish. This job reads them from the
+    # candidate repository (REGISTRY_PREFIX below). While that is not the
+    # registry the pipeline verified, resolve-rc-target.sh's image gate can
+    # still fire, for a commit whose images never reached the candidate
+    # repository; the race with the publish is the one that is gone.
     #
     # THE TAG IS evalcand_ AND NOT staging_, and that split is what makes this
     # gate possible at all. Both name the same commit and share a core, but
@@ -273,6 +277,19 @@ postsubmits:
           # withdrawn unmeasured. Like every RC run, a flagged one writes
           # nothing to main's baseline store.
           export EVAL_MODE_NEXT="1"
+          # Where the candidate's published images are: the repository
+          # kube-agents' copy-candidate-images.yml names as
+          # CANDIDATE_REGISTRY_PREFIX. The candidate's
+          # hack/resolve-rc-target.sh looks for the commit's images there and
+          # its hack/ci-deploy.sh installs from there; unset, both use
+          # ghcr.io/gke-labs/kube-agents. This job's service account reads the
+          # repository for the check, and the leased pool project's nodes pull
+          # from it. The candidate's scripts need both halves: before
+          # gke-labs/kube-agents#7150 they cannot ask an Artifact Registry
+          # repository, read the images as missing and fail the resolve step
+          # ahead of the summary; before #7265 they find the images here and
+          # still install the chart's images from GHCR.
+          export REGISTRY_PREFIX="us-docker.pkg.dev/kube-agents-prow/kube-agents-candidates"
           # ─── The agent model: the `gate` pair of the eval-model Secret ─────────
           # The gate's pair, so the candidate is graded on the model the gate
           # runs, against the record the nightlies build at that model's key.
