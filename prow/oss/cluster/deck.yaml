@@ -24,7 +24,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
       - name: deck
-        image: us-central1-docker.pkg.dev/gob-prow/prow-images/deck:v20261120-b19656dbd
+        image: us-central1-docker.pkg.dev/gob-prow/prow-images/deck:v20261127-ae9277128
         args:
         - --config-path=/etc/config/config.yaml
         - --job-config-path=/etc/job-config
